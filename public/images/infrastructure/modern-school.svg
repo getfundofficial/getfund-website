@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="schoolGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#schoolGradient)" rx="12"/>
+  <!-- School Building Icon -->
+  <g transform="translate(350, 150)">
+    <rect x="0" y="40" width="100" height="60" fill="rgba(255,255,255,0.9)" rx="4"/>
+    <rect x="10" y="30" width="80" height="40" fill="rgba(255,255,255,0.8)" rx="4"/>
+    <rect x="20" y="20" width="60" height="30" fill="rgba(255,255,255,0.7)" rx="4"/>
+    <polygon points="50,10 10,30 90,30" fill="rgba(255,255,255,0.9)"/>
+    <rect x="35" y="60" width="15" height="25" fill="#1E40AF"/>
+    <rect x="60" y="55" width="8" height="8" fill="#1E40AF"/>
+    <rect x="75" y="55" width="8" height="8" fill="#1E40AF"/>
+    <rect x="60" y="70" width="8" height="8" fill="#1E40AF"/>
+    <rect x="75" y="70" width="8" height="8" fill="#1E40AF"/>
+  </g>
+  <text x="400" y="250" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="bold">Modern School Infrastructure</text>
+  <text x="400" y="280" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="16">Building the future of education in Ghana</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="newsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#newsGradient)" rx="12"/>
+  <!-- News/Article Icon -->
+  <g transform="translate(300, 120)">
+    <rect x="0" y="40" width="200" height="120" fill="rgba(255,255,255,0.9)" rx="8"/>
+    <rect x="15" y="55" width="170" height="8" fill="#D97706" rx="2"/>
+    <rect x="15" y="70" width="130" height="4" fill="rgba(217, 119, 6, 0.6)" rx="1"/>
+    <rect x="15" y="80" width="150" height="4" fill="rgba(217, 119, 6, 0.6)" rx="1"/>
+    <rect x="15" y="90" width="120" height="4" fill="rgba(217, 119, 6, 0.6)" rx="1"/>
+    <rect x="15" y="100" width="160" height="4" fill="rgba(217, 119, 6, 0.6)" rx="1"/>
+    <rect x="15" y="110" width="140" height="4" fill="rgba(217, 119, 6, 0.6)" rx="1"/>
+    <rect x="15" y="130" width="80" height="20" fill="#D97706" rx="4"/>
+    <text x="55" y="143" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8" font-weight="bold">READ MORE</text>
+  </g>
+  <text x="400" y="290" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="bold">Latest News & Updates</text>
+  <text x="400" y="320" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="16">Stay informed about our latest projects and achievements</text>
+</svg>
