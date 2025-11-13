@@ -21,11 +21,7 @@ interface NewsProps {
   articles?: NewsArticle[];
 }
 
-export default function News({ articles: propArticles }: NewsProps) {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
-  const [isLoadingCMS, setIsLoadingCMS] = useState(true);
-
-  const defaultArticles: NewsArticle[] = [
+const defaultArticles: NewsArticle[] = [
     {
       id: 'default-1',
       slug: 'getfund-commences-accelerated-infrastructure-program-at-ambariya-schools',
@@ -78,6 +74,10 @@ A high powered delegation from Ghana Education Trust Fund (GETFund), led by the 
 This expansion is directly motivated by the school's rapidly growing population. It is a strategic step toward fulfilling President Mahama's agenda to end the double-track system, aligning with the vision of the GETFund Administrator, Mr. Paul Adjei, to improve educational facilities nationwide.`
     }
   ];
+
+export default function News({ articles: propArticles }: NewsProps) {
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [isLoadingCMS, setIsLoadingCMS] = useState(true);
 
   // Fetch news articles from CMS on component mount
   useEffect(() => {

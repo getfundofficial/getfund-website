@@ -17,7 +17,7 @@ interface HomepageContent {
     description: string;
   };
   aboutGETFundHeading: string;
-  aboutGETFundContent: any[];
+  aboutGETFundContent: string[];
   relevantFactors: string[];
 }
 

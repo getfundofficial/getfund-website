@@ -17,7 +17,7 @@ export function getHeaderHeight(windowWidth = typeof window !== 'undefined' ? wi
 export function setHeaderHeightVar(value: number) {
   try {
     document.documentElement.style.setProperty('--header-height', `${value}px`);
-  } catch (e) {
+  } catch {
     // noop in environments without document
   }
 }

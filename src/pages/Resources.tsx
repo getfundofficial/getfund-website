@@ -3,6 +3,17 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 
+interface Resource {
+  id: number;
+  title: string;
+  description: string;
+  year: string;
+  size: string;
+  pages: string;
+  type: string;
+  downloadUrl: string;
+}
+
 export default function Resources() {
   const annualReports = [
     {
@@ -126,7 +137,7 @@ export default function Resources() {
     },
   ];
 
-  const ResourceCard = ({ resource }: { resource: any }) => (
+  const ResourceCard = ({ resource }: { resource: Resource }) => (
     <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex items-start justify-between mb-4">

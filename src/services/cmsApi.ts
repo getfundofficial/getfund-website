@@ -16,7 +16,28 @@ export interface CMSContent {
   category: string | null;
   author: string | null;
   published_at: string;
-  meta_data?: any;
+  meta_data?: Record<string, unknown>;
+}
+
+interface HeroSlideResponse {
+  id: number;
+  title: string;
+  subtitle: string;
+  image_url: string;
+  link_text?: string;
+  link_url?: string;
+}
+
+interface NewsArticleResponse {
+  id: number;
+  title: string;
+  excerpt?: string;
+  summary?: string;
+  content?: string;
+  image_url?: string;
+  date?: string;
+  published_date?: string;
+  category?: string;
 }
 
 export interface HeroSlide {
@@ -58,10 +79,10 @@ class CMSApiClient {
         throw new Error(`Failed to fetch hero slides: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: HeroSlideResponse[] = await response.json();
 
       // Transform database format to website format
-      return data.map((slide: any) => ({
+      return data.map((slide) => ({
         id: slide.id.toString(),
         title: slide.title,
         subtitle: slide.subtitle || '',
@@ -86,18 +107,18 @@ class CMSApiClient {
         throw new Error(`Failed to fetch news articles: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data: NewsArticleResponse[] = await response.json();
 
       // Transform database format to website format
-      return data.map((article: any) => ({
+      return data.map((article) => ({
         id: article.id.toString(),
         slug: article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
         title: article.title,
         excerpt: article.excerpt || article.summary || '',
         content: article.content || '',
-        image: article.image_url,
+        image: article.image_url || null,
         author: 'GETFund',
-        date: article.date || article.published_date,
+        date: article.date || article.published_date || '',
         tags: article.category ? [article.category] : ['News'],
       })).slice(0, limit);
     } catch (error) {

@@ -5,7 +5,11 @@ import Slider from 'react-slick';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cmsApi } from '../services/cmsApi';
 
-function NextArrow(props: any) {
+interface ArrowProps {
+  onClick?: () => void;
+}
+
+function NextArrow(props: ArrowProps) {
   const { onClick } = props;
   return (
     <button
@@ -19,7 +23,7 @@ function NextArrow(props: any) {
   );
 }
 
-function PrevArrow(props: any) {
+function PrevArrow(props: ArrowProps) {
   const { onClick } = props;
   return (
     <button
@@ -46,7 +50,6 @@ interface HeroSlide {
 
 interface HeroProps {
   slides?: HeroSlide[];
-  heroCta?: any;
 }
 
 export default function Hero({ slides: propSlides }: HeroProps) {
