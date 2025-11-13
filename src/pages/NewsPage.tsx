@@ -29,13 +29,20 @@ export default function NewsPage() {
     const fetchNews = async () => {
       try {
         setLoading(true);
+        console.log('[NewsPage] Fetching all news articles...');
         const cmsArticles = await cmsApi.getNewsArticles();
+        console.log('[NewsPage] Received articles:', cmsArticles.length);
+        console.log('[NewsPage] Articles:', cmsArticles);
 
         if (cmsArticles.length > 0) {
           setArticles(cmsArticles);
+        } else {
+          console.warn('[NewsPage] No articles returned from CMS');
+          setArticles([]);
         }
       } catch (error) {
-        console.error('Failed to fetch news articles:', error);
+        console.error('[NewsPage] Failed to fetch news articles:', error);
+        setArticles([]);
       } finally {
         setLoading(false);
       }
@@ -55,6 +62,11 @@ export default function NewsPage() {
 
     return matchesSearch && matchesCategory;
   });
+
+  console.log('[NewsPage] Total articles:', articles.length);
+  console.log('[NewsPage] Filtered articles:', filteredArticles.length);
+  console.log('[NewsPage] Search term:', searchTerm);
+  console.log('[NewsPage] Selected category:', selectedCategory);
 
   // Get unique categories from articles
   const categories = ['All', ...Array.from(new Set(articles.flatMap(a => a.tags)))];

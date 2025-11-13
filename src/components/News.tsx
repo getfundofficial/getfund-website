@@ -21,60 +21,6 @@ interface NewsProps {
   articles?: NewsArticle[];
 }
 
-const defaultArticles: NewsArticle[] = [
-    {
-      id: 'default-1',
-      slug: 'getfund-commences-accelerated-infrastructure-program-at-ambariya-schools',
-      title: 'GETFund Commences Accelerated Infrastructure Program at Ambariya Schools; Targets 18-Month Completion',
-      date: '2025-10-14',
-      excerpt: 'The Ghana Education Trust Fund has signaled the immediate start of major infrastructure projects at Ambariya Senior High School and Ambariya Community Primary School in the Tamale Metropolis. Projects include 2 new two-storey dormitory blocks for boys, 2 new two-storey dormitory blocks for girls, a twelve-unit classroom block, a two-storey administration and library complex, and a 5,000-capacity multipurpose auditorium.',
-      category: 'Infrastructure',
-      image: '/images/recent-projects/ambariya.png',
-      author: 'Isaac Asiedu Odei',
-      content: `On the 5th of October 2025, a delegation led by the Deputy Administrator of GETFund, Hon Alhaji Alhassan Sualihu Dandaawa on an official working visit, confirmed after an on-site assessment that the sites are ready for crucial possession and assessment. This forms part of the Administrator of the Fund, Mr. Paul Adjei's vision to transform educational facilities nationwide.
-
-During engagements with the school authorities and community elders, Hon. Dandaawa confirmed that funds have been allocated to support the construction of the following planned comprehensive projects for Ambariya SHS:
-
-• 2 new two-storey dormitory blocks for boys
-• 2 new Two-storey dormitory blocks for girls  
-• A twelve-unit classroom block
-• A two-storey administration and library complex and
-• A 5,000-capacity multipurpose auditorium for the primary school.
-
-The Ambariya community was visibly grateful for the massive infrastructural boost, with leaders pledging full support to ensure a smooth and swift execution. "Education is the bedrock of our community's future," a school dignitary emphasized, expressing profound thanks.`
-    },
-    {
-      id: 'default-2',
-      slug: 'getfund-kicks-off-multi-project-construction-to-boost-education-in-the-northern-region',
-      title: 'GETFund Kicks Off Multi-Project Construction to Boost Education in the Northern Region',
-      date: '2025-10-14',
-      excerpt: 'The Ghana Education Trust Fund has commenced a significant push to bridge the infrastructure gap in the Northern Region\'s education sector. On Sunday, October 5, 2025, a high-level team visited the Northern School of Business (NOBISCO) to inspect the site for a new three-storey, 18-unit classroom block. Kumbungu SHS will receive a 2,500-capacity Dining Hall with Kitchen, Assembly Hall, and dormitory block.',
-      category: 'Infrastructure',
-      image: '/images/recent-projects/nobisco.png',
-      author: 'Isaac Asiedu Odei',
-      content: `On Sunday, October 5, 2025, a high-level team led by the Deputy Administrator, Hon. Alhaji Alhassan Sualihu Dandaawa, visited the Northern School of Business (NOBISCO). The team, which included the project consultant and the contractor, inspected the site earmarked for the construction of a new three-storey, 18-unit classroom block.
-
-Management of NOBISCO warmly welcomed the project, which they saw as a crucial step towards expanding access to quality education. They also used the opportunity to appeal for additional support, specifically requesting a girls' dormitory block and a 12-seater toilet facility.
-
-Kumbungu SHS is set to receive a major overhaul with the construction of a large 2,500-capacity Dining Hall with an attached Kitchen, a 2,500-capacity Assembly Hall, and a much-needed single-storey dormitory block. Sang Community Day SHS in the Mion District will also benefit from a new 2,500-capacity Dining Hall with an attached Kitchen.`
-    },
-    {
-      id: 'default-3',
-      slug: 'n-r-getfund-launches-major-infrastructure-expansion-at-ghana-senior-high-school',
-      title: 'N/R: GETFund Launches Major Infrastructure Expansion at Ghana Senior High School',
-      date: '2025-10-14',
-      excerpt: 'Ghana Education Trust Fund has launched a major infrastructural expansion at the Ghana Senior High School (GHANASCO). The project includes a 2-storey, 12-unit classroom block, a 2-storey boys\' dormitory block, two new 12-seater toilet facilities, science laboratory rehabilitation, and a 5,000-capacity multipurpose assembly hall. The expansion is motivated by the school\'s rapidly growing population and aims to end the double-track system.',
-      category: 'Infrastructure',
-      image: '/images/recent-projects/ghanasco.png',
-      author: 'Isaac Asiedu Odei',
-      content: `Ghana Education Trust Fund (GETFund) has launched a major infrastructural expansion at the Ghana Senior High School (GHANASCO). The project, which has full funding and is scheduled for completion within 18 months, includes a 2-storey, 12-unit classroom block, a 2-storey boys' dormitory block, two new 12-seater toilet facilities, the rehabilitation of the science laboratory, and the construction of a 5,000-capacity multipurpose assembly hall.
-
-A high powered delegation from Ghana Education Trust Fund (GETFund), led by the Deputy Administrator, Hon. Alhaji Alhassan Sualihu Dandaawa, visited the school on October 5, 2025, to formalise the commencement of a substantial infrastructure project.
-
-This expansion is directly motivated by the school's rapidly growing population. It is a strategic step toward fulfilling President Mahama's agenda to end the double-track system, aligning with the vision of the GETFund Administrator, Mr. Paul Adjei, to improve educational facilities nationwide.`
-    }
-  ];
-
 export default function News({ articles: propArticles }: NewsProps) {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [isLoadingCMS, setIsLoadingCMS] = useState(true);
@@ -83,7 +29,9 @@ export default function News({ articles: propArticles }: NewsProps) {
   useEffect(() => {
     const fetchNews = async () => {
       try {
+        console.log('[News Component] Fetching news from CMS...');
         const cmsArticles = await cmsApi.getRecentNews(3);
+        console.log('[News Component] Received CMS articles:', cmsArticles.length);
 
         if (cmsArticles.length > 0) {
           // Transform CMS articles to component format
@@ -101,13 +49,15 @@ export default function News({ articles: propArticles }: NewsProps) {
             content: article.content,
           }));
 
+          console.log('[News Component] Setting articles:', transformedArticles.length);
           setArticles(transformedArticles);
         } else {
-          setArticles(defaultArticles);
+          console.log('[News Component] No CMS articles found');
+          setArticles([]);
         }
       } catch (error) {
-        console.error('Failed to fetch news from CMS, using default articles:', error);
-        setArticles(defaultArticles);
+        console.error('[News Component] Failed to fetch news from CMS:', error);
+        setArticles([]);
       } finally {
         setIsLoadingCMS(false);
       }
@@ -115,8 +65,10 @@ export default function News({ articles: propArticles }: NewsProps) {
 
     // Only fetch if propArticles wasn't provided
     if (!propArticles || propArticles.length === 0) {
+      console.log('[News Component] No prop articles, fetching from CMS');
       fetchNews();
     } else {
+      console.log('[News Component] Using prop articles:', propArticles.length);
       setArticles(propArticles);
       setIsLoadingCMS(false);
     }
@@ -129,7 +81,33 @@ export default function News({ articles: propArticles }: NewsProps) {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading news...</p>
+            <p className="mt-4 text-gray-600">Loading news from CMS...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show empty state if no articles
+  if (!articles || articles.length === 0) {
+    return (
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
+        <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">News & Updates</h2>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Stay updated with the latest developments and achievements from GETFund.
+            </p>
+          </div>
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <svg className="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No News Articles Yet</h3>
+              <p className="text-gray-600">News articles will appear here once they are published through the CMS.</p>
+            </div>
           </div>
         </div>
       </section>

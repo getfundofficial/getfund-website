@@ -29,8 +29,9 @@ interface HeroSlideResponse {
 }
 
 interface NewsArticleResponse {
-  id: number;
+  id: number | string;
   title: string;
+  slug?: string;
   excerpt?: string;
   summary?: string;
   content?: string;
@@ -38,6 +39,7 @@ interface NewsArticleResponse {
   date?: string;
   published_date?: string;
   category?: string;
+  author?: string;
 }
 
 export interface HeroSlide {
@@ -63,9 +65,33 @@ export interface NewsArticle {
 
 class CMSApiClient {
   private baseUrl: string;
+  private fetchTimeout: number = 15000; // 15 second timeout
 
   constructor(baseUrl: string = CMS_API_URL) {
     this.baseUrl = baseUrl;
+  }
+
+  /**
+   * Fetch with timeout
+   */
+  private async fetchWithTimeout(url: string, options: RequestInit = {}, timeout: number = this.fetchTimeout): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${timeout}ms`);
+      }
+      throw error;
+    }
   }
 
   /**
@@ -73,7 +99,7 @@ class CMSApiClient {
    */
   async getHeroSlides(): Promise<HeroSlide[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/hero-slides`);
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/hero-slides`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch hero slides: ${response.statusText}`);
@@ -101,28 +127,35 @@ class CMSApiClient {
    */
   async getNewsArticles(limit?: number): Promise<NewsArticle[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/news`);
+      console.log('[CMS API] Fetching news from:', `${this.baseUrl}/news`);
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/news`);
+
+      console.log('[CMS API] Response status:', response.status, response.statusText);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch news articles: ${response.statusText}`);
       }
 
       const data: NewsArticleResponse[] = await response.json();
+      console.log('[CMS API] Received articles:', data.length);
 
       // Transform database format to website format
-      return data.map((article) => ({
+      const transformed = data.map((article) => ({
         id: article.id.toString(),
-        slug: article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+        slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
         title: article.title,
         excerpt: article.excerpt || article.summary || '',
         content: article.content || '',
         image: article.image_url || null,
-        author: 'GETFund',
+        author: article.author || 'GETFund',
         date: article.date || article.published_date || '',
         tags: article.category ? [article.category] : ['News'],
       })).slice(0, limit);
+
+      console.log('[CMS API] Transformed articles:', transformed.length);
+      return transformed;
     } catch (error) {
-      console.error('Error fetching news articles:', error);
+      console.error('[CMS API] Error fetching news articles:', error);
       return [];
     }
   }
@@ -132,7 +165,7 @@ class CMSApiClient {
    */
   async getNewsArticleBySlug(slug: string): Promise<NewsArticle | null> {
     try {
-      const response = await fetch(`${this.baseUrl}/content/published/${slug}`);
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/content/published/${slug}`);
 
       if (!response.ok) {
         if (response.status === 404) {
