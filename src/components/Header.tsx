@@ -1,6 +1,7 @@
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 interface NavItem {
   name: string;
@@ -11,7 +12,10 @@ interface NavItem {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
+
+  // Hide header when scrolling down and scrolled past threshold
+  const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
   // No special scroll handler anymore - 'What We Do' is a dedicated page at /what-we-do
 
@@ -24,7 +28,9 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100">
+    <header className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100 transition-transform duration-300 ease-in-out ${
+      shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
+    }`}>
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center">
           <img 

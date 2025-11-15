@@ -1,5 +1,6 @@
 import { ChevronRight, Home } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 interface BreadcrumbItem {
   label: string;
@@ -33,6 +34,10 @@ const routeLabels: Record<string, string> = {
 
 const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   const location = useLocation();
+  const { scrollDirection, isScrolled } = useScrollDirection(100);
+
+  // Make breadcrumb sticky when header is hidden
+  const shouldStick = scrollDirection === 'down' && isScrolled;
   
   // Generate breadcrumbs from current path if items not provided
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
@@ -98,7 +103,12 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   if (location.pathname === '/') return null;
 
   return (
-  <nav aria-label="Breadcrumb" style={{ marginTop: 'var(--header-height)' }} className={`bg-gray-50 border-b border-gray-200 pt-[9px] sm:pt-[13px] md:pt-[17px] lg:pt-[21px] ${className}`}>
+  <nav
+    aria-label="Breadcrumb"
+    style={shouldStick ? {} : { marginTop: 'var(--header-height)' }}
+    className={`bg-gray-50 border-b border-gray-200 pt-[9px] sm:pt-[13px] md:pt-[17px] lg:pt-[21px] transition-all duration-300 ease-in-out ${
+      shouldStick ? 'sticky top-0 z-40 shadow-md' : ''
+    } ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <ol className="flex items-center space-x-2 py-3 text-sm">
           {breadcrumbs.map((item, index) => (
