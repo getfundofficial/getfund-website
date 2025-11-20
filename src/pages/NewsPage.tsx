@@ -75,20 +75,17 @@ export default function NewsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
-        <Header />
-        <Breadcrumb />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading news articles...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading news articles...</p>
         </div>
-        <Footer />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <Breadcrumb />
       

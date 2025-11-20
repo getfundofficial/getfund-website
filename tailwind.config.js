@@ -22,6 +22,18 @@ export default {
       fontFamily: {
         'sans': ['Montserrat', 'Inter', 'system-ui', 'sans-serif'],
       },
+      screens: {
+        'xs': '475px',      // Extra small devices (large phones)
+        '3xl': '1920px',    // Large desktops
+        '4xl': '2560px',    // 4K displays / TVs
+      },
+      fontSize: {
+        'xxs': ['0.625rem', { lineHeight: '0.875rem' }],
+      },
+      maxWidth: {
+        '8xl': '88rem',
+        '9xl': '96rem',
+      },
     },
   },
   plugins: [],

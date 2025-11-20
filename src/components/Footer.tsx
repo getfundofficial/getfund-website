@@ -37,30 +37,30 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="bg-getfund-secondary text-white">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 3xl:px-8 4xl:px-12 max-w-9xl py-12 sm:py-16 3xl:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 3xl:gap-16 mb-8 sm:mb-12">
           <div>
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4 sm:mb-6">
               <img 
                 src="/images/logos/getfund-logo-light-main.png" 
                 alt="Ghana Education Trust Fund" 
-                className="h-14 w-auto object-contain"
+                className="h-12 sm:h-14 3xl:h-16 4xl:h-20 w-auto object-contain"
               />
             </div>
-            <p className="text-gray-400 leading-relaxed mb-6">
+            <p className="text-sm sm:text-base 3xl:text-lg text-gray-400 leading-relaxed mb-4 sm:mb-6">
               Supporting the delivery of quality education to Ghanaians from basic to tertiary level
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4 flex-wrap">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <a
                     key={social.label}
                     href={social.href}
-                    className="bg-gray-800 w-10 h-10 rounded-lg flex items-center justify-center hover:bg-getfund-primary transition-colors"
+                    className="bg-gray-800 w-10 h-10 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14 rounded-lg flex items-center justify-center hover:bg-getfund-primary transition-colors touch-manipulation"
                     aria-label={social.label}
                   >
-                    <Icon className="w-5 h-5" aria-hidden="true" />
+                    <Icon className="w-5 h-5 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7" aria-hidden="true" />
                   </a>
                 );
               })}
@@ -68,8 +68,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Quick Links</h3>
+            <ul className="space-y-2 sm:space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   {link.href.startsWith('#') ? (
@@ -83,7 +83,7 @@ export default function Footer() {
                   ) : (
                     <Link
                       to={link.href}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -94,23 +94,23 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Contact Info</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <a href="tel:+233544323020" className="text-gray-400 hover:text-white transition-colors">
+            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Contact Info</h3>
+            <ul className="space-y-3 sm:space-y-4">
+              <li className="flex items-start gap-2 sm:gap-3">
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-6 3xl:h-6 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <a href="tel:+233544323020" className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors">
                   +233 (544) 323-020
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <a href="mailto:info@getfund.gov.gh" className="text-gray-400 hover:text-white transition-colors">
+              <li className="flex items-start gap-2 sm:gap-3">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-6 3xl:h-6 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <a href="mailto:info@getfund.gov.gh" className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors">
                   info@getfund.gov.gh
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <span className="text-gray-400">
+              <li className="flex items-start gap-2 sm:gap-3">
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-6 3xl:h-6 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <span className="text-sm sm:text-base 3xl:text-lg text-gray-400">
                   No. 42, 4th Close, Airport Residential Area, Accra
                 </span>
               </li>
@@ -118,8 +118,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Office Hours</h3>
-            <div className="space-y-2 text-gray-400">
+            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Office Hours</h3>
+            <div className="space-y-2 text-sm sm:text-base 3xl:text-lg text-gray-400">
               <p>Monday - Friday</p>
               <p className="font-semibold text-white">8:00 AM - 5:00 PM</p>
               <p className="mt-4">Saturday - Sunday</p>
@@ -128,10 +128,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-sm">
+        <div className="border-t border-gray-800 pt-6 sm:pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-gray-400 text-xs sm:text-sm 3xl:text-base">
             <p>&copy; {currentYear} Ghana Education Trust Fund. All rights reserved.</p>
-            <div className="flex gap-6">
+            <div className="flex gap-4 sm:gap-6">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>

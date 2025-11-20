@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    height: 100%;
   }
 
   body {
@@ -13,6 +14,16 @@
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #root {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 }
 
@@ -23,7 +34,15 @@
      future header size changes. The values below match the header/logo
      sizing used in the header component. */
   :root {
-    --header-height: 112px; /* small screens: logo h-20 (80px) + 2*16px padding */
+    --header-height: 88px; /* xs: logo h-14 (56px) + 2*12px padding */
+  }
+
+  @media (min-width: 475px) {
+    :root { --header-height: 96px; } /* xs: logo h-16 (64px) + 2*16px padding */
+  }
+
+  @media (min-width: 640px) {
+    :root { --header-height: 112px; } /* sm: logo h-20 (80px) + 2*16px padding */
   }
 
   @media (min-width: 768px) {
@@ -34,9 +53,42 @@
     :root { --header-height: 144px; } /* lg: logo h-28 (112px) + 32px padding */
   }
 
+  @media (min-width: 1280px) {
+    :root { --header-height: 160px; } /* xl: logo h-32 (128px) + 32px padding */
+  }
+
+  @media (min-width: 1920px) {
+    :root { --header-height: 176px; } /* 3xl: logo h-36 (144px) + 32px padding */
+  }
+
+  @media (min-width: 2560px) {
+    :root { --header-height: 208px; } /* 4xl: logo h-40 (160px) + 48px padding */
+  }
+
   html { scroll-padding-top: var(--header-height); }
   /* Ensure anchor targets account for fixed header at different screen sizes */
   [id] { scroll-margin-top: var(--header-height); }
+
+  /* Touch target optimization for mobile */
+  @media (max-width: 1023px) {
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Responsive text rendering for large screens */
+  @media (min-width: 1920px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    html {
+      font-size: 20px;
+    }
+  }
 }
 
 /* Hero slide text: only show content for active slide (slick assigns .slick-active) */
@@ -60,6 +112,75 @@
 /* Ensure slider controls are above overlays */
 .slick-prev, .slick-next, .slick-dots { z-index: 30 !important; }
 
+/* Dropdown menu hover persistence */
+.dropdown-container:hover .dropdown-menu,
+.dropdown-menu:hover {
+  display: block !important;
+}
+
+.dropdown-menu {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Prevent body from getting horizontal scroll from big slides */
-body { overflow-x: hidden; }
+body { 
+  overflow-x: hidden; 
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent text overflow on small screens */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Smooth transitions for responsive changes */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    transition-property: none;
+  }
+  
+  *:where(:not(.slick-slide *)) {
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+  }
+}
+
+/* Optimize for tablets in landscape */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .container {
+    max-width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Optimize for large screens */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1800px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .container {
+    max-width: 2400px;
+  }
+}
 

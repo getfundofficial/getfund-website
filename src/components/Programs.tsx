@@ -1,8 +1,26 @@
 import { GraduationCap, Users, TrendingUp, BookOpen, Building2, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export default function Programs() {
-  const services = [
+interface Program {
+  title: string;
+  description: string;
+  link: string;
+}
+
+interface Stat {
+  number: string;
+  label: string;
+  description: string;
+}
+
+interface ProgramsProps {
+  title?: string;
+  programs?: Program[];
+  stats?: Stat[];
+}
+
+export default function Programs({ title, programs: propPrograms, stats }: ProgramsProps = {}) {
+  const defaultServices = [
     {
       icon: Building2,
       title: 'Educational Infrastructure Projects',
@@ -22,21 +40,26 @@ export default function Programs() {
       link: '/service/education-sector-support'
     },
   ];
+  
+  const services = propPrograms?.map(p => ({
+    ...p,
+    icon: Building2
+  })) || defaultServices;
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24 3xl:py-28 bg-gray-50">
       {/* Scroll anchor with offset for fixed header */}
       <div id="what-we-do" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16 md:mb-20">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">What We Do</h2>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 max-w-8xl">
+        <div className="text-center mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 3xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 3xl:mb-8">{title || 'What We Do'}</h2>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl 3xl:text-3xl text-gray-600 max-w-4xl 3xl:max-w-5xl mx-auto leading-relaxed">
             GETFund is committed to transforming education in Ghana through strategic investments and key initiatives.
           </p>
         </div>
 
         {/* Services Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 mb-12 sm:mb-16 md:mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 3xl:gap-12 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
           {services.map((service) => {
             const Icon = service.icon;
             return (

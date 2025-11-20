@@ -19,9 +19,11 @@ interface NewsArticle {
 
 interface NewsProps {
   articles?: NewsArticle[];
+  title?: string;
+  subtitle?: string;
 }
 
-export default function News({ articles: propArticles }: NewsProps) {
+export default function News({ articles: propArticles, title, subtitle }: NewsProps = {}) {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [isLoadingCMS, setIsLoadingCMS] = useState(true);
 
@@ -95,9 +97,9 @@ export default function News({ articles: propArticles }: NewsProps) {
         <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16 md:mb-20">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">News & Updates</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">{title || 'News & Updates'}</h2>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Stay updated with the latest developments and achievements from GETFund.
+              {subtitle || 'Stay updated with the latest developments and achievements from GETFund.'}
             </p>
           </div>
           <div className="text-center py-16">
@@ -120,9 +122,9 @@ export default function News({ articles: propArticles }: NewsProps) {
       <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16 md:mb-20">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">News & Updates</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">{title || 'News & Updates'}</h2>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Stay updated with the latest developments and achievements from GETFund.
+            {subtitle || 'Stay updated with the latest developments and achievements from GETFund.'}
           </p>
         </div>
 

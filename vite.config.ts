@@ -21,4 +21,7 @@ export default defineConfig({
     sourcemap: false,
     chunkSizeWarningLimit: 1000,
   },
+  server: {
+    sourcemapIgnoreList: () => true,
+  },
 });

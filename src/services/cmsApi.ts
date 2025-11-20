@@ -63,6 +63,31 @@ export interface NewsArticle {
   tags: string[];
 }
 
+export type SectionType = 'text' | 'html' | 'image' | 'gallery' | 'video' | 'stats' | 'hero' | 'cta' | 'page_content';
+
+export interface PageSection {
+  id: string;
+  section_key: string;
+  section_type: SectionType;
+  title?: string;
+  content: any; // JSONB content, varies by section type
+  order_index: number;
+  is_active: boolean;
+}
+
+export interface CMSPage {
+  id: string;
+  slug: string;
+  title: string;
+  meta_title?: string;
+  meta_description?: string;
+  is_active: boolean;
+  layout_template: string;
+  template_variables?: Record<string, any>; // Template-level variables
+  content?: any; // Legacy content structure (JSON)
+  sections?: PageSection[];
+}
+
 class CMSApiClient {
   private baseUrl: string;
   private fetchTimeout: number = 15000; // 15 second timeout
@@ -82,6 +107,13 @@ class CMSApiClient {
       const response = await fetch(url, {
         ...options,
         signal: controller.signal,
+        cache: 'no-store', // Disable caching to always get fresh data
+        headers: {
+          ...options.headers,
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
       });
       clearTimeout(timeoutId);
       return response;
@@ -203,6 +235,44 @@ class CMSApiClient {
    */
   async getRecentNews(count: number = 3): Promise<NewsArticle[]> {
     return this.getNewsArticles(count);
+  }
+
+  /**
+   * Fetch a single published page by slug with all its sections
+   */
+  async getPageBySlug(slug: string): Promise<CMSPage | null> {
+    try {
+      // Add timestamp to prevent any caching
+      const timestamp = Date.now();
+      const url = `${this.baseUrl}/pages/${slug}?_t=${timestamp}`;
+      console.log('[CMS API] Fetching page:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      console.log('[CMS API] Page response status:', response.status, response.statusText);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          return null;
+        }
+        throw new Error(`Failed to fetch page: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const page: CMSPage = data.page;
+
+      console.log('[CMS API] Received page:', page.title, 'with', page.sections?.length || 0, 'sections');
+
+      // Only return if it's published
+      if (!page.is_active) {
+        console.log('[CMS API] Page is not published');
+        return null;
+      }
+
+      return page;
+    } catch (error) {
+      console.error(`[CMS API] Error fetching page by slug (${slug}):`, error);
+      return null;
+    }
   }
 }
 

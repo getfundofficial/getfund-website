@@ -53,22 +53,19 @@ export default function NewsArticlePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <Breadcrumb />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading article...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading article...</p>
         </div>
-        <Footer />
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20">
-        <div className="container mx-auto px-4 py-16">
+      <div className="min-h-screen bg-gray-50 pt-20 flex flex-col">
+        <div className="container mx-auto px-4 py-16 flex-1">
           <h1 className="text-2xl font-bold text-gray-900">Article not found</h1>
           <Link to="/news" className="text-getfund-primary hover:underline">
             ← Back to News
@@ -85,9 +82,10 @@ export default function NewsArticlePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Header />
       <Breadcrumb items={breadcrumbItems} />
+      <div className="flex-1">
       {/* Hero Section */}
       <div className="relative bg-getfund-primary text-white pt-40 pb-16">
         <div className="absolute inset-0">
@@ -186,6 +184,7 @@ export default function NewsArticlePage() {
           )}
         </div>
       </article>
+      </div>
       <Footer />
     </div>
   );
