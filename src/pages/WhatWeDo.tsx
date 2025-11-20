@@ -28,12 +28,14 @@ export default function WhatWeDo() {
         const response = await cmsApi.getPageBySlug('what-we-do');
         
         // Find the page_content section
-        const contentSection = response.sections?.find(
-          (section: any) => section.section_type === 'page_content'
-        );
-        
-        if (contentSection?.content) {
-          setPageContent(contentSection.content);
+        if (response) {
+          const contentSection = response.sections?.find(
+            (section: any) => section.section_type === 'page_content'
+          );
+          
+          if (contentSection?.content) {
+            setPageContent(contentSection.content);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch what-we-do content from CMS:', error);

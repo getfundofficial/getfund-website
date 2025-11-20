@@ -34,12 +34,14 @@ export default function Home() {
         const response = await cmsApi.getPageBySlug('home');
         
         // Find the page_content section
-        const contentSection = response.sections?.find(
-          (section: any) => section.section_type === 'page_content'
-        );
-        
-        if (contentSection?.content) {
-          setPageContent(contentSection.content);
+        if (response) {
+          const contentSection = response.sections?.find(
+            (section: any) => section.section_type === 'page_content'
+          );
+          
+          if (contentSection?.content) {
+            setPageContent(contentSection.content);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch home content from CMS:', error);
