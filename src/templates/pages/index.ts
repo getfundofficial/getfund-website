@@ -14,6 +14,7 @@ import { ScholarshipProgrammePage } from './ScholarshipProgrammePage';
 import { InfrastructureProjectsPage } from './InfrastructureProjectsPage';
 import { ImpactPage } from './ImpactPage';
 import { FAQPage } from './FAQPage';
+import { SupportUsPage } from './SupportUsPage';
 
 // Template metadata for documentation and CMS integration
 export interface PageTemplateMetadata {
@@ -34,6 +35,7 @@ export const pageTemplateRegistry: Record<string, React.ComponentType<any>> = {
   'impact': ImpactPage,
   'faq': FAQPage,
   'contact': ContactPage,
+  'support-us': SupportUsPage,
 };
 
 // Metadata for each template (used by CMS)
@@ -177,6 +179,85 @@ export const pageTemplateMetadata: Record<string, PageTemplateMetadata> = {
             instagram: { type: 'string', format: 'url' },
           },
         },
+      },
+    },
+  },
+  'support-us': {
+    name: 'support-us',
+    displayName: 'Support Us',
+    description: 'Template for Support Us page with hero, impact stats, ways to support, scholarship info, and donation CTAs',
+    contentSchema: {
+      type: 'object',
+      properties: {
+        heroTitle: { type: 'string', description: 'Hero section title' },
+        heroSubtitle: { type: 'string', description: 'Hero section subtitle' },
+        heroCtaText: { type: 'string', description: 'Hero CTA button text' },
+        heroCtaLink: { type: 'string', format: 'url', description: 'Hero CTA button link' },
+        impactTitle: { type: 'string', description: 'Impact stats section title' },
+        impactSubtitle: { type: 'string', description: 'Impact stats subtitle' },
+        stats: {
+          type: 'array',
+          description: 'Impact statistics',
+          items: {
+            type: 'object',
+            properties: {
+              number: { type: 'string' },
+              label: { type: 'string' },
+              icon: { type: 'string', enum: ['users', 'building', 'heart'] },
+            },
+            required: ['number', 'label'],
+          },
+        },
+        actTitle: { type: 'string', description: 'GETFund Act section title' },
+        actIntro: { type: 'string', description: 'GETFund Act introduction' },
+        legalFoundationTitle: { type: 'string', description: 'Legal foundation subsection title' },
+        legalFoundationText: { type: 'string', description: 'Legal foundation description' },
+        fundingMechanismTitle: { type: 'string', description: 'Funding mechanism subsection title' },
+        fundingMechanismText: { type: 'string', description: 'Funding mechanism description' },
+        constitutionalMandate: { type: 'string', description: 'Constitutional mandate quote' },
+        waysToSupportTitle: { type: 'string', description: 'Ways to support section title' },
+        waysToSupportSubtitle: { type: 'string', description: 'Ways to support subtitle' },
+        supportOptions: {
+          type: 'array',
+          description: 'Support options/methods',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+              ctaText: { type: 'string' },
+              ctaLink: { type: 'string', format: 'url' },
+              icon: { type: 'string', enum: ['heart', 'building', 'users'] },
+            },
+            required: ['title', 'description'],
+          },
+        },
+        scholarshipTitle: { type: 'string', description: 'Scholarship section title' },
+        scholarshipSubtitle: { type: 'string', description: 'Scholarship section subtitle' },
+        scholarshipTypes: {
+          type: 'array',
+          description: 'Types of scholarships',
+          items: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
+            },
+            required: ['title', 'description'],
+          },
+        },
+        scholarshipAmount: { type: 'string', description: 'Featured scholarship amount (e.g., GH₵ 5,000)' },
+        scholarshipAmountText: { type: 'string', description: 'Text describing what the amount covers' },
+        scholarshipCtaText: { type: 'string', description: 'Scholarship CTA button text' },
+        scholarshipCtaLink: { type: 'string', format: 'url', description: 'Scholarship CTA link' },
+        ctaTitle: { type: 'string', description: 'Final CTA section title' },
+        ctaDescription: { type: 'string', description: 'Final CTA description' },
+        ctaButtonText: { type: 'string', description: 'Primary CTA button text' },
+        ctaButtonLink: { type: 'string', format: 'url', description: 'Primary CTA button link' },
+        ctaSecondaryText: { type: 'string', description: 'Secondary CTA button text' },
+        ctaSecondaryLink: { type: 'string', format: 'url', description: 'Secondary CTA button link' },
+        contactEmail: { type: 'string', format: 'email', description: 'Contact email for donations' },
+        contactPhone: { type: 'string', description: 'Contact phone for donations' },
       },
     },
   },

@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
 import WhatWeDo from './pages/WhatWeDo';
+import WhoWeAre from './pages/WhoWeAre';
+import Impact from './pages/Impact';
+import Resources from './pages/Resources';
 import NewsPage from './pages/NewsPage';
 import NewsArticlePage from './pages/NewsArticlePage';
 import FAQ from './pages/FAQ';
@@ -20,16 +22,25 @@ function App() {
       <ScrollToTop />
       <div className="min-h-screen">
         <Routes>
-          {/* Homepage - Static with CMS Components */}
-          <Route path="/" element={<Home />} />
+          {/* Homepage - CMS-powered */}
+          <Route path="/" element={<CMSPage />} />
           
           {/* What We Do - CMS-powered with Programs component */}
           <Route path="/what-we-do" element={<WhatWeDo />} />
+          
+          {/* Who We Are - Dedicated CMS-powered page */}
+          <Route path="/who-we-are" element={<WhoWeAre />} />
+          
+          {/* Impact - Dedicated CMS-powered page */}
+          <Route path="/impact" element={<Impact />} />
+          
+          {/* Resources - Dedicated CMS-powered page */}
+          <Route path="/resources" element={<Resources />} />
 
           {/* CMS-Powered Pages */}
-          <Route path="/who-we-are/:slug?" element={<CMSPage />} />
-          <Route path="/impact/:slug?" element={<CMSPage />} />
-          <Route path="/resources/:slug?" element={<CMSPage />} />
+          <Route path="/who-we-are/:slug" element={<CMSPage />} />
+          <Route path="/impact/:slug" element={<CMSPage />} />
+          <Route path="/resources/:slug" element={<CMSPage />} />
           <Route path="/support-us/:slug?" element={<CMSPage />} />
           <Route path="/contact/:slug?" element={<CMSPage />} />
 

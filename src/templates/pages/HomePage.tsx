@@ -1,7 +1,8 @@
 import React from 'react';
-import { Target, Eye, Heart, Calendar, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Target, Eye, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import News from '../../components/News';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -94,15 +95,6 @@ interface HomePageProps {
     // News Section
     newsTitle?: string;
     newsSubtitle?: string;
-    featuredNews?: Array<{
-      id: string;
-      slug: string;
-      title: string;
-      excerpt: string;
-      category: string;
-      date: string;
-      image?: string;
-    }>;
   };
 }
 
@@ -345,74 +337,10 @@ export const HomePage: React.FC<HomePageProps> = ({ pageData, content }) => {
       )}
 
       {/* News & Updates Section */}
-      {content.featuredNews && content.featuredNews.length > 0 && (
-        <section className="py-16 md:py-24 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
-                {content.newsTitle || 'News & Updates'}
-              </h2>
-              <p className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                {content.newsSubtitle ||
-                  'Stay updated with the latest developments and achievements from GETFund.'}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {content.featuredNews.slice(0, 3).map((article) => (
-                <article
-                  key={article.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                >
-                  {article.image && (
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="h-48 w-full object-cover"
-                    />
-                  )}
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <span className="bg-getfund-primary/10 text-getfund-primary px-3 py-1 rounded-full text-sm font-medium">
-                        {article.category}
-                      </span>
-                      <div className="flex items-center gap-1 text-gray-500 text-sm">
-                        <Calendar className="w-4 h-4" />
-                        <time dateTime={article.date}>
-                          {new Date(article.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
-                        </time>
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
-                      {article.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed mb-6">{article.excerpt}</p>
-                    <Link
-                      to={`/news/${article.slug}`}
-                      className="inline-flex items-center gap-2 text-getfund-primary font-semibold hover:gap-3 transition-all"
-                    >
-                      Read More <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Link
-                to="/news"
-                className="inline-block bg-getfund-primary text-white px-10 py-4 rounded-sm font-semibold hover:bg-green-700 transition-colors shadow-lg uppercase tracking-wide"
-              >
-                View All News
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      <News
+        title={content.newsTitle}
+        subtitle={content.newsSubtitle}
+      />
     </div>
   );
 };

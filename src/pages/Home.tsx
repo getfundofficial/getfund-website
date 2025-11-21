@@ -8,20 +8,25 @@ import Footer from '../components/Footer';
 import { cmsApi } from '../services/cmsApi';
 
 interface PageContent {
-  vision: { title: string; description: string };
-  mission: { title: string; description: string };
-  services: Array<{ title: string; description: string; link: string }>;
-  newsTitle: string;
-  newsSubtitle: string;
-  coreValues: { title: string; description: string };
-  heroSlides: Array<{ image: string; headline: string; description: string; ctaText?: string; ctaLink?: string }>;
-  impactStats: Array<{ number: string; label: string; description: string }>;
-  aboutHeading: string;
-  aboutSubheading: string;
-  servicesTitle: string;
-  aboutGETFundHeading: string;
-  aboutGETFundContent: string[];
-  relevantFactors: string[];
+  vision?: { title: string; description: string };
+  mission?: { title: string; description: string };
+  newsTitle?: string;
+  newsSubtitle?: string;
+  coreValues?: { title: string; description: string };
+  heroSlides?: Array<{ image: string; headline: string; description: string; ctaText?: string; ctaLink?: string }>;
+  aboutTitle?: string;
+  aboutSubtitle?: string;
+  aboutDescription?: string;
+  aboutStats?: Array<{ number: string; label: string; description: string }>;
+  aboutImage?: string;
+  aboutImageAlt?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  aboutHeading?: string;
+  aboutSubheading?: string;
+  aboutGETFundHeading?: string;
+  aboutGETFundContent?: string[];
+  relevantFactors?: string[];
 }
 
 export default function Home() {
@@ -33,15 +38,38 @@ export default function Home() {
       try {
         const response = await cmsApi.getPageBySlug('home');
         
-        // Find the page_content section
-        if (response) {
-          const contentSection = response.sections?.find(
-            (section: any) => section.section_type === 'page_content'
-          );
+        if (response && response.sections) {
+          const content: PageContent = {};
           
-          if (contentSection?.content) {
-            setPageContent(contentSection.content);
-          }
+          response.sections.forEach((section: any) => {
+            if (section.section_key === 'hero_slides' && section.content) {
+              content.heroSlides = section.content.slides;
+            } else if (section.section_key === 'about_getfund' && section.content) {
+              content.aboutTitle = section.content.aboutTitle;
+              content.aboutSubtitle = section.content.aboutSubtitle;
+              content.aboutDescription = section.content.aboutDescription;
+              content.aboutStats = section.content.aboutStats;
+              content.aboutImage = section.content.aboutImage;
+              content.aboutImageAlt = section.content.aboutImageAlt;
+              content.aboutGETFundHeading = section.content.aboutGETFundHeading;
+              content.relevantFactors = section.content.relevantFactors;
+              content.ctaText = section.content.ctaText;
+              content.ctaLink = section.content.ctaLink;
+              // Map to old structure for About component
+              content.aboutHeading = section.content.aboutTitle;
+              content.aboutSubheading = section.content.aboutSubtitle;
+              content.aboutGETFundContent = [section.content.aboutDescription];
+            } else if (section.section_key === 'vision_mission' && section.content) {
+              content.vision = section.content.vision;
+              content.mission = section.content.mission;
+              content.coreValues = section.content.coreValues;
+            } else if (section.section_key === 'news_updates' && section.content) {
+              content.newsTitle = section.content.newsTitle;
+              content.newsSubtitle = section.content.newsSubtitle;
+            }
+          });
+          
+          setPageContent(content);
         }
       } catch (error) {
         console.error('Failed to fetch home content from CMS:', error);
@@ -70,14 +98,20 @@ export default function Home() {
       <main className="flex-1">
         <Hero slides={pageContent?.heroSlides} />
         <About content={pageContent ? {
-          aboutHeading: pageContent.aboutHeading,
-          aboutSubheading: pageContent.aboutSubheading,
-          mission: pageContent.mission,
-          vision: pageContent.vision,
-          coreValues: pageContent.coreValues,
-          aboutGETFundHeading: pageContent.aboutGETFundHeading,
-          aboutGETFundContent: pageContent.aboutGETFundContent,
-          relevantFactors: pageContent.relevantFactors
+          aboutHeading: pageContent.aboutTitle || pageContent.aboutHeading || 'Empowering Ghana Through Education',
+          aboutSubheading: pageContent.aboutSubtitle || pageContent.aboutSubheading || 'Building Brighter Futures',
+          aboutDescription: pageContent.aboutDescription,
+          aboutStats: pageContent.aboutStats,
+          aboutImage: pageContent.aboutImage,
+          aboutImageAlt: pageContent.aboutImageAlt,
+          ctaText: pageContent.ctaText,
+          ctaLink: pageContent.ctaLink,
+          mission: pageContent.mission || { title: 'Our Mission', description: '' },
+          vision: pageContent.vision || { title: 'Our Vision', description: '' },
+          coreValues: pageContent.coreValues || { title: 'Core Values', description: '' },
+          aboutGETFundHeading: pageContent.aboutGETFundHeading || 'About GETFund',
+          aboutGETFundContent: pageContent.aboutGETFundContent || [],
+          relevantFactors: pageContent.relevantFactors || []
         } : undefined} />
         <News 
           title={pageContent?.newsTitle}

@@ -4,6 +4,12 @@ import { useState } from 'react';
 interface HomepageContent {
   aboutHeading: string;
   aboutSubheading: string;
+  aboutDescription?: string;
+  aboutStats?: Array<{ number: string; label: string; description: string }>;
+  aboutImage?: string;
+  aboutImageAlt?: string;
+  ctaText?: string;
+  ctaLink?: string;
   mission: {
     title: string;
     description: string;
@@ -61,7 +67,25 @@ export default function About({ content: propContent }: AboutProps) {
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             {content.aboutSubheading}
           </p>
+          {content.aboutDescription && (
+            <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-5xl mx-auto leading-relaxed mt-6">
+              {content.aboutDescription}
+            </p>
+          )}
         </div>
+
+        {/* Stats Section */}
+        {content.aboutStats && content.aboutStats.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-16 md:mb-20">
+            {content.aboutStats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stat.number}</div>
+                <div className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
+                <p className="text-xs sm:text-sm text-gray-600">{stat.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 mb-12 sm:mb-16 md:mb-20">
           <div className="text-center">
@@ -95,28 +119,67 @@ export default function About({ content: propContent }: AboutProps) {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-getfund-secondary/5 to-getfund-secondary/10 p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl">
-          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">{content.aboutGETFundHeading}</h3>
-          <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg lg:text-xl max-w-5xl mx-auto">
-            <p>
-              Since its establishment in the year 2000, the fund has remained committed to its mandate espoused in its governing legislation, Act 581. The object of the Fund is to provide funding to supplement government's effort for the provision of educational infrastructure and facilities at all levels.
-            </p>
-            <p>
-              GETFund has since its inception remained a significant player in Ghana's education sector not only by way of providing physical infrastructure, but also through the enhancement of our human capital, awarding scholarships to many deserving citizens.
-            </p>
-            <p>
-              The law establishing GETFund further emphasizes a distribution formula that must be approved by Parliament each year, requiring that some crucial factors related to education delivery and development are considered in the process of preparing the Formula.
-            </p>
-            <div>
-              <span className="font-semibold">Relevant Factors:</span>
-              <ul className="list-disc pl-6 mt-2">
-                {content.relevantFactors.map((factor, index) => (
-                  <li key={index}>{factor}</li>
-                ))}
-              </ul>
-            </div>
+        {/* Image Section */}
+        {content.aboutImage && (
+          <div className="mb-12 sm:mb-16 md:mb-20">
+            <img 
+              src={content.aboutImage} 
+              alt={content.aboutImageAlt || 'GETFund'} 
+              className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-xl shadow-lg"
+            />
+          </div>
+        )}
+
+        {/* Detailed About GETFund Section */}
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl mb-12 sm:mb-16 md:mb-20">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">
+            {content.aboutGETFundHeading || 'About GETFund'}
+          </h2>
+          <div className="space-y-6 sm:space-y-8 text-gray-700 leading-relaxed text-base sm:text-lg md:text-xl max-w-6xl mx-auto">
+            {/* Main Description */}
+            {(content.aboutGETFundContent && content.aboutGETFundContent.length > 0) ? (
+              content.aboutGETFundContent.map((paragraph, index) => (
+                <p key={index} className="text-justify">{paragraph}</p>
+              ))
+            ) : (
+              <>
+                <p className="text-justify">
+                  Since its establishment in the year 2000, the fund has remained committed to its mandate espoused in its governing legislation, Act 581. The object of the Fund is to provide funding to supplement government's effort for the provision of educational infrastructure and facilities at all levels.
+                </p>
+                <p className="text-justify">
+                  GETFund has since its inception remained a significant player in Ghana's education sector not only by way of providing physical infrastructure, but also through the enhancement of our human capital, awarding scholarships to many deserving citizens.
+                </p>
+                <p className="text-justify">
+                  The law establishing GETFund further emphasizes a distribution formula that must be approved by Parliament each year, requiring that some crucial factors related to education delivery and development are considered in the process of preparing the Formula.
+                </p>
+              </>
+            )}
+            
+            {/* Relevant Factors */}
+            {content.relevantFactors && content.relevantFactors.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-bold text-xl sm:text-2xl mb-4 text-gray-900">Relevant Factors:</h3>
+                <ul className="list-disc pl-6 sm:pl-8 space-y-2">
+                  {content.relevantFactors.map((factor, index) => (
+                    <li key={index} className="text-gray-700">{factor}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* CTA Button */}
+        {content.ctaText && content.ctaLink && (
+          <div className="text-center">
+            <a 
+              href={content.ctaLink}
+              className="inline-block bg-getfund-primary hover:bg-getfund-primary/90 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-200"
+            >
+              {content.ctaText}
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

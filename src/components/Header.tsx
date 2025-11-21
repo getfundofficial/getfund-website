@@ -1,7 +1,8 @@
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollDirection } from '../hooks/useScrollDirection';
+import { cmsApi, MenuItem } from '../services/cmsApi';
 
 interface NavItem {
   name: string;
@@ -11,21 +12,48 @@ interface NavItem {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [ctaButton, setCtaButton] = useState<MenuItem | null>(null);
+  const [isLoadingMenu, setIsLoadingMenu] = useState(true);
   const location = useLocation();
   const { scrollDirection, isScrolled } = useScrollDirection(100);
 
   // Hide header when scrolling down and scrolled past threshold
   const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
-  // No special scroll handler anymore - 'What We Do' is a dedicated page at /what-we-do
+  // Fetch menu configuration from CMS
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const menuConfig = await cmsApi.getMenuConfig();
+        setMenuItems(menuConfig.menuItems);
+        setCtaButton(menuConfig.ctaButton);
+      } catch (error) {
+        console.error('Failed to load menu:', error);
+      } finally {
+        setIsLoadingMenu(false);
+      }
+    };
 
-  const navItems: NavItem[] = [
+    fetchMenu();
+  }, []);
+
+  // Fallback menu items if CMS fails to load
+  const defaultNavItems: NavItem[] = [
     { name: 'Who We Are', href: '/who-we-are' },
     { name: 'What We Do', href: '/what-we-do' },
     { name: 'Impact', href: '/impact' },
     { name: 'News & Updates', href: '/news' },
     { name: 'Resources', href: '/resources' },
   ];
+
+  // Use CMS menu items if available, otherwise use defaults
+  const navItems: NavItem[] = menuItems.length > 0
+    ? menuItems.map(item => ({
+        name: item.label,
+        href: `/${item.slug}`,
+      }))
+    : defaultNavItems;
 
   return (
     <header className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100 transition-transform duration-300 ease-in-out ${
@@ -76,38 +104,17 @@ export default function Header() {
             </li>
           ))}
           
-          {/* Support Us Button with Dropdown */}
-          <li className="relative dropdown-container group">
-            <Link
-              to="/support-us"
-              className="inline-flex items-center justify-center gap-1.5 bg-green-600 text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-green-700 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap"
-              title="Support Us"
-            >
-              <span className="hidden xl:inline">Support Us</span>
-              <span className="xl:hidden">Support</span>
-              <svg 
-                className="w-3 h-3 xl:w-4 xl:h-4 transition-transform group-hover:rotate-180" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-                aria-hidden="true"
+          {/* CTA Button (from CMS) */}
+          {ctaButton && (
+            <li>
+              <Link
+                to={`/${ctaButton.slug}`}
+                className="inline-flex items-center justify-center gap-1.5 bg-yellow-500 text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </Link>
-            {/* Invisible bridge to prevent dropdown from disappearing */}
-            <div className="absolute left-0 top-full w-full h-2 hidden group-hover:block" />
-            <div className="dropdown-menu absolute left-0 top-full mt-2 hidden group-hover:block z-50 min-w-full">
-              <a
-                href="https://donate.getfund.gov.gh/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block bg-white text-getfund-secondary px-4 xl:px-6 py-2.5 xl:py-3 rounded font-semibold hover:bg-green-100 transition-colors text-xs lg:text-sm xl:text-base uppercase tracking-wide whitespace-nowrap shadow-lg border border-gray-200"
-              >
-                Donate
-              </a>
-            </div>
-          </li>
+                {ctaButton.label}
+              </Link>
+            </li>
+          )}
           
           {/* Contact Button */}
           <li>
@@ -147,26 +154,18 @@ export default function Header() {
                   )}
                 </li>
               ))}
-              <li className="relative">
-                <div className="flex flex-col items-center">
+              {/* CTA Button (Mobile) */}
+              {ctaButton && (
+                <li>
                   <Link
-                    to="/support-us"
-                    className="block mx-4 mt-2 bg-green-600 text-white px-6 py-3 rounded-sm font-semibold hover:bg-green-700 transition-colors text-sm uppercase tracking-wide text-center"
+                    to={`/${ctaButton.slug}`}
+                    className="block mx-4 mt-2 bg-yellow-500 text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm uppercase tracking-wide text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Support Us
+                    {ctaButton.label}
                   </Link>
-                  <a
-                    href="https://donate.getfund.gov.gh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block mx-4 bg-white text-getfund-secondary px-6 py-3 rounded-b-sm font-semibold hover:bg-green-100 transition-colors text-sm uppercase tracking-wide text-center border border-gray-200"
-                    style={{ marginTop: '-4px' }}
-                  >
-                    Donate
-                  </a>
-                </div>
-              </li>
+                </li>
+              )}
               <li>
                 <Link
                   to="/contact"

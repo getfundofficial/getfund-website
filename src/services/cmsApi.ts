@@ -274,6 +274,39 @@ class CMSApiClient {
       return null;
     }
   }
+
+  /**
+   * Fetch menu configuration
+   */
+  async getMenuConfig(): Promise<{ menuItems: MenuItem[]; ctaButton: MenuItem | null }> {
+    try {
+      const url = `${this.baseUrl}/menu`;
+      console.log('[CMS API] Fetching menu config:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch menu: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[CMS API] Received menu:', data);
+
+      return data;
+    } catch (error) {
+      console.error('[CMS API] Error fetching menu config:', error);
+      // Return empty menu on error
+      return { menuItems: [], ctaButton: null };
+    }
+  }
+}
+
+export interface MenuItem {
+  id: string;
+  slug: string;
+  title: string;
+  label: string;
+  order?: number;
+  parentId?: string | null;
 }
 
 // Export a singleton instance
