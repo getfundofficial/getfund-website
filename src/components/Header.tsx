@@ -13,8 +13,6 @@ interface NavItem {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [ctaButton, setCtaButton] = useState<MenuItem | null>(null);
-  const [isLoadingMenu, setIsLoadingMenu] = useState(true);
   const location = useLocation();
   const { scrollDirection, isScrolled } = useScrollDirection(100);
 
@@ -27,11 +25,8 @@ export default function Header() {
       try {
         const menuConfig = await cmsApi.getMenuConfig();
         setMenuItems(menuConfig.menuItems);
-        setCtaButton(menuConfig.ctaButton);
       } catch (error) {
         console.error('Failed to load menu:', error);
-      } finally {
-        setIsLoadingMenu(false);
       }
     };
 
@@ -45,6 +40,7 @@ export default function Header() {
     { name: 'Impact', href: '/impact' },
     { name: 'News & Updates', href: '/news' },
     { name: 'Resources', href: '/resources' },
+    { name: 'Support Us', href: '/support-us' },
   ];
 
   // Use CMS menu items if available, otherwise use defaults
@@ -103,19 +99,7 @@ export default function Header() {
               )}
             </li>
           ))}
-          
-          {/* CTA Button (from CMS) */}
-          {ctaButton && (
-            <li>
-              <Link
-                to={`/${ctaButton.slug}`}
-                className="inline-flex items-center justify-center gap-1.5 bg-yellow-500 text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap"
-              >
-                {ctaButton.label}
-              </Link>
-            </li>
-          )}
-          
+
           {/* Contact Button */}
           <li>
             <Link
@@ -154,18 +138,6 @@ export default function Header() {
                   )}
                 </li>
               ))}
-              {/* CTA Button (Mobile) */}
-              {ctaButton && (
-                <li>
-                  <Link
-                    to={`/${ctaButton.slug}`}
-                    className="block mx-4 mt-2 bg-yellow-500 text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm uppercase tracking-wide text-center"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {ctaButton.label}
-                  </Link>
-                </li>
-              )}
               <li>
                 <Link
                   to="/contact"

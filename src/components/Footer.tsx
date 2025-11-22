@@ -22,7 +22,7 @@ export default function Footer() {
     { icon: Twitter, href: 'https://twitter.com/GETFundOfficial', label: 'Twitter' },
     { icon: Linkedin, href: 'https://www.linkedin.com/company/getfundofficial/', label: 'LinkedIn' },
     { icon: Instagram, href: 'https://www.instagram.com/getfundofficial/', label: 'Instagram' },
-    { icon: Youtube, href: 'https://www.youtube.com/@getfundghana', label: 'YouTube' },
+    { icon: Youtube, href: 'https://www.youtube.com/@GETFundOfficial', label: 'YouTube' },
     { icon: WhatsappIcon, href: 'https://whatsapp.com/channel/0029VaF1QwFJvQ1Q2Q1Q2Q', label: 'WhatsApp Channel' },
   ];
 
@@ -33,6 +33,7 @@ export default function Footer() {
     { name: 'Impact', href: '/impact' },
     { name: 'News & Updates', href: '/news' },
     { name: 'Resources', href: '/resources' },
+    { name: 'Support Us', href: '/support-us' },
   ];
 
   return (

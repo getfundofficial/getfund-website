@@ -68,7 +68,7 @@ interface SupportUsPageProps {
   };
 }
 
-export const SupportUsPage: React.FC<SupportUsPageProps> = ({ pageData, content }) => {
+export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
   // Icon mapping for stats
   const getStatIcon = (iconName?: string) => {
     switch (iconName) {
