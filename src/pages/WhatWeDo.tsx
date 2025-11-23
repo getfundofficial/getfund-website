@@ -79,9 +79,9 @@ export default function WhatWeDo() {
 
         {/* Programs Section */}
         <Programs 
-          title={pageContent?.servicesTitle}
           programs={pageContent?.services}
           stats={pageContent?.impactStats}
+          showTitle={false}
         />
       </main>
       <Footer />
