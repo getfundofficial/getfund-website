@@ -31,12 +31,12 @@ export default function Header() {
     <header className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100 transition-transform duration-300 ease-in-out ${
       shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
     }`}>
-      <nav className="container mx-auto px-3 xs:px-4 sm:px-6 py-3 sm:py-4 3xl:px-8 4xl:px-12 max-w-9xl flex items-center justify-between">
+      <nav className="container mx-auto px-3 xs:px-4 sm:px-6 py-2 sm:py-3 3xl:px-8 4xl:px-12 max-w-9xl flex items-center justify-between">
         <Link to="/" className="flex items-center flex-shrink-0">
           <img
             src="/images/logos/GETFund logo_200cm Wide -  Black.png"
             alt="Ghana Education Trust Fund"
-            className="h-14 xs:h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 3xl:h-36 4xl:h-40 w-auto object-contain max-w-[200px] xs:max-w-[250px] sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] 3xl:max-w-[700px]"
+            className="h-10 xs:h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 3xl:h-24 4xl:h-28 w-auto object-contain max-w-[150px] xs:max-w-[200px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[400px] 3xl:max-w-[500px]"
           />
         </Link>
 
