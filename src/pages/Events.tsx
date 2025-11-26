@@ -1,36 +1,81 @@
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import { cmsApi } from '../services/cmsApi';
+
+interface Event {
+  id: number;
+  title: string;
+  date: string;
+  description: string;
+  imageUrl?: string;
+}
+
+interface EventsContent {
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    title: string;
+  };
+  upcomingEvents: {
+    heading: string;
+    events: Event[];
+    emptyStateTitle: string;
+    emptyStateSubtitle: string;
+  };
+}
 
 export default function Events() {
-  // Placeholder events data - can be replaced with CMS data later
-  const upcomingEvents = [
-    {
-      id: 1,
-      title: 'Event 1',
-      date: 'TBD',
-      description: 'Event details coming soon',
-    },
-    {
-      id: 2,
-      title: 'Event 2',
-      date: 'TBD',
-      description: 'Event details coming soon',
-    },
-    {
-      id: 3,
-      title: 'Event 3',
-      date: 'TBD',
-      description: 'Event details coming soon',
-    },
-  ];
+  const [content, setContent] = useState<EventsContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const page = await cmsApi.getPageBySlug('events');
+        const section = page.sections?.find(s => s.section_type === 'page_content');
+        if (section?.content) {
+          setContent(section.content as EventsContent);
+        }
+      } catch (error) {
+        console.error('Failed to load page content:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!content) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">Content not found</p>
+      </div>
+    );
+  }
+
+  const events = content.upcomingEvents?.events || [];
 
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
-        <title>Events | GETFund</title>
-        <meta name="description" content="Upcoming GETFund events and fundraising activities" />
+        <title>{content.meta?.title || 'Events | GETFund'}</title>
+        <meta name="description" content={content.meta?.description || 'Upcoming GETFund events and fundraising activities'} />
       </Helmet>
 
       <Header />
@@ -40,7 +85,7 @@ export default function Events() {
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
           <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Events</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{content.hero?.title}</h1>
           </div>
         </section>
 
@@ -48,33 +93,37 @@ export default function Events() {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
-              Upcoming events
+              {content.upcomingEvents?.heading}
             </h2>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {upcomingEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                >
-                  {/* Placeholder for event flyer/image */}
-                  <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 text-lg">Event Flyer</span>
-                  </div>
+            {events.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                {events.map((event) => (
+                  <div
+                    key={event.id}
+                    className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                  >
+                    {/* Event image or placeholder */}
+                    {event.imageUrl ? (
+                      <img src={event.imageUrl} alt={event.title} className="aspect-video w-full object-cover" />
+                    ) : (
+                      <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-400 text-lg">Event Flyer</span>
+                      </div>
+                    )}
 
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
-                    <p className="text-gray-600 mb-4">{event.date}</p>
-                    <p className="text-gray-700">{event.description}</p>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
+                      <p className="text-gray-600 mb-4">{event.date}</p>
+                      <p className="text-gray-700">{event.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {upcomingEvents.length === 0 && (
+                ))}
+              </div>
+            ) : (
               <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">No upcoming events at the moment.</p>
-                <p className="text-gray-500 mt-2">Check back soon for updates!</p>
+                <p className="text-gray-600 text-lg">{content.upcomingEvents?.emptyStateTitle}</p>
+                <p className="text-gray-500 mt-2">{content.upcomingEvents?.emptyStateSubtitle}</p>
               </div>
             )}
           </div>
