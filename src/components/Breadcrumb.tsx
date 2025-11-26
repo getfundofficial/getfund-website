@@ -1,5 +1,6 @@
 import { ChevronRight, Home } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 interface BreadcrumbItem {
   label: string;
@@ -124,7 +125,7 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   return (
   <nav
     aria-label="Breadcrumb"
-    className={`bg-white border-b-2 border-gray-300 shadow-sm mt-[70px] sm:mt-[84px] md:mt-[100px] lg:mt-[116px] xl:mt-[132px] ${className}`}>
+    className={`bg-white border-b-2 border-gray-300 shadow-md mt-[70px] sm:mt-[84px] md:mt-[100px] lg:mt-[116px] xl:mt-[132px] sticky top-0 z-40 transition-all duration-300 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <ol className="flex items-center space-x-2 py-3 text-sm font-medium">
           {breadcrumbs.map((item, index) => (
