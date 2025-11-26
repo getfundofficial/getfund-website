@@ -307,6 +307,7 @@ export interface MenuItem {
   label: string;
   order?: number;
   parentId?: string | null;
+  children?: MenuItem[];
 }
 
 // Export a singleton instance

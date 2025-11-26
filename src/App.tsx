@@ -14,6 +14,11 @@ import EducationSectorSupport from './pages/EducationSectorSupport';
 import CommunitySHSProgramme from './pages/CommunitySHSProgramme';
 import SecondaryEducationImprovementProgramme from './pages/SecondaryEducationImprovementProgramme';
 import CMSPage from './pages/CMSPage';
+import WhyFundraising from './pages/WhyFundraising';
+import WaysToDonate from './pages/WaysToDonate';
+import Partnerships from './pages/Partnerships';
+import BeneficiariesGiveBack from './pages/BeneficiariesGiveBack';
+import Events from './pages/Events';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -47,6 +52,13 @@ function App() {
           {/* News & Updates */}
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:slug" element={<NewsArticlePage />} />
+
+          {/* Fundraising Pages - Hardcoded with full content */}
+          <Route path="/fundraising/why-fundraising" element={<WhyFundraising />} />
+          <Route path="/fundraising/ways-to-donate" element={<WaysToDonate />} />
+          <Route path="/fundraising/partnerships" element={<Partnerships />} />
+          <Route path="/fundraising/beneficiaries-give-back" element={<BeneficiariesGiveBack />} />
+          <Route path="/fundraising/events" element={<Events />} />
 
           {/* Other Pages */}
           <Route path="/faq" element={<FAQ />} />
