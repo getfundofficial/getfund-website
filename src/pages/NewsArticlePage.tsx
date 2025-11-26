@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { Calendar, User, ArrowLeft } from 'lucide-react';
+import { Calendar, User, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
