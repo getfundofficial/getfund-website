@@ -139,7 +139,7 @@ export default function NewsArticlePage() {
           {/* Article Content */}
           <div className="bg-white shadow p-8 md:p-12">
             <div 
-              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-ul:text-gray-700 prose-li:mb-2"
+              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-justify prose-ul:text-gray-700 prose-li:mb-2"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
           </div>
