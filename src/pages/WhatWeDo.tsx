@@ -62,9 +62,9 @@ export default function WhatWeDo() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <Breadcrumb />
-      <main className="flex-1">
+      <main className="flex-1 pt-[130px] sm:pt-[148px] md:pt-[168px] lg:pt-[192px] xl:pt-[212px]">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-getfund-primary via-getfund-secondary to-red-900 text-white pt-32 pb-20">
+        <section className="relative bg-gradient-to-br from-getfund-primary via-getfund-secondary to-red-900 text-white pb-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">

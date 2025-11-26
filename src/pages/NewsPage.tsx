@@ -90,7 +90,7 @@ export default function NewsPage() {
       <Breadcrumb />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-getfund-primary via-teal-700 to-gray-800 text-white py-20">
+      <section className="relative bg-gradient-to-r from-getfund-primary via-teal-700 to-gray-800 text-white py-20 mt-[130px] sm:mt-[148px] md:mt-[168px] lg:mt-[192px] xl:mt-[212px]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">

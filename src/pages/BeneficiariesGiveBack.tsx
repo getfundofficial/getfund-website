@@ -75,7 +75,7 @@ export default function BeneficiariesGiveBack() {
       <Header />
       <Breadcrumb />
 
-      <main className="flex-1">
+      <main className="flex-1 pt-[130px] sm:pt-[148px] md:pt-[168px] lg:pt-[192px] xl:pt-[212px]">
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
           <div className="container mx-auto px-4 max-w-4xl text-center">

@@ -124,16 +124,16 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   return (
   <nav
     aria-label="Breadcrumb"
-    className={`bg-gray-50 border-b border-gray-200 mt-[70px] sm:mt-[84px] md:mt-[100px] lg:mt-[116px] xl:mt-[132px] pt-[9px] sm:pt-[13px] md:pt-[17px] lg:pt-[21px] ${className}`}>
+    className={`fixed top-[70px] sm:top-[84px] md:top-[100px] lg:top-[116px] xl:top-[132px] left-0 right-0 bg-white border-b-2 border-gray-300 shadow-sm z-40 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <ol className="flex items-center space-x-2 py-3 text-sm">
+        <ol className="flex items-center space-x-2 py-3 text-sm font-medium">
           {breadcrumbs.map((item, index) => (
             <li key={item.href} className="flex items-center">
               {index > 0 && (
                 <ChevronRight className="w-4 h-4 text-gray-400 mx-2 flex-shrink-0" />
               )}
               {item.isActive ? (
-                <span className="text-getfund-primary font-medium flex items-center">
+                <span className="text-getfund-primary font-semibold flex items-center">
                   {index === 0 && <Home className="w-4 h-4 mr-2" />}
                   {item.label}
                 </span>
@@ -141,7 +141,7 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
                 item.href.includes('#') ? (
                   <a
                     href={item.href}
-                    className="text-gray-600 hover:text-getfund-primary transition-colors flex items-center"
+                    className="text-gray-700 hover:text-getfund-primary flex items-center"
                   >
                     {index === 0 && <Home className="w-4 h-4 mr-2" />}
                     {item.label}
@@ -149,7 +149,7 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
                 ) : (
                   <Link
                     to={item.href}
-                    className="text-gray-600 hover:text-getfund-primary transition-colors flex items-center"
+                    className="text-gray-700 hover:text-getfund-primary flex items-center"
                   >
                     {index === 0 && <Home className="w-4 h-4 mr-2" />}
                     {item.label}
