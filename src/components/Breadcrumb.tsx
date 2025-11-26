@@ -30,6 +30,12 @@ const routeLabels: Record<string, string> = {
   '/service/education-sector-support': 'Education Sector Support',
   '/community-day-school-project': 'Community Day School Project',
   '/basic-education-project': 'Basic Education Improvement Project',
+  '/fundraising': 'Fundraising',
+  '/fundraising/why-fundraising': 'Why Fundraising?',
+  '/fundraising/ways-to-donate': 'Ways to Donate',
+  '/fundraising/partnerships': 'Partnerships',
+  '/fundraising/beneficiaries-give-back': 'Beneficiaries Give Back',
+  '/fundraising/events': 'Events',
 };
 
 const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
@@ -62,6 +68,24 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
       breadcrumbs.push({
         label: 'What We Do',
         href: '/what-we-do',
+        isActive: false
+      });
+      
+      breadcrumbs.push({
+        label: label,
+        href: fullPath,
+        isActive: true
+      });
+    }
+    // Special handling for fundraising routes - show intermediate Fundraising breadcrumb
+    else if (pathnames[0] === 'fundraising' && pathnames.length > 1) {
+      const fullPath = location.pathname;
+      const label = routeLabels[fullPath] || pathnames[pathnames.length - 1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      
+      // Add Fundraising as intermediate breadcrumb for fundraising routes
+      breadcrumbs.push({
+        label: 'Fundraising',
+        href: '/fundraising',
         isActive: false
       });
       

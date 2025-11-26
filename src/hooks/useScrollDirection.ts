@@ -14,21 +14,30 @@ export const useScrollDirection = (threshold: number = 10): ScrollDirection => {
   useEffect(() => {
     let lastScrollY = window.scrollY;
     let ticking = false;
+    let lastUpdateTime = Date.now();
 
     const updateScrollDirection = () => {
       const scrollY = window.scrollY;
+      const now = Date.now();
 
       // Check if scrolled past threshold
       setIsScrolled(scrollY > threshold);
       setScrollY(scrollY);
 
-      if (Math.abs(scrollY - lastScrollY) < threshold) {
+      // Require larger movement and debounce updates to prevent flickering
+      const scrollDiff = Math.abs(scrollY - lastScrollY);
+      const timeDiff = now - lastUpdateTime;
+      
+      // Only update direction if: scrolled more than threshold AND
+      // either moved significantly (50px) or enough time passed (150ms)
+      if (scrollDiff < threshold || (scrollDiff < 50 && timeDiff < 150)) {
         ticking = false;
         return;
       }
 
       setScrollDirection(scrollY > lastScrollY ? 'down' : 'up');
       lastScrollY = scrollY > 0 ? scrollY : 0;
+      lastUpdateTime = now;
       ticking = false;
     };
 
@@ -39,7 +48,7 @@ export const useScrollDirection = (threshold: number = 10): ScrollDirection => {
       }
     };
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => window.removeEventListener('scroll', onScroll);
   }, [threshold]);
