@@ -102,9 +102,9 @@ export default function NewsPage() {
 
       <main className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-12">
             {/* Main Content */}
-            <div>
+            <div className="lg:col-span-2">
               {filteredArticles.length === 0 ? (
                 <div className="bg-white shadow p-12 text-center">
                   <p className="text-gray-600 text-lg">No articles found matching your criteria.</p>
@@ -169,6 +169,68 @@ export default function NewsPage() {
                   </button>
                 </div>
               )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-8">
+              {/* Search */}
+              <div className="bg-white p-6 shadow">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Search</h3>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search articles..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
+                  />
+                  <Search className="w-5 h-5 text-gray-400 absolute right-3 top-3.5" />
+                </div>
+              </div>
+
+              {/* Recent Posts */}
+              <div className="bg-white p-6 shadow">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Posts</h3>
+                <div className="space-y-4">
+                  {recentPosts.map((post) => (
+                    <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+                      <Link
+                        to={`/news/${post.slug}`}
+                        className="block hover:text-getfund-primary transition-colors"
+                      >
+                        <h4 className="font-semibold text-sm line-clamp-2 mb-2">{post.title}</h4>
+                        <p className="text-gray-500 text-xs">
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </p>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div className="bg-white p-6 shadow">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Categories</h3>
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`block w-full text-left px-3 py-2 transition-colors ${
+                        selectedCategory === category
+                          ? 'bg-getfund-primary bg-opacity-10 text-getfund-primary font-semibold'
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
