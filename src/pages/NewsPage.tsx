@@ -90,12 +90,15 @@ export default function NewsPage() {
       <Breadcrumb />
       
       {/* Hero Section */}
-      <section className="relative bg-white pt-8 pb-8 border-b border-gray-200">
+      <section className="relative bg-gradient-to-r from-getfund-primary via-teal-700 to-gray-800 text-white py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
               News & Updates
             </h1>
+            <p className="text-xl md:text-2xl text-gray-100">
+              Transforming Ghana's educational landscape through strategic investments and partnerships
+            </p>
           </div>
         </div>
       </section>
