@@ -110,7 +110,7 @@ export default function NewsPage() {
                   <p className="text-gray-600 text-lg">No articles found matching your criteria.</p>
                 </div>
               ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-2 gap-6">
                 {filteredArticles.map((article) => (
                   <article
                     key={article.id}
