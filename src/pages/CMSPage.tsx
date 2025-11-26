@@ -275,7 +275,7 @@ export default function CMSPage() {
       <Header />
       <Breadcrumb />
 
-      <main className="flex-1 pt-[130px] sm:pt-[148px] md:pt-[168px] lg:pt-[192px] xl:pt-[212px]">
+      <main className="flex-1">
         {/* Render using page template if specified */}
         {PageTemplate && (
           <PageTemplate

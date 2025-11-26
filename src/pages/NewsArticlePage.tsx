@@ -85,7 +85,7 @@ export default function NewsArticlePage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
       <Breadcrumb items={breadcrumbItems} />
-      <div className="flex-1 bg-gray-50 pt-[130px] sm:pt-[148px] md:pt-[168px] lg:pt-[192px] xl:pt-[212px]">
+      <div className="flex-1 bg-gray-50">
       {/* Header Section */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 py-8">
