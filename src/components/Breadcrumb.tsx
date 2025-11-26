@@ -125,7 +125,7 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
   return (
   <nav
     aria-label="Breadcrumb"
-    className={`bg-white border-b-2 border-gray-300 shadow-md mt-[70px] sm:mt-[84px] md:mt-[100px] lg:mt-[116px] xl:mt-[132px] sticky top-[70px] sm:top-[84px] md:top-[100px] lg:top-[116px] xl:top-[132px] z-40 transition-all duration-300 ${className}`}>
+    className={`bg-white border-b-2 border-gray-300 shadow-md mt-[70px] sm:mt-[84px] md:mt-[100px] lg:mt-[116px] xl:mt-[132px] sticky top-0 z-40 transition-all duration-300 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <ol className="flex items-center space-x-2 py-3 text-sm font-medium">
           {breadcrumbs.map((item, index) => (
