@@ -6,9 +6,14 @@ export default function ImpactStats({ className = '' }: ImpactStatsProps) {
   return (
     <section className={`py-16 bg-gray-50 ${className}`}>
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-          Our Impact. 25+ years of giving
-        </h2>
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            Our Impact
+          </h2>
+          <p className="text-xl md:text-2xl text-gray-600 mt-2">
+            25+ years of giving
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {/* Scholarships awarded */}

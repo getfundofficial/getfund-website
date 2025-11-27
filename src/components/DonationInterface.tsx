@@ -24,7 +24,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
   return (
     <div className={`bg-white border border-gray-200 rounded-lg p-6 ${className}`}>
-      <h3 className="text-xl font-semibold text-gray-900 mb-6">I would like to donate.</h3>
+      <h3 className="text-xl font-semibold text-gray-900 mb-6">I would like to donate...</h3>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Frequency Selection */}

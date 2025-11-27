@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
 interface BeneficiariesGiveBackContent {
@@ -106,6 +107,9 @@ export default function BeneficiariesGiveBack() {
             </div>
           </div>
         </section>
+
+        {/* Contact Section */}
+        <ContactSection />
       </main>
 
       <Footer />
