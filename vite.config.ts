@@ -23,5 +23,11 @@ export default defineConfig({
   },
   server: {
     sourcemapIgnoreList: () => true,
+    proxy: {
+      '/uploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
   },
 });

@@ -1,4 +1,5 @@
 import { Calendar, ArrowRight, Search } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -18,21 +19,50 @@ interface NewsArticle {
   tags: string[];
 }
 
+interface NewsUpdatesContent {
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    title: string;
+    subtitle: string;
+  };
+  sidebar: {
+    searchLabel: string;
+    searchPlaceholder: string;
+    recentPostsLabel: string;
+    categoriesLabel: string;
+  };
+  emptyState: {
+    noArticlesMessage: string;
+  };
+}
+
 export default function NewsPage() {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [content, setContent] = useState<NewsUpdatesContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Fetch all news articles from CMS on component mount
+  // Fetch news articles and page content from CMS on component mount
   useEffect(() => {
-    const fetchNews = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+
+        // Fetch page content
+        const page = await cmsApi.getPageBySlug('news');
+        const section = page.sections?.find(s => s.section_type === 'page_content');
+        if (section?.content) {
+          setContent(section.content as NewsUpdatesContent);
+        }
+
+        // Fetch articles
         console.log('[NewsPage] Fetching all news articles...');
         const cmsArticles = await cmsApi.getNewsArticles();
         console.log('[NewsPage] Received articles:', cmsArticles.length);
-        console.log('[NewsPage] Articles:', cmsArticles);
 
         if (cmsArticles.length > 0) {
           setArticles(cmsArticles);
@@ -41,14 +71,14 @@ export default function NewsPage() {
           setArticles([]);
         }
       } catch (error) {
-        console.error('[NewsPage] Failed to fetch news articles:', error);
+        console.error('[NewsPage] Failed to fetch data:', error);
         setArticles([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNews();
+    fetchData();
   }, []);
 
   // Filter articles based on search and category
@@ -86,18 +116,26 @@ export default function NewsPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{content?.meta?.title || 'News & Updates | GETFund'}</title>
+        <meta
+          name="description"
+          content={content?.meta?.description || 'Stay updated with the latest news from GETFund'}
+        />
+      </Helmet>
+
       <Header />
       <Breadcrumb />
-      
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-getfund-primary via-teal-700 to-gray-800 text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              News & Updates
+              {content?.hero?.title || 'News & Updates'}
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Transforming Ghana's educational landscape through strategic investments and partnerships
+              {content?.hero?.subtitle || 'Transforming Ghana\'s educational landscape through strategic investments and partnerships'}
             </p>
           </div>
         </div>
@@ -110,7 +148,9 @@ export default function NewsPage() {
             <div className="lg:col-span-2">
               {filteredArticles.length === 0 ? (
                 <div className="bg-white shadow p-12 text-center">
-                  <p className="text-gray-600 text-lg">No articles found matching your criteria.</p>
+                  <p className="text-gray-600 text-lg">
+                    {content?.emptyState?.noArticlesMessage || 'No articles found matching your criteria.'}
+                  </p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -178,11 +218,13 @@ export default function NewsPage() {
             <div className="space-y-8">
               {/* Search */}
               <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Search</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {content?.sidebar?.searchLabel || 'Search'}
+                </h3>
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search articles..."
+                    placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
@@ -193,7 +235,9 @@ export default function NewsPage() {
 
               {/* Recent Posts */}
               <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Recent Posts</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">
+                  {content?.sidebar?.recentPostsLabel || 'Recent Posts'}
+                </h3>
                 <div className="space-y-4">
                   {recentPosts.map((post) => (
                     <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
@@ -217,7 +261,9 @@ export default function NewsPage() {
 
               {/* Categories */}
               <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Categories</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">
+                  {content?.sidebar?.categoriesLabel || 'Categories'}
+                </h3>
                 <div className="space-y-2">
                   {categories.map((category) => (
                     <button
