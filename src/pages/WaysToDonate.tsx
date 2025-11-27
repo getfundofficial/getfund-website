@@ -7,6 +7,7 @@ import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
 import ContactSection from '../components/ContactSection';
 import DonationCard from '../components/DonationCard';
+import DonationModal from '../components/DonationModal';
 import { cmsApi } from '../services/cmsApi';
 
 interface DonationOption {
@@ -42,9 +43,27 @@ interface WaysToDonateContent {
   };
 }
 
+// Donation amounts in GHC for each option
+const donationAmounts: Record<string, number> = {
+  'Classroom construction support': 50000,
+  'Student Scholarship (Local)': 5000,
+  'Student Scholarship (International)': 20000,
+  'School Meals': 1000,
+  'Classroom Furniture': 3000,
+  'Learning Materials': 2000,
+  'ICT & Digital Learning Tools': 10000,
+  'School Sanitation & Water Access': 15000,
+};
+
 export default function WaysToDonate() {
   const [content, setContent] = useState<WaysToDonateContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedDonation, setSelectedDonation] = useState<{
+    title: string;
+    amount: number;
+    description: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -144,9 +163,33 @@ export default function WaysToDonate() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {(content.donationOptions || []).map((option, index) => (
-                <DonationCard key={index} {...option} />
+                <DonationCard
+                  key={index}
+                  {...option}
+                  buttonAction={() => {
+                    setSelectedDonation({
+                      title: option.title,
+                      amount: donationAmounts[option.title] || 5000,
+                      description: option.description,
+                    });
+                    setModalOpen(true);
+                  }}
+                />
               ))}
             </div>
+            
+            {selectedDonation && (
+              <DonationModal
+                isOpen={modalOpen}
+                onClose={() => {
+                  setModalOpen(false);
+                  setSelectedDonation(null);
+                }}
+                title={selectedDonation.title}
+                amount={selectedDonation.amount}
+                description={selectedDonation.description}
+              />
+            )}
           </div>
         </section>
 
