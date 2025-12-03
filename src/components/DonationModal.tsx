@@ -1,5 +1,6 @@
-import { X, Heart, Info, ChevronDown } from 'lucide-react';
+import { X, Heart, Info, ChevronDown, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { paymentService } from '../services/paymentService';
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -12,6 +13,11 @@ interface DonationModalProps {
 export default function DonationModal({ isOpen, onClose, title, amount, description }: DonationModalProps) {
   const [donationAmount, setDonationAmount] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<string>('');
+  const [customerEmail, setCustomerEmail] = useState<string>('');
+  const [customerPhone, setCustomerPhone] = useState<string>('');
+  const [donorName, setDonorName] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string>('');
 
   if (!isOpen) return null;
 
@@ -20,15 +26,64 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
 
   const handleQuickAmount = (value: number) => {
     setDonationAmount(value.toString());
+    setError('');
   };
 
-  const handleDonate = () => {
+  const handleDonate = async () => {
+    setError('');
+
+    // Validate inputs
     if (!donationAmount || !paymentMethod) {
-      alert('Please enter an amount and select a payment method');
+      setError('Please enter an amount and select a payment method');
       return;
     }
-    console.log('Donation:', { amount: donationAmount, method: paymentMethod });
-    onClose();
+
+    if (!customerEmail) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    // Validate amount
+    const amountNum = parseFloat(donationAmount);
+    const validation = paymentService.validateAmount(amountNum, 'GHS');
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid amount');
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Initialize payment
+      const response = await paymentService.initiatePayment({
+        amount: amountNum,
+        currency: 'GHS',
+        paymentMethod,
+        customerEmail,
+        customerPhone,
+        campaignTitle: title,
+        donorName,
+      });
+
+      if (response.success && response.data?.paymentUrl) {
+        // Redirect to payment gateway
+        window.location.href = response.data.paymentUrl;
+      } else {
+        setError(response.error || 'Payment initialization failed. Please try again.');
+        setIsProcessing(false);
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      setIsProcessing(false);
+      console.error('Payment error:', err);
+    }
   };
 
   return (
@@ -82,24 +137,82 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
             type="number"
             placeholder="Enter amount"
             value={donationAmount}
-            onChange={(e) => setDonationAmount(e.target.value)}
+            onChange={(e) => {
+              setDonationAmount(e.target.value);
+              setError('');
+            }}
             className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-getfund-primary transition-colors"
+            disabled={isProcessing}
+          />
+        </div>
+
+        {/* Email Input */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Email Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            placeholder="your@email.com"
+            value={customerEmail}
+            onChange={(e) => {
+              setCustomerEmail(e.target.value);
+              setError('');
+            }}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-getfund-primary transition-colors"
+            disabled={isProcessing}
+            required
+          />
+        </div>
+
+        {/* Phone Input (Optional) */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Phone Number (Optional)
+          </label>
+          <input
+            type="tel"
+            placeholder="+233 000 000 000"
+            value={customerPhone}
+            onChange={(e) => setCustomerPhone(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-getfund-primary transition-colors"
+            disabled={isProcessing}
+          />
+        </div>
+
+        {/* Donor Name (Optional) */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Your Name (Optional)
+          </label>
+          <input
+            type="text"
+            placeholder="John Doe"
+            value={donorName}
+            onChange={(e) => setDonorName(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:border-getfund-primary transition-colors"
+            disabled={isProcessing}
           />
         </div>
 
         {/* Payment Method Dropdown */}
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-900 mb-2">
-            Payment Method
+            Payment Method <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <select
               value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => {
+                setPaymentMethod(e.target.value);
+                setError('');
+              }}
               className="w-full px-4 py-3 border-2 border-red-400 rounded-lg text-gray-700 appearance-none bg-white focus:outline-none focus:border-red-500 transition-colors cursor-pointer"
+              disabled={isProcessing}
+              required
             >
               <option value="">Select payment method</option>
-              <option value="mobile-money">Mobile Money</option>
+              <option value="mobile-money">Mobile Money (MTN, Vodafone, AirtelTigo)</option>
               <option value="credit-card">Credit/Debit Card</option>
               <option value="bank-transfer">Bank Transfer</option>
               <option value="paypal">PayPal</option>
@@ -107,6 +220,13 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           </div>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-600">{error}</p>
+          </div>
+        )}
 
         {/* Information Notice */}
         <div className="flex gap-3 mb-6 p-3 bg-gray-50 rounded-lg">
@@ -119,10 +239,20 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
         {/* Donate Button */}
         <button
           onClick={handleDonate}
-          className="w-full bg-pink-400 hover:bg-pink-500 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+          disabled={isProcessing}
+          className="w-full bg-pink-400 hover:bg-pink-500 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
-          <Heart className="w-5 h-5" />
-          Donate GHS {donationAmount || '0'}
+          {isProcessing ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              <Heart className="w-5 h-5" />
+              Donate GHS {donationAmount || '0'}
+            </>
+          )}
         </button>
       </div>
     </div>

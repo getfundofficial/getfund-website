@@ -19,6 +19,7 @@ import WaysToDonate from './pages/WaysToDonate';
 import Partnerships from './pages/Partnerships';
 import BeneficiariesGiveBack from './pages/BeneficiariesGiveBack';
 import Events from './pages/Events';
+import PaymentCallback from './pages/PaymentCallback';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -59,6 +60,10 @@ function App() {
           <Route path="/fundraising/partnerships" element={<Partnerships />} />
           <Route path="/fundraising/beneficiaries-give-back" element={<BeneficiariesGiveBack />} />
           <Route path="/fundraising/events" element={<Events />} />
+
+          {/* Payment Routes */}
+          <Route path="/payment/callback" element={<PaymentCallback />} />
+          <Route path="/payment/success" element={<PaymentCallback />} />
 
           {/* Other Pages */}
           <Route path="/faq" element={<FAQ />} />
