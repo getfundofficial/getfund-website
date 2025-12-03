@@ -76,7 +76,23 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
         // Redirect to payment gateway
         window.location.href = response.data.paymentUrl;
       } else {
-        setError(response.error || 'Payment initialization failed. Please try again.');
+        // Show detailed error message
+        const errorMsg = response.error || 'Payment initialization failed. Please try again.';
+        const xcelError = (response as any).xcelError;
+        
+        console.error('Payment failed:', {
+          error: errorMsg,
+          xcelError: xcelError,
+          fullResponse: response
+        });
+        
+        // Show user-friendly error with details if available
+        if (xcelError) {
+          setError(`${errorMsg}${xcelError.message ? ` - ${xcelError.message}` : ''}`);
+        } else {
+          setError(errorMsg);
+        }
+        
         setIsProcessing(false);
       }
     } catch (err) {
