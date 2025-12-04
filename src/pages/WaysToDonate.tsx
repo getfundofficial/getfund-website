@@ -218,8 +218,8 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* Impact Stats - HARDCODED COMPONENT */}
-        <ImpactStats />
+        {/* Impact Stats - CMS-POWERED */}
+        <ImpactStats page="ways-to-donate" />
 
         {/* Give with Confidence */}
         <section className="py-16 bg-white">

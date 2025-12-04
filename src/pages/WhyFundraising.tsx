@@ -118,8 +118,8 @@ export default function WhyFundraising() {
           </div>
         </section>
 
-        {/* Impact Stats - HARDCODED COMPONENT */}
-        <ImpactStats />
+        {/* Impact Stats - CMS-POWERED */}
+        <ImpactStats page="why-fundraising" />
 
         {/* Why Donate Section */}
         <section className="py-16 bg-white">
