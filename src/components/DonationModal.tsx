@@ -41,9 +41,13 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
 
   const getFinalAmount = (): number => {
     if (selectedAmount === 'other') {
-      return parseFloat(customAmount) || 0;
+      return parseFloat(customAmount.replace(/,/g, '')) || 0;
     }
     return selectedAmount;
+  };
+
+  const formatNumberWithCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
   const handleDonate = async () => {
@@ -135,7 +139,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="font-bold text-gray-900 mb-1 text-sm">GH₵{preset.value}</div>
+                <div className="font-bold text-gray-900 mb-1 text-sm">GH₵{formatNumberWithCommas(preset.value)}</div>
                 <div className="text-xs text-gray-600 leading-tight">{preset.label}</div>
               </button>
             ))}
@@ -159,12 +163,16 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
 
             {selectedAmount === 'other' && (
               <input
-                type="number"
+                type="text"
                 placeholder="Enter custom amount"
                 value={customAmount}
                 onChange={(e) => {
-                  setCustomAmount(e.target.value);
-                  setError('');
+                  const value = e.target.value.replace(/,/g, '');
+                  if (value === '' || /^\d+$/.test(value)) {
+                    const formatted = value === '' ? '' : formatNumberWithCommas(parseInt(value));
+                    setCustomAmount(formatted);
+                    setError('');
+                  }
                 }}
                 className="w-full mt-2 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
                 autoFocus

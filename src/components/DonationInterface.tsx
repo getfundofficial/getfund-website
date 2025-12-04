@@ -12,6 +12,10 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
   const amounts = [50, 100, 200, 500];
 
+  const formatNumberWithCommas = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Placeholder for donation submission logic
@@ -89,7 +93,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                 }`}
                 aria-pressed={amount === amt}
               >
-                GH₵{amt}
+                GH₵{formatNumberWithCommas(amt)}
               </button>
             ))}
             <button
@@ -114,13 +118,18 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
               Enter amount (GH₵)
             </label>
             <input
-              type="number"
+              type="text"
               id="customAmount"
               value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/,/g, '');
+                if (value === '' || /^\d+$/.test(value)) {
+                  const formatted = value === '' ? '' : formatNumberWithCommas(parseInt(value));
+                  setCustomAmount(formatted);
+                }
+              }}
               className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
               placeholder="Enter amount"
-              min="1"
               required
               aria-required="true"
             />
