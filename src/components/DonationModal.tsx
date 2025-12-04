@@ -125,7 +125,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
           </div>
 
           {/* Preset Amounts */}
-          <div className="grid grid-cols-3 gap-2 mb-4">
+          <div className="grid grid-cols-3 gap-3 mb-4">
             {presetAmounts.map((preset, index) => (
               <button
                 key={index}
@@ -133,14 +133,14 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                   setSelectedAmount(preset.value);
                   setError('');
                 }}
-                className={`p-3 rounded-lg border-2 text-center transition-all ${
+                className={`p-4 rounded-lg border-2 transition-all min-h-[90px] flex flex-col items-center justify-center ${
                   selectedAmount === preset.value
                     ? 'border-green-500 bg-green-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="font-bold text-gray-900 mb-1 text-sm">GH₵{formatNumberWithCommas(preset.value)}</div>
-                <div className="text-xs text-gray-600 leading-tight">{preset.label}</div>
+                <div className="font-bold text-gray-900 mb-2 text-base">GH₵{formatNumberWithCommas(preset.value)}</div>
+                <div className="text-xs text-gray-600 leading-relaxed text-center w-full">{preset.label}</div>
               </button>
             ))}
           </div>
