@@ -2,15 +2,21 @@ import { X, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { paymentService } from '../services/paymentService';
 
+interface PresetAmount {
+  value: number;
+  label: string;
+}
+
 interface DonationModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   amount: number;
   description: string;
+  presetAmounts?: PresetAmount[];
 }
 
-export default function DonationModal({ isOpen, onClose, title, amount, description }: DonationModalProps) {
+export default function DonationModal({ isOpen, onClose, title, amount, description, presetAmounts: customPresetAmounts }: DonationModalProps) {
   const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(amount);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [showNoteField, setShowNoteField] = useState(false);
@@ -23,11 +29,14 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
 
   if (!isOpen) return null;
 
-  // Preset amounts based on the campaign
-  const presetAmounts = [
-    { value: Math.floor(amount / 2), label: `Buy a girl 1 year's supply of pads` },
-    { value: amount, label: `Buy 2 girls 1 year's supply of pads` }
-  ];
+  // Use custom preset amounts from CMS, or fall back to default calculated amounts
+  const presetAmounts = customPresetAmounts && customPresetAmounts.length === 3
+    ? customPresetAmounts
+    : [
+        { value: Math.floor(amount / 2), label: `Buy a girl 1 year's supply of pads` },
+        { value: amount, label: `Buy 2 girls 1 year's supply of pads` },
+        { value: Math.floor(amount * 1.5), label: `Buy 3 girls 1 year's supply of pads` }
+      ];
 
   const getFinalAmount = (): number => {
     if (selectedAmount === 'other') {
@@ -111,7 +120,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
           </div>
 
           {/* Preset Amounts */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="grid grid-cols-3 gap-2 mb-4">
             {presetAmounts.map((preset, index) => (
               <button
                 key={index}
@@ -119,13 +128,13 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                   setSelectedAmount(preset.value);
                   setError('');
                 }}
-                className={`p-4 rounded-lg border-2 text-left transition-all ${
+                className={`p-3 rounded-lg border-2 text-center transition-all ${
                   selectedAmount === preset.value
                     ? 'border-green-500 bg-green-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="font-bold text-gray-900 mb-1">GH₵{preset.value}</div>
+                <div className="font-bold text-gray-900 mb-1 text-sm">GH₵{preset.value}</div>
                 <div className="text-xs text-gray-600 leading-tight">{preset.label}</div>
               </button>
             ))}

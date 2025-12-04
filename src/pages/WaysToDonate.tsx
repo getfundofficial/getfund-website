@@ -10,10 +10,16 @@ import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
 import { cmsApi } from '../services/cmsApi';
 
+interface PresetAmount {
+  value: number;
+  label: string;
+}
+
 interface DonationOption {
   title: string;
   description: string;
   buttonText: string;
+  presetAmounts?: PresetAmount[];
 }
 
 interface WaysToDonateContent {
@@ -63,6 +69,7 @@ export default function WaysToDonate() {
     title: string;
     amount: number;
     description: string;
+    presetAmounts?: PresetAmount[];
   } | null>(null);
 
   useEffect(() => {
@@ -171,6 +178,7 @@ export default function WaysToDonate() {
                       title: option.title,
                       amount: donationAmounts[option.title] || 5000,
                       description: option.description,
+                      presetAmounts: option.presetAmounts,
                     });
                     setModalOpen(true);
                   }}
@@ -188,6 +196,7 @@ export default function WaysToDonate() {
                 title={selectedDonation.title}
                 amount={selectedDonation.amount}
                 description={selectedDonation.description}
+                presetAmounts={selectedDonation.presetAmounts}
               />
             )}
           </div>
