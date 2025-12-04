@@ -24,10 +24,12 @@ export default function DonationCard({
 
   return (
     <div
-      className={`bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow ${className}`}
+      className={`bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow flex flex-col h-full ${className}`}
     >
-      <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
-      <p className="text-gray-700 leading-relaxed mb-6">{description}</p>
+      <div className="flex-1">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
+        <p className="text-gray-700 leading-relaxed mb-6">{description}</p>
+      </div>
       <button
         onClick={handleClick}
         className="w-full bg-getfund-gold text-white py-3 px-6 rounded-md font-semibold hover:bg-yellow-600 transition-colors focus:ring-4 focus:ring-yellow-300"
