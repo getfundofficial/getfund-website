@@ -20,6 +20,7 @@ import Partnerships from './pages/Partnerships';
 import BeneficiariesGiveBack from './pages/BeneficiariesGiveBack';
 import Events from './pages/Events';
 import PaymentCallback from './pages/PaymentCallback';
+import TestSuccess from './pages/payment/TestSuccess';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           {/* Payment Routes */}
           <Route path="/payment/callback" element={<PaymentCallback />} />
           <Route path="/payment/success" element={<PaymentCallback />} />
+          <Route path="/payment/test-success" element={<TestSuccess />} />
 
           {/* Other Pages */}
           <Route path="/faq" element={<FAQ />} />
