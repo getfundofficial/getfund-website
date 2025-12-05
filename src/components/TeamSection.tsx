@@ -255,50 +255,21 @@ export default function TeamSection({
           {/* Management Team Tab Content */}
           {activeTab === 'management' && (
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Administrator */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/paul-adjei.jpg"
-                  alt="Mr. Paul Adjei"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-lg font-bold">Mr. Paul Adjei</h3>
+              {managementTeam.map((member) => (
+                <div key={member.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
+                  <img
+                    src={member.image_url || '/images/placeholder.jpg'}
+                    alt={member.name}
+                    className="w-full h-80 object-cover"
+                  />
+                  <div className="bg-gray-900 text-white text-center py-4 px-6">
+                    <h3 className="text-lg font-bold">{member.name}</h3>
+                  </div>
+                  <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                    <p className="text-sm font-semibold">{member.title}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">Administrator</p>
-                </div>
-              </div>
-
-              {/* Deputy Administrator */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/alhassan-dandaawa.jpg"
-                  alt="Hon. Alhassan S. Dandaawa"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-lg font-bold">Hon. Alhassan S. Dandaawa</h3>
-                </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">Deputy Administrator</p>
-                </div>
-              </div>
-
-              {/* Financial Controller */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/alexis-asuinura.jpg"
-                  alt="Mr. Alexis K. Asuinura"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-lg font-bold">Mr. Alexis K. Asuinura</h3>
-                </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">Financial Controller</p>
-                </div>
-              </div>
+              ))}
             </div>
           )}
         </div>
