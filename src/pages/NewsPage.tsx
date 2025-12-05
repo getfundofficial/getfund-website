@@ -45,6 +45,8 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 10;
 
   // Fetch news articles and page content from CMS on component mount
   useEffect(() => {
@@ -93,8 +95,63 @@ export default function NewsPage() {
     return matchesSearch && matchesCategory;
   });
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+
+  // Reset to page 1 when search or category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory]);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const generatePageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      // Show all pages if total is less than max
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Show first page, last page, current page and neighbors
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i);
+        }
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        pageNumbers.push(1);
+        pageNumbers.push('...');
+        pageNumbers.push(currentPage - 1);
+        pageNumbers.push(currentPage);
+        pageNumbers.push(currentPage + 1);
+        pageNumbers.push('...');
+        pageNumbers.push(totalPages);
+      }
+    }
+
+    return pageNumbers;
+  };
+
   console.log('[NewsPage] Total articles:', articles.length);
   console.log('[NewsPage] Filtered articles:', filteredArticles.length);
+  console.log('[NewsPage] Current page:', currentPage);
+  console.log('[NewsPage] Total pages:', totalPages);
   console.log('[NewsPage] Search term:', searchTerm);
   console.log('[NewsPage] Selected category:', selectedCategory);
 
@@ -154,7 +211,7 @@ export default function NewsPage() {
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
-                {filteredArticles.map((article) => (
+                {currentArticles.map((article) => (
                   <article
                     key={article.id}
                     className="bg-white shadow hover:shadow-lg transition-shadow overflow-hidden group"
@@ -200,14 +257,62 @@ export default function NewsPage() {
               </div>
               )}
 
-              {/* Pagination: Only show if more than 1 page (e.g. > 10 articles) */}
-              {filteredArticles.length > 10 && (
+              {/* Pagination */}
+              {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-2 mt-12">
-                  <button className="px-4 py-2 text-white font-semibold bg-getfund-primary">1</button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">2</button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">3</button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">4</button>
-                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors">
+                  {/* Previous button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 transition-colors ${
+                      currentPage === 1
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                    aria-label="Previous page"
+                  >
+                    <ArrowRight className="w-4 h-4 rotate-180" />
+                  </button>
+
+                  {/* Page numbers */}
+                  {generatePageNumbers().map((pageNum, index) => {
+                    if (pageNum === '...') {
+                      return (
+                        <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
+                          ...
+                        </span>
+                      );
+                    }
+
+                    const pageNumber = pageNum as number;
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => handlePageChange(pageNumber)}
+                        className={`px-4 py-2 font-semibold transition-colors ${
+                          currentPage === pageNumber
+                            ? 'text-white bg-getfund-primary'
+                            : 'text-gray-600 hover:bg-gray-100'
+                        }`}
+                        aria-label={`Page ${pageNumber}`}
+                        aria-current={currentPage === pageNumber ? 'page' : undefined}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+
+                  {/* Next button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 transition-colors ${
+                      currentPage === totalPages
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                    aria-label="Next page"
+                  >
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
