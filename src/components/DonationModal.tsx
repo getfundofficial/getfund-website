@@ -107,7 +107,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-sm w-full relative">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -125,7 +125,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
           </div>
 
           {/* Preset Amounts */}
-          <div className="flex flex-col gap-3 mb-4">
+          <div className="grid grid-cols-3 gap-3 mb-4">
             {presetAmounts.map((preset, index) => (
               <button
                 key={index}
@@ -133,20 +133,20 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                   setSelectedAmount(preset.value);
                   setError('');
                 }}
-                className={`p-4 rounded-lg border-2 transition-all flex items-center justify-between ${
+                className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center text-center min-h-[100px] ${
                   selectedAmount === preset.value
                     ? 'border-green-500 bg-green-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="font-bold text-gray-900 text-lg">GH₵{formatNumberWithCommas(preset.value)}</div>
-                <div className="text-sm text-gray-600 text-right flex-1 ml-4">{preset.label}</div>
+                <div className="font-bold text-gray-900 text-xl mb-2">GH₵{formatNumberWithCommas(preset.value)}</div>
+                <div className="text-xs text-gray-600 leading-tight">{preset.label}</div>
               </button>
             ))}
           </div>
 
           {/* Custom Amount */}
-          <div className="mb-4">
+          <div className="mb-6">
             <button
               onClick={() => setSelectedAmount('other')}
               className={`w-full p-3 rounded-lg border-2 text-left transition-all ${
@@ -174,50 +174,53 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                     setError('');
                   }
                 }}
-                className="w-full mt-2 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
+                className="w-full mt-2 px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
                 autoFocus
               />
             )}
           </div>
 
-          {/* Email Input */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={customerEmail}
-              onChange={(e) => {
-                setCustomerEmail(e.target.value);
-                setError('');
-              }}
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
-              disabled={isProcessing}
-              required
-            />
-          </div>
+          {/* Email and Payment Method Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            {/* Email Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={customerEmail}
+                onChange={(e) => {
+                  setCustomerEmail(e.target.value);
+                  setError('');
+                }}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
+                disabled={isProcessing}
+                required
+              />
+            </div>
 
-          {/* Payment Method */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Payment Method <span className="text-red-500">*</span>
-            </label>
-            <select
-              value={paymentMethod}
-              onChange={(e) => {
-                setPaymentMethod(e.target.value);
-                setError('');
-              }}
-              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500 bg-white"
-              disabled={isProcessing}
-              required
-            >
-              <option value="mobile-money">Mobile Money</option>
-              <option value="card">Credit/Debit Card</option>
-              <option value="bank-transfer">Bank Transfer</option>
-            </select>
+            {/* Payment Method */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Payment Method <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={paymentMethod}
+                onChange={(e) => {
+                  setPaymentMethod(e.target.value);
+                  setError('');
+                }}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500 bg-white"
+                disabled={isProcessing}
+                required
+              >
+                <option value="mobile-money">Mobile Money</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="bank-transfer">Bank Transfer</option>
+              </select>
+            </div>
           </div>
 
           {/* Add Note/Comment */}
