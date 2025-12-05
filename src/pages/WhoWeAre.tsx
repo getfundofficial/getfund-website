@@ -3,6 +3,7 @@ import { Eye, Target, Heart } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
+import TeamSection from '../components/TeamSection';
 import { cmsApi } from '../services/cmsApi';
 
 interface PageContent {
@@ -276,9 +277,9 @@ export default function WhoWeAre() {
         </section>
 
         {/* Leadership & Governance */}
-        <section className="py-16 bg-gray-50">
+        <section className="pt-16 pb-8 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 {pageContent?.leadershipTitle || 'Leadership & Governance'}
               </h2>
@@ -286,59 +287,128 @@ export default function WhoWeAre() {
                 {pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
               </p>
             </div>
+          </div>
+        </section>
 
-            {/* Board of Directors */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <img 
-                  src={pageContent?.boardImage || '/images/about/getfund-board.jpg'}
-                  alt="GETFund Board of Directors"
-                  className="rounded-xl shadow-lg w-full h-auto object-cover"
+        {/* Historical Administrators Section */}
+        <section className="pb-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Administrators
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Leaders who have guided GETFund through its transformative journey
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+              {/* Mr. Fosubua Banahene - 2001-2009 */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <img
+                  src="/images/about/fosubua-banahene.jpg"
+                  alt="Mr. Fosubua Banahene"
+                  className="w-full h-80 object-cover"
                 />
+                <div className="bg-gray-900 text-white text-center py-4 px-6">
+                  <h3 className="text-base font-bold">Mr. Fosubua Banahene</h3>
+                </div>
+                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                  <p className="text-sm font-semibold">2001-2009</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                  {pageContent?.boardTitle || 'Committed Board of Directors'}
-                </h3>
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  {pageContent?.boardDescription || 'Our experienced board of directors includes all spheres of education, finance, and public administration to guide GETFund\'s strategic direction and ensure accountability to all our initiatives.'}
-                </p>
-                <div className="space-y-4">
-                  {(pageContent?.boardCommitments || [
-                    { title: 'Strategic Direction', description: 'Setting priorities and overseeing implementation', icon: '1' },
-                    { title: 'Performance Monitoring', description: 'Ensuring all projects achieve educational outcomes', icon: '2' },
-                    { title: 'Stakeholder Engagement', description: 'Building partnerships for educational success', icon: '3' }
-                  ]).map((commitment, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        index === 0 ? 'bg-red-100 text-red-800' :
-                        index === 1 ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-orange-100 text-orange-800'
-                      }`}>
-                        <span className="font-bold">{commitment.icon}</span>
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-1">{commitment.title}</h4>
-                        <p className="text-gray-600 text-sm">{commitment.description}</p>
-                      </div>
-                    </div>
-                  ))}
+
+              {/* Mr. Sam Garbah - 2009-2017 */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <img
+                  src="/images/about/sam-garbah.jpg"
+                  alt="Mr. Sam Garbah"
+                  className="w-full h-80 object-cover"
+                />
+                <div className="bg-gray-900 text-white text-center py-4 px-6">
+                  <h3 className="text-base font-bold">Mr. Sam Garbah</h3>
+                </div>
+                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                  <p className="text-sm font-semibold">2009-2017</p>
+                </div>
+              </div>
+
+              {/* Dr. Richard A Boadu - 2017-2024 */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <img
+                  src="/images/about/richard-boadu.jpg"
+                  alt="Dr. Richard A Boadu"
+                  className="w-full h-80 object-cover"
+                />
+                <div className="bg-gray-900 text-white text-center py-4 px-6">
+                  <h3 className="text-base font-bold">Dr. Richard A Boadu</h3>
+                </div>
+                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                  <p className="text-sm font-semibold">2017-2024</p>
+                </div>
+              </div>
+
+              {/* Mr. Paul Adjei - 2025-Date */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <img
+                  src="/images/about/paul-adjei.jpg"
+                  alt="Mr. Paul Adjei"
+                  className="w-full h-80 object-cover"
+                />
+                <div className="bg-gray-900 text-white text-center py-4 px-6">
+                  <h3 className="text-base font-bold">Mr. Paul Adjei</h3>
+                </div>
+                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                  <p className="text-sm font-semibold">2025-Date</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Interactive Team Section */}
+        <TeamSection
+          boardGroupImage={pageContent?.boardImage || '/images/about/getfund-board.jpg'}
+          managementGroupImage="/images/about/management-team.jpg"
+          chairman={{
+            name: 'Hon. Emmanuel K. Bedzrah',
+            title: 'Board Chairman',
+            image: '/images/about/chairman.jpg',
+            bio: `
+              <p class="mb-4">Hon. Emmanuel K. Bedzrah brings extensive experience in public service and educational policy to his role as Board Chairman of GETFund.</p>
+
+              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Background</h3>
+              <p class="mb-4">With a distinguished career in public administration and a deep commitment to educational development, Hon. Bedzrah has been instrumental in shaping GETFund's strategic direction.</p>
+
+              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Vision</h3>
+              <p class="mb-4">Under his leadership, the Board continues to prioritize transparency, accountability, and innovative approaches to educational financing that ensure every Ghanaian child has access to quality education.</p>
+
+              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Key Achievements</h3>
+              <ul class="space-y-2 mb-4">
+                <li class="flex items-start gap-2">
+                  <span class="text-getfund-primary font-bold">•</span>
+                  <span>Strengthened governance frameworks for increased accountability</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-getfund-primary font-bold">•</span>
+                  <span>Expanded partnerships with educational institutions nationwide</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-getfund-primary font-bold">•</span>
+                  <span>Championed initiatives for infrastructure development in underserved areas</span>
+                </li>
+              </ul>
+            `
+          }}
+        />
+
         {/* Footer Message */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="bg-gradient-to-r from-getfund-primary to-getfund-secondary text-white rounded-2xl p-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold">
                 {pageContent?.footerMessage || 'Supporting the delivery of quality education.'}
               </h2>
-              <button className="bg-white text-getfund-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors mt-4">
-                Learn More
-              </button>
             </div>
           </div>
         </section>
