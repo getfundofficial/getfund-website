@@ -63,6 +63,24 @@ export interface NewsArticle {
   tags: string[];
 }
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  title: string;
+  role: 'board_chairman' | 'board_member' | 'management' | 'historical_admin';
+  image_url?: string;
+  bio?: string;
+  date_range?: string;
+  display_order: number;
+  status: 'active' | 'inactive';
+}
+
+export interface TeamMembersResponse {
+  chairman: TeamMember | null;
+  management: TeamMember[];
+  historical_admins: TeamMember[];
+}
+
 export type SectionType = 'text' | 'html' | 'image' | 'gallery' | 'video' | 'stats' | 'hero' | 'cta' | 'page_content';
 
 export interface PageSection {
@@ -296,6 +314,30 @@ class CMSApiClient {
       console.error('[CMS API] Error fetching menu config:', error);
       // Return empty menu on error
       return { menuItems: [], ctaButton: null };
+    }
+  }
+
+  /**
+   * Fetch all team members (chairman, management, historical admins)
+   */
+  async getTeamMembers(): Promise<TeamMembersResponse> {
+    try {
+      const url = `${this.baseUrl}/team-members`;
+      console.log('[CMS API] Fetching team members:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch team members: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('[CMS API] Received team members:', result);
+
+      return result.data;
+    } catch (error) {
+      console.error('[CMS API] Error fetching team members:', error);
+      // Return empty data on error
+      return { chairman: null, management: [], historical_admins: [] };
     }
   }
 }

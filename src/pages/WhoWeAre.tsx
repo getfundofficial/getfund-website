@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
 import TeamSection from '../components/TeamSection';
-import { cmsApi } from '../services/cmsApi';
+import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
 interface PageContent {
   // Hero Section
@@ -55,11 +55,21 @@ interface PageContent {
 export default function WhoWeAre() {
   const [pageContent, setPageContent] = useState<PageContent | null>(null);
   const [loading, setLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<{
+    chairman: TeamMemberType | null;
+    management: TeamMemberType[];
+    historical_admins: TeamMemberType[];
+  }>({ chairman: null, management: [], historical_admins: [] });
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
+        // Fetch page content
         const response = await cmsApi.getPageBySlug('who-we-are');
+
+        // Fetch team members
+        const members = await cmsApi.getTeamMembers();
+        setTeamMembers(members);
 
         if (response && response.sections) {
           // Look for page_content section first
@@ -303,65 +313,21 @@ export default function WhoWeAre() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {/* Mr. Fosubua Banahene - 2001-2009 */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/fosubua-banahene.jpg"
-                  alt="Mr. Fosubua Banahene"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-base font-bold">Mr. Fosubua Banahene</h3>
+              {teamMembers.historical_admins.map((admin) => (
+                <div key={admin.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
+                  <img
+                    src={admin.image_url || '/images/placeholder.jpg'}
+                    alt={admin.name}
+                    className="w-full h-80 object-cover"
+                  />
+                  <div className="bg-gray-900 text-white text-center py-4 px-6">
+                    <h3 className="text-base font-bold">{admin.name}</h3>
+                  </div>
+                  <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                    <p className="text-sm font-semibold">{admin.date_range}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">2001-2009</p>
-                </div>
-              </div>
-
-              {/* Mr. Sam Garbah - 2009-2017 */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/sam-garbah.jpg"
-                  alt="Mr. Sam Garbah"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-base font-bold">Mr. Sam Garbah</h3>
-                </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">2009-2017</p>
-                </div>
-              </div>
-
-              {/* Dr. Richard A Boadu - 2017-2024 */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/richard-boadu.jpg"
-                  alt="Dr. Richard A Boadu"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-base font-bold">Dr. Richard A Boadu</h3>
-                </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">2017-2024</p>
-                </div>
-              </div>
-
-              {/* Mr. Paul Adjei - 2025-Date */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <img
-                  src="/images/about/paul-adjei.jpg"
-                  alt="Mr. Paul Adjei"
-                  className="w-full h-80 object-cover"
-                />
-                <div className="bg-gray-900 text-white text-center py-4 px-6">
-                  <h3 className="text-base font-bold">Mr. Paul Adjei</h3>
-                </div>
-                <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                  <p className="text-sm font-semibold">2025-Date</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -370,36 +336,13 @@ export default function WhoWeAre() {
         <TeamSection
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-board.jpg'}
           managementGroupImage="/images/about/management-team.jpg"
-          chairman={{
-            name: 'Hon. Emmanuel K. Bedzrah',
-            title: 'Board Chairman',
-            image: '/images/about/chairman.jpg',
-            bio: `
-              <p class="mb-4">Hon. Emmanuel K. Bedzrah brings extensive experience in public service and educational policy to his role as Board Chairman of GETFund.</p>
-
-              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Background</h3>
-              <p class="mb-4">With a distinguished career in public administration and a deep commitment to educational development, Hon. Bedzrah has been instrumental in shaping GETFund's strategic direction.</p>
-
-              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Vision</h3>
-              <p class="mb-4">Under his leadership, the Board continues to prioritize transparency, accountability, and innovative approaches to educational financing that ensure every Ghanaian child has access to quality education.</p>
-
-              <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Key Achievements</h3>
-              <ul class="space-y-2 mb-4">
-                <li class="flex items-start gap-2">
-                  <span class="text-getfund-primary font-bold">•</span>
-                  <span>Strengthened governance frameworks for increased accountability</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-getfund-primary font-bold">•</span>
-                  <span>Expanded partnerships with educational institutions nationwide</span>
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-getfund-primary font-bold">•</span>
-                  <span>Championed initiatives for infrastructure development in underserved areas</span>
-                </li>
-              </ul>
-            `
-          }}
+          chairman={teamMembers.chairman ? {
+            name: teamMembers.chairman.name,
+            title: teamMembers.chairman.title,
+            image: teamMembers.chairman.image_url || '/images/about/chairman.jpg',
+            bio: teamMembers.chairman.bio || ''
+          } : undefined}
+          managementTeam={teamMembers.management}
         />
 
         {/* Footer Message */}

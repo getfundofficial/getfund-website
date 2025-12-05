@@ -8,16 +8,26 @@ interface TeamMember {
   bio: string;
 }
 
+interface ManagementMember {
+  id: string;
+  name: string;
+  title: string;
+  image_url?: string;
+  display_order: number;
+}
+
 interface TeamSectionProps {
   boardGroupImage?: string;
   managementGroupImage?: string;
   chairman?: TeamMember;
+  managementTeam?: ManagementMember[];
 }
 
 export default function TeamSection({
   boardGroupImage = '/images/about/getfund-board.jpg',
   managementGroupImage = '/images/about/management-team.jpg',
-  chairman
+  chairman,
+  managementTeam = []
 }: TeamSectionProps) {
   const [activeTab, setActiveTab] = useState<'board' | 'management'>('board');
   const [modalOpen, setModalOpen] = useState(false);
