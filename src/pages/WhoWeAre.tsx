@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
 import TeamSection from '../components/TeamSection';
+import PageBanner from '../components/PageBanner';
 import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
 interface BannerBackground {
@@ -163,38 +164,11 @@ export default function WhoWeAre() {
       <Breadcrumb />
       <main className="flex-1">
         {/* Hero Section */}
-        <section
-          className="relative text-white py-16 overflow-hidden"
-          style={{
-            background: pageContent?.bannerBackground?.imageUrl
-              ? `url(${pageContent.bannerBackground.imageUrl})`
-              : 'linear-gradient(to bottom right, #DC143C, #B22222, #8B0000)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          {/* Tint Overlay - Only show if background image exists */}
-          {pageContent?.bannerBackground?.imageUrl && (
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundColor: pageContent.bannerBackground.tintColor || '#DC143C',
-                opacity: (pageContent.bannerBackground.tintOpacity ?? 50) / 100,
-              }}
-            />
-          )}
-
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-                {pageContent?.heroTitle || 'About Us'}
-              </h1>
-              <p className="text-xl md:text-2xl text-red-100 leading-relaxed drop-shadow-md">
-                {pageContent?.heroSubtitle || 'Supporting the delivery of quality education to Ghanaians from basic to tertiary level'}
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title={pageContent?.heroTitle || 'About Us'}
+          subtitle={pageContent?.heroSubtitle || 'Supporting the delivery of quality education to Ghanaians from basic to tertiary level'}
+          bannerBackground={pageContent?.bannerBackground}
+        />
 
         {/* Main Content - Ghana Education Trust Fund */}
         <section className="py-16 md:py-20 bg-white">
