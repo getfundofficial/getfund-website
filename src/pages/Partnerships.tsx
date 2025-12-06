@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
@@ -11,7 +12,14 @@ interface PartnershipBenefit {
   description: string;
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface PartnershipsContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -90,14 +98,11 @@ export default function Partnerships() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-              {content.hero?.title}
-            </h1>
-          </div>
-        </section>
+        <PageBanner
+          title={content.hero?.title || 'Partnerships with GETFund'}
+          bannerBackground={content.bannerBackground}
+          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+        />
 
         {/* Intro Paragraph */}
         <section className="py-16 bg-white">

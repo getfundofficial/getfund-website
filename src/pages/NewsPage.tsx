@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cmsApi } from '../services/cmsApi';
@@ -19,7 +20,14 @@ interface NewsArticle {
   tags: string[];
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface NewsUpdatesContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -184,19 +192,12 @@ export default function NewsPage() {
       <Header />
       <Breadcrumb />
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-getfund-primary via-teal-700 to-gray-800 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {content?.hero?.title || 'News & Updates'}
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-100">
-              {content?.hero?.subtitle || 'Transforming Ghana\'s educational landscape through strategic investments and partnerships'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageBanner
+        title={content?.hero?.title || 'News & Updates'}
+        subtitle={content?.hero?.subtitle || 'Transforming Ghana\'s educational landscape through strategic investments and partnerships'}
+        bannerBackground={content?.bannerBackground}
+        defaultGradient="linear-gradient(to right, #DC143C, #0F766E, #1F2937)"
+      />
 
       <main className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
 import ContactSection from '../components/ContactSection';
@@ -22,7 +23,14 @@ interface DonationOption {
   presetAmounts?: PresetAmount[];
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface WaysToDonateContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -122,17 +130,12 @@ export default function WaysToDonate() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {content.hero?.title}
-            </h1>
-            <p className="text-lg md:text-xl leading-relaxed">
-              {content.hero?.subtitle}
-            </p>
-          </div>
-        </section>
+        <PageBanner
+          title={content.hero?.title || 'Ways to Donate'}
+          subtitle={content.hero?.subtitle || "Investing in Education. Building Ghana's Tomorrow."}
+          bannerBackground={content.bannerBackground}
+          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+        />
 
         {/* Donation Interface & Impact Visualized - HARDCODED COMPONENT */}
         <section className="py-16 bg-gray-50">

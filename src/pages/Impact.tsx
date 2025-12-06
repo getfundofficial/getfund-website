@@ -3,6 +3,7 @@ import { TrendingUp, Users, Building, Award, BookOpen, GraduationCap } from 'luc
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
+import PageBanner from '../components/PageBanner';
 import { cmsApi } from '../services/cmsApi';
 
 interface StatItem {
@@ -26,7 +27,15 @@ interface Achievement {
   description: string;
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface PageContent {
+  bannerBackground?: BannerBackground;
+
   // Hero Section
   heroTitle?: string;
   heroSubtitle?: string;
@@ -155,19 +164,11 @@ export default function Impact() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-getfund-primary via-getfund-secondary to-red-900 text-white py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {pageContent?.heroTitle || 'Our Impact'}
-              </h1>
-              <p className="text-xl md:text-2xl text-red-100 leading-relaxed">
-                {pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title={pageContent?.heroTitle || 'Our Impact'}
+          subtitle={pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
+          bannerBackground={pageContent?.bannerBackground}
+        />
 
         {/* Impact Statistics */}
         <section className="py-16 md:py-20 bg-white">

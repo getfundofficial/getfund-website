@@ -3,6 +3,7 @@ import { Download, Eye, FileText, Calendar, FileCheck } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
+import PageBanner from '../components/PageBanner';
 import { cmsApi } from '../services/cmsApi';
 
 interface ResourceDocument {
@@ -17,7 +18,15 @@ interface ResourceDocument {
   downloadUrl: string;
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface PageContent {
+  bannerBackground?: BannerBackground;
+
   // Hero Section
   heroTitle?: string;
   heroSubtitle?: string;
@@ -171,28 +180,26 @@ export default function Resources() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-getfund-primary via-getfund-secondary to-red-900 text-white py-16">
+        <PageBanner
+          title={pageContent?.heroTitle || 'Resources & Publications'}
+          subtitle={pageContent?.heroSubtitle || "Access our comprehensive collection of reports, policies, research studies, and strategic documents that showcase Ghana's educational development journey."}
+          bannerBackground={pageContent?.bannerBackground}
+        />
+
+        {/* Quick Action Buttons */}
+        <div className="bg-gray-50 py-8">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {pageContent?.heroTitle || 'Resources & Publications'}
-              </h1>
-              <p className="text-xl md:text-2xl text-red-100 leading-relaxed mb-8">
-                {pageContent?.heroSubtitle || "Access our comprehensive collection of reports, policies, research studies, and strategic documents that showcase Ghana's educational development journey."}
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <button className="bg-white text-getfund-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2">
-                  <Download className="w-5 h-5" />
-                  Browse All Resources
-                </button>
-                <button className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-getfund-primary transition-colors">
-                  Subscribe to Updates
-                </button>
-              </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <button className="bg-white text-getfund-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2 shadow-sm border border-gray-200">
+                <Download className="w-5 h-5" />
+                Browse All Resources
+              </button>
+              <button className="bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                Subscribe to Updates
+              </button>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Stats Section */}
         <section className="py-12 bg-white border-b">

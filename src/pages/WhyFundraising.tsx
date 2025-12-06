@@ -3,12 +3,20 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface WhyFundraisingContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -93,13 +101,16 @@ export default function WhyFundraising() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{content.hero?.title}</h1>
-            <p className="text-xl md:text-2xl mb-8 leading-relaxed">
-              {content.hero?.subtitle}
-            </p>
+        <PageBanner
+          title={content.hero?.title || 'Why Fundraising?'}
+          subtitle={content.hero?.subtitle || 'Your support helps us expand access to quality education'}
+          bannerBackground={content.bannerBackground}
+          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+        />
+
+        {/* CTA Button below banner */}
+        <div className="bg-gray-50 py-8">
+          <div className="container mx-auto px-4 text-center">
             <button
               onClick={scrollToDonation}
               className="inline-block bg-getfund-gold text-white px-8 py-4 rounded-md font-semibold hover:bg-yellow-600 transition-colors text-lg"
@@ -107,7 +118,7 @@ export default function WhyFundraising() {
               {content.hero?.ctaButtonText}
             </button>
           </div>
-        </section>
+        </div>
 
         {/* Main Content */}
         <section className="py-16 bg-white">

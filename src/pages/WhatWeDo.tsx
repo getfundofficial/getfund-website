@@ -3,9 +3,17 @@ import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Programs from '../components/Programs';
 import Footer from '../components/Footer';
+import PageBanner from '../components/PageBanner';
 import { cmsApi } from '../services/cmsApi';
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface PageContent {
+  bannerBackground?: BannerBackground;
   servicesTitle?: string;
   servicesSubtitle?: string;
   services?: Array<{ title: string; description: string; link: string }>;
@@ -63,19 +71,11 @@ export default function WhatWeDo() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-getfund-primary via-getfund-secondary to-red-900 text-white py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {pageContent?.servicesTitle || 'What We Do'}
-              </h1>
-              <p className="text-xl md:text-2xl text-red-100 leading-relaxed">
-                {pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments and key initiatives.'}
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title={pageContent?.servicesTitle || 'What We Do'}
+          subtitle={pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments and key initiatives.'}
+          bannerBackground={pageContent?.bannerBackground}
+        />
 
         {/* Programs Section */}
         <Programs 

@@ -4,10 +4,18 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface BeneficiariesGiveBackContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -77,12 +85,11 @@ export default function BeneficiariesGiveBack() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{content.hero?.title}</h1>
-          </div>
-        </section>
+        <PageBanner
+          title={content.hero?.title || 'GETFund Beneficiaries'}
+          bannerBackground={content.bannerBackground}
+          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+        />
 
         {/* Main Content */}
         <section className="py-20 bg-white">

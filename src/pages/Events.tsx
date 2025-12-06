@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
@@ -14,7 +15,14 @@ interface Event {
   imageUrl?: string;
 }
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintOpacity?: number;
+}
+
 interface EventsContent {
+  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -83,12 +91,11 @@ export default function Events() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-getfund-primary to-blue-700 text-white py-20">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{content.hero?.title}</h1>
-          </div>
-        </section>
+        <PageBanner
+          title={content.hero?.title || 'Events'}
+          bannerBackground={content.bannerBackground}
+          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+        />
 
         {/* Upcoming Events */}
         <section className="py-16 bg-white">
