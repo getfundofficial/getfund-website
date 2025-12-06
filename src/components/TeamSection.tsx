@@ -192,7 +192,7 @@ export default function TeamSection({
                       <img
                         src={chairman.image}
                         alt={chairman.name}
-                        className="w-full h-64 object-cover rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-64 object-contain rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="text-center flex-1 flex flex-col justify-between">
                         <div>
@@ -257,11 +257,13 @@ export default function TeamSection({
             <div className="grid md:grid-cols-3 gap-8">
               {managementTeam.map((member) => (
                 <div key={member.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
-                  <img
-                    src={member.image_url || '/images/placeholder.jpg'}
-                    alt={member.name}
-                    className="w-full h-80 object-cover"
-                  />
+                  <div className="w-full h-80 bg-gray-50 flex items-center justify-center p-4">
+                    <img
+                      src={member.image_url || '/images/placeholder.jpg'}
+                      alt={member.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                   <div className="bg-gray-900 text-white text-center py-4 px-6">
                     <h3 className="text-lg font-bold">{member.name}</h3>
                   </div>
