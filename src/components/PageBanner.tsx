@@ -69,11 +69,17 @@ export default function PageBanner({
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
+            style={{ color: bannerBackground?.titleColor || '#FFFFFF' }}
+          >
             {title}
           </h1>
           {subtitle && (
-            <p className="text-xl md:text-2xl text-red-100 leading-relaxed drop-shadow-md">
+            <p
+              className="text-xl md:text-2xl leading-relaxed drop-shadow-md"
+              style={{ color: bannerBackground?.subtitleColor || '#FCA5A5' }}
+            >
               {subtitle}
             </p>
           )}

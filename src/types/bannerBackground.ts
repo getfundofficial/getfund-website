@@ -9,4 +9,6 @@ export interface BannerBackground {
   gradientDirection?: 'to right' | 'to bottom' | 'to bottom right' | 'to top right';
   useGradient?: boolean;
   tintOpacity?: number;
+  titleColor?: string;
+  subtitleColor?: string;
 }
