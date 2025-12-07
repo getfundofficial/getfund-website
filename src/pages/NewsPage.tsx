@@ -49,7 +49,7 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 10;
+  const articlesPerPage = 12;
 
   // Fetch news articles and page content from CMS on component mount
   useEffect(() => {
