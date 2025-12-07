@@ -1,5 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -21,13 +21,21 @@ interface NewsArticle {
 
 export default function NewsArticlePage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(true);
-  const [latestNews, setLatestNews] = useState<NewsArticle[]>([]);
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [previousArticle, setPreviousArticle] = useState<NewsArticle | null>(null);
   const [nextArticle, setNextArticle] = useState<NewsArticle | null>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/news?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -54,12 +62,8 @@ export default function NewsArticlePage() {
             setPreviousArticle(allArticles[currentIndex + 1]);
           }
 
-          // Set latest news (first 4 articles excluding current)
-          const latest = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
-          setLatestNews(latest);
-
-          // Set related articles (3 articles excluding current)
-          const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 3);
+          // Set related articles (4 articles excluding current)
+          const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
           setRelatedArticles(related);
         }
 
@@ -240,7 +244,7 @@ export default function NewsArticlePage() {
               {relatedArticles.length > 0 && (
                 <div className="mt-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">Related News</h3>
-                  <div className="grid md:grid-cols-3 gap-6">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {relatedArticles.map((related) => (
                       <Link key={related.id} to={`/news/${related.slug}`} className="group bg-white overflow-hidden hover:shadow-lg transition-shadow">
                         <div className="relative h-48">
@@ -283,56 +287,27 @@ export default function NewsArticlePage() {
 
             {/* Sidebar - Right Column */}
             <div className="lg:col-span-1">
-              {/* Latest News */}
+              {/* Search */}
               <div className="bg-white p-6 mb-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
-                  Latest News
+                  Search
                 </h3>
-                <div className="space-y-4">
-                  {latestNews.map((news) => (
-                    <Link
-                      key={news.id}
-                      to={`/news/${news.slug}`}
-                      className="flex gap-3 group"
-                    >
-                      <div className="flex-shrink-0 w-20 h-20">
-                        {news.image ? (
-                          <img
-                            src={news.image}
-                            alt={news.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200"></div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-sm text-gray-900 group-hover:text-getfund-primary transition-colors line-clamp-2 mb-1">
-                          {news.title}
-                        </h4>
-                        <div className="flex items-center gap-1 text-gray-500 text-xs">
-                          <Calendar className="w-3 h-3" />
-                          <time dateTime={news.date}>
-                            {new Date(news.date).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </time>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                <Link
-                  to="/news"
-                  className="block mt-4 pt-4 border-t border-gray-200 text-getfund-primary hover:text-getfund-secondary font-semibold text-sm transition-colors"
-                >
-                  View All News →
-                </Link>
+                <form onSubmit={handleSearch} className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search articles..."
+                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-getfund-primary transition-colors"
+                    aria-label="Search"
+                  >
+                    <Search className="w-5 h-5" />
+                  </button>
+                </form>
               </div>
 
               {/* Quick Links */}
