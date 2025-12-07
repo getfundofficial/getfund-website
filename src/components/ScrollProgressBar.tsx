@@ -31,7 +31,7 @@ export default function ScrollProgressBar() {
       aria-label="Page scroll progress"
     >
       <div
-        className="h-full bg-gradient-to-r from-getfund-primary via-getfund-accent to-getfund-gold transition-all duration-150 ease-out"
+        className="h-full bg-red-600 transition-all duration-150 ease-out"
         style={{ width: `${scrollProgress}%` }}
       />
     </div>
