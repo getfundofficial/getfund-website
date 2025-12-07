@@ -1,6 +1,5 @@
-import { useParams } from 'react-router-dom';
-import { Calendar, User, ArrowLeft, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -19,11 +18,23 @@ interface NewsArticle {
   tags: string[];
 }
 
+interface Event {
+  id: number;
+  title: string;
+  date: string;
+  description: string;
+  imageUrl?: string;
+}
+
 export default function NewsArticlePage() {
   const { slug } = useParams();
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [latestNews, setLatestNews] = useState<NewsArticle[]>([]);
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [previousArticle, setPreviousArticle] = useState<NewsArticle | null>(null);
+  const [nextArticle, setNextArticle] = useState<NewsArticle | null>(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -36,10 +47,38 @@ export default function NewsArticlePage() {
         if (cmsArticle) {
           setArticle(cmsArticle);
 
-          // Fetch related articles (excluding current one)
-          const allArticles = await cmsApi.getNewsArticles(5);
-          const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 2);
+          // Fetch all articles for navigation and sidebar
+          const allArticles = await cmsApi.getNewsArticles();
+
+          // Find current article index
+          const currentIndex = allArticles.findIndex(a => a.id === cmsArticle.id);
+
+          // Set previous and next articles
+          if (currentIndex > 0) {
+            setNextArticle(allArticles[currentIndex - 1]);
+          }
+          if (currentIndex < allArticles.length - 1) {
+            setPreviousArticle(allArticles[currentIndex + 1]);
+          }
+
+          // Set latest news (first 4 articles excluding current)
+          const latest = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
+          setLatestNews(latest);
+
+          // Set related articles (3 articles excluding current)
+          const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 3);
           setRelatedArticles(related);
+        }
+
+        // Fetch upcoming events
+        try {
+          const eventsPage = await cmsApi.getPageBySlug('events');
+          const eventsSection = eventsPage?.sections?.find(s => s.section_type === 'page_content');
+          if (eventsSection?.content?.upcomingEvents?.events) {
+            setUpcomingEvents(eventsSection.content.upcomingEvents.events.slice(0, 3));
+          }
+        } catch (error) {
+          console.error('Failed to fetch events:', error);
         }
       } catch (error) {
         console.error('Failed to fetch article:', error);
@@ -77,7 +116,7 @@ export default function NewsArticlePage() {
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'News & Updates', href: '/news' },
+    { label: 'News & Events', href: '/news' },
     { label: article.title, href: `/news/${slug}`, isActive: true }
   ];
 
@@ -85,146 +124,291 @@ export default function NewsArticlePage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
       <Breadcrumb items={breadcrumbItems} />
+
       <div className="flex-1 bg-gray-50">
-      {/* Header Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
-            <Link 
-              to="/news" 
-              className="inline-flex items-center gap-2 text-getfund-primary hover:text-getfund-secondary mb-6 transition-colors font-medium"
+        {/* Back to News Link */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="container mx-auto px-4 py-6">
+            <Link
+              to="/news"
+              className="inline-flex items-center gap-2 text-getfund-primary hover:text-getfund-secondary transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" />
               Back to News
             </Link>
-            
-            <div>
-              <div className="mb-4">
-                <span className="bg-getfund-primary text-white px-3 py-1 text-xs font-semibold uppercase">
-                  {article.tags[0] || 'Announcement'}
-                </span>
-              </div>
-              
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
-                {article.title}
-              </h1>
-
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
-                <Calendar className="w-4 h-4" />
-                <time dateTime={article.date}>
-                  {new Date(article.date).toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </time>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <article className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          {/* Featured Image */}
-          <div className="mb-8 bg-white shadow">
-            <img 
-              src={article.image || '/images/hero/main-slider-1.jpg'}
-              alt={article.title}
-              className="w-full h-auto object-cover"
-            />
-          </div>
+        {/* Main Content Area - 2 Column Layout */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content - Left Column */}
+            <div className="lg:col-span-2">
+              {/* Featured Image */}
+              {article.image && (
+                <div className="mb-6">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="w-full h-auto object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+                    }}
+                  />
+                </div>
+              )}
 
-          {/* Article Content */}
-          <div className="bg-white shadow p-8 md:p-12">
-            <div 
-              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-justify prose-ul:text-gray-700 prose-li:mb-2"
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
-          </div>
-
-          {/* Share and Navigation Section */}
-          <div className="bg-white shadow p-6 mt-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h4 className="text-lg font-bold text-gray-900 mb-4">Share this article</h4>
-                <div className="flex items-center gap-4">
-                  <button className="inline-flex items-center gap-2 text-gray-700 hover:text-getfund-primary transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Facebook
-                  </button>
-                  <button className="inline-flex items-center gap-2 text-gray-700 hover:text-getfund-primary transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                    X (Twitter)
-                  </button>
+              {/* Article Header */}
+              <div className="mb-6">
+                <span className="bg-getfund-primary text-white px-3 py-1 text-sm font-semibold">
+                  {article.tags[0] || 'General News'}
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-4 mb-4">
+                  {article.title}
+                </h1>
+                <div className="flex items-center gap-2 text-gray-600 text-sm">
+                  <Calendar className="w-4 h-4" />
+                  <time dateTime={article.date}>
+                    {new Date(article.date).toLocaleDateString('en-US', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
+                  </time>
                 </div>
               </div>
-              {relatedArticles.length > 0 && (
-                <div className="md:text-right">
-                  <Link 
-                    to={`/news/${relatedArticles[0].slug}`}
-                    className="inline-flex items-center gap-2 text-getfund-primary hover:text-getfund-secondary font-semibold transition-colors"
+
+              {/* Article Content */}
+              <div className="bg-white p-8 mb-6">
+                <div
+                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-justify prose-ul:text-gray-700 prose-li:mb-2"
+                  dangerouslySetInnerHTML={{ __html: article.content }}
+                />
+              </div>
+
+              {/* Share this article */}
+              <div className="bg-white p-6 mb-6">
+                <h4 className="text-lg font-bold text-gray-900 mb-4">Share this article</h4>
+                <div className="flex items-center gap-4">
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#1877F2] text-white rounded hover:bg-[#0d65d9] transition-colors"
                   >
-                    Next News <ArrowRight className="w-4 h-4" />
-                  </Link>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Facebook
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${window.location.href}&text=${article.title}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    X (Twitter)
+                  </a>
+                </div>
+              </div>
+
+              {/* Previous/Next News Navigation */}
+              <div className="flex justify-between items-center bg-white p-6 mb-6">
+                <div>
+                  {previousArticle && (
+                    <Link
+                      to={`/news/${previousArticle.slug}`}
+                      className="inline-flex items-center gap-2 text-getfund-primary hover:text-getfund-secondary transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                      Previous News
+                    </Link>
+                  )}
+                </div>
+                <div>
+                  {nextArticle && (
+                    <Link
+                      to={`/news/${nextArticle.slug}`}
+                      className="inline-flex items-center gap-2 text-getfund-primary hover:text-getfund-secondary transition-colors"
+                    >
+                      Next News
+                      <ChevronRight className="w-5 h-5" />
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Related News */}
+              {relatedArticles.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Related News</h3>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {relatedArticles.map((related) => (
+                      <Link key={related.id} to={`/news/${related.slug}`} className="group bg-white overflow-hidden hover:shadow-lg transition-shadow">
+                        <div className="relative h-48">
+                          {related.image ? (
+                            <img
+                              src={related.image}
+                              alt={related.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                              <span className="text-gray-400">No image</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-4">
+                          <div className="flex items-center gap-1 text-gray-500 text-xs mb-2">
+                            <Calendar className="w-3 h-3" />
+                            <time dateTime={related.date}>
+                              {new Date(related.date).toLocaleDateString('en-US', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                              })}
+                            </time>
+                          </div>
+                          <h4 className="font-bold text-gray-900 group-hover:text-getfund-primary transition-colors text-sm line-clamp-2">
+                            {related.title}
+                          </h4>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Related Articles */}
-          {relatedArticles.length > 0 && (
-            <div className="mt-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Related News</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                {relatedArticles.map((related) => (
-                  <Link key={related.id} to={`/news/${related.slug}`} className="group">
-                    <div className="bg-white shadow hover:shadow-lg transition-shadow overflow-hidden">
-                      <div className="relative">
-                        {related.image && (
+            {/* Sidebar - Right Column */}
+            <div className="lg:col-span-1">
+              {/* Latest News */}
+              <div className="bg-white p-6 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+                  Latest News
+                </h3>
+                <div className="space-y-4">
+                  {latestNews.map((news) => (
+                    <Link
+                      key={news.id}
+                      to={`/news/${news.slug}`}
+                      className="flex gap-3 group"
+                    >
+                      <div className="flex-shrink-0 w-20 h-20">
+                        {news.image ? (
                           <img
-                            src={related.image}
-                            alt={related.title}
-                            className="w-full h-48 object-cover"
+                            src={news.image}
+                            alt={news.title}
+                            className="w-full h-full object-cover"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
                             }}
                           />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200"></div>
                         )}
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-getfund-primary text-white px-3 py-1 text-xs font-semibold uppercase">
-                            {related.tags[0] || 'Announcement'}
-                          </span>
-                        </div>
                       </div>
-                      <div className="p-6">
-                        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-                          <Calendar className="w-4 h-4" />
-                          <time dateTime={related.date}>
-                            {new Date(related.date).toLocaleDateString('en-US', {
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm text-gray-900 group-hover:text-getfund-primary transition-colors line-clamp-2 mb-1">
+                          {news.title}
+                        </h4>
+                        <div className="flex items-center gap-1 text-gray-500 text-xs">
+                          <Calendar className="w-3 h-3" />
+                          <time dateTime={news.date}>
+                            {new Date(news.date).toLocaleDateString('en-US', {
+                              month: 'short',
                               day: 'numeric',
-                              month: 'long',
                               year: 'numeric',
                             })}
                           </time>
                         </div>
-                        <h4 className="font-bold text-gray-900 group-hover:text-getfund-primary transition-colors line-clamp-2 mb-2">
-                          {related.title}
-                        </h4>
-                        <p className="text-sm text-gray-600 line-clamp-2">{related.excerpt}</p>
                       </div>
-                    </div>
+                    </Link>
+                  ))}
+                </div>
+                <Link
+                  to="/news"
+                  className="block mt-4 pt-4 border-t border-gray-200 text-getfund-primary hover:text-getfund-secondary font-semibold text-sm transition-colors"
+                >
+                  View All News →
+                </Link>
+              </div>
+
+              {/* Upcoming Events */}
+              {upcomingEvents.length > 0 && (
+                <div className="bg-white p-6 mb-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+                    Upcoming Events
+                  </h3>
+                  <div className="space-y-4">
+                    {upcomingEvents.map((event) => (
+                      <div key={event.id} className="border-l-4 border-getfund-primary pl-4 py-2">
+                        <h4 className="font-bold text-sm text-gray-900 mb-1">
+                          {event.title}
+                        </h4>
+                        <div className="flex items-center gap-1 text-gray-500 text-xs mb-2">
+                          <Calendar className="w-3 h-3" />
+                          <time>{event.date}</time>
+                        </div>
+                        <p className="text-xs text-gray-600 line-clamp-2">
+                          {event.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <Link
+                    to="/events"
+                    className="block mt-4 pt-4 border-t border-gray-200 text-getfund-primary hover:text-getfund-secondary font-semibold text-sm transition-colors"
+                  >
+                    View All Events →
                   </Link>
-                ))}
+                </div>
+              )}
+
+              {/* Quick Links */}
+              <div className="bg-white p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+                  Quick Links
+                </h3>
+                <nav className="space-y-2">
+                  <Link
+                    to="/funding-opportunities"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → Funding Opportunities
+                  </Link>
+                  <Link
+                    to="/funded-projects"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → Funded Projects
+                  </Link>
+                  <Link
+                    to="/resources"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → Resources
+                  </Link>
+                  <Link
+                    to="/faqs"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → FAQs
+                  </Link>
+                </nav>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </article>
       </div>
+
       <Footer />
     </div>
   );
 }
-// Force rebuild - v1.0.1
