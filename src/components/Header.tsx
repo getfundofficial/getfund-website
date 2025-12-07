@@ -5,6 +5,7 @@ import { useScrollDirection } from '../hooks/useScrollDirection';
 import { cmsApi, MenuItem } from '../services/cmsApi';
 import DropdownMenu from './DropdownMenu';
 import MobileDropdownMenu from './MobileDropdownMenu';
+import ScrollProgressBar from './ScrollProgressBar';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,9 +29,11 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100 transition-transform duration-300 ease-in-out ${
-      shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
-    }`}>
+    <>
+      <ScrollProgressBar />
+      <header className={`fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b border-gray-100 transition-transform duration-300 ease-in-out ${
+        shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
+      }`}>
       <nav className="container mx-auto px-3 xs:px-4 sm:px-6 py-2 sm:py-3 3xl:px-8 4xl:px-12 max-w-9xl flex items-center justify-between">
         <Link to="/" className="flex items-center flex-shrink-0">
           <img
@@ -119,5 +122,6 @@ export default function Header() {
         )}
       </nav>
     </header>
+    </>
   );
 }
