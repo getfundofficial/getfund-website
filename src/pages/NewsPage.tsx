@@ -19,6 +19,7 @@ interface NewsArticle {
   author: string;
   date: string;
   tags: string[];
+  category?: string;
 }
 
 
@@ -48,6 +49,7 @@ export default function NewsPage() {
   const [content, setContent] = useState<NewsUpdatesContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 12;
 
@@ -59,7 +61,7 @@ export default function NewsPage() {
 
         // Fetch page content
         const page = await cmsApi.getPageBySlug('news');
-        const section = page.sections?.find(s => s.section_type === 'page_content');
+        const section = page?.sections?.find(s => s.section_type === 'page_content');
         if (section?.content) {
           setContent(section.content as NewsUpdatesContent);
         }
@@ -86,13 +88,16 @@ export default function NewsPage() {
     fetchData();
   }, []);
 
-  // Filter articles based on search
+  // Filter articles based on search and category
   const filteredArticles = articles.filter(article => {
     const matchesSearch = searchTerm === '' ||
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesSearch;
+    const matchesCategory = selectedCategory === 'ALL' ||
+      article.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
   });
 
   // Pagination calculations
@@ -101,10 +106,10 @@ export default function NewsPage() {
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  // Reset to page 1 when search changes
+  // Reset to page 1 when search or category changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, selectedCategory]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -187,6 +192,72 @@ export default function NewsPage() {
 
       <main className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
+          {/* Category Filter */}
+          <div className="mb-6 max-w-2xl mx-auto">
+            <div className="flex flex-wrap gap-2 justify-center">
+              <button
+                onClick={() => setSelectedCategory('ALL')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'ALL'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setSelectedCategory('NEWS')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'NEWS'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                News
+              </button>
+              <button
+                onClick={() => setSelectedCategory('ANNOUNCEMENT')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'ANNOUNCEMENT'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                Announcement
+              </button>
+              <button
+                onClick={() => setSelectedCategory('EVENT')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'EVENT'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                Event
+              </button>
+              <button
+                onClick={() => setSelectedCategory('UPDATE')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'UPDATE'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setSelectedCategory('PRESS_RELEASE')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  selectedCategory === 'PRESS_RELEASE'
+                    ? 'bg-getfund-primary text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                Press Release
+              </button>
+            </div>
+          </div>
+
           {/* Search Bar */}
           <div className="mb-8 max-w-2xl mx-auto">
             <div className="relative">
