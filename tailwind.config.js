@@ -20,7 +20,7 @@ export default {
         'secondary': '#191825',
       },
       fontFamily: {
-        'sans': ['Montserrat', 'Inter', 'system-ui', 'sans-serif'],
+        'sans': ['Frutiger', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
       screens: {
         'xs': '475px',      // Extra small devices (large phones)
