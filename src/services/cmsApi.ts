@@ -61,6 +61,7 @@ export interface NewsArticle {
   author: string;
   date: string;
   tags: string[];
+  category?: string;
 }
 
 export interface TeamMember {
@@ -200,6 +201,7 @@ class CMSApiClient {
         author: article.author || 'GETFund',
         date: article.date || article.published_date || '',
         tags: article.category ? [article.category] : ['News'],
+        category: article.category || 'NEWS',
       })).slice(0, limit);
 
       console.log('[CMS API] Transformed articles:', transformed.length);
@@ -241,6 +243,7 @@ class CMSApiClient {
         author: article.author || 'GETFund',
         date: article.published_at || new Date().toISOString(),
         tags: article.category ? [article.category] : ['News'],
+        category: article.category || 'NEWS',
       };
     } catch (error) {
       console.error(`Error fetching news article by slug (${slug}):`, error);
