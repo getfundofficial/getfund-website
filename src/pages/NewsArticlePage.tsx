@@ -341,15 +341,21 @@ export default function NewsArticlePage() {
                   Quick Links
                 </h3>
                 <nav className="space-y-2">
-                  {menuItems.map((item) => (
-                    <Link
-                      key={item.id}
-                      to={`/${item.slug}`}
-                      className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                    >
-                      → {item.label}
-                    </Link>
-                  ))}
+                  {menuItems
+                    .filter((item) => {
+                      // Filter out fundraising and other items without proper pages
+                      const excludedSlugs = ['fundraising'];
+                      return !excludedSlugs.includes(item.slug.toLowerCase());
+                    })
+                    .map((item) => (
+                      <Link
+                        key={item.id}
+                        to={`/${item.slug}`}
+                        className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                      >
+                        → {item.label}
+                      </Link>
+                    ))}
                 </nav>
               </div>
             </div>
