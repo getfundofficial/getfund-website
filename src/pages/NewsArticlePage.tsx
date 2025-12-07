@@ -18,13 +18,6 @@ interface NewsArticle {
   tags: string[];
 }
 
-interface Event {
-  id: number;
-  title: string;
-  date: string;
-  description: string;
-  imageUrl?: string;
-}
 
 export default function NewsArticlePage() {
   const { slug } = useParams();
@@ -32,7 +25,6 @@ export default function NewsArticlePage() {
   const [loading, setLoading] = useState(true);
   const [latestNews, setLatestNews] = useState<NewsArticle[]>([]);
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
-  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [previousArticle, setPreviousArticle] = useState<NewsArticle | null>(null);
   const [nextArticle, setNextArticle] = useState<NewsArticle | null>(null);
 
@@ -68,17 +60,6 @@ export default function NewsArticlePage() {
           // Set related articles (3 articles excluding current)
           const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 3);
           setRelatedArticles(related);
-        }
-
-        // Fetch upcoming events
-        try {
-          const eventsPage = await cmsApi.getPageBySlug('events');
-          const eventsSection = eventsPage?.sections?.find(s => s.section_type === 'page_content');
-          if (eventsSection?.content?.upcomingEvents?.events) {
-            setUpcomingEvents(eventsSection.content.upcomingEvents.events.slice(0, 3));
-          }
-        } catch (error) {
-          console.error('Failed to fetch events:', error);
         }
       } catch (error) {
         console.error('Failed to fetch article:', error);
@@ -116,7 +97,7 @@ export default function NewsArticlePage() {
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'News & Events', href: '/news' },
+    { label: 'News & Updates', href: '/news' },
     { label: article.title, href: `/news/${slug}`, isActive: true }
   ];
 
@@ -340,37 +321,6 @@ export default function NewsArticlePage() {
                 </Link>
               </div>
 
-              {/* Upcoming Events */}
-              {upcomingEvents.length > 0 && (
-                <div className="bg-white p-6 mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
-                    Upcoming Events
-                  </h3>
-                  <div className="space-y-4">
-                    {upcomingEvents.map((event) => (
-                      <div key={event.id} className="border-l-4 border-getfund-primary pl-4 py-2">
-                        <h4 className="font-bold text-sm text-gray-900 mb-1">
-                          {event.title}
-                        </h4>
-                        <div className="flex items-center gap-1 text-gray-500 text-xs mb-2">
-                          <Calendar className="w-3 h-3" />
-                          <time>{event.date}</time>
-                        </div>
-                        <p className="text-xs text-gray-600 line-clamp-2">
-                          {event.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <Link
-                    to="/events"
-                    className="block mt-4 pt-4 border-t border-gray-200 text-getfund-primary hover:text-getfund-secondary font-semibold text-sm transition-colors"
-                  >
-                    View All Events →
-                  </Link>
-                </div>
-              )}
-
               {/* Quick Links */}
               <div className="bg-white p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
@@ -378,16 +328,22 @@ export default function NewsArticlePage() {
                 </h3>
                 <nav className="space-y-2">
                   <Link
-                    to="/funding-opportunities"
+                    to="/what-we-do"
                     className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
                   >
-                    → Funding Opportunities
+                    → What We Do
                   </Link>
                   <Link
-                    to="/funded-projects"
+                    to="/who-we-are"
                     className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
                   >
-                    → Funded Projects
+                    → Who We Are
+                  </Link>
+                  <Link
+                    to="/impact"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → Impact
                   </Link>
                   <Link
                     to="/resources"
@@ -396,7 +352,13 @@ export default function NewsArticlePage() {
                     → Resources
                   </Link>
                   <Link
-                    to="/faqs"
+                    to="/support-us"
+                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                  >
+                    → Support Us
+                  </Link>
+                  <Link
+                    to="/faq"
                     className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
                   >
                     → FAQs
