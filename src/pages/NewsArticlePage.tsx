@@ -162,7 +162,13 @@ export default function NewsArticlePage() {
               {/* Article Content */}
               <div className="bg-white p-8 mb-6">
                 <div
-                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-justify prose-ul:text-gray-700 prose-li:mb-2"
+                  className="prose prose-lg max-w-none
+                    prose-headings:text-gray-900 prose-headings:font-bold prose-headings:mb-4 prose-headings:mt-6
+                    prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+                    prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4 prose-ul:text-gray-700
+                    prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4 prose-ol:text-gray-700
+                    prose-li:mb-2 prose-li:ml-2 prose-li:leading-relaxed
+                    prose-strong:font-bold prose-strong:text-gray-900"
                   dangerouslySetInnerHTML={{ __html: article.content }}
                 />
               </div>

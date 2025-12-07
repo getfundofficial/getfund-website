@@ -183,3 +183,57 @@ img {
   }
 }
 
+/* Article content formatting */
+.prose ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose ul li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.prose ul li::marker {
+  color: #059669;
+}
+
+.prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose ol li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.prose ol li::marker {
+  color: #059669;
+  font-weight: 600;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.prose ul ul,
+.prose ul ol,
+.prose ol ul,
+.prose ol ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
