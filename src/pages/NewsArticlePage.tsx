@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import { useState, useEffect } from 'react';
-import { cmsApi } from '../services/cmsApi';
+import { cmsApi, MenuItem } from '../services/cmsApi';
 
 interface NewsArticle {
   id: string;
@@ -27,6 +27,7 @@ export default function NewsArticlePage() {
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
   const [previousArticle, setPreviousArticle] = useState<NewsArticle | null>(null);
   const [nextArticle, setNextArticle] = useState<NewsArticle | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -61,6 +62,10 @@ export default function NewsArticlePage() {
           const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 3);
           setRelatedArticles(related);
         }
+
+        // Fetch menu items for Quick Links
+        const menuConfig = await cmsApi.getMenuConfig();
+        setMenuItems(menuConfig.menuItems);
       } catch (error) {
         console.error('Failed to fetch article:', error);
       } finally {
@@ -336,42 +341,15 @@ export default function NewsArticlePage() {
                   Quick Links
                 </h3>
                 <nav className="space-y-2">
-                  <Link
-                    to="/what-we-do"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → What We Do
-                  </Link>
-                  <Link
-                    to="/who-we-are"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → Who We Are
-                  </Link>
-                  <Link
-                    to="/impact"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → Impact
-                  </Link>
-                  <Link
-                    to="/resources"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → Resources
-                  </Link>
-                  <Link
-                    to="/support-us"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → Support Us
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
-                  >
-                    → FAQs
-                  </Link>
+                  {menuItems.map((item) => (
+                    <Link
+                      key={item.id}
+                      to={`/${item.slug}`}
+                      className="block py-2 text-gray-700 hover:text-getfund-primary hover:pl-2 transition-all"
+                    >
+                      → {item.label}
+                    </Link>
+                  ))}
                 </nav>
               </div>
             </div>
