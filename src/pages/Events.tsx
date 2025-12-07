@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
@@ -15,11 +16,6 @@ interface Event {
   imageUrl?: string;
 }
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface EventsContent {
   bannerBackground?: BannerBackground;

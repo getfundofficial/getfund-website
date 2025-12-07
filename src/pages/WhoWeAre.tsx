@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Eye, Target, Heart } from 'lucide-react';
 import Header from '../components/Header';
@@ -7,11 +8,6 @@ import TeamSection from '../components/TeamSection';
 import PageBanner from '../components/PageBanner';
 import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface PageContent {
   // Hero Section

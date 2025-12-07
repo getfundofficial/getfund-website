@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
@@ -12,11 +13,6 @@ interface PartnershipBenefit {
   description: string;
 }
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface PartnershipsContent {
   bannerBackground?: BannerBackground;

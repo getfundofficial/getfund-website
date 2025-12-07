@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
@@ -9,11 +10,6 @@ import ImpactStats from '../components/ImpactStats';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface WhyFundraisingContent {
   bannerBackground?: BannerBackground;

@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
@@ -8,11 +9,6 @@ import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import { cmsApi } from '../services/cmsApi';
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface BeneficiariesGiveBackContent {
   bannerBackground?: BannerBackground;

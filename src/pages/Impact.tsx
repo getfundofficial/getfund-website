@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { TrendingUp, Users, Building, Award, BookOpen, GraduationCap } from 'lucide-react';
 import Header from '../components/Header';
@@ -27,11 +28,6 @@ interface Achievement {
   description: string;
 }
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface PageContent {
   bannerBackground?: BannerBackground;

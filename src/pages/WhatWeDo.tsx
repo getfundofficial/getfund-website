@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
@@ -6,11 +7,6 @@ import Footer from '../components/Footer';
 import PageBanner from '../components/PageBanner';
 import { cmsApi } from '../services/cmsApi';
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface PageContent {
   bannerBackground?: BannerBackground;

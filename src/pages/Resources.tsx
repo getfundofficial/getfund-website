@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Download, Eye, FileText, Calendar, FileCheck } from 'lucide-react';
 import Header from '../components/Header';
@@ -18,11 +19,6 @@ interface ResourceDocument {
   downloadUrl: string;
 }
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface PageContent {
   bannerBackground?: BannerBackground;

@@ -1,3 +1,4 @@
+import { BannerBackground } from '../types/bannerBackground';
 import { Calendar, ArrowRight, Search } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
@@ -20,11 +21,6 @@ interface NewsArticle {
   tags: string[];
 }
 
-interface BannerBackground {
-  imageUrl?: string | null;
-  tintColor?: string;
-  tintOpacity?: number;
-}
 
 interface NewsUpdatesContent {
   bannerBackground?: BannerBackground;

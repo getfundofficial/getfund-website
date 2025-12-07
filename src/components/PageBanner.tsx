@@ -3,6 +3,9 @@ import React from 'react';
 interface BannerBackground {
   imageUrl?: string | null;
   tintColor?: string;
+  tintColor2?: string;
+  gradientDirection?: 'to right' | 'to bottom' | 'to bottom right' | 'to top right';
+  useGradient?: boolean;
   tintOpacity?: number;
 }
 
@@ -15,7 +18,7 @@ interface PageBannerProps {
 
 /**
  * Reusable page banner component with CMS-editable background
- * Supports background images with tinted overlays or solid gradients
+ * Supports background images with tinted overlays (solid or gradient) or solid gradients
  */
 export default function PageBanner({
   title,
@@ -24,6 +27,29 @@ export default function PageBanner({
   defaultGradient = 'linear-gradient(to bottom right, #DC143C, #B22222, #8B0000)',
 }: PageBannerProps) {
   const hasBackgroundImage = bannerBackground?.imageUrl;
+  const useGradient = bannerBackground?.useGradient ?? false;
+
+  // Generate tint overlay style
+  const getTintStyle = () => {
+    if (!hasBackgroundImage) return {};
+
+    const opacity = (bannerBackground.tintOpacity ?? 50) / 100;
+
+    if (useGradient) {
+      const direction = bannerBackground.gradientDirection || 'to right';
+      const color1 = bannerBackground.tintColor || '#DC143C';
+      const color2 = bannerBackground.tintColor2 || '#B22222';
+      return {
+        backgroundImage: `linear-gradient(${direction}, ${color1}, ${color2})`,
+        opacity,
+      };
+    } else {
+      return {
+        backgroundColor: bannerBackground.tintColor || '#DC143C',
+        opacity,
+      };
+    }
+  };
 
   return (
     <section
@@ -38,13 +64,7 @@ export default function PageBanner({
     >
       {/* Tint Overlay - Only show if background image exists */}
       {hasBackgroundImage && (
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundColor: bannerBackground.tintColor || '#DC143C',
-            opacity: (bannerBackground.tintOpacity ?? 50) / 100,
-          }}
-        />
+        <div className="absolute inset-0" style={getTintStyle()} />
       )}
 
       <div className="container mx-auto px-4 relative z-10">
