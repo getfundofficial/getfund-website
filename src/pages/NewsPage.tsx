@@ -187,17 +187,30 @@ export default function NewsPage() {
 
       <main className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              {filteredArticles.length === 0 ? (
-                <div className="bg-white shadow p-12 text-center">
-                  <p className="text-gray-600 text-lg">
-                    {content?.emptyState?.noArticlesMessage || 'No articles found matching your criteria.'}
-                  </p>
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 gap-6">
+          {/* Search Bar */}
+          <div className="mb-8 max-w-2xl mx-auto">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-getfund-primary focus:border-transparent shadow-sm"
+              />
+              <Search className="w-5 h-5 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2" />
+            </div>
+          </div>
+
+          {/* News Grid */}
+          <div>
+            {filteredArticles.length === 0 ? (
+              <div className="bg-white shadow p-12 text-center">
+                <p className="text-gray-600 text-lg">
+                  {content?.emptyState?.noArticlesMessage || 'No articles found matching your criteria.'}
+                </p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentArticles.map((article) => (
                   <article
                     key={article.id}
@@ -304,27 +317,6 @@ export default function NewsPage() {
                   </button>
                 </div>
               )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-8">
-              {/* Search */}
-              <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
-                  {content?.sidebar?.searchLabel || 'Search'}
-                </h3>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
-                  />
-                  <Search className="w-5 h-5 text-gray-400 absolute right-3 top-3.5" />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </main>
