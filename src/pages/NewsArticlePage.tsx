@@ -149,12 +149,15 @@ export default function NewsArticlePage() {
                 </h1>
                 <div className="flex items-center gap-2 text-gray-600 text-sm">
                   <Calendar className="w-4 h-4" />
-                  <time dateTime={article.date}>
-                    {new Date(article.date).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    })}
+                  <time dateTime={article.date || new Date().toISOString()}>
+                    {article.date && article.date !== ''
+                      ? new Date(article.date).toLocaleDateString('en-US', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })
+                      : 'Date not available'
+                    }
                   </time>
                 </div>
               </div>

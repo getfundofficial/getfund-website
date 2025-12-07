@@ -239,7 +239,7 @@ class CMSApiClient {
         content: article.body || '',
         image: article.featured_image_url,
         author: article.author || 'GETFund',
-        date: article.published_at,
+        date: article.published_at || new Date().toISOString(),
         tags: article.category ? [article.category] : ['News'],
       };
     } catch (error) {
