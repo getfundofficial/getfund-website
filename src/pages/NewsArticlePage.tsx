@@ -24,6 +24,7 @@ export default function NewsArticlePage() {
   const navigate = useNavigate();
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [latestNews, setLatestNews] = useState<NewsArticle[]>([]);
   const [relatedArticles, setRelatedArticles] = useState<NewsArticle[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [previousArticle, setPreviousArticle] = useState<NewsArticle | null>(null);
@@ -61,6 +62,10 @@ export default function NewsArticlePage() {
           if (currentIndex < allArticles.length - 1) {
             setPreviousArticle(allArticles[currentIndex + 1]);
           }
+
+          // Set latest news (first 4 articles excluding current)
+          const latest = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
+          setLatestNews(latest);
 
           // Set related articles (4 articles excluding current)
           const related = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
@@ -308,6 +313,58 @@ export default function NewsArticlePage() {
                     <Search className="w-5 h-5" />
                   </button>
                 </form>
+              </div>
+
+              {/* Latest News */}
+              <div className="bg-white p-6 mb-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+                  Latest News
+                </h3>
+                <div className="space-y-4">
+                  {latestNews.map((news) => (
+                    <Link
+                      key={news.id}
+                      to={`/news/${news.slug}`}
+                      className="flex gap-3 group"
+                    >
+                      <div className="flex-shrink-0 w-20 h-20">
+                        {news.image ? (
+                          <img
+                            src={news.image}
+                            alt={news.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-200"></div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm text-gray-900 group-hover:text-getfund-primary transition-colors line-clamp-2 mb-1">
+                          {news.title}
+                        </h4>
+                        <div className="flex items-center gap-1 text-gray-500 text-xs">
+                          <Calendar className="w-3 h-3" />
+                          <time dateTime={news.date}>
+                            {new Date(news.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </time>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <Link
+                  to="/news"
+                  className="block mt-4 pt-4 border-t border-gray-200 text-getfund-primary hover:text-getfund-secondary font-semibold text-sm transition-colors"
+                >
+                  View All News →
+                </Link>
               </div>
 
               {/* Quick Links */}

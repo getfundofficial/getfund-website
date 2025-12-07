@@ -48,7 +48,6 @@ export default function NewsPage() {
   const [content, setContent] = useState<NewsUpdatesContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 10;
 
@@ -87,16 +86,13 @@ export default function NewsPage() {
     fetchData();
   }, []);
 
-  // Filter articles based on search and category
+  // Filter articles based on search
   const filteredArticles = articles.filter(article => {
     const matchesSearch = searchTerm === '' ||
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory = selectedCategory === 'All' ||
-      article.tags.includes(selectedCategory);
-
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   // Pagination calculations
@@ -105,10 +101,10 @@ export default function NewsPage() {
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  // Reset to page 1 when search or category changes
+  // Reset to page 1 when search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -157,12 +153,6 @@ export default function NewsPage() {
   console.log('[NewsPage] Current page:', currentPage);
   console.log('[NewsPage] Total pages:', totalPages);
   console.log('[NewsPage] Search term:', searchTerm);
-  console.log('[NewsPage] Selected category:', selectedCategory);
-
-  // Get unique categories from articles
-  const categories = ['All', ...Array.from(new Set(articles.flatMap(a => a.tags)))];
-
-  const recentPosts = articles.slice(0, 3)
 
   if (loading) {
     return (
@@ -320,7 +310,7 @@ export default function NewsPage() {
             <div className="space-y-8">
               {/* Search */}
               <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
                   {content?.sidebar?.searchLabel || 'Search'}
                 </h3>
                 <div className="relative">
@@ -329,57 +319,9 @@ export default function NewsPage() {
                     placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-getfund-primary focus:border-transparent"
                   />
                   <Search className="w-5 h-5 text-gray-400 absolute right-3 top-3.5" />
-                </div>
-              </div>
-
-              {/* Recent Posts */}
-              <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">
-                  {content?.sidebar?.recentPostsLabel || 'Recent Posts'}
-                </h3>
-                <div className="space-y-4">
-                  {recentPosts.map((post) => (
-                    <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-                      <Link
-                        to={`/news/${post.slug}`}
-                        className="block hover:text-getfund-primary transition-colors"
-                      >
-                        <h4 className="font-semibold text-sm line-clamp-2 mb-2">{post.title}</h4>
-                        <p className="text-gray-500 text-xs">
-                          {new Date(post.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
-                        </p>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Categories */}
-              <div className="bg-white p-6 shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">
-                  {content?.sidebar?.categoriesLabel || 'Categories'}
-                </h3>
-                <div className="space-y-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`block w-full text-left px-3 py-2 transition-colors ${
-                        selectedCategory === category
-                          ? 'bg-getfund-primary bg-opacity-10 text-getfund-primary font-semibold'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
                 </div>
               </div>
             </div>
