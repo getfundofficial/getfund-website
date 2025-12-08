@@ -66,7 +66,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
               <img
                 src={image}
                 alt={title}
-                className="w-full h-auto rounded-xl shadow-lg object-cover max-h-96"
+                className="w-full h-auto shadow-lg object-contain"
               />
             </div>
           )}
