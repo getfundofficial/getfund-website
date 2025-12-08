@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Breadcrumb from './Breadcrumb';
 import Footer from './Footer';
+import LoadingScreen from './LoadingScreen';
 import { cmsApi, CMSPage as CMSPageType } from '../services/cmsApi';
 
 /**
@@ -50,10 +51,7 @@ export default function CMSPage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Loading content...</p>
-          </div>
+          <LoadingScreen />
         </main>
         <Footer />
       </div>

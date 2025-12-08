@@ -3,6 +3,7 @@ import { Calendar, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import LoadingScreen from '../components/LoadingScreen';
 import { useState, useEffect } from 'react';
 import { cmsApi, MenuItem } from '../services/cmsApi';
 
@@ -86,14 +87,7 @@ export default function NewsArticlePage() {
   }, [slug]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading article...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!article) {

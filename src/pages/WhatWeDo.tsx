@@ -5,6 +5,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import Programs from '../components/Programs';
 import Footer from '../components/Footer';
 import PageBanner from '../components/PageBanner';
+import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 
@@ -52,14 +53,7 @@ export default function WhatWeDo() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading content...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

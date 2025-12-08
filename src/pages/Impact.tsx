@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
 import PageBanner from '../components/PageBanner';
+import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 interface StatItem {
@@ -132,14 +133,7 @@ export default function Impact() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading impact data...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   const getIconComponent = (iconName?: string) => {

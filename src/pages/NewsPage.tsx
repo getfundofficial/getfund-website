@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
+import LoadingScreen from '../components/LoadingScreen';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cmsApi } from '../services/cmsApi';
@@ -160,14 +161,7 @@ export default function NewsPage() {
   console.log('[NewsPage] Search term:', searchTerm);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading news articles...</p>
-        </div>
-      </div>
-    )
+    return <LoadingScreen />;
   }
 
   return (

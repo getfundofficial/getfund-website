@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import LoadingScreen from '../components/LoadingScreen';
 import SectionRenderer from '../components/cms/SectionRenderer';
 import { cmsApi, CMSPage as CMSPageType } from '../services/cmsApi';
 import { getPageTemplate } from '../templates/pages';
@@ -92,14 +93,7 @@ export default function CMSPage() {
   }, [location.pathname, location.key]); // Re-fetch when pathname or navigation key changes
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading page...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (error || !page) {
