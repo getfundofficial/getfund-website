@@ -323,21 +323,12 @@ export default function TeamSection({
                         transform: 'rotateY(180deg)'
                       }}
                     >
-                      <div className="p-6 h-full flex flex-col justify-center text-white relative">
-                        {/* Rotating GETFund Logo */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                          <img
-                            src="/images/logos/getfund-cropped-icon.png"
-                            alt="GETFund Logo"
-                            className="w-48 h-48 object-contain animate-spin-slow"
-                          />
-                        </div>
-
-                        <div className="text-center mb-4 relative z-10">
+                      <div className="p-6 h-full flex flex-col justify-center text-white">
+                        <div className="text-center mb-4">
                           <h3 className="text-xl font-bold mb-2">{member.name}</h3>
                           <p className="text-sm font-semibold text-getfund-light">{member.title}</p>
                         </div>
-                        <div className="flex-1 flex items-center justify-center relative z-10">
+                        <div className="flex-1 flex items-center justify-center">
                           <button
                             className="bg-white text-getfund-primary px-6 py-3 font-semibold hover:bg-getfund-light transition-colors"
                             aria-label={`View full profile of ${member.name}`}
@@ -345,7 +336,7 @@ export default function TeamSection({
                             View Full Profile
                           </button>
                         </div>
-                        <div className="text-center text-xs text-getfund-light mt-4 relative z-10">
+                        <div className="text-center text-xs text-getfund-light mt-4">
                           Click again to flip back
                         </div>
                       </div>
