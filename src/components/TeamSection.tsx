@@ -201,16 +201,16 @@ export default function TeamSection({
                     <div className="bg-gray-900 text-white px-6 py-4 text-center">
                       <h3 className="text-lg font-bold">Board Chairman</h3>
                     </div>
-                    <div className="p-4 flex-1 flex flex-col">
+                    <div className="p-2 flex-1 flex flex-col">
                       <img
                         src={chairman.image}
                         alt={chairman.name}
-                        className="w-full h-96 object-contain mb-4 group-hover:scale-105 transition-transform duration-300"
+                        className="w-full flex-1 object-contain mb-3 group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="text-center flex-1 flex flex-col justify-between">
-                        <div>
-                          <h4 className="text-xl font-bold text-gray-900 mb-2">{chairman.name}</h4>
-                          <p className="text-sm text-getfund-primary font-semibold mb-4">{chairman.title}</p>
+                      <div className="text-center">
+                        <div className="mb-3">
+                          <h4 className="text-xl font-bold text-gray-900 mb-1">{chairman.name}</h4>
+                          <p className="text-sm text-getfund-primary font-semibold mb-3">{chairman.title}</p>
                         </div>
                         <button className="w-full bg-getfund-primary text-white px-4 py-3 font-semibold hover:bg-getfund-secondary transition-colors">
                           View Full Profile
