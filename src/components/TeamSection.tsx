@@ -201,16 +201,18 @@ export default function TeamSection({
                     <div className="bg-gray-900 text-white px-6 py-4 text-center">
                       <h3 className="text-lg font-bold">Board Chairman</h3>
                     </div>
-                    <div className="p-2 flex-1 flex flex-col">
-                      <img
-                        src={chairman.image}
-                        alt={chairman.name}
-                        className="w-full flex-1 object-contain mb-3 group-hover:scale-105 transition-transform duration-300"
-                      />
+                    <div className="p-4 flex-1 flex flex-col">
+                      <div className="flex-1 flex items-center justify-center mb-4">
+                        <img
+                          src={chairman.image}
+                          alt={chairman.name}
+                          className="w-full max-h-80 object-contain group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
                       <div className="text-center">
-                        <div className="mb-3">
-                          <h4 className="text-xl font-bold text-gray-900 mb-1">{chairman.name}</h4>
-                          <p className="text-sm text-getfund-primary font-semibold mb-3">{chairman.title}</p>
+                        <div className="mb-4">
+                          <h4 className="text-xl font-bold text-gray-900 mb-2">{chairman.name}</h4>
+                          <p className="text-sm text-getfund-primary font-semibold mb-4">{chairman.title}</p>
                         </div>
                         <button className="w-full bg-getfund-primary text-white px-4 py-3 font-semibold hover:bg-getfund-secondary transition-colors">
                           View Full Profile
@@ -295,11 +297,11 @@ export default function TeamSection({
                       className="absolute w-full h-full bg-white shadow-lg overflow-hidden"
                       style={{ backfaceVisibility: 'hidden' }}
                     >
-                      <div className="w-full h-80 bg-gray-50 flex items-center justify-center p-4">
+                      <div className="w-full h-72 bg-gray-50 flex items-center justify-center p-4">
                         <img
                           src={member.image_url || '/images/placeholder.jpg'}
                           alt={member.name}
-                          className="w-full h-full object-contain"
+                          className="w-full max-h-full object-contain"
                         />
                       </div>
                       <div className="bg-gray-900 text-white text-center py-4 px-6">
