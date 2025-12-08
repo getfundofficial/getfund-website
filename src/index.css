@@ -88,6 +88,20 @@
       font-size: 20px;
     }
   }
+
+  /* Slow rotation animation for logos */
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
 }
 
 /* Hero slide text: only show content for active slide (slick assigns .slick-active) */

@@ -37,6 +37,7 @@ export default function TeamSection({
     image?: string;
     type: 'individual' | 'group';
   }>({ title: '', content: '', type: 'group' });
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
 
   const handleBoardGroupClick = () => {
     setModalContent({
@@ -126,6 +127,18 @@ export default function TeamSection({
       type: 'individual'
     });
     setModalOpen(true);
+  };
+
+  const toggleCardFlip = (memberId: string) => {
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(memberId)) {
+        newSet.delete(memberId);
+      } else {
+        newSet.add(memberId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -256,19 +269,85 @@ export default function TeamSection({
           {activeTab === 'management' && (
             <div className="grid md:grid-cols-3 gap-8">
               {managementTeam.map((member) => (
-                <div key={member.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
-                  <div className="w-full h-80 bg-gray-50 flex items-center justify-center p-4">
-                    <img
-                      src={member.image_url || '/images/placeholder.jpg'}
-                      alt={member.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div className="bg-gray-900 text-white text-center py-4 px-6">
-                    <h3 className="text-lg font-bold">{member.name}</h3>
-                  </div>
-                  <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                    <p className="text-sm font-semibold">{member.title}</p>
+                <div
+                  key={member.id}
+                  className="relative h-[32rem] cursor-pointer"
+                  style={{ perspective: '1000px' }}
+                  onClick={() => toggleCardFlip(member.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      toggleCardFlip(member.id);
+                    }
+                  }}
+                  aria-label={`View profile of ${member.name}`}
+                >
+                  <div
+                    className={`absolute w-full h-full transition-transform duration-700`}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: flippedCards.has(member.id) ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                    }}
+                  >
+                    {/* Front of card */}
+                    <div
+                      className="absolute w-full h-full bg-white shadow-lg overflow-hidden"
+                      style={{ backfaceVisibility: 'hidden' }}
+                    >
+                      <div className="w-full h-80 bg-gray-50 flex items-center justify-center p-4">
+                        <img
+                          src={member.image_url || '/images/placeholder.jpg'}
+                          alt={member.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="bg-gray-900 text-white text-center py-4 px-6">
+                        <h3 className="text-lg font-bold">{member.name}</h3>
+                      </div>
+                      <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
+                        <p className="text-sm font-semibold">{member.title}</p>
+                      </div>
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 bg-white px-3 py-1 shadow-sm">
+                        Click to view profile
+                      </div>
+                    </div>
+
+                    {/* Back of card */}
+                    <div
+                      className="absolute w-full h-full bg-getfund-primary shadow-lg overflow-hidden"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)'
+                      }}
+                    >
+                      <div className="p-6 h-full flex flex-col justify-center text-white relative">
+                        {/* Rotating GETFund Logo */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                          <img
+                            src="/images/getfund-logo.png"
+                            alt="GETFund Logo"
+                            className="w-48 h-48 object-contain animate-spin-slow"
+                          />
+                        </div>
+
+                        <div className="text-center mb-4 relative z-10">
+                          <h3 className="text-xl font-bold mb-2">{member.name}</h3>
+                          <p className="text-sm font-semibold text-getfund-light">{member.title}</p>
+                        </div>
+                        <div className="flex-1 flex items-center justify-center relative z-10">
+                          <button
+                            className="bg-white text-getfund-primary px-6 py-3 font-semibold hover:bg-getfund-light transition-colors"
+                            aria-label={`View full profile of ${member.name}`}
+                          >
+                            View Full Profile
+                          </button>
+                        </div>
+                        <div className="text-center text-xs text-getfund-light mt-4 relative z-10">
+                          Click again to flip back
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
