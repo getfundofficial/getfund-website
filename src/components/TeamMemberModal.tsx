@@ -62,11 +62,11 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
 
         <div className="p-8 md:p-12">
           {image && (
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center">
               <img
                 src={image}
                 alt={title}
-                className="w-full h-auto shadow-lg object-contain"
+                className="w-auto max-h-96 shadow-lg object-contain"
               />
             </div>
           )}
