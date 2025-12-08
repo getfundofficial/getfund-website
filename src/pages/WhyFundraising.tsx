@@ -8,6 +8,7 @@ import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
 import ContactSection from '../components/ContactSection';
+import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 
@@ -65,14 +66,7 @@ export default function WhyFundraising() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!content) {
