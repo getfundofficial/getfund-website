@@ -8,7 +8,7 @@ export default function LoadingScreen({ message = 'Loading content...' }: Loadin
       <div className="text-center">
         <div className="relative w-32 h-32 mx-auto mb-6">
           <img
-            src="/images/getfund-logo.png"
+            src="/images/logos/getfund-cropped-icon.png"
             alt="GETFund Logo"
             className="w-full h-full object-contain animate-spin-slow"
           />

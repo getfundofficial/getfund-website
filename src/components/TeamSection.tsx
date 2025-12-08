@@ -325,7 +325,7 @@ export default function TeamSection({
                         {/* Rotating GETFund Logo */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
                           <img
-                            src="/images/getfund-logo.png"
+                            src="/images/logos/getfund-cropped-icon.png"
                             alt="GETFund Logo"
                             className="w-48 h-48 object-contain animate-spin-slow"
                           />
