@@ -89,17 +89,24 @@ export default function NewsPage() {
     fetchData();
   }, []);
 
-  // Filter articles based on search and category
-  const filteredArticles = articles.filter(article => {
-    const matchesSearch = searchTerm === '' ||
-      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+  // Filter articles based on search and category, then sort by date (latest first)
+  const filteredArticles = articles
+    .filter(article => {
+      const matchesSearch = searchTerm === '' ||
+        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory = selectedCategory === 'ALL' ||
-      article.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'ALL' ||
+        article.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      // Sort by date in descending order (latest first)
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
