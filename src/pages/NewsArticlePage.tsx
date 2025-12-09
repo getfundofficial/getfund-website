@@ -65,7 +65,10 @@ export default function NewsArticlePage() {
           }
 
           // Set latest news (first 4 articles excluding current)
-          const latest = allArticles.filter(a => a.id !== cmsArticle.id).slice(0, 4);
+          const latest = allArticles
+            .filter(a => a.id !== cmsArticle.id)
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 4);
           setLatestNews(latest);
 
           // Set related articles (4 articles excluding current)
