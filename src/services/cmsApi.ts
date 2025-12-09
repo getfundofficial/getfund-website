@@ -82,6 +82,32 @@ export interface TeamMembersResponse {
   historical_admins: TeamMember[];
 }
 
+export interface FooterConfig {
+  id: number;
+  logo_url: string;
+  about_text: string;
+  phone: string;
+  email: string;
+  address: string;
+  office_hours_weekday: string;
+  office_hours_weekend: string;
+  background_color: string;
+  social_links: {
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+    whatsapp?: string;
+  };
+  quick_links: Array<{
+    name: string;
+    href: string;
+  }>;
+  is_active: boolean;
+  updated_at: string;
+}
+
 export type SectionType = 'text' | 'html' | 'image' | 'gallery' | 'video' | 'stats' | 'hero' | 'cta' | 'page_content';
 
 export interface PageSection {
@@ -341,6 +367,30 @@ class CMSApiClient {
       console.error('[CMS API] Error fetching team members:', error);
       // Return empty data on error
       return { chairman: null, management: [], historical_admins: [] };
+    }
+  }
+
+  /**
+   * Fetch footer configuration
+   */
+  async getFooterConfig(): Promise<FooterConfig | null> {
+    try {
+      const url = `${this.baseUrl}/footer-config`;
+      console.log('[CMS API] Fetching footer config:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch footer config: ${response.statusText}`);
+      }
+
+      const data: FooterConfig = await response.json();
+      console.log('[CMS API] Received footer config:', data);
+
+      return data;
+    } catch (error) {
+      console.error('[CMS API] Error fetching footer config:', error);
+      // Return null on error - Footer component will use fallback
+      return null;
     }
   }
 }
