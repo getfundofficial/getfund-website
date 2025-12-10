@@ -19,9 +19,47 @@ export default function Header() {
     const fetchMenu = async () => {
       try {
         const menuConfig = await cmsApi.getMenuConfig();
-        setMenuItems(menuConfig.menuItems);
+        if (menuConfig.menuItems.length > 0) {
+          setMenuItems(menuConfig.menuItems);
+        } else {
+          // Fallback menu when backend is not available
+          console.warn('Backend not available, using fallback menu');
+          setMenuItems([
+            { id: '1', slug: 'about', title: 'About', label: 'About' },
+            { id: '2', slug: 'news', title: 'News', label: 'News' },
+            {
+              id: '3',
+              slug: 'fundraising',
+              title: 'Fundraising',
+              label: 'Fundraising',
+              children: [
+                { id: '3-1', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '3' },
+                { id: '3-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '3' }
+              ]
+            },
+            { id: '4', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
+            { id: '5', slug: 'contact', title: 'Contact', label: 'Contact' }
+          ]);
+        }
       } catch (error) {
         console.error('Failed to load menu:', error);
+        // Fallback menu on error
+        setMenuItems([
+          { id: '1', slug: 'about', title: 'About', label: 'About' },
+          { id: '2', slug: 'news', title: 'News', label: 'News' },
+          {
+            id: '3',
+            slug: 'fundraising',
+            title: 'Fundraising',
+            label: 'Fundraising',
+            children: [
+              { id: '3-1', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '3' },
+              { id: '3-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '3' }
+            ]
+          },
+          { id: '4', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
+          { id: '5', slug: 'contact', title: 'Contact', label: 'Contact' }
+        ]);
       }
     };
 
