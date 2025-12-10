@@ -393,6 +393,78 @@ class CMSApiClient {
       return null;
     }
   }
+
+  /**
+   * Fetch all campaigns (optionally featured only)
+   */
+  async getCampaigns(featured: boolean = false): Promise<Campaign[]> {
+    try {
+      const url = `${this.baseUrl}/campaigns${featured ? '?featured=true' : ''}`;
+      console.log('[CMS API] Fetching campaigns:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch campaigns: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[CMS API] Received campaigns:', data.campaigns?.length || 0);
+
+      return data.campaigns || [];
+    } catch (error) {
+      console.error('[CMS API] Error fetching campaigns:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Fetch a single campaign by slug
+   */
+  async getCampaignBySlug(slug: string): Promise<Campaign | null> {
+    try {
+      const url = `${this.baseUrl}/campaigns/${slug}`;
+      console.log('[CMS API] Fetching campaign:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          return null;
+        }
+        throw new Error(`Failed to fetch campaign: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[CMS API] Received campaign:', data.campaign?.title);
+
+      return data.campaign || null;
+    } catch (error) {
+      console.error(`[CMS API] Error fetching campaign by slug (${slug}):`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Fetch lottery configuration
+   */
+  async getLotteryConfig(): Promise<LotteryConfig | null> {
+    try {
+      const url = `${this.baseUrl}/lottery/config`;
+      console.log('[CMS API] Fetching lottery config:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch lottery config: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[CMS API] Received lottery config:', data.config);
+
+      return data.config || null;
+    } catch (error) {
+      console.error('[CMS API] Error fetching lottery config:', error);
+      return null;
+    }
+  }
 }
 
 export interface MenuItem {
@@ -403,6 +475,41 @@ export interface MenuItem {
   order?: number;
   parentId?: string | null;
   children?: MenuItem[];
+}
+
+export interface Campaign {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  goal_amount: number;
+  raised_amount: number;
+  currency: string;
+  status: string;
+  button_text: string;
+  percentage_funded: number;
+  days_left: number | null;
+  donation_count: number;
+}
+
+export interface LotteryConfig {
+  prizes: Array<{
+    rank: number | string;
+    amount: number;
+    description: string;
+    currency: string;
+    count?: number;
+  }>;
+  next_draw_date: string;
+  how_it_works_steps: Array<{
+    step: number;
+    title: string;
+    description: string;
+  }>;
+  is_active: boolean;
+  banner_color: string;
+  current_entries_count: number;
 }
 
 // Export a singleton instance

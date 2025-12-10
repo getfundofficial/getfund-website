@@ -15,6 +15,7 @@ import { InfrastructureProjectsPage } from './InfrastructureProjectsPage';
 import { ImpactPage } from './ImpactPage';
 import { FAQPage } from './FAQPage';
 import { SupportUsPage } from './SupportUsPage';
+import { FundraisingCampaignsPage } from './FundraisingCampaignsPage';
 
 // Template metadata for documentation and CMS integration
 export interface PageTemplateMetadata {
@@ -36,6 +37,7 @@ export const pageTemplateRegistry: Record<string, React.ComponentType<any>> = {
   'faq': FAQPage,
   'contact': ContactPage,
   'support-us': SupportUsPage,
+  'fundraising-campaigns': FundraisingCampaignsPage,
 };
 
 // Metadata for each template (used by CMS)
@@ -258,6 +260,21 @@ export const pageTemplateMetadata: Record<string, PageTemplateMetadata> = {
         ctaSecondaryLink: { type: 'string', format: 'url', description: 'Secondary CTA button link' },
         contactEmail: { type: 'string', format: 'email', description: 'Contact email for donations' },
         contactPhone: { type: 'string', description: 'Contact phone for donations' },
+      },
+    },
+  },
+  'fundraising-campaigns': {
+    name: 'fundraising-campaigns',
+    displayName: 'Fundraising Campaigns',
+    description: 'Template for fundraising campaigns page with featured campaigns and scholarship lottery',
+    contentSchema: {
+      type: 'object',
+      properties: {
+        heroTitle: { type: 'string', description: 'Hero section title' },
+        heroSubtitle: { type: 'string', description: 'Hero section subtitle' },
+        featuredCampaignsTitle: { type: 'string', description: 'Featured campaigns section title' },
+        lotteryTitle: { type: 'string', description: 'Lottery section title' },
+        lotterySubtitle: { type: 'string', description: 'Lottery section subtitle' },
       },
     },
   },
