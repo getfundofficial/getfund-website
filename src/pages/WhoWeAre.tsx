@@ -165,8 +165,8 @@ export default function WhoWeAre() {
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
               <div>
-                <img 
-                  src={pageContent?.mainImage || '/images/about/getfund-board.jpg'}
+                <img
+                  src={pageContent?.mainImage || '/images/about/getfund-7th-board-inauguration.jpg'}
                   alt={pageContent?.mainImageAlt || 'GETFund Board'}
                   className="rounded-xl shadow-lg w-full h-auto object-cover"
                 />
@@ -325,8 +325,8 @@ export default function WhoWeAre() {
 
         {/* Interactive Team Section */}
         <TeamSection
-          boardGroupImage={pageContent?.boardImage || '/images/about/getfund-board.jpg'}
-          managementGroupImage="/images/about/management-team.jpg"
+          boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
+          managementGroupImage="/images/about/getfund-7th-board-inauguration.jpg"
           chairman={teamMembers.chairman ? {
             name: teamMembers.chairman.name,
             title: teamMembers.chairman.title,

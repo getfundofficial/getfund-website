@@ -25,40 +25,50 @@ export default function Header() {
           // Fallback menu when backend is not available
           console.warn('Backend not available, using fallback menu');
           setMenuItems([
-            { id: '1', slug: 'about', title: 'About', label: 'About' },
-            { id: '2', slug: 'news', title: 'News', label: 'News' },
+            { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
+            { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
+            { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
+            { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
+            { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
             {
-              id: '3',
+              id: '6',
               slug: 'fundraising',
               title: 'Fundraising',
-              label: 'Fundraising',
+              label: 'FUNDRAISING',
               children: [
-                { id: '3-1', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '3' },
-                { id: '3-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '3' }
+                { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
+                { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
+                { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
+                { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
+                { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
+                { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
               ]
-            },
-            { id: '4', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
-            { id: '5', slug: 'contact', title: 'Contact', label: 'Contact' }
+            }
           ]);
         }
       } catch (error) {
         console.error('Failed to load menu:', error);
         // Fallback menu on error
         setMenuItems([
-          { id: '1', slug: 'about', title: 'About', label: 'About' },
-          { id: '2', slug: 'news', title: 'News', label: 'News' },
+          { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
+          { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
+          { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
+          { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
+          { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
           {
-            id: '3',
+            id: '6',
             slug: 'fundraising',
             title: 'Fundraising',
-            label: 'Fundraising',
+            label: 'FUNDRAISING',
             children: [
-              { id: '3-1', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '3' },
-              { id: '3-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '3' }
+              { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
+              { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
+              { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
+              { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
+              { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
+              { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
             ]
-          },
-          { id: '4', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
-          { id: '5', slug: 'contact', title: 'Contact', label: 'Contact' }
+          }
         ]);
       }
     };

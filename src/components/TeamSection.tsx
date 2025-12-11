@@ -24,8 +24,8 @@ interface TeamSectionProps {
 }
 
 export default function TeamSection({
-  boardGroupImage = '/images/about/getfund-board.jpg',
-  managementGroupImage = '/images/about/management-team.jpg',
+  boardGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
+  managementGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
   chairman,
   managementTeam = []
 }: TeamSectionProps) {
