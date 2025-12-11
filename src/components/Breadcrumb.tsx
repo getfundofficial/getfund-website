@@ -36,6 +36,7 @@ const routeLabels: Record<string, string> = {
   '/fundraising/partnerships': 'Partnerships',
   '/fundraising/beneficiaries-give-back': 'Beneficiaries Give Back',
   '/fundraising/events': 'Events',
+  '/fundraising-campaigns': 'Fundraising Campaigns',
 };
 
 const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
@@ -77,17 +78,32 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
     else if (pathnames[0] === 'fundraising' && pathnames.length > 1) {
       const fullPath = location.pathname;
       const label = routeLabels[fullPath] || pathnames[pathnames.length - 1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      
+
       // Add Fundraising as intermediate breadcrumb for fundraising routes
       breadcrumbs.push({
         label: 'Fundraising',
         href: '/fundraising',
         isActive: false
       });
-      
+
       breadcrumbs.push({
         label: label,
         href: fullPath,
+        isActive: true
+      });
+    }
+    // Special handling for fundraising-campaigns (at root level but part of fundraising)
+    else if (pathnames[0] === 'fundraising-campaigns') {
+      // Add Fundraising as intermediate breadcrumb
+      breadcrumbs.push({
+        label: 'Fundraising',
+        href: '/fundraising/ways-to-donate',
+        isActive: false
+      });
+
+      breadcrumbs.push({
+        label: 'Fundraising Campaigns',
+        href: '/fundraising-campaigns',
         isActive: true
       });
     } else {

@@ -14,6 +14,7 @@ import EducationSectorSupport from './pages/EducationSectorSupport';
 import CommunitySHSProgramme from './pages/CommunitySHSProgramme';
 import SecondaryEducationImprovementProgramme from './pages/SecondaryEducationImprovementProgramme';
 import CMSPage from './pages/CMSPage';
+import Home from './pages/Home';
 import WhyFundraising from './pages/WhyFundraising';
 import WaysToDonate from './pages/WaysToDonate';
 import Partnerships from './pages/Partnerships';
@@ -22,6 +23,7 @@ import Events from './pages/Events';
 import PaymentCallback from './pages/PaymentCallback';
 import TestSuccess from './pages/payment/TestSuccess';
 import ScrollToTop from './components/ScrollToTop';
+import FundraisingCampaigns from './pages/FundraisingCampaigns';
 
 function App() {
   return (
@@ -29,8 +31,8 @@ function App() {
       <ScrollToTop />
       <div className="min-h-screen">
         <Routes>
-          {/* Homepage - CMS-powered */}
-          <Route path="/" element={<CMSPage />} />
+          {/* Homepage */}
+          <Route path="/" element={<Home />} />
           
           {/* What We Do - CMS-powered with Programs component */}
           <Route path="/what-we-do" element={<WhatWeDo />} />
@@ -56,6 +58,7 @@ function App() {
           <Route path="/news/:slug" element={<NewsArticlePage />} />
 
           {/* Fundraising Pages - Hardcoded with full content */}
+          <Route path="/fundraising-campaigns" element={<FundraisingCampaigns />} />
           <Route path="/fundraising/why-fundraising" element={<WhyFundraising />} />
           <Route path="/fundraising/ways-to-donate" element={<WaysToDonate />} />
           <Route path="/fundraising/partnerships" element={<Partnerships />} />

@@ -78,22 +78,34 @@ export default function DropdownMenu({ item }: DropdownMenuProps) {
         <div className="absolute top-full left-0 pt-2 z-50">
           <div className="w-64 bg-white border border-gray-200 rounded-lg shadow-xl">
             <ul className="py-2" role="menu">
-              {item.children.map((child) => (
-                <li key={child.id} role="none">
-                  <Link
-                    to={`/${item.slug}/${child.slug}`}
-                    className={`block px-4 py-3 ${
-                      location.pathname === `/${item.slug}/${child.slug}`
-                        ? 'bg-gray-100 text-getfund-primary font-semibold'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-getfund-primary'
-                    } transition-colors`}
-                    role="menuitem"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {child.label}
-                  </Link>
-                </li>
-              ))}
+              {item.children.map((child) => {
+                // Handle different slug formats:
+                // - 'fundraising-campaigns' -> use directly as /fundraising-campaigns
+                // - 'fundraising/why-fundraising' -> use directly as /fundraising/why-fundraising
+                // - 'why-fundraising' -> prepend parent as /fundraising/why-fundraising
+                let childPath: string;
+                if (child.slug.includes('/') || child.slug.includes('-campaigns')) {
+                  childPath = `/${child.slug}`;
+                } else {
+                  childPath = `/${item.slug}/${child.slug}`;
+                }
+                return (
+                  <li key={child.id} role="none">
+                    <Link
+                      to={childPath}
+                      className={`block px-4 py-3 ${
+                        location.pathname === childPath
+                          ? 'bg-gray-100 text-getfund-primary font-semibold'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-getfund-primary'
+                      } transition-colors`}
+                      role="menuitem"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {child.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
