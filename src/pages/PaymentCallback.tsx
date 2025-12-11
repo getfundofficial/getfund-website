@@ -57,7 +57,7 @@ export default function PaymentCallback() {
           // TEMPORARY WORKAROUND: If user has a reference, assume payment was successful
           // This is because Xcel only redirects back after successful payment
           // TODO: Remove this once backend verification API is working
-          if (reference && reference.startsWith('CUD')) {
+          if (reference && (reference.startsWith('CUD') || reference.startsWith('PMT') || reference.startsWith('GETFUND'))) {
             console.warn('Backend verification failed, assuming payment successful based on Xcel redirect');
             setStatus('success');
             setPaymentDetails({
@@ -74,7 +74,7 @@ export default function PaymentCallback() {
         console.error('Payment verification error:', error);
 
         // TEMPORARY WORKAROUND: Same as above
-        if (reference && reference.startsWith('CUD')) {
+        if (reference && (reference.startsWith('CUD') || reference.startsWith('PMT') || reference.startsWith('GETFUND'))) {
           console.warn('Backend verification exception, assuming payment successful based on Xcel redirect');
           setStatus('success');
           setPaymentDetails({
