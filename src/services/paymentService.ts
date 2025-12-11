@@ -196,7 +196,7 @@ class PaymentService {
     }
 
     // Minimum donation amount
-    const minimumAmount = currency === 'GHS' ? 10 : 1;
+    const minimumAmount = currency === 'GHS' ? 0.1 : 0.01;
     if (amount < minimumAmount) {
       return { valid: false, error: `Minimum donation is ${currency} ${minimumAmount}` };
     }
