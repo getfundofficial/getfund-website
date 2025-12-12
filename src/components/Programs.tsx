@@ -69,7 +69,7 @@ export default function Programs({ title, programs: propPrograms, stats, showTit
               <Link
                 key={service.title}
                 to={service.link}
-                className="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-lg hover:shadow-xl transition-all border-t-4 border-getfund-primary group cursor-pointer min-h-[280px] flex flex-col"
+                className="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-getfund-primary group cursor-pointer min-h-[280px] flex flex-col hover:-translate-y-2"
               >
                 <div className="bg-getfund-primary/10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-getfund-primary/20 transition-colors">
                   <Icon className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-getfund-primary" aria-hidden="true" />

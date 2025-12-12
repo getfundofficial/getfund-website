@@ -6,7 +6,13 @@ import News from '../components/News';
 import About from '../components/About';
 import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
+import VideoSection from '../components/VideoSection';
+import { StatsBackgroundSection } from '../components/BackgroundSection';
+import AnimatedCounter from '../components/AnimatedCounter';
+import { TestimonialsSection } from '../components/TestimonialCard';
+import ImageTextSection from '../components/ImageTextSection';
 import { cmsApi } from '../services/cmsApi';
+import { GraduationCap, Building2, Briefcase } from 'lucide-react';
 
 interface PageContent {
   vision?: { title: string; description: string };
@@ -154,11 +160,106 @@ export default function Home() {
     return <LoadingScreen />;
   }
 
+  // Default testimonials data
+  const testimonials = [
+    {
+      quote: "GETFund scholarship changed my life. I was able to complete my medical degree and now I'm serving my community as a doctor.",
+      authorName: "Dr. Ama Mensah",
+      authorRole: "GETFund Scholarship Beneficiary",
+      location: "Kumasi, Ghana",
+      authorImage: "/images/scholarship/OME1079.jpg"
+    },
+    {
+      quote: "Our school was transformed with new classrooms and a modern science laboratory. Our students now have the facilities they need to excel.",
+      authorName: "Mr. Kofi Asante",
+      authorRole: "School Headmaster",
+      location: "Northern Region",
+      authorImage: "/images/about/getfund-7th-board-inauguration.jpg"
+    },
+    {
+      quote: "Thanks to GETFund's infrastructure projects, our community now has access to quality education. The new school building has given our children hope.",
+      authorName: "Madam Efua Darko",
+      authorRole: "Community Leader",
+      location: "Western Region",
+      authorImage: "/images/hero/main-slider-3.jpg"
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
         <Hero slides={pageContent?.heroSlides} />
+
+        {/* Video Section */}
+        <VideoSection
+          title="See Our Impact in Action"
+          subtitle="Watch how GETFund is transforming education and building futures across Ghana"
+          videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          provider="youtube"
+        />
+
+        {/* Image-Text Section for About */}
+        <ImageTextSection
+          title="Empowering Ghana Through Education"
+          description={
+            <>
+              <p>The Ghana Education Trust Fund (GETFund) is a statutory body established by Act 581 in 2000 to provide financial resources for educational development across Ghana.</p>
+              <p>We are committed to supplementing government efforts in providing educational infrastructure and facilities at all levels, from basic education to tertiary institutions.</p>
+            </>
+          }
+          imageUrl="/images/about/getfund-7th-board-inauguration.jpg"
+          imageAlt="GETFund Board Inauguration"
+          ctaText="Learn More About Us"
+          ctaLink="/who-we-are"
+          className="bg-white"
+        />
+
+        {/* Animated Stats Section with Background Image */}
+        <StatsBackgroundSection backgroundImage="/images/hero/main-slider-1.jpg">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
+              Our Impact in Numbers
+            </h2>
+            <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto">
+              Transforming education across Ghana through strategic investments
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                <GraduationCap className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
+                <AnimatedCounter end={5000} suffix="+" duration={2500} />
+              </div>
+              <p className="text-white/90 font-medium text-lg">Scholarships Awarded</p>
+              <p className="text-white/70 text-sm mt-1">Supporting talented students nationwide</p>
+            </div>
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                <Building2 className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
+                <AnimatedCounter end={200} suffix="+" duration={2000} />
+              </div>
+              <p className="text-white/90 font-medium text-lg">Schools Built</p>
+              <p className="text-white/70 text-sm mt-1">Modern facilities across all regions</p>
+            </div>
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                <Briefcase className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
+                <AnimatedCounter end={1000} suffix="+" duration={2200} />
+              </div>
+              <p className="text-white/90 font-medium text-lg">Infrastructure Projects</p>
+              <p className="text-white/70 text-sm mt-1">Completed nationwide</p>
+            </div>
+          </div>
+        </StatsBackgroundSection>
+
+        {/* Original About Section with Vision/Mission */}
         <About content={pageContent ? {
           aboutHeading: pageContent.aboutTitle || pageContent.aboutHeading || 'Empowering Ghana Through Education',
           aboutSubheading: pageContent.aboutSubtitle || pageContent.aboutSubheading || 'Building Brighter Futures',
@@ -175,7 +276,17 @@ export default function Home() {
           aboutGETFundContent: pageContent.aboutGETFundContent || [],
           relevantFactors: pageContent.relevantFactors || []
         } : undefined} />
-        <News 
+
+        {/* Testimonials Section */}
+        <TestimonialsSection
+          title="What Our Beneficiaries Say"
+          subtitle="Hear from students and communities whose lives have been transformed through GETFund support"
+          testimonials={testimonials}
+          variant="grid"
+        />
+
+        {/* News Section */}
+        <News
           title={pageContent?.newsTitle}
           subtitle={pageContent?.newsSubtitle}
         />

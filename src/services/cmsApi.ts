@@ -3,7 +3,7 @@
  * Fetches published content from the CMS backend
  */
 
-const CMS_API_URL = import.meta.env.VITE_CMS_API_URL || 'http://localhost:5000/api';
+const CMS_API_URL = import.meta.env.VITE_CMS_API_URL || '/api';
 
 export interface CMSContent {
   id: string;

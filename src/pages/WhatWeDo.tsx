@@ -64,7 +64,14 @@ export default function WhatWeDo() {
         <PageBanner
           title={pageContent?.servicesTitle || 'What We Do'}
           subtitle={pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments and key initiatives.'}
-          bannerBackground={pageContent?.bannerBackground}
+          bannerBackground={pageContent?.bannerBackground || {
+            imageUrl: '/images/scholarship/GETFund-Projects-02-768x436.jpg',
+            tintColor: '#059669',
+            tintColor2: '#1e3a5f',
+            useGradient: true,
+            tintOpacity: 75,
+            gradientDirection: 'to right'
+          }}
         />
 
         {/* Programs Section */}

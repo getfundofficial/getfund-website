@@ -132,17 +132,20 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
           {articles.slice(0, 3).map((article) => (
             <article
               key={article.title}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
+              className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col hover:-translate-y-1"
             >
-              <img 
-                src={article.image} 
-                alt={`${article.title} - GETFund infrastructure project`}
-                className="h-40 sm:h-48 md:h-52 w-full object-cover"
-                loading="lazy"
-                decoding="async"
-                width="400"
-                height="200"
-              />
+              <div className="relative h-40 sm:h-48 md:h-52 overflow-hidden">
+                <img
+                  src={article.image}
+                  alt={`${article.title} - GETFund infrastructure project`}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="200"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
               <div className="p-4 sm:p-6 flex flex-col flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                   <span className="bg-getfund-primary/10 text-getfund-primary px-3 py-1 rounded-full text-xs sm:text-sm font-medium w-fit">
