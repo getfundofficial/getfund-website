@@ -3,6 +3,7 @@ import { Gift, Calendar, TrendingUp, Award, DollarSign } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
+import PageBanner from '../components/PageBanner';
 
 interface Campaign {
   id: string;
@@ -197,11 +198,23 @@ export default function FundraisingCampaigns() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <Breadcrumb />
+      <PageBanner
+        title="Support Education Through Giving"
+        subtitle="Your donations directly fund scholarships, infrastructure, and educational programs across Ghana"
+        bannerBackground={{
+          imageUrl: '/images/hero/main-slider-3.jpg',
+          tintColor: '#DC143C',
+          tintColor2: '#2563EB',
+          useGradient: true,
+          tintOpacity: 75,
+          gradientDirection: 'to right'
+        }}
+      />
       <main className="flex-1">
         {/* Featured Campaigns Section */}
-        <section className="py-12 sm:py-16 bg-white">
+        <section className="py-16 sm:py-20 lg:py-24 bg-white">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-10 sm:mb-12">
+            <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Featured Fundraising Campaigns
               </h2>
@@ -234,9 +247,9 @@ export default function FundraisingCampaigns() {
           </div>
         </section>
         {/* GETfund Scholarship Lottery Section - First */}
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-10 sm:mb-12">
+            <div className="text-center mb-12 sm:mb-16">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 GETFund Scholarship Lottery
               </h1>
@@ -272,6 +285,20 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col">
+      {/* Campaign Image */}
+      {campaign.image_url ? (
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={campaign.image_url}
+            alt={campaign.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="relative h-48 bg-gradient-to-br from-getfund-primary to-getfund-secondary flex items-center justify-center">
+          <Gift className="w-16 h-16 text-white/50" />
+        </div>
+      )}
       <div className="p-5 sm:p-6 flex-1 flex flex-col">
         {/* Status Badge */}
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
@@ -314,7 +341,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
         </div>
 
         <button
-          onClick={() => window.location.href = `/fundraising/campaigns/${campaign.slug}`}
+          onClick={() => window.location.href = '/fundraising/ways-to-donate'}
           className="w-full bg-getfund-gold hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
         >
           {campaign.button_text || 'Donate Now'}

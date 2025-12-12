@@ -76,14 +76,22 @@ export default function About({ content: propContent }: AboutProps) {
 
         {/* Stats Section */}
         {content.aboutStats && content.aboutStats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-16 md:mb-20">
-            {content.aboutStats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stat.number}</div>
-                <div className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
-                <p className="text-xs sm:text-sm text-gray-600">{stat.description}</p>
-              </div>
-            ))}
+          <div className="flex justify-center mb-12 sm:mb-16 md:mb-20">
+            <div className={`grid gap-8 sm:gap-12 md:gap-16 lg:gap-20 ${
+              content.aboutStats.length === 3
+                ? 'grid-cols-1 sm:grid-cols-3'
+                : content.aboutStats.length === 4
+                  ? 'grid-cols-2 md:grid-cols-4'
+                  : 'grid-cols-2 md:grid-cols-3'
+            }`}>
+              {content.aboutStats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stat.number}</div>
+                  <div className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
+                  <p className="text-xs sm:text-sm text-gray-600">{stat.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

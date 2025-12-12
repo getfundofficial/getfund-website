@@ -187,8 +187,14 @@ export default function NewsPage() {
       <PageBanner
         title={content?.hero?.title || 'News & Updates'}
         subtitle={content?.hero?.subtitle || 'Transforming Ghana\'s educational landscape through strategic investments and partnerships'}
-        bannerBackground={content?.bannerBackground}
-        defaultGradient="linear-gradient(to right, #DC143C, #0F766E, #1F2937)"
+        bannerBackground={content?.bannerBackground || {
+          imageUrl: '/images/hero/main-slider-1.jpg',
+          tintColor: '#DC143C',
+          tintColor2: '#1F2937',
+          useGradient: true,
+          tintOpacity: 75,
+          gradientDirection: 'to right'
+        }}
       />
 
       <main className="py-12 bg-gray-50">

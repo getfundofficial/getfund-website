@@ -157,7 +157,14 @@ export default function Impact() {
         <PageBanner
           title={pageContent?.heroTitle || 'Our Impact'}
           subtitle={pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
-          bannerBackground={pageContent?.bannerBackground}
+          bannerBackground={pageContent?.bannerBackground || {
+            imageUrl: '/images/scholarship/OME1079.jpg',
+            tintColor: '#DC143C',
+            tintColor2: '#059669',
+            useGradient: true,
+            tintOpacity: 70,
+            gradientDirection: 'to right'
+          }}
         />
 
         {/* Impact Statistics */}

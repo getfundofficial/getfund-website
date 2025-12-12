@@ -7,6 +7,7 @@ import Footer from '../components/Footer';
 import TeamSection from '../components/TeamSection';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
+import AdministratorsSection from '../components/AdministratorsSection';
 import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
 
@@ -157,7 +158,14 @@ export default function WhoWeAre() {
         <PageBanner
           title={pageContent?.heroTitle || 'About Us'}
           subtitle={pageContent?.heroSubtitle || 'Supporting the delivery of quality education to Ghanaians from basic to tertiary level'}
-          bannerBackground={pageContent?.bannerBackground}
+          bannerBackground={pageContent?.bannerBackground || {
+            imageUrl: '/images/about/getfund-7th-board-inauguration.jpg',
+            tintColor: '#DC143C',
+            tintColor2: '#1e3a5f',
+            useGradient: true,
+            tintOpacity: 70,
+            gradientDirection: 'to bottom right'
+          }}
         />
 
         {/* Main Content - Ghana Education Trust Fund */}
@@ -277,10 +285,10 @@ export default function WhoWeAre() {
           </div>
         </section>
 
-        {/* Leadership & Governance */}
-        <section className="pt-16 pb-8 bg-gray-50">
+        {/* Leadership & Governance Header */}
+        <section className="pt-16 pb-4 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-8">
+            <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 {pageContent?.leadershipTitle || 'Leadership & Governance'}
               </h2>
@@ -291,37 +299,12 @@ export default function WhoWeAre() {
           </div>
         </section>
 
-        {/* Historical Administrators Section */}
-        <section className="pb-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Administrators
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Leaders who have guided GETFund through its transformative journey
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {teamMembers.historical_admins.map((admin) => (
-                <div key={admin.id} className="bg-white rounded-xl shadow-lg overflow-hidden">
-                  <img
-                    src={admin.image_url || '/images/placeholder.jpg'}
-                    alt={admin.name}
-                    className="w-full h-80 object-cover"
-                  />
-                  <div className="bg-gray-900 text-white text-center py-4 px-6">
-                    <h3 className="text-base font-bold">{admin.name}</h3>
-                  </div>
-                  <div className="bg-gray-900 text-white text-center py-3 px-6 border-t border-gray-700">
-                    <p className="text-sm font-semibold">{admin.date_range}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Administrators Section - New Redesigned Component */}
+        <AdministratorsSection
+          administrators={teamMembers.historical_admins}
+          title="Administrators"
+          subtitle="Leaders who have guided GETFund through its transformative journey"
+        />
 
         {/* Interactive Team Section */}
         <TeamSection
@@ -330,7 +313,7 @@ export default function WhoWeAre() {
           chairman={teamMembers.chairman ? {
             name: teamMembers.chairman.name,
             title: teamMembers.chairman.title,
-            image: teamMembers.chairman.image_url || '/images/about/chairman.jpg',
+            image: teamMembers.chairman.image_url || '/images/board/s8507362-member1.jpg',
             bio: teamMembers.chairman.bio || ''
           } : undefined}
           managementTeam={teamMembers.management}
