@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
-import ImpactStats from '../components/ImpactStats';
+import PledgeToSupportForm from '../components/PledgeToSupportForm';
 import ContactSection from '../components/ContactSection';
 import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
@@ -34,6 +34,10 @@ interface WaysToDonateContent {
   hero: {
     title: string;
     subtitle: string;
+  };
+  impactVisualized?: {
+    totalRaised: string;
+    totalDonations: string;
   };
   donationOptions: DonationOption[];
   otherWays: {
@@ -133,29 +137,40 @@ export default function WaysToDonate() {
           defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
         />
 
-        {/* Donation Interface & Impact Visualized - HARDCODED COMPONENT */}
-        <section className="py-16 bg-gray-50">
+        {/* Impact Visualized - TOP LEFT */}
+        <section className="py-8 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {/* Donation Interface */}
-              <div>
-                <DonationInterface />
-              </div>
-
-              {/* Impact Visualized */}
-              <div className="bg-white border border-gray-200 rounded-lg p-6 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Your Impact Visualized</h3>
-                <div className="space-y-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white border border-gray-200 rounded-lg p-6 inline-block">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Your Impact Visualized</h3>
+                <div className="flex gap-8">
                   <div>
                     <div className="text-sm text-gray-600 mb-1">Total Raised</div>
-                    <div className="text-4xl font-bold text-getfund-primary">GH₵ [TBD]</div>
+                    <div className="text-3xl font-bold text-getfund-primary">
+                      {content.impactVisualized?.totalRaised || 'GH₵ [TBD]'}
+                    </div>
                   </div>
                   <div>
                     <div className="text-sm text-gray-600 mb-1">Total Donations</div>
-                    <div className="text-4xl font-bold text-getfund-gold">[TBD]</div>
+                    <div className="text-3xl font-bold text-getfund-gold">
+                      {content.impactVisualized?.totalDonations || '[TBD]'}
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Split Card: Donation Interface + Pledge to Support */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Left: Donation Interface */}
+              <DonationInterface />
+
+              {/* Right: Pledge to Support Form */}
+              <PledgeToSupportForm />
             </div>
           </div>
         </section>
@@ -225,9 +240,6 @@ export default function WaysToDonate() {
             </div>
           </div>
         </section>
-
-        {/* Impact Stats - CMS-POWERED */}
-        <ImpactStats page="ways-to-donate" />
 
         {/* Give with Confidence */}
         <section className="py-16 bg-white">
