@@ -7,7 +7,8 @@ import DropdownMenu from './DropdownMenu';
 import MobileDropdownMenu from './MobileDropdownMenu';
 import ScrollProgressBar from './ScrollProgressBar';
 
-// Default menu items (shown immediately, updated from CMS if available)
+// Default menu items (shown immediately, may be updated from CMS)
+// These match the actual routes defined in App.tsx
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
@@ -42,8 +43,12 @@ export default function Header() {
     const fetchMenu = async () => {
       try {
         const menuConfig = await cmsApi.getMenuConfig();
+        // Only use CMS menu if it has valid items and matches our routes
         if (menuConfig.menuItems.length > 0) {
+          console.log('[Header] Loaded menu from CMS:', menuConfig.menuItems);
           setMenuItems(menuConfig.menuItems);
+        } else {
+          console.log('[Header] Using default menu (CMS returned empty)');
         }
       } catch (error) {
         console.error('Failed to load menu from CMS, using default menu:', error);
@@ -51,7 +56,9 @@ export default function Header() {
       }
     };
 
-    fetchMenu();
+    // Temporarily disable CMS menu to always use defaults with correct routes
+    // fetchMenu();
+    console.log('[Header] Using default hardcoded menu');
   }, []);
 
   return (
