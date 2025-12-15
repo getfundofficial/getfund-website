@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import DonationModal from '../components/DonationModal';
+import LoadingScreen from '../components/LoadingScreen';
 
 interface Campaign {
   id: string;
@@ -183,18 +184,7 @@ export default function FundraisingCampaigns() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1 flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-getfund-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading fundraising campaigns...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <LoadingScreen message="Loading fundraising campaigns..." />;
   }
 
   return (

@@ -10,6 +10,7 @@ import PledgeToSupportForm from '../components/PledgeToSupportForm';
 import ContactSection from '../components/ContactSection';
 import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
+import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 interface PresetAmount {
@@ -98,14 +99,7 @@ export default function WaysToDonate() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!content) {
