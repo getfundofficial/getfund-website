@@ -2,17 +2,30 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { paymentService } from '../services/paymentService';
+import { LotteryEntryConfirmation } from '../components/lottery/LotteryEntryConfirmation';
+
+interface LotteryEntryData {
+  id: string;
+  payment_reference: string;
+  donation_amount: number;
+  currency: string;
+  draw_month: string;
+  campaign_title?: string;
+  total_entries: number;
+}
 
 export default function PaymentCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
+  const [lotteryEntry, setLotteryEntry] = useState<LotteryEntryData | null>(null);
+  const [showLotteryModal, setShowLotteryModal] = useState(false);
 
   useEffect(() => {
     const verifyPayment = async () => {
       const reference = searchParams.get('reference');
-      
+
       if (!reference) {
         setStatus('failed');
         return;
@@ -20,12 +33,28 @@ export default function PaymentCallback() {
 
       try {
         const response = await paymentService.verifyPayment(reference);
-        
+
         if (response.success && response.data) {
           setPaymentDetails(response.data);
-          
+
           if (response.data.status === 'success' || response.data.status === 'completed') {
             setStatus('success');
+
+            // Fetch lottery entry details
+            try {
+              const apiUrl = import.meta.env.VITE_CMS_API_URL || '/api';
+              const entryResponse = await fetch(`${apiUrl}/lottery/entry/${reference}`);
+              if (entryResponse.ok) {
+                const entryData = await entryResponse.json();
+                if (entryData.entry) {
+                  setLotteryEntry(entryData.entry);
+                  setShowLotteryModal(true);
+                }
+              }
+            } catch (entryError) {
+              console.log('Could not fetch lottery entry:', entryError);
+              // Not a critical error - payment was still successful
+            }
           } else {
             setStatus('failed');
           }
@@ -89,7 +118,7 @@ export default function PaymentCallback() {
             <p className="text-gray-600 mb-6">
               We couldn't process your payment. Please try again or contact support if the problem persists.
             </p>
-            
+
             <div className="space-y-3">
               <button
                 onClick={() => navigate('/fundraising/ways-to-donate')}
@@ -107,6 +136,14 @@ export default function PaymentCallback() {
           </div>
         )}
       </div>
+
+      {/* Lottery Entry Confirmation Modal */}
+      {showLotteryModal && lotteryEntry && (
+        <LotteryEntryConfirmation
+          entry={lotteryEntry}
+          onClose={() => setShowLotteryModal(false)}
+        />
+      )}
     </div>
   );
 }

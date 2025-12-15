@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Gift, Calendar, TrendingUp, Award, DollarSign } from 'lucide-react';
+import { Gift, TrendingUp } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
+import LoadingScreen from '../components/LoadingScreen';
+import { FlipCard } from '../components/lottery/FlipCard';
+import { CountdownTimer } from '../components/lottery/CountdownTimer';
+import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
 
 interface Campaign {
   id: string;
@@ -23,23 +27,34 @@ interface Campaign {
   is_featured?: boolean;
 }
 
+interface LotteryPrize {
+  rank: number | string;
+  amount: number;
+  description: string;
+  currency: string;
+  count?: number;
+  flip_description?: string;
+}
+
+interface LotteryStep {
+  step: number;
+  title: string;
+  description: string;
+  flip_description?: string;
+}
+
 interface LotteryConfig {
-  prizes: Array<{
-    rank: number | string;
-    amount: number;
-    description: string;
-    currency: string;
-    count?: number;
-  }>;
+  prizes: LotteryPrize[];
   next_draw_date: string;
-  how_it_works_steps: Array<{
-    step: number;
-    title: string;
-    description: string;
-  }>;
+  how_it_works_steps: LotteryStep[];
   is_active: boolean;
   banner_color: string;
   current_entries_count: number;
+  section_title?: string;
+  section_description?: string;
+  sharing_enabled?: boolean;
+  share_text?: string;
+  share_hashtags?: string;
 }
 
 // Default campaigns data
@@ -180,18 +195,7 @@ export default function FundraisingCampaigns() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex-1 flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-getfund-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading fundraising campaigns...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <LoadingScreen message="Loading fundraising campaigns..." />;
   }
 
   return (
@@ -246,16 +250,26 @@ export default function FundraisingCampaigns() {
             </div>
           </div>
         </section>
-        {/* GETfund Scholarship Lottery Section - First */}
+        {/* GETfund Scholarship Lottery Section */}
         <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                GETFund Scholarship Lottery
+                {lotteryConfig.section_title || 'GETFund Scholarship Lottery'}
               </h1>
-              <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto">
-                Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.
+              <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto mb-6">
+                {lotteryConfig.section_description ||
+                  'Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.'}
               </p>
+
+              {/* Social Sharing */}
+              {lotteryConfig.sharing_enabled !== false && (
+                <SocialShareButtons
+                  shareText={lotteryConfig.share_text || 'Support education in Ghana and enter the GETFund Scholarship Lottery! Every donation gives you a chance to win.'}
+                  shareUrl={typeof window !== 'undefined' ? `${window.location.origin}/fundraising-campaigns` : ''}
+                  hashtags={lotteryConfig.share_hashtags || 'GETFund,EducationGhana,ScholarshipLottery'}
+                />
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
@@ -352,52 +366,82 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
 };
 
 // Lottery Prize Box Component
-const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string }> = ({ prizes, bannerColor }) => {
+const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string }> = ({ prizes }) => {
   const mainPrizes = prizes.filter(p => typeof p.rank === 'number');
-  const additionalPrizes = prizes.filter(p => p.rank === 'additional');
+
+  // Get prize by rank
+  const getPrize = (rank: number) => mainPrizes.find(p => p.rank === rank);
+  const firstPrize = getPrize(1);
+  const secondPrize = getPrize(2);
+  const thirdPrize = getPrize(3);
+
+  // Prize card component with tinted backgrounds
+  const PrizeCard: React.FC<{ prize: LotteryPrize; rank: 1 | 2 | 3 }> = ({ prize, rank }) => {
+    const rankLabels = { 1: '1st Prize', 2: '2nd Prize', 3: '3rd Prize' };
+
+    // Tint colors: gold, silver, bronze
+    const tintStyles = {
+      1: 'bg-gradient-to-r from-amber-50 via-yellow-50/80 to-amber-50 border-amber-200',
+      2: 'bg-gradient-to-r from-slate-100 via-gray-50 to-slate-100 border-slate-200',
+      3: 'bg-gradient-to-r from-orange-50 via-amber-50/60 to-orange-50 border-orange-200',
+    };
+
+    const accentColors = {
+      1: 'text-amber-600',
+      2: 'text-slate-500',
+      3: 'text-orange-600',
+    };
+
+    const frontContent = (
+      <div className={`h-full px-6 sm:px-8 ${tintStyles[rank]} rounded-2xl border flex items-center justify-between`}>
+        <div className={`${accentColors[rank]} font-bold text-lg sm:text-xl uppercase tracking-wider`}>
+          {rankLabels[rank]}
+        </div>
+        <div className="text-3xl sm:text-4xl font-bold text-gray-900">
+          <span className="text-getfund-primary">GH₵</span>{prize.amount.toLocaleString()}
+        </div>
+      </div>
+    );
+
+    const backContent = prize.flip_description ? (
+      <div className="h-full p-5 sm:p-6 bg-gradient-to-br from-getfund-primary to-green-700 rounded-xl text-white flex items-center justify-center text-center">
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-widest opacity-70 mb-2">
+            {rankLabels[rank]}
+          </div>
+          <p className="text-sm leading-relaxed">{prize.flip_description}</p>
+        </div>
+      </div>
+    ) : null;
+
+    return (
+      <FlipCard
+        className="flex-1"
+        frontContent={frontContent}
+        backContent={backContent}
+      />
+    );
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
-      {/* Yellow header */}
-      <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 p-6 text-center">
-        <h3 className="text-xl sm:text-2xl font-bold text-gray-900">This Month's Lottery Prizes</h3>
+    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 h-full flex flex-col">
+      {/* Header */}
+      <div className="relative bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 px-6 py-4 border-b border-amber-100">
+        <div className="text-center">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Monthly Scholarship Prizes
+          </h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Total: <span className="font-semibold text-getfund-primary">GH₵{mainPrizes.reduce((sum, p) => sum + p.amount, 0).toLocaleString()}</span>
+          </p>
+        </div>
       </div>
 
-      <div className="p-6 sm:p-8">
-        {/* 1st Prize - Large */}
-        {mainPrizes.filter(p => p.rank === 1).map((prize, index) => (
-          <div key={index} className="text-center mb-6 pb-6 border-b border-gray-200">
-            <div className="text-sm font-medium text-gray-500 mb-1">1st Prize</div>
-            <div className="text-3xl sm:text-4xl font-bold text-getfund-primary mb-1">
-              ₵{prize.amount.toLocaleString()}
-            </div>
-            <div className="text-lg text-gray-700">{prize.description}</div>
-          </div>
-        ))}
-
-        {/* 2nd and 3rd Prize - Side by side */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {mainPrizes.filter(p => p.rank === 2 || p.rank === 3).map((prize, index) => (
-            <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-xs font-medium text-gray-500 mb-1">
-                {prize.rank === 2 ? '2nd Prize' : '3rd Prize'}
-              </div>
-              <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                ₵{prize.amount.toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600">{prize.description}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Additional prizes */}
-        {additionalPrizes.map((prize, index) => (
-          <div key={`add-${index}`} className="p-4 bg-yellow-50 rounded-lg text-center border border-yellow-200">
-            <div className="text-base sm:text-lg font-semibold text-gray-900">
-              Plus {prize.count} additional prizes of ₵{prize.amount.toLocaleString()} each!
-            </div>
-          </div>
-        ))}
+      {/* Prizes stacked vertically - fills remaining space */}
+      <div className="p-4 sm:p-5 flex-1 flex flex-col gap-3">
+        {firstPrize && <PrizeCard prize={firstPrize} rank={1} />}
+        {secondPrize && <PrizeCard prize={secondPrize} rank={2} />}
+        {thirdPrize && <PrizeCard prize={thirdPrize} rank={3} />}
       </div>
     </div>
   );
@@ -409,22 +453,56 @@ const LotteryHowItWorks: React.FC<{
   nextDrawDate: string;
   currentEntries: number;
 }> = ({ steps, nextDrawDate, currentEntries }) => {
+  // Step card front content
+  const StepFront: React.FC<{ step: LotteryStep }> = ({ step }) => (
+    <div className="flex items-start">
+      <div className="bg-getfund-primary text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0 mr-4 font-bold text-lg shadow-lg">
+        {step.step}
+      </div>
+      <div className="flex-1">
+        <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">{step.title}</h4>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{step.description}</p>
+        {step.flip_description && (
+          <span className="text-xs text-getfund-primary font-medium mt-1 block">Tap for more →</span>
+        )}
+      </div>
+    </div>
+  );
+
+  // Step card back content
+  const StepBack: React.FC<{ step: LotteryStep }> = ({ step }) => (
+    <div className="bg-gradient-to-br from-getfund-primary to-green-700 rounded-lg p-4 h-full flex flex-col justify-center">
+      <div className="flex items-center mb-2">
+        <div className="bg-white/20 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3 font-bold text-sm">
+          {step.step}
+        </div>
+        <h4 className="text-base font-semibold text-white">{step.title}</h4>
+      </div>
+      <p className="text-sm text-white/90 leading-relaxed">{step.flip_description}</p>
+    </div>
+  );
+
   return (
     <div className="bg-white rounded-xl shadow-xl p-6 sm:p-8 flex flex-col border border-gray-100">
       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">How It Works</h3>
 
       <div className="space-y-5 sm:space-y-6 mb-8 flex-1">
         {steps.map((step, index) => (
-          <div key={index} className="flex items-start">
-            <div className="bg-getfund-primary text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0 mr-4 font-bold text-lg shadow-lg">
-              {step.step}
-            </div>
-            <div>
-              <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">{step.title}</h4>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{step.description}</p>
-            </div>
-          </div>
+          <FlipCard
+            key={index}
+            className="min-h-[80px]"
+            frontContent={<StepFront step={step} />}
+            backContent={step.flip_description ? <StepBack step={step} /> : null}
+          />
         ))}
+      </div>
+
+      {/* Countdown Timer */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 sm:p-5 mb-4">
+        <div className="text-center mb-3">
+          <span className="text-sm font-medium text-white/80">Time Until Next Draw</span>
+        </div>
+        <CountdownTimer targetDate={nextDrawDate} />
       </div>
 
       {/* Draw Info */}

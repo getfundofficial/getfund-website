@@ -10,6 +10,7 @@ import PledgeToSupportForm from '../components/PledgeToSupportForm';
 import ContactSection from '../components/ContactSection';
 import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
+import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 interface PresetAmount {
@@ -98,14 +99,7 @@ export default function WaysToDonate() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-getfund-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading..." />;
   }
 
   if (!content) {
@@ -162,19 +156,6 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* Split Card: Donation Interface + Pledge to Support */}
-        <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {/* Left: Donation Interface */}
-              <DonationInterface />
-
-              {/* Right: Pledge to Support Form */}
-              <PledgeToSupportForm />
-            </div>
-          </div>
-        </section>
-
         {/* Donation Options */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -199,7 +180,7 @@ export default function WaysToDonate() {
                 />
               ))}
             </div>
-            
+
             {selectedDonation && (
               <DonationModal
                 isOpen={modalOpen}
@@ -213,6 +194,19 @@ export default function WaysToDonate() {
                 presetAmounts={selectedDonation.presetAmounts}
               />
             )}
+          </div>
+        </section>
+
+        {/* Split Card: Donation Interface + Pledge to Support */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Left: Donation Interface */}
+              <DonationInterface />
+
+              {/* Right: Pledge to Support Form */}
+              <PledgeToSupportForm />
+            </div>
           </div>
         </section>
 
