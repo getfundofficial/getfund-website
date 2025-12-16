@@ -156,19 +156,6 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* Split Card: Donation Interface + Pledge to Support */}
-        <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {/* Left: Donation Interface */}
-              <DonationInterface />
-
-              {/* Right: Pledge to Support Form */}
-              <PledgeToSupportForm />
-            </div>
-          </div>
-        </section>
-
         {/* Donation Options */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -193,7 +180,7 @@ export default function WaysToDonate() {
                 />
               ))}
             </div>
-            
+
             {selectedDonation && (
               <DonationModal
                 isOpen={modalOpen}
@@ -207,6 +194,19 @@ export default function WaysToDonate() {
                 presetAmounts={selectedDonation.presetAmounts}
               />
             )}
+          </div>
+        </section>
+
+        {/* Split Card: Donation Interface + Pledge to Support */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Left: Donation Interface */}
+              <DonationInterface />
+
+              {/* Right: Pledge to Support Form */}
+              <PledgeToSupportForm />
+            </div>
           </div>
         </section>
 

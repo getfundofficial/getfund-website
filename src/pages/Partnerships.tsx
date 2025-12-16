@@ -63,7 +63,7 @@ export default function Partnerships() {
   }, []);
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen message="Loading..." />;
   }
 
   if (!content) {

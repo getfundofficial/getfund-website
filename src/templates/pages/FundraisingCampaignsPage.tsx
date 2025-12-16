@@ -78,10 +78,16 @@ export const FundraisingCampaignsPage: React.FC<FundraisingCampaignsPageProps> =
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-getfund-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading fundraising campaigns...</p>
+          <div className="w-40 h-40 mx-auto mb-8">
+            <img
+              src="/images/logos/getfund-cropped-icon.png"
+              alt="Loading..."
+              className="w-full h-full object-contain animate-spin-slow"
+            />
+          </div>
+          <p className="text-gray-700 text-xl font-semibold">Loading fundraising campaigns...</p>
         </div>
       </div>
     );
