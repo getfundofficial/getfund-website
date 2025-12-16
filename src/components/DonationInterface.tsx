@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Heart, RefreshCw, Calendar, Shield } from 'lucide-react';
+import DonationModal from './DonationModal';
 
 interface DonationInterfaceProps {
   className?: string;
@@ -10,6 +11,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
   const [amount, setAmount] = useState<number | 'other'>(100);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [donorType, setDonorType] = useState<string>('Individual');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const amounts = [50, 100, 200, 500, 1000];
 
@@ -31,6 +33,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
       amount: amount === 'other' ? customAmount : amount,
       donorType,
     });
+    setModalOpen(true);
   };
 
   const frequencyOptions = [
@@ -190,6 +193,15 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           </div>
         </div>
       </form>
+
+      {/* Donation Modal */}
+      <DonationModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="General Donation"
+        amount={amount === 'other' ? parseFloat(customAmount.replace(/,/g, '')) || 0 : amount}
+        description={`${frequency === 'one-time' ? 'One-time' : frequency === 'monthly' ? 'Monthly' : 'Yearly'} donation as ${donorType}`}
+      />
     </div>
   );
 }
