@@ -86,23 +86,11 @@ export default function VideoSection({
   };
 
   return (
-    <section className={`py-16 sm:py-20 bg-gray-50 ${className}`}>
-      <div className="container mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="text-center mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {title}
-          </h2>
-          {subtitle && (
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-              {subtitle}
-            </p>
-          )}
-        </div>
-
-        {/* Video Container */}
-        <div className="max-w-4xl mx-auto">
-          <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+    <section className={`py-12 sm:py-16 md:py-20 bg-white ${className}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Video Container - Immersive Layout */}
+        <div className="max-w-7xl mx-auto">
+          <div className="relative aspect-[16/9] md:aspect-[21/9] lg:h-[550px] bg-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
             {isPlaying ? (
               renderVideo()
             ) : (
@@ -129,11 +117,18 @@ export default function VideoSection({
                   </button>
                 </div>
 
-                {/* Video Title Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                  <p className="text-white font-semibold text-lg sm:text-xl">
-                    {title}
-                  </p>
+                {/* Video Info Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+                  <div className="max-w-2xl">
+                    <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2">
+                      {title}
+                    </h2>
+                    {subtitle && (
+                      <p className="text-white/80 text-sm sm:text-base md:text-lg">
+                        {subtitle}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </>
             )}
