@@ -19,12 +19,14 @@ interface SocialShareButtonsProps {
   shareText: string;
   shareUrl?: string;
   hashtags?: string;
+  vertical?: boolean;
 }
 
 export const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
   shareText,
   shareUrl = typeof window !== 'undefined' ? window.location.href : '',
   hashtags = 'GETFund,EducationGhana',
+  vertical = false,
 }) => {
   const encodedText = encodeURIComponent(shareText);
   const encodedUrl = encodeURIComponent(shareUrl);
@@ -70,6 +72,38 @@ export const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
       color: 'bg-[#0A66C2] hover:bg-[#095196]',
     },
   ];
+
+  if (vertical) {
+    return (
+      <div className="flex flex-col items-center gap-3">
+        {shareLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${link.color} text-white p-2.5 rounded-full transition-all duration-200 hover:scale-110 shadow-md`}
+            aria-label={`Share on ${link.name}`}
+            title={`Share on ${link.name}`}
+          >
+            <link.icon className="w-5 h-5" />
+          </a>
+        ))}
+
+        {/* Native share button (mobile) */}
+        {typeof navigator !== 'undefined' && navigator.share && (
+          <button
+            onClick={handleNativeShare}
+            className="bg-getfund-primary hover:bg-green-700 text-white p-2.5 rounded-full transition-all duration-200 hover:scale-110 shadow-md"
+            aria-label="Share"
+            title="Share"
+          >
+            <Share2 className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-3">

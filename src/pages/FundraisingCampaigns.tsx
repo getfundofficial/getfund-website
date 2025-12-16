@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
+import ContactSection from '../components/ContactSection';
 import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
@@ -54,6 +55,7 @@ interface LotteryConfig {
   current_entries_count: number;
   section_title?: string;
   section_description?: string;
+  prize_box_title?: string;
   sharing_enabled?: boolean;
   share_text?: string;
   share_hashtags?: string;
@@ -261,34 +263,46 @@ export default function FundraisingCampaigns() {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 {lotteryConfig.section_title || 'GETFund Scholarship Lottery'}
               </h1>
-              <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto mb-6">
+              <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto">
                 {lotteryConfig.section_description ||
                   'Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.'}
               </p>
-
-              {/* Social Sharing */}
-              {lotteryConfig.sharing_enabled !== false && (
-                <SocialShareButtons
-                  shareText={lotteryConfig.share_text || 'Support education in Ghana and enter the GETFund Scholarship Lottery! Every donation gives you a chance to win.'}
-                  shareUrl={typeof window !== 'undefined' ? `${window.location.origin}/fundraising-campaigns` : ''}
-                  hashtags={lotteryConfig.share_hashtags || 'GETFund,EducationGhana,ScholarshipLottery'}
-                />
-              )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto items-start">
               {/* Prize Box */}
-              <LotteryPrizeBox prizes={lotteryConfig.prizes} bannerColor={lotteryConfig.banner_color} />
+              <LotteryPrizeBox prizes={lotteryConfig.prizes} bannerColor={lotteryConfig.banner_color} prizeBoxTitle={lotteryConfig.prize_box_title} />
 
-              {/* How It Works */}
-              <LotteryHowItWorks
-                steps={lotteryConfig.how_it_works_steps}
-                nextDrawDate={lotteryConfig.next_draw_date}
-                currentEntries={lotteryConfig.current_entries_count}
-              />
+              {/* How It Works + Share Section */}
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* How It Works */}
+                <div className="flex-1">
+                  <LotteryHowItWorks
+                    steps={lotteryConfig.how_it_works_steps}
+                    nextDrawDate={lotteryConfig.next_draw_date}
+                    currentEntries={lotteryConfig.current_entries_count}
+                  />
+                </div>
+
+                {/* Social Sharing - Vertical */}
+                {lotteryConfig.sharing_enabled !== false && (
+                  <div className="flex lg:flex-col items-center justify-center gap-3 lg:gap-4 py-4 lg:py-0">
+                    <p className="text-xs text-gray-500 font-medium lg:-rotate-90 lg:whitespace-nowrap lg:mb-2">Share</p>
+                    <SocialShareButtons
+                      shareText={lotteryConfig.share_text || 'Support education in Ghana and enter the GETFund Scholarship Lottery! Every donation gives you a chance to win.'}
+                      shareUrl={typeof window !== 'undefined' ? `${window.location.origin}/fundraising-campaigns` : ''}
+                      hashtags={lotteryConfig.share_hashtags || 'GETFund,EducationGhana,ScholarshipLottery'}
+                      vertical={true}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
+
+        {/* Get in Touch Section */}
+        <ContactSection />
       </main>
       <Footer />
 
@@ -388,8 +402,8 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
   );
 };
 
-// Lottery Prize Box Component
-const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string }> = ({ prizes }) => {
+// Lottery Prize Box Component - Modern Dark Theme
+const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string; prizeBoxTitle?: string }> = ({ prizes, prizeBoxTitle }) => {
   const mainPrizes = prizes.filter(p => typeof p.rank === 'number');
 
   // Get prize by rank
@@ -398,70 +412,92 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
   const secondPrize = getPrize(2);
   const thirdPrize = getPrize(3);
 
-  // Prize card component with tinted backgrounds
+  // Prize card component with dark theme and metallic accents
   const PrizeCard: React.FC<{ prize: LotteryPrize; rank: 1 | 2 | 3 }> = ({ prize, rank }) => {
-    const rankLabels = { 1: '1st Prize', 2: '2nd Prize', 3: '3rd Prize' };
+    const rankLabels = { 1: '1ST', 2: '2ND', 3: '3RD' };
 
-    // Tint colors: gold, silver, bronze
-    const tintStyles = {
-      1: 'bg-gradient-to-r from-amber-50 via-yellow-50/80 to-amber-50 border-amber-200',
-      2: 'bg-gradient-to-r from-slate-100 via-gray-50 to-slate-100 border-slate-200',
-      3: 'bg-gradient-to-r from-orange-50 via-amber-50/60 to-orange-50 border-orange-200',
+    // Metallic accent colors and gradients
+    const accentStyles = {
+      1: {
+        border: 'border-l-4 border-yellow-400',
+        gradient: 'from-yellow-400 to-amber-500',
+        text: 'text-yellow-400',
+        glow: 'shadow-yellow-400/20',
+      },
+      2: {
+        border: 'border-l-4 border-slate-300',
+        gradient: 'from-slate-300 to-slate-400',
+        text: 'text-slate-300',
+        glow: 'shadow-slate-300/20',
+      },
+      3: {
+        border: 'border-l-4 border-orange-400',
+        gradient: 'from-orange-400 to-orange-600',
+        text: 'text-orange-400',
+        glow: 'shadow-orange-400/20',
+      },
     };
 
-    const accentColors = {
-      1: 'text-amber-600',
-      2: 'text-slate-500',
-      3: 'text-orange-600',
+    // Progressive sizing with explicit heights for FlipCard
+    const sizeStyles = {
+      1: { height: 'h-28 sm:h-32', padding: 'py-8', rankSize: 'text-3xl', amountSize: 'text-4xl sm:text-5xl' },
+      2: { height: 'h-24 sm:h-28', padding: 'py-6', rankSize: 'text-2xl', amountSize: 'text-3xl sm:text-4xl' },
+      3: { height: 'h-20 sm:h-24', padding: 'py-5', rankSize: 'text-xl', amountSize: 'text-2xl sm:text-3xl' },
     };
 
     const frontContent = (
-      <div className={`h-full px-6 sm:px-8 ${tintStyles[rank]} rounded-2xl border flex items-center justify-between`}>
-        <div className={`${accentColors[rank]} font-bold text-lg sm:text-xl uppercase tracking-wider`}>
-          {rankLabels[rank]}
+      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gradient-to-r from-gray-800 to-gray-900 ${accentStyles[rank].border} rounded-lg flex items-center justify-between shadow-lg ${accentStyles[rank].glow} hover:shadow-xl transition-shadow duration-300`}>
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Rank badge */}
+          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br ${accentStyles[rank].gradient} flex items-center justify-center shadow-lg`}>
+            <span className="text-gray-900 font-black text-sm sm:text-base">{rankLabels[rank]}</span>
+          </div>
+          <div>
+            <span className={`${accentStyles[rank].text} font-semibold text-xs sm:text-sm uppercase tracking-widest`}>Prize</span>
+          </div>
         </div>
-        <div className="text-3xl sm:text-4xl font-bold text-gray-900">
-          <span className="text-getfund-primary">GH₵</span>{prize.amount.toLocaleString()}
+        <div className={`${sizeStyles[rank].amountSize} font-bold text-white`}>
+          <span className={`${accentStyles[rank].text}`}>GH₵</span>{prize.amount.toLocaleString()}
         </div>
       </div>
     );
 
     const backContent = prize.flip_description ? (
-      <div className="h-full p-5 sm:p-6 bg-gradient-to-br from-getfund-primary to-green-700 rounded-xl text-white flex items-center justify-center text-center">
+      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gradient-to-r ${accentStyles[rank].gradient} rounded-lg flex items-center justify-center text-center shadow-lg`}>
         <div>
-          <div className="text-xs font-semibold uppercase tracking-widest opacity-70 mb-2">
-            {rankLabels[rank]}
-          </div>
-          <p className="text-sm leading-relaxed">{prize.flip_description}</p>
+          <div className="text-gray-900 font-black text-sm mb-1">{rankLabels[rank]} PRIZE</div>
+          <p className="text-gray-900/80 text-sm leading-relaxed">{prize.flip_description}</p>
         </div>
       </div>
     ) : null;
 
     return (
       <FlipCard
-        className="flex-1"
         frontContent={frontContent}
         backContent={backContent}
+        className={sizeStyles[rank].height}
       />
     );
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 h-full flex flex-col">
+    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 px-6 py-4 border-b border-amber-100">
+      <div className="relative px-8 py-6 border-b border-gray-200">
         <div className="text-center">
-          <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
-            Monthly Scholarship Prizes
+          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            {prizeBoxTitle || 'Monthly Scholarship Prizes'}
           </h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Total: <span className="font-semibold text-getfund-primary">GH₵{mainPrizes.reduce((sum, p) => sum + p.amount, 0).toLocaleString()}</span>
-          </p>
+          <div className="mt-3 flex justify-center gap-1.5">
+            <span className="w-10 h-1.5 bg-yellow-400 rounded-full"></span>
+            <span className="w-10 h-1.5 bg-slate-400 rounded-full"></span>
+            <span className="w-10 h-1.5 bg-orange-400 rounded-full"></span>
+          </div>
         </div>
       </div>
 
-      {/* Prizes stacked vertically - fills remaining space */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col gap-3">
+      {/* Prizes stacked vertically */}
+      <div className="p-6 sm:p-8 flex flex-col gap-4">
         {firstPrize && <PrizeCard prize={firstPrize} rank={1} />}
         {secondPrize && <PrizeCard prize={secondPrize} rank={2} />}
         {thirdPrize && <PrizeCard prize={thirdPrize} rank={3} />}
@@ -532,16 +568,13 @@ const LotteryHowItWorks: React.FC<{
       <div className="bg-gray-50 rounded-lg p-4 sm:p-5 mb-6 border border-gray-200">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-600">Next Draw</span>
-          <div className="text-right">
-            <span className="font-bold text-lg text-getfund-primary block">
-              {new Date(nextDrawDate).toLocaleDateString('en-GB', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              })}
-            </span>
-            <span className="text-xs text-gray-500">8:00 PM GMT • Live on GTV</span>
-          </div>
+          <span className="font-bold text-lg text-getfund-primary">
+            {new Date(nextDrawDate).toLocaleDateString('en-GB', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-600">Current Entries</span>

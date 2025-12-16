@@ -7,7 +7,6 @@ import Footer from '../components/Footer';
 import TeamSection from '../components/TeamSection';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
-import AdministratorsSection from '../components/AdministratorsSection';
 import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
 
@@ -236,78 +235,65 @@ export default function WhoWeAre() {
           </div>
         </section>
 
-        {/* Educational Financing Section */}
-        <section className="py-16 bg-blue-50">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-              {pageContent?.financingTitle || 'The Issue of Educational Financing'}
-            </h2>
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-getfund-primary mb-3">The Cost Sharing Policy</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {pageContent?.costSharingPolicy || 'Currently in Ghana, due to government\'s inability to solely sustain tertiary education efforts, the cost of self financing has been introduced by HEP through the adoption of the discredited to cost sharing NCHE 1998.'}
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-getfund-primary mb-3">Public Responsibility</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {pageContent?.publicResponsibility || 'Notwithstanding all cost sharing options/variable cost options available from the public, the policy will not only politicize and elaborate Ghanaians but it is central capable of reaching their full purpose of HEP promotion if the purpose of HEP funding is not adequately equalized by the government.'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Funding Formula */}
+        {/* Educational Financing & Funding Formula - Split Layout */}
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              {pageContent?.fundingFormulaTitle || 'Funding Formula'}
-            </h2>
-            <p className="text-gray-700 mb-6 leading-relaxed">
-              {pageContent?.fundingFormulaIntro || 'The law establishing GETFund further emphasizes a distribution formula that must be approved by Parliament each year, requiring that some crucial factors related to education delivery and development are considered in the process of preparing the Formula. These relevant factors should include but not limited to:'}
-            </p>
-            <ul className="space-y-3">
-              {(pageContent?.relevantFactors || [
-                'promotion of the study of Mathematics, Science and Technology',
-                'advancement of female education',
-                'reduction in the high level of illiteracy in historically disadvantaged areas',
-                'promotion of Vocational, Technical Education and Training',
-                'equitable allocation of funds to the Districts at the Pre-Tertiary level of education'
-              ]).map((factor, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
-                  <span className="text-gray-700">{factor}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Leadership & Governance Header */}
-        <section className="pt-16 pb-4 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {pageContent?.leadershipTitle || 'Leadership & Governance'}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                {pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
-              </p>
+            <div className="relative grid lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
+              {/* Educational Financing - Left */}
+              <div className="pr-0 lg:pr-12 pb-10 lg:pb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+                  {pageContent?.financingTitle || 'The Issue of Educational Financing'}
+                </h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-getfund-primary mb-3">The Cost Sharing Policy</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {pageContent?.costSharingPolicy || 'Currently in Ghana, due to government\'s inability to solely sustain tertiary education efforts, the cost of self financing has been introduced by HEP through the adoption of the discredited to cost sharing NCHE 1998.'}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-getfund-primary mb-3">Public Responsibility</h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {pageContent?.publicResponsibility || 'Notwithstanding all cost sharing options/variable cost options available from the public, the policy will not only politicize and elaborate Ghanaians but it is central capable of reaching their full purpose of HEP promotion if the purpose of HEP funding is not adequately equalized by the government.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vertical Divider - contained within this section */}
+              <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200"></div>
+
+              {/* Funding Formula - Right */}
+              <div className="pl-0 lg:pl-12 pt-10 lg:pt-0 border-t lg:border-t-0 border-gray-200">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                  {pageContent?.fundingFormulaTitle || 'Funding Formula'}
+                </h2>
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  {pageContent?.fundingFormulaIntro || 'The law establishing GETFund further emphasizes a distribution formula that must be approved by Parliament each year, requiring that some crucial factors related to education delivery and development are considered in the process of preparing the Formula. These relevant factors should include but not limited to:'}
+                </p>
+                <ul className="space-y-3">
+                  {(pageContent?.relevantFactors || [
+                    'promotion of the study of Mathematics, Science and Technology',
+                    'advancement of female education',
+                    'reduction in the high level of illiteracy in historically disadvantaged areas',
+                    'promotion of Vocational, Technical Education and Training',
+                    'equitable allocation of funds to the Districts at the Pre-Tertiary level of education'
+                  ]).map((factor, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                      <span className="text-gray-700">{factor}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Administrators Section - New Redesigned Component */}
-        <AdministratorsSection
-          administrators={teamMembers.historical_admins}
-          title="Administrators"
-          subtitle="Leaders who have guided GETFund through its transformative journey"
-        />
-
-        {/* Interactive Team Section */}
+        {/* Leadership & Governance - Unified Section */}
         <TeamSection
+          sectionTitle={pageContent?.leadershipTitle || 'Leadership & Governance'}
+          sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
           managementGroupImage="/images/about/getfund-7th-board-inauguration.jpg"
           chairman={teamMembers.chairman ? {
@@ -317,6 +303,32 @@ export default function WhoWeAre() {
             bio: teamMembers.chairman.bio || ''
           } : undefined}
           managementTeam={teamMembers.management}
+          currentAdministrator={teamMembers.historical_admins.find(
+            admin => admin.date_range?.toLowerCase().includes('date') ||
+                     admin.date_range?.toLowerCase().includes('present')
+          )}
+          pastAdministrators={teamMembers.historical_admins
+            .filter(admin =>
+              !admin.date_range?.toLowerCase().includes('date') &&
+              !admin.date_range?.toLowerCase().includes('present')
+            )
+            .sort((a, b) => {
+              const getEndYear = (dateRange?: string) => {
+                if (!dateRange) return 0;
+                const match = dateRange.match(/(\d{4})$/);
+                return match ? parseInt(match[1]) : 0;
+              };
+              return getEndYear(b.date_range) - getEndYear(a.date_range);
+            })
+            .map(admin => ({
+              id: admin.id,
+              name: admin.name,
+              title: admin.title,
+              image_url: admin.image_url,
+              date_range: admin.date_range,
+              display_order: admin.display_order
+            }))
+          }
         />
 
         {/* Footer Message */}

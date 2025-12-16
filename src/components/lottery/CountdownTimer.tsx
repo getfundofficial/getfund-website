@@ -62,10 +62,27 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, onCo
     </div>
   );
 
+  const isLessThanOneDay = timeLeft.days === 0;
+
+  // Show only days when more than 1 day remains
+  if (!isLessThanOneDay) {
+    return (
+      <div className="flex justify-center items-center">
+        <div className="flex flex-col items-center px-4 sm:px-6">
+          <div className="bg-gradient-to-br from-getfund-primary to-green-700 text-white text-3xl sm:text-4xl md:text-5xl font-bold px-6 sm:px-8 py-4 sm:py-5 flex items-center justify-center rounded-lg shadow-lg">
+            {timeLeft.days}
+          </div>
+          <span className="text-sm sm:text-base text-gray-600 mt-2 uppercase tracking-wide">
+            {timeLeft.days === 1 ? 'Day' : 'Days'} remaining
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show hours, minutes, seconds when less than 1 day remains
   return (
     <div className="flex justify-center items-center gap-1 sm:gap-2">
-      <TimeUnit value={timeLeft.days} label="Days" />
-      <span className="text-xl sm:text-2xl font-bold text-gray-400 mt-[-20px]">:</span>
       <TimeUnit value={timeLeft.hours} label="Hours" />
       <span className="text-xl sm:text-2xl font-bold text-gray-400 mt-[-20px]">:</span>
       <TimeUnit value={timeLeft.minutes} label="Mins" />
