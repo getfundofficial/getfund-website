@@ -9,6 +9,8 @@ import ContactSection from '../components/ContactSection';
 import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
+import DonationModal from '../components/DonationModal';
+import LoadingScreen from '../components/LoadingScreen';
 
 interface Campaign {
   id: string;
@@ -143,6 +145,8 @@ export default function FundraisingCampaigns() {
   const [campaigns, setCampaigns] = useState<Campaign[]>(defaultCampaigns);
   const [lotteryConfig, setLotteryConfig] = useState<LotteryConfig>(defaultLotteryConfig);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
 
   useEffect(() => {
     // Use relative URL in development (via Vite proxy) or absolute URL in production
@@ -301,6 +305,22 @@ export default function FundraisingCampaigns() {
         <ContactSection />
       </main>
       <Footer />
+
+      {/* Donation Modal */}
+      {selectedCampaign && (
+        <DonationModal
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedCampaign(null);
+          }}
+          title={selectedCampaign.title}
+          amount={selectedCampaign.goal_amount / 100} // Default suggested amount
+          description={selectedCampaign.description}
+          campaignId={selectedCampaign.id}
+          campaignSlug={selectedCampaign.slug}
+        />
+      )}
     </div>
   );
 }
@@ -369,7 +389,10 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
         </div>
 
         <button
-          onClick={() => window.location.href = '/fundraising/ways-to-donate'}
+          onClick={() => {
+            setSelectedCampaign(campaign);
+            setModalOpen(true);
+          }}
           className="w-full bg-getfund-gold hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
         >
           {campaign.button_text || 'Donate Now'}

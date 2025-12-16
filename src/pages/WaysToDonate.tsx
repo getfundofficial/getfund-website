@@ -99,7 +99,7 @@ export default function WaysToDonate() {
   }, []);
 
   if (isLoading) {
-    return <LoadingScreen message="Loading..." />;
+    return <LoadingScreen />;
   }
 
   if (!content) {

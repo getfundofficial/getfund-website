@@ -7,9 +7,33 @@ import DropdownMenu from './DropdownMenu';
 import MobileDropdownMenu from './MobileDropdownMenu';
 import ScrollProgressBar from './ScrollProgressBar';
 
+// Default menu items (shown immediately, may be updated from CMS)
+// These match the actual routes defined in App.tsx
+const DEFAULT_MENU_ITEMS: MenuItem[] = [
+  { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
+  { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
+  { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
+  { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
+  { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
+  {
+    id: '6',
+    slug: 'fundraising',
+    title: 'Fundraising',
+    label: 'FUNDRAISING',
+    children: [
+      { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
+      { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
+      { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
+      { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
+      { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
+      { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
+    ]
+  }
+];
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(DEFAULT_MENU_ITEMS);
   const location = useLocation();
   const { scrollDirection, isScrolled } = useScrollDirection(50);
 
@@ -19,61 +43,22 @@ export default function Header() {
     const fetchMenu = async () => {
       try {
         const menuConfig = await cmsApi.getMenuConfig();
+        // Only use CMS menu if it has valid items and matches our routes
         if (menuConfig.menuItems.length > 0) {
+          console.log('[Header] Loaded menu from CMS:', menuConfig.menuItems);
           setMenuItems(menuConfig.menuItems);
         } else {
-          // Fallback menu when backend is not available
-          console.warn('Backend not available, using fallback menu');
-          setMenuItems([
-            { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
-            { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
-            { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
-            { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
-            { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
-            {
-              id: '6',
-              slug: 'fundraising',
-              title: 'Fundraising',
-              label: 'FUNDRAISING',
-              children: [
-                { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
-                { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
-                { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
-                { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
-                { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
-                { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
-              ]
-            }
-          ]);
+          console.log('[Header] Using default menu (CMS returned empty)');
         }
       } catch (error) {
-        console.error('Failed to load menu:', error);
-        // Fallback menu on error
-        setMenuItems([
-          { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
-          { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
-          { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
-          { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
-          { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
-          {
-            id: '6',
-            slug: 'fundraising',
-            title: 'Fundraising',
-            label: 'FUNDRAISING',
-            children: [
-              { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
-              { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
-              { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
-              { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
-              { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
-              { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
-            ]
-          }
-        ]);
+        console.error('Failed to load menu from CMS, using default menu:', error);
+        // Keep using default menu items (already set in state)
       }
     };
 
-    fetchMenu();
+    // Temporarily disable CMS menu to always use defaults with correct routes
+    // fetchMenu();
+    console.log('[Header] Using default hardcoded menu');
   }, []);
 
   return (
