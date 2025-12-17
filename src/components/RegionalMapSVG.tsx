@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { select } from 'd3-selection';
-import { createGhanaProjection, createPathGenerator, getRegionColor, normalizeRegionName, MAP_WIDTH, MAP_HEIGHT } from '../utils/mapUtils';
+import { geoMercator, geoPath } from 'd3-geo';
+import { getRegionColor, normalizeRegionName, MAP_WIDTH, MAP_HEIGHT } from '../utils/mapUtils';
 
 interface Region {
   name: string;
@@ -59,11 +60,11 @@ export default function RegionalMapSVG({ regions, onRegionHover, onRegionClick, 
 
     const svg = select(svgRef.current);
 
-    // Use fitSize to automatically calculate optimal projection
-    const projection = createGhanaProjection(MAP_WIDTH, MAP_HEIGHT);
+    // Create projection and use fitSize to automatically calculate optimal scale/translate
+    const projection = geoMercator();
     projection.fitSize([MAP_WIDTH, MAP_HEIGHT], geoData);
 
-    const pathGenerator = createPathGenerator(projection);
+    const pathGenerator = geoPath().projection(projection);
 
     console.log('[RegionalMapSVG] Projection configured with fitSize');
 
