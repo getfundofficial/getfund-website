@@ -37,7 +37,15 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
   console.log('[GhanaRegionalMap] Total regions:', regions.length);
 
   const getRegionData = (regionName: string) => {
-    return regions.find(r => r.name.toLowerCase() === regionName.toLowerCase());
+    // Normalize both strings: lowercase and trim whitespace
+    const normalizedSearch = regionName.toLowerCase().trim();
+    const found = regions.find(r => r.name.toLowerCase().trim() === normalizedSearch);
+
+    if (!found) {
+      console.warn(`[GhanaRegionalMap] No data match for region: "${regionName}"`);
+    }
+
+    return found;
   };
 
   const getRegionFillColor = (regionName: string) => {
