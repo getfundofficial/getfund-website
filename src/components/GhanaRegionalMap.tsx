@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { useState } from 'react';
+import { MapPin } from 'lucide-react';
 
 interface Region {
   name: string;
@@ -18,47 +18,31 @@ interface GhanaRegionalMapProps {
 
 export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegionalMapProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [geoUrl] = useState('/data/ghana-regions.geojson');
 
-  useEffect(() => {
-    console.log('=== GHANA MAP DEBUG ===');
-    console.log('Total regions received:', regions.length);
-    console.log('Region names:', regions.map(r => r.name).join(', '));
-    console.log('GeoJSON URL:', geoUrl);
-  }, [regions, geoUrl]);
-
-  const getRegionColor = (regionName: string): string => {
-    const region = regions.find(r => r.name === regionName);
-
-    if (!region) {
-      console.warn(`No data found for region: ${regionName}`);
-      return '#D1D5DB'; // Light gray for no data
-    }
-
-    const count = region.totalProjects;
-
-    // Color scale from light to dark green based on project count
-    if (count >= 500) return '#065F46'; // Very dark green
-    if (count >= 200) return '#047857'; // Dark green
-    if (count >= 100) return '#10B981'; // Medium green
-    if (count >= 50) return '#34D399'; // Light green
-    return '#6EE7B7'; // Very light green
+  const getRegionColor = (count: number): string => {
+    if (count >= 500) return 'from-emerald-900 to-emerald-800';
+    if (count >= 200) return 'from-emerald-700 to-emerald-600';
+    if (count >= 100) return 'from-emerald-500 to-emerald-400';
+    if (count >= 50) return 'from-emerald-300 to-emerald-200';
+    return 'from-emerald-100 to-emerald-50';
   };
 
-  const handleRegionClick = (regionName: string) => {
-    console.log('Region clicked:', regionName);
-    setSelectedRegion(prev => prev === regionName ? null : regionName);
+  const getTextColor = (count: number): string => {
+    if (count >= 200) return 'text-white';
+    return 'text-gray-900';
   };
 
   const selectedData = selectedRegion
     ? regions.find(r => r.name === selectedRegion)
     : null;
 
+  // Sort regions by total projects (descending)
+  const sortedRegions = [...regions].sort((a, b) => b.totalProjects - a.totalProjects);
+
   return (
     <div className={className}>
       {/* Title Section */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <h3 className="text-3xl font-bold text-gray-900 mb-3">
           Regional Impact Distribution
         </h3>
@@ -67,133 +51,77 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
         </p>
       </div>
 
-      {/* Map Container */}
-      <div className="relative bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{
-            rotate: [0, 0, 0],
-            center: [-1.2, 7.8],
-            scale: 3500
-          }}
-          width={1000}
-          height={800}
-          style={{
-            width: '100%',
-            height: 'auto',
-            maxHeight: '800px'
-          }}
-        >
-          <Geographies geography={geoUrl}>
-            {({ geographies }) => {
-              if (!geographies || geographies.length === 0) {
-                console.error('ERROR: No geographies loaded from GeoJSON');
-                return null;
-              }
-
-              console.log('GeoJSON loaded successfully!');
-              console.log('Number of regions in GeoJSON:', geographies.length);
-              console.log('GeoJSON region names:', geographies.map((geo: any) => geo.properties.region).join(', '));
-
-              return geographies.map((geo: any) => {
-                const regionName = geo.properties.region;
-                const isSelected = selectedRegion === regionName;
-                const isHovered = hoveredRegion === regionName;
-                const fillColor = getRegionColor(regionName);
-
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill={fillColor}
-                    stroke="#FFFFFF"
-                    strokeWidth={isSelected ? 3 : isHovered ? 2 : 1}
-                    style={{
-                      default: {
-                        outline: 'none',
-                        transition: 'all 0.2s ease-in-out'
-                      },
-                      hover: {
-                        outline: 'none',
-                        fill: fillColor,
-                        filter: 'brightness(0.85)',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease-in-out'
-                      },
-                      pressed: {
-                        outline: 'none',
-                        fill: fillColor,
-                        filter: 'brightness(0.7)',
-                        transition: 'all 0.2s ease-in-out'
-                      }
-                    }}
-                    onMouseEnter={() => {
-                      setHoveredRegion(regionName);
-                      console.log('Hovering:', regionName);
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredRegion(null);
-                    }}
-                    onClick={() => handleRegionClick(regionName)}
-                  />
-                );
-              });
-            }}
-          </Geographies>
-        </ComposableMap>
-
-        {/* Hover Tooltip */}
-        {hoveredRegion && !selectedRegion && (
-          <div className="absolute top-6 right-6 bg-gray-900 bg-opacity-95 text-white px-5 py-3 rounded-lg shadow-2xl z-20 pointer-events-none">
-            <div className="font-bold text-base mb-1">{hoveredRegion}</div>
-            {regions.find(r => r.name === hoveredRegion) && (
-              <div className="text-gray-200 text-sm">
-                {regions.find(r => r.name === hoveredRegion)?.totalProjects.toLocaleString()} projects
-              </div>
-            )}
-            <div className="text-xs text-gray-400 mt-2 border-t border-gray-700 pt-2">
-              Click to see details
+      {/* Regional Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {sortedRegions.map((region) => (
+          <button
+            key={region.name}
+            onClick={() => setSelectedRegion(region.name)}
+            className={`
+              relative overflow-hidden rounded-xl p-5 text-left transition-all duration-300 shadow-md hover:shadow-xl
+              bg-gradient-to-br ${getRegionColor(region.totalProjects)}
+              ${selectedRegion === region.name ? 'ring-4 ring-getfund-primary scale-105' : 'hover:scale-102'}
+              ${getTextColor(region.totalProjects)}
+            `}
+          >
+            <div className="flex items-start justify-between mb-2">
+              <MapPin className="w-5 h-5 opacity-70" />
+              {selectedRegion === region.name && (
+                <div className="w-2 h-2 bg-getfund-primary rounded-full animate-pulse"></div>
+              )}
             </div>
-          </div>
-        )}
+            <h4 className="font-bold text-lg mb-1">{region.name}</h4>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold">{region.totalProjects.toLocaleString()}</span>
+              <span className="text-sm opacity-80">projects</span>
+            </div>
+            <div className="mt-3 text-xs opacity-75 space-y-1">
+              {region.basicEducation && region.basicEducation > 0 && (
+                <div>Basic: {region.basicEducation}</div>
+              )}
+              {region.secondaryEducation && region.secondaryEducation > 0 && (
+                <div>Secondary: {region.secondaryEducation}</div>
+              )}
+              {region.tertiaryEducation && region.tertiaryEducation > 0 && (
+                <div>Tertiary: {region.tertiaryEducation}</div>
+              )}
+            </div>
+          </button>
+        ))}
       </div>
 
       {/* Color Legend */}
-      <div className="mt-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 shadow-md">
+      <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 shadow-md mb-8">
         <h4 className="text-sm font-semibold text-gray-700 mb-4 text-center">
           Project Distribution Scale
         </h4>
         <div className="flex flex-wrap items-center justify-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#065F46' }}></div>
+            <div className="w-6 h-6 rounded shadow-sm bg-gradient-to-br from-emerald-900 to-emerald-800"></div>
             <span className="text-sm text-gray-700 font-medium">500+ projects</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#047857' }}></div>
+            <div className="w-6 h-6 rounded shadow-sm bg-gradient-to-br from-emerald-700 to-emerald-600"></div>
             <span className="text-sm text-gray-700 font-medium">200-499</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#10B981' }}></div>
+            <div className="w-6 h-6 rounded shadow-sm bg-gradient-to-br from-emerald-500 to-emerald-400"></div>
             <span className="text-sm text-gray-700 font-medium">100-199</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#34D399' }}></div>
+            <div className="w-6 h-6 rounded shadow-sm bg-gradient-to-br from-emerald-300 to-emerald-200"></div>
             <span className="text-sm text-gray-700 font-medium">50-99</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#6EE7B7' }}></div>
+            <div className="w-6 h-6 rounded shadow-sm bg-gradient-to-br from-emerald-100 to-emerald-50"></div>
             <span className="text-sm text-gray-700 font-medium">1-49</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded shadow-sm" style={{ backgroundColor: '#D1D5DB' }}></div>
-            <span className="text-sm text-gray-700 font-medium">No data</span>
           </div>
         </div>
       </div>
 
       {/* Selected Region Details Card */}
       {selectedData && (
-        <div className="mt-8 bg-white rounded-2xl shadow-2xl p-8 border-4 border-getfund-primary animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border-4 border-getfund-primary animate-fadeIn">
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-3xl font-bold text-gray-900 mb-1">
