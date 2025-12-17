@@ -66,9 +66,10 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       {/* SVG Map using react-simple-maps */}
       <div className="relative bg-gray-100 rounded-xl shadow-lg p-4" style={{ minHeight: '600px' }}>
         <ComposableMap
+          projection="geoMercator"
           projectionConfig={{
-            rotate: [1.0, -7.9, 0],
-            scale: 6000
+            center: [-1, 7.5],
+            scale: 3500
           }}
           width={800}
           height={600}
