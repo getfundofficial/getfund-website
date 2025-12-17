@@ -64,16 +64,15 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       </div>
 
       {/* SVG Map using react-simple-maps */}
-      <div className="relative bg-white rounded-xl shadow-lg p-4" style={{ minHeight: '600px' }}>
+      <div className="relative bg-gray-100 rounded-xl shadow-lg p-4" style={{ minHeight: '600px' }}>
         <ComposableMap
-          projection="geoMercator"
           projectionConfig={{
-            scale: 4500,
-            center: [-1.0, 7.9]
+            rotate: [1.0, -7.9, 0],
+            scale: 6000
           }}
           width={800}
           height={600}
-          className="w-full h-auto"
+          style={{ width: '100%', height: 'auto' }}
         >
           <Geographies geography="/data/ghana-regions.geojson">
             {({ geographies }: { geographies: GeoFeature[] }) =>
@@ -88,14 +87,14 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
                     geography={geo}
                     fill={getRegionFillColor(regionName)}
                     stroke="#FFFFFF"
-                    strokeWidth={isSelected || isHovered ? 3 : 1.5}
+                    strokeWidth={isSelected || isHovered ? 2.5 : 1.5}
                     style={{
                       default: {
                         outline: 'none',
                       },
                       hover: {
                         outline: 'none',
-                        filter: 'brightness(0.9)',
+                        filter: 'brightness(0.85)',
                         cursor: 'pointer',
                       },
                       pressed: {
