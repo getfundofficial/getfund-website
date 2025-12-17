@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import RegionalDetailPanel from './RegionalDetailPanel';
+import regionPaths from '../data/ghana-region-paths.json';
 
 interface Region {
   name: string;
@@ -15,26 +16,6 @@ interface GhanaRegionalMapProps {
   regions: Region[];
   className?: string;
 }
-
-// Simplified SVG paths for Ghana regions (approximate positioning)
-const regionPaths: Record<string, string> = {
-  'Upper West': 'M50,80 L140,80 L140,180 L50,180 Z',
-  'Upper East': 'M140,80 L240,80 L240,180 L140,180 Z',
-  'North East': 'M240,80 L320,80 L320,160 L240,160 Z',
-  'Savannah': 'M80,180 L200,180 L200,260 L80,260 Z',
-  'Northern': 'M200,160 L350,160 L350,280 L200,280 Z',
-  'Bono': 'M50,260 L140,260 L140,360 L50,360 Z',
-  'Bono East': 'M140,260 L230,260 L230,350 L140,350 Z',
-  'Oti': 'M280,280 L370,280 L370,380 L280,380 Z',
-  'Ahafo': 'M80,360 L160,360 L160,440 L80,440 Z',
-  'Ashanti': 'M140,350 L250,350 L250,460 L140,460 Z',
-  'Western North': 'M30,440 L110,440 L110,530 L30,530 Z',
-  'Western': 'M30,530 L130,530 L130,650 L30,650 Z',
-  'Central': 'M130,530 L240,530 L240,630 L130,630 Z',
-  'Eastern': 'M240,460 L360,460 L360,580 L240,580 Z',
-  'Volta': 'M330,380 L420,380 L420,520 L330,520 Z',
-  'Greater Accra': 'M210,630 L310,630 L310,680 L210,680 Z',
-};
 
 export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegionalMapProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
@@ -78,9 +59,9 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       {/* Map Container */}
       <div className="relative bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
         <svg
-          viewBox="0 0 450 700"
-          className="w-full h-auto max-w-3xl mx-auto"
-          style={{ maxHeight: '700px' }}
+          viewBox="0 0 1000 800"
+          className="w-full h-auto max-w-5xl mx-auto"
+          style={{ maxHeight: '800px' }}
         >
           {Object.entries(regionPaths).map(([regionName, pathData]) => {
             const isHovered = hoveredRegion === regionName;
@@ -89,7 +70,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
             return (
               <path
                 key={regionName}
-                d={pathData}
+                d={pathData as string}
                 fill={getRegionColor(regionName)}
                 stroke="#FFFFFF"
                 strokeWidth={isSelected ? 3 : isHovered ? 2 : 1.5}
