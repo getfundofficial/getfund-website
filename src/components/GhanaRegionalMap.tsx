@@ -35,6 +35,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
 
   console.log('[GhanaRegionalMap] Component received regions:', regions);
   console.log('[GhanaRegionalMap] Total regions:', regions.length);
+  console.log('[GhanaRegionalMap] Region names from data:', regions.map(r => `"${r.name}"`).join(', '));
 
   const getRegionData = (regionName: string) => {
     // Normalize both strings: lowercase and trim whitespace
@@ -42,7 +43,8 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
     const found = regions.find(r => r.name.toLowerCase().trim() === normalizedSearch);
 
     if (!found) {
-      console.warn(`[GhanaRegionalMap] No data match for region: "${regionName}"`);
+      console.warn(`[GhanaRegionalMap] No data match for GeoJSON region: "${regionName}"`);
+      console.warn('[GhanaRegionalMap] Available region names from data:', regions.map(r => `"${r.name}"`));
     }
 
     return found;
@@ -94,6 +96,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
               }
 
               console.log('[GhanaRegionalMap] Loaded geographies:', geographies.length);
+              console.log('[GhanaRegionalMap] GeoJSON region names:', geographies.map(g => `"${g.properties.region}"`).join(', '));
               console.log('[GhanaRegionalMap] Sample geo:', geographies[0]);
 
               return geographies.map((geo) => {
