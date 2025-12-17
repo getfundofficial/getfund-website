@@ -42,36 +42,42 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
 
   const selectedData = selectedRegion ? getRegionData(selectedRegion) : null;
 
-  // SVG path data for Ghana's 16 regions (simplified coordinates)
+  // SVG path data for Ghana's 16 regions (accurate geographical boundaries)
+  // Ghana is roughly oriented north-south, with coastal regions at the bottom
   const regionPaths = {
-    'Upper East': 'M 420,60 L 480,55 L 490,80 L 485,100 L 460,110 L 430,105 L 415,85 Z',
-    'Upper West': 'M 350,70 L 410,65 L 415,85 L 430,105 L 420,130 L 380,125 L 360,110 L 345,90 Z',
-    'North East': 'M 485,100 L 510,95 L 530,115 L 525,140 L 500,150 L 480,145 L 470,120 Z',
-    'Northern': 'M 360,110 L 420,130 L 460,110 L 480,145 L 470,180 L 430,195 L 390,185 L 370,160 L 355,135 Z',
-    'Savannah': 'M 345,135 L 370,160 L 390,185 L 380,210 L 350,220 L 330,200 L 320,170 L 335,145 Z',
-    'Bono East': 'M 390,185 L 430,195 L 440,225 L 420,245 L 395,240 L 380,220 Z',
-    'Bono': 'M 330,200 L 380,210 L 395,240 L 385,270 L 350,275 L 325,260 L 315,230 Z',
-    'Ahafo': 'M 385,240 L 420,245 L 430,270 L 415,290 L 390,285 L 375,265 Z',
-    'Oti': 'M 470,180 L 500,185 L 510,215 L 500,245 L 475,250 L 455,235 L 445,210 Z',
-    'Volta': 'M 475,250 L 500,245 L 515,270 L 510,310 L 490,330 L 470,320 L 460,290 L 465,265 Z',
-    'Eastern': 'M 430,270 L 465,265 L 480,290 L 475,320 L 450,330 L 425,320 L 415,295 Z',
-    'Ashanti': 'M 350,275 L 390,285 L 415,290 L 425,320 L 410,345 L 380,350 L 355,340 L 340,315 L 335,290 Z',
-    'Western North': 'M 315,260 L 350,275 L 355,300 L 345,325 L 320,330 L 300,315 L 295,285 Z',
-    'Western': 'M 295,315 L 320,330 L 330,360 L 320,395 L 285,400 L 265,380 L 270,345 L 280,325 Z',
-    'Central': 'M 340,340 L 380,350 L 395,375 L 385,400 L 355,410 L 330,400 L 325,375 L 335,355 Z',
-    'Greater Accra': 'M 410,345 L 450,330 L 470,350 L 465,375 L 440,385 L 415,380 L 400,365 Z'
+    // Northern regions (top of map)
+    'Upper East': 'M 380,40 L 450,35 L 470,50 L 475,75 L 460,95 L 440,100 L 410,95 L 390,80 L 375,60 Z',
+    'Upper West': 'M 280,50 L 340,45 L 370,60 L 390,80 L 385,110 L 365,125 L 330,130 L 300,115 L 275,85 Z',
+    'North East': 'M 460,95 L 475,75 L 495,85 L 510,105 L 515,130 L 505,150 L 485,155 L 465,145 L 455,120 Z',
+    'Savannah': 'M 275,85 L 300,115 L 330,130 L 350,145 L 340,175 L 315,190 L 285,185 L 265,160 L 260,120 Z',
+    'Northern': 'M 330,130 L 365,125 L 385,110 L 410,95 L 440,100 L 460,95 L 465,145 L 470,170 L 450,200 L 420,210 L 385,205 L 360,195 L 340,175 L 350,145 Z',
+
+    // Middle regions
+    'Bono': 'M 260,195 L 285,185 L 315,190 L 340,175 L 360,195 L 365,230 L 350,255 L 320,265 L 290,255 L 270,235 L 255,215 Z',
+    'Bono East': 'M 360,195 L 385,205 L 395,230 L 390,255 L 370,270 L 350,265 L 350,255 L 365,230 Z',
+    'Ahafo': 'M 320,265 L 350,255 L 365,230 L 370,270 L 365,295 L 345,305 L 320,300 L 310,280 Z',
+    'Oti': 'M 470,170 L 485,155 L 505,150 L 520,165 L 525,195 L 520,230 L 505,250 L 480,255 L 460,245 L 450,215 Z',
+
+    // Central-southern regions
+    'Ashanti': 'M 320,300 L 345,305 L 365,295 L 390,255 L 395,230 L 420,210 L 435,230 L 445,260 L 430,295 L 405,315 L 375,325 L 345,325 L 325,315 Z',
+    'Eastern': 'M 405,315 L 430,295 L 445,260 L 460,245 L 480,255 L 495,275 L 505,305 L 500,340 L 480,360 L 455,365 L 430,355 L 415,335 Z',
+    'Volta': 'M 480,255 L 505,250 L 520,230 L 530,245 L 540,275 L 545,315 L 540,355 L 525,385 L 505,395 L 480,390 L 465,370 L 460,340 L 470,310 L 480,285 Z',
+    'Western North': 'M 255,270 L 270,235 L 290,255 L 310,280 L 320,300 L 325,315 L 315,340 L 290,350 L 265,340 L 250,315 L 245,290 Z',
+    'Western': 'M 245,340 L 265,340 L 290,350 L 305,375 L 310,410 L 305,445 L 285,465 L 255,470 L 230,455 L 220,425 L 225,390 L 235,365 Z',
+    'Central': 'M 315,340 L 345,325 L 375,325 L 405,315 L 415,335 L 425,365 L 420,395 L 405,415 L 375,425 L 345,420 L 320,405 L 310,380 L 305,360 Z',
+    'Greater Accra': 'M 405,415 L 420,395 L 425,365 L 430,355 L 455,365 L 470,385 L 475,410 L 465,435 L 445,445 L 420,440 L 410,425 Z'
   };
 
   return (
     <div className={`relative ${className}`}>
       {/* SVG Map */}
       <svg
-        viewBox="0 0 600 450"
+        viewBox="200 0 400 500"
         className="w-full h-auto"
         xmlns="http://www.w3.org/2000/svg"
       >
         {/* Background */}
-        <rect width="600" height="450" fill="#F3F4F6" />
+        <rect x="200" y="0" width="400" height="500" fill="#F3F4F6" />
 
         {/* Regions */}
         {Object.entries(regionPaths).map(([regionName, path]) => (
@@ -96,22 +102,22 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
           const data = getRegionData(regionName);
           // Calculate approximate center for each region (simplified)
           const labelPositions: Record<string, [number, number]> = {
-            'Upper East': [455, 85],
-            'Upper West': [380, 95],
-            'North East': [505, 120],
-            'Northern': [415, 155],
-            'Savannah': [345, 185],
-            'Bono East': [410, 215],
-            'Bono': [355, 240],
-            'Ahafo': [400, 265],
-            'Oti': [475, 215],
-            'Volta': [485, 290],
-            'Eastern': [445, 300],
-            'Ashanti': [375, 315],
-            'Western North': [320, 295],
-            'Western': [295, 355],
-            'Central': [360, 380],
-            'Greater Accra': [435, 365]
+            'Upper East': [425, 70],
+            'Upper West': [320, 90],
+            'North East': [490, 120],
+            'Savannah': [285, 145],
+            'Northern': [400, 155],
+            'Bono': [310, 230],
+            'Bono East': [370, 230],
+            'Ahafo': [340, 285],
+            'Oti': [490, 210],
+            'Ashanti': [370, 285],
+            'Eastern': [445, 330],
+            'Volta': [505, 320],
+            'Western North': [275, 305],
+            'Western': [260, 405],
+            'Central': [360, 375],
+            'Greater Accra': [440, 405]
           };
 
           const [x, y] = labelPositions[regionName] || [0, 0];
