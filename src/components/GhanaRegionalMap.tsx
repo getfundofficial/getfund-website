@@ -69,7 +69,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
           projection="geoMercator"
           projectionConfig={{
             center: [-1.0, 7.9],
-            scale: 4000
+            scale: 2400
           }}
           width={800}
           height={600}
