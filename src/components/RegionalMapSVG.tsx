@@ -58,8 +58,14 @@ export default function RegionalMapSVG({ regions, onRegionHover, onRegionClick, 
     if (!geoData || !svgRef.current) return;
 
     const svg = select(svgRef.current);
+
+    // Use fitSize to automatically calculate optimal projection
     const projection = createGhanaProjection(MAP_WIDTH, MAP_HEIGHT);
+    projection.fitSize([MAP_WIDTH, MAP_HEIGHT], geoData);
+
     const pathGenerator = createPathGenerator(projection);
+
+    console.log('[RegionalMapSVG] Projection configured with fitSize');
 
     // Helper function to find region data
     const findRegionData = (geoRegionName: string) => {
@@ -74,10 +80,16 @@ export default function RegionalMapSVG({ regions, onRegionHover, onRegionClick, 
       .data(geoData.features)
       .enter()
       .append('path')
-      .attr('d', (d: any) => pathGenerator(d))
+      .attr('d', (d: any) => {
+        const path = pathGenerator(d);
+        console.log(`[RegionalMapSVG] Path for ${d.properties.region}:`, path ? path.substring(0, 100) : 'NULL');
+        return path;
+      })
       .attr('fill', (d: GeoFeature) => {
         const regionData = findRegionData(d.properties.region);
-        return getRegionColor(regionData?.totalProjects);
+        const color = getRegionColor(regionData?.totalProjects);
+        console.log(`[RegionalMapSVG] Color for ${d.properties.region}: ${color} (${regionData?.totalProjects} projects)`);
+        return color;
       })
       .attr('stroke', '#FFFFFF')
       .attr('stroke-width', 1.5)
