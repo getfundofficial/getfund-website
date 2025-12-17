@@ -61,8 +61,11 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
         <svg
           viewBox="0 0 1000 800"
           className="w-full h-auto max-w-5xl mx-auto"
-          style={{ maxHeight: '800px' }}
+          style={{ maxHeight: '800px', backgroundColor: '#F3F4F6' }}
         >
+          {/* Background */}
+          <rect width="1000" height="800" fill="#F3F4F6" />
+
           {Object.entries(regionPaths).map(([regionName, pathData]) => {
             const isHovered = hoveredRegion === regionName;
             const isSelected = selectedRegion === regionName;
