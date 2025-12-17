@@ -33,6 +33,9 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
+  console.log('[GhanaRegionalMap] Component received regions:', regions);
+  console.log('[GhanaRegionalMap] Total regions:', regions.length);
+
   const getRegionData = (regionName: string) => {
     return regions.find(r => r.name.toLowerCase() === regionName.toLowerCase());
   };
@@ -77,14 +80,22 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
         >
           <Geographies geography="/data/ghana-regions.geojson">
             {({ geographies }: { geographies: GeoFeature[] }) => {
+              if (!geographies || geographies.length === 0) {
+                console.error('[GhanaRegionalMap] No geographies loaded!');
+                return null;
+              }
+
               console.log('[GhanaRegionalMap] Loaded geographies:', geographies.length);
+              console.log('[GhanaRegionalMap] Sample geo:', geographies[0]);
+
               return geographies.map((geo) => {
                 const regionName = geo.properties.region;
                 const isSelected = selectedRegion === regionName;
                 const isHovered = hoveredRegion === regionName;
                 const fillColor = getRegionFillColor(regionName);
+                const regionData = getRegionData(regionName);
 
-                console.log(`[GhanaRegionalMap] Rendering region: ${regionName}, color: ${fillColor}`);
+                console.log(`[GhanaRegionalMap] Rendering ${regionName}: color=${fillColor}, data=`, regionData);
 
                 return (
                   <Geography
