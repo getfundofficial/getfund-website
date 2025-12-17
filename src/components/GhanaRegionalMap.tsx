@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
 interface Region {
@@ -64,29 +64,33 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       </div>
 
       {/* SVG Map using react-simple-maps */}
-      <div className="relative bg-gray-100 rounded-xl shadow-lg p-4" style={{ minHeight: '600px' }}>
+      <div className="relative bg-white rounded-xl shadow-lg p-4" style={{ minHeight: '600px' }}>
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
-            center: [-1, 7.5],
-            scale: 3500
+            center: [-1.0, 7.9],
+            scale: 4000
           }}
           width={800}
           height={600}
           style={{ width: '100%', height: 'auto' }}
         >
           <Geographies geography="/data/ghana-regions.geojson">
-            {({ geographies }: { geographies: GeoFeature[] }) =>
-              geographies.map((geo) => {
+            {({ geographies }: { geographies: GeoFeature[] }) => {
+              console.log('[GhanaRegionalMap] Loaded geographies:', geographies.length);
+              return geographies.map((geo) => {
                 const regionName = geo.properties.region;
                 const isSelected = selectedRegion === regionName;
                 const isHovered = hoveredRegion === regionName;
+                const fillColor = getRegionFillColor(regionName);
+
+                console.log(`[GhanaRegionalMap] Rendering region: ${regionName}, color: ${fillColor}`);
 
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={getRegionFillColor(regionName)}
+                    fill={fillColor}
                     stroke="#FFFFFF"
                     strokeWidth={isSelected || isHovered ? 2.5 : 1.5}
                     style={{
@@ -107,8 +111,8 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
                     onClick={() => handleRegionClick(regionName)}
                   />
                 );
-              })
-            }
+              });
+            }}
           </Geographies>
         </ComposableMap>
 
