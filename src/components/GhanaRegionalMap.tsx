@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
 interface Region {
   name: string;
@@ -16,19 +16,37 @@ interface GhanaRegionalMapProps {
   className?: string;
 }
 
+interface GeoFeature {
+  type: string;
+  properties: {
+    region: string;
+    capital: string;
+  };
+  geometry: {
+    type: string;
+    coordinates: number[][][];
+  };
+  rsmKey: string;
+}
+
 export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegionalMapProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   const getRegionData = (regionName: string) => {
     return regions.find(r => r.name.toLowerCase() === regionName.toLowerCase());
   };
 
-  const getRegionColor = (total: number) => {
-    if (total >= 500) return 'from-green-800 to-green-900 border-green-700';
-    if (total >= 200) return 'from-green-600 to-green-700 border-green-500';
-    if (total >= 100) return 'from-green-400 to-green-500 border-green-300';
-    if (total >= 50) return 'from-green-300 to-green-400 border-green-200';
-    return 'from-green-200 to-green-300 border-green-100';
+  const getRegionFillColor = (regionName: string) => {
+    const data = getRegionData(regionName);
+    if (!data) return '#E5E7EB'; // Gray for no data
+
+    const total = data.totalProjects;
+    if (total >= 500) return '#166534'; // Dark green
+    if (total >= 200) return '#16A34A'; // Medium green
+    if (total >= 100) return '#4ADE80'; // Light green
+    if (total >= 50) return '#86EFAC'; // Very light green
+    return '#BBF7D0'; // Lightest green
   };
 
   const handleRegionClick = (regionName: string) => {
@@ -37,84 +55,97 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
 
   const selectedData = selectedRegion ? getRegionData(selectedRegion) : null;
 
-  // Organize regions by geographical zones for better visualization
-  const regionalZones = {
-    'Northern Zone': ['Upper East', 'Upper West', 'North East', 'Savannah', 'Northern'],
-    'Middle Belt': ['Bono', 'Bono East', 'Ahafo', 'Oti'],
-    'Forest & Coastal Zone': ['Ashanti', 'Eastern', 'Volta', 'Western North', 'Western', 'Central', 'Greater Accra']
-  };
-
   return (
     <div className={`${className}`}>
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-gray-900 mb-2">Regional Impact Distribution</h3>
         <p className="text-gray-600">Click on any region to view detailed breakdown</p>
       </div>
 
-      {/* Geographical Zones */}
-      <div className="space-y-8">
-        {Object.entries(regionalZones).map(([zone, regionNames]) => (
-          <div key={zone}>
-            <h4 className="text-lg font-semibold text-gray-700 mb-4 pb-2 border-b-2 border-gray-200">
-              {zone}
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {regionNames.map((regionName) => {
-                const data = getRegionData(regionName);
-                if (!data) return null;
-
-                const colorClass = getRegionColor(data.totalProjects);
+      {/* SVG Map using react-simple-maps */}
+      <div className="relative bg-white rounded-xl shadow-lg p-4">
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{
+            scale: 3500,
+            center: [-1.2, 7.9]
+          }}
+          className="w-full h-auto"
+          style={{ width: '100%', height: 'auto' }}
+        >
+          <Geographies geography="/data/ghana-regions.geojson">
+            {({ geographies }: { geographies: GeoFeature[] }) =>
+              geographies.map((geo) => {
+                const regionName = geo.properties.region;
                 const isSelected = selectedRegion === regionName;
+                const isHovered = hoveredRegion === regionName;
 
                 return (
-                  <button
-                    key={regionName}
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={getRegionFillColor(regionName)}
+                    stroke="#FFFFFF"
+                    strokeWidth={isSelected || isHovered ? 2 : 1}
+                    style={{
+                      default: {
+                        outline: 'none',
+                      },
+                      hover: {
+                        outline: 'none',
+                        filter: 'brightness(0.9)',
+                        cursor: 'pointer',
+                      },
+                      pressed: {
+                        outline: 'none',
+                      },
+                    }}
+                    onMouseEnter={() => setHoveredRegion(regionName)}
+                    onMouseLeave={() => setHoveredRegion(null)}
                     onClick={() => handleRegionClick(regionName)}
-                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 hover:scale-105 hover:shadow-lg ${
-                      isSelected
-                        ? 'ring-4 ring-getfund-primary shadow-xl scale-105'
-                        : 'hover:border-getfund-primary/50'
-                    } bg-gradient-to-br ${colorClass}`}
-                    aria-pressed={isSelected}
-                  >
-                    <div className="flex flex-col items-center gap-2 text-white">
-                      <MapPin className="w-5 h-5" />
-                      <div className="text-center">
-                        <div className="font-semibold text-sm">{regionName}</div>
-                        <div className="text-2xl font-bold mt-1">{data.totalProjects}</div>
-                        <div className="text-xs opacity-90">projects</div>
-                      </div>
-                    </div>
-                  </button>
+                  />
                 );
-              })}
-            </div>
+              })
+            }
+          </Geographies>
+        </ComposableMap>
+
+        {/* Hover Tooltip */}
+        {hoveredRegion && !selectedRegion && (
+          <div className="absolute top-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-xl text-sm pointer-events-none z-10">
+            <div className="font-semibold">{hoveredRegion}</div>
+            {getRegionData(hoveredRegion) && (
+              <div className="text-gray-300 mt-1">
+                {getRegionData(hoveredRegion)?.totalProjects} projects
+              </div>
+            )}
+            <div className="text-xs text-gray-400 mt-1">Click for details</div>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Legend */}
-      <div className="mt-8 p-4 bg-gray-50 rounded-xl">
+      <div className="mt-6 p-4 bg-gray-50 rounded-xl">
         <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-gradient-to-br from-green-800 to-green-900 border-2 border-green-700"></div>
+            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#166534' }}></div>
             <span className="text-gray-700">500+ projects</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-gradient-to-br from-green-600 to-green-700 border-2 border-green-500"></div>
+            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#16A34A' }}></div>
             <span className="text-gray-700">200-499</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-gradient-to-br from-green-400 to-green-500 border-2 border-green-300"></div>
+            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#4ADE80' }}></div>
             <span className="text-gray-700">100-199</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-gradient-to-br from-green-300 to-green-400 border-2 border-green-200"></div>
+            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#86EFAC' }}></div>
             <span className="text-gray-700">50-99</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-gradient-to-br from-green-200 to-green-300 border-2 border-green-100"></div>
+            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#BBF7D0' }}></div>
             <span className="text-gray-700">1-49</span>
           </div>
         </div>
