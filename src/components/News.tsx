@@ -2,6 +2,7 @@ import { Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cmsApi } from '../services/cmsApi';
+import OptimizedImage from './OptimizedImage';
 
 interface NewsArticle {
   id: string;
@@ -141,16 +142,13 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
               className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col hover:-translate-y-1"
             >
               <div className="relative h-40 sm:h-48 md:h-52 overflow-hidden">
-                <img
-                  src={article.image}
+                <OptimizedImage
+                  src={article.image || '/images/news/news-placeholder.svg'}
                   alt={`${article.title} - GETFund infrastructure project`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                  decoding="async"
-                  width="400"
-                  height="200"
+                  fallbackSrc="/images/news/news-placeholder.svg"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
               </div>
               <div className="p-4 sm:p-6 flex flex-col flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">

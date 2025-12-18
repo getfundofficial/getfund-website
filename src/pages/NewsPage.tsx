@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
+import OptimizedImage from '../components/OptimizedImage';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cmsApi } from '../services/cmsApi';
@@ -295,14 +296,14 @@ export default function NewsPage() {
                     className="bg-white shadow hover:shadow-lg transition-shadow overflow-hidden group"
                   >
                     <Link to={`/news/${article.slug}`} className="block">
-                      <div className="relative">
-                        <img
+                      <div className="relative h-48">
+                        <OptimizedImage
                           src={article.image && article.image !== '/images/news/news-placeholder.svg' ? article.image : '/images/news/news-placeholder.svg'}
                           alt={article.title}
                           className="h-48 w-full object-cover"
-                          onError={e => { e.currentTarget.src = '/images/news/news-placeholder.svg'; }}
+                          fallbackSrc="/images/news/news-placeholder.svg"
                         />
-                        <div className="absolute top-4 left-4">
+                        <div className="absolute top-4 left-4 z-10">
                           <span className="bg-getfund-primary text-white px-3 py-1 text-xs font-semibold uppercase">
                             {article.tags[0] || 'Announcement'}
                           </span>

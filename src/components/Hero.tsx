@@ -41,6 +41,15 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 type FontSize = 'small' | 'medium' | 'large' | 'xlarge';
+type GradientDirection = 'to right' | 'to bottom' | 'to bottom right' | 'to top right';
+
+interface SlideOverlay {
+  tintColor?: string;
+  tintColor2?: string;
+  useGradient?: boolean;
+  gradientDirection?: GradientDirection;
+  tintOpacity?: number;
+}
 
 interface HeroSlide {
   src: string;
@@ -52,6 +61,7 @@ interface HeroSlide {
   ctaLink?: string;
   titleFontSize?: FontSize;
   subtitleFontSize?: FontSize;
+  overlay?: SlideOverlay;
 }
 
 interface CMSSlide {
@@ -62,6 +72,33 @@ interface CMSSlide {
   ctaLink?: string;
   titleFontSize?: FontSize;
   subtitleFontSize?: FontSize;
+  overlay?: SlideOverlay;
+}
+
+// Default overlay settings
+const defaultOverlay: SlideOverlay = {
+  tintColor: '#059669', // green-600
+  tintColor2: '#0d9488', // teal-600
+  useGradient: true,
+  gradientDirection: 'to bottom',
+  tintOpacity: 60,
+};
+
+// Helper to generate overlay style
+function getOverlayStyle(overlay?: SlideOverlay): React.CSSProperties {
+  const settings = { ...defaultOverlay, ...overlay };
+  const opacity = (settings.tintOpacity ?? 60) / 100;
+
+  if (settings.useGradient && settings.tintColor2) {
+    return {
+      background: `linear-gradient(${settings.gradientDirection || 'to bottom'}, ${settings.tintColor}${Math.round(opacity * 0.6 * 255).toString(16).padStart(2, '0')}, ${settings.tintColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}, ${settings.tintColor2}${Math.round(opacity * 255).toString(16).padStart(2, '0')})`,
+    };
+  }
+
+  return {
+    backgroundColor: settings.tintColor,
+    opacity: opacity,
+  };
 }
 
 // Font size class mappings
@@ -139,6 +176,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
         ctaLink: slide.ctaLink,
         titleFontSize: slide.titleFontSize || 'medium',
         subtitleFontSize: slide.subtitleFontSize || 'medium',
+        overlay: slide.overlay,
       }));
       console.log('[Hero] Using prop slides:', transformedSlides);
       setSlides(transformedSlides);
@@ -224,8 +262,11 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                   height={1080}
                   priority={idx === 0}
                 />
-                {/* Green teal overlay matching the design */}
-                <div className="absolute inset-0 bg-gradient-to-b from-green-600/40 via-green-700/60 to-teal-600/70 z-10" />
+                {/* Dynamic overlay - customizable per slide */}
+                <div
+                  className="absolute inset-0 z-10"
+                  style={getOverlayStyle(slide.overlay)}
+                />
 
 
                 {/* Text Content Overlay */}

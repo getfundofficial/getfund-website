@@ -6,6 +6,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
+import OptimizedImage from '../components/OptimizedImage';
 import GhanaRegionalMap from '../components/GhanaRegionalMap';
 import { cmsApi } from '../services/cmsApi';
 
@@ -288,14 +289,12 @@ export default function Impact() {
               ]).map((project, index) => (
                 <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                   {project.image && (
-                    <div className="h-48 bg-gray-200">
-                      <img
+                    <div className="h-48">
+                      <OptimizedImage
                         src={project.image}
                         alt={project.category}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/placeholder.jpg';
-                        }}
+                        fallbackSrc="/images/placeholder.jpg"
                       />
                     </div>
                   )}
@@ -329,14 +328,12 @@ export default function Impact() {
               ]).map((resource, index) => (
                 <div key={index} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   {resource.image && (
-                    <div className="h-56 bg-gray-200">
-                      <img
+                    <div className="h-56">
+                      <OptimizedImage
                         src={resource.image}
                         alt={resource.type}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/placeholder.jpg';
-                        }}
+                        fallbackSrc="/images/placeholder.jpg"
                       />
                     </div>
                   )}
@@ -388,14 +385,12 @@ export default function Impact() {
                 }
               ]).map((story) => (
                 <div key={story.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="h-48 bg-gray-200">
-                    <img 
-                      src={story.image} 
+                  <div className="h-48">
+                    <OptimizedImage
+                      src={story.image}
                       alt={story.name}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/placeholder.jpg';
-                      }}
+                      fallbackSrc="/images/placeholder.jpg"
                     />
                   </div>
                   <div className="p-6">
@@ -515,14 +510,11 @@ export default function Impact() {
                 <h3 className="text-xl font-semibold text-gray-700 mb-6 text-center">Partner Universities</h3>
                 <div className="flex flex-wrap justify-center items-center gap-8">
                   {pageContent.universityLogos.map((logo, index) => (
-                    <div key={index} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                      <img
+                    <div key={index} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow h-24 w-32">
+                      <OptimizedImage
                         src={logo}
                         alt={`University ${index + 1}`}
                         className="h-16 w-auto object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }}
                       />
                     </div>
                   ))}
@@ -535,14 +527,12 @@ export default function Impact() {
               <div className="max-w-6xl mx-auto">
                 <div className="grid md:grid-cols-2 gap-6">
                   {pageContent.scholarshipImages.map((image, index) => (
-                    <div key={index} className="rounded-xl overflow-hidden shadow-md">
-                      <img
+                    <div key={index} className="rounded-xl overflow-hidden shadow-md h-64">
+                      <OptimizedImage
                         src={image}
                         alt={`Scholarship Program ${index + 1}`}
                         className="w-full h-64 object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/placeholder.jpg';
-                        }}
+                        fallbackSrc="/images/placeholder.jpg"
                       />
                     </div>
                   ))}
