@@ -26,6 +26,8 @@ interface HeroSlideResponse {
   image_url: string;
   link_text?: string;
   link_url?: string;
+  title_font_size?: string;
+  subtitle_font_size?: string;
 }
 
 interface NewsArticleResponse {
@@ -49,6 +51,8 @@ export interface HeroSlide {
   image: string;
   buttonText?: string;
   buttonLink?: string;
+  titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
+  subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
 }
 
 export interface NewsArticle {
@@ -192,6 +196,8 @@ class CMSApiClient {
         image: slide.image_url || '',
         buttonText: slide.link_text || '',
         buttonLink: slide.link_url || '',
+        titleFontSize: (slide.title_font_size as HeroSlide['titleFontSize']) || 'medium',
+        subtitleFontSize: (slide.subtitle_font_size as HeroSlide['subtitleFontSize']) || 'medium',
       }));
     } catch (error) {
       console.error('Error fetching hero slides:', error);

@@ -22,7 +22,15 @@ interface VideoSection {
 interface PageContent {
   newsTitle?: string;
   newsSubtitle?: string;
-  heroSlides?: Array<{ image: string; headline: string; description: string; ctaText?: string; ctaLink?: string }>;
+  heroSlides?: Array<{
+    image: string;
+    headline: string;
+    description: string;
+    ctaText?: string;
+    ctaLink?: string;
+    titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
+    subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
+  }>;
   videoSection?: VideoSection;
 }
 
@@ -80,8 +88,22 @@ export default function Home() {
           const content: PageContent = { ...defaultContent };
 
           response.sections.forEach((section: any) => {
-            if (section.section_key === 'hero_slides' && section.content) {
-              content.heroSlides = section.content.slides;
+            // Handle page_content section type (HomePageEditor unified format)
+            if (section.section_type === 'page_content' && section.content && section.is_active) {
+              if (section.content.heroSlides) {
+                content.heroSlides = section.content.heroSlides;
+              }
+              if (section.content.newsTitle) {
+                content.newsTitle = section.content.newsTitle;
+              }
+              if (section.content.newsSubtitle) {
+                content.newsSubtitle = section.content.newsSubtitle;
+              }
+            }
+            // Handle separate hero_slides section (legacy format)
+            else if (section.section_key === 'hero_slides' && section.content) {
+              // Support both 'slides' (legacy) and 'heroSlides' (new HomePageEditor format)
+              content.heroSlides = section.content.slides || section.content.heroSlides;
             } else if (section.section_key === 'news_updates' && section.content) {
               content.newsTitle = section.content.newsTitle;
               content.newsSubtitle = section.content.newsSubtitle;
