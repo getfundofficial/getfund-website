@@ -11,7 +11,6 @@ import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
 import DonationModal from '../components/DonationModal';
 
-
 interface Campaign {
   id: string;
   title: string;
