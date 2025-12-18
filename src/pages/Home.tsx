@@ -3,37 +3,27 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import News from '../components/News';
-import About from '../components/About';
 import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
 import VideoSection from '../components/VideoSection';
-import { StatsBackgroundSection } from '../components/BackgroundSection';
-import AnimatedCounter from '../components/AnimatedCounter';
 import { TestimonialsSection } from '../components/TestimonialCard';
-import ImageTextSection from '../components/ImageTextSection';
+import AnimatedCounter from '../components/AnimatedCounter';
 import { cmsApi } from '../services/cmsApi';
-import { GraduationCap, Building2, Briefcase } from 'lucide-react';
+import { GraduationCap, Building2, Briefcase, Target, Eye, Heart } from 'lucide-react';
+
+interface VideoSection {
+  url: string;
+  provider: 'youtube' | 'vimeo' | 'upload';
+  title?: string;
+  subtitle?: string;
+  thumbnail?: string;
+}
 
 interface PageContent {
-  vision?: { title: string; description: string };
-  mission?: { title: string; description: string };
   newsTitle?: string;
   newsSubtitle?: string;
-  coreValues?: { title: string; description: string };
   heroSlides?: Array<{ image: string; headline: string; description: string; ctaText?: string; ctaLink?: string }>;
-  aboutTitle?: string;
-  aboutSubtitle?: string;
-  aboutDescription?: string;
-  aboutStats?: Array<{ number: string; label: string; description: string }>;
-  aboutImage?: string;
-  aboutImageAlt?: string;
-  ctaText?: string;
-  ctaLink?: string;
-  aboutHeading?: string;
-  aboutSubheading?: string;
-  aboutGETFundHeading?: string;
-  aboutGETFundContent?: string[];
-  relevantFactors?: string[];
+  videoSection?: VideoSection;
 }
 
 // Default content when CMS is not available
@@ -67,40 +57,14 @@ const defaultContent: PageContent = {
       description: 'GETFund is committed to sustainable growth in the education sector.',
     }
   ],
-  vision: {
-    title: 'Our Vision',
-    description: 'To be a leading education trust fund in Africa, ensuring quality and accessible education for all Ghanaians'
-  },
-  mission: {
-    title: 'Our Mission',
-    description: 'To mobilize and manage financial resources for the provision and expansion of educational infrastructure at all levels of education in Ghana'
-  },
-  coreValues: {
-    title: 'Core Values',
-    description: 'Integrity, transparency, excellence, and commitment to transforming lives through education'
-  },
-  aboutTitle: 'Empowering Ghana Through Education',
-  aboutSubtitle: 'Building Brighter Futures',
-  aboutDescription: 'The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.',
-  aboutStats: [
-    { number: '5000+', label: 'Scholarships Awarded', description: 'Supporting talented students' },
-    { number: '200+', label: 'Schools Built', description: 'Across all regions' },
-    { number: '1000+', label: 'Infrastructure Projects', description: 'Completed nationwide' }
-  ],
-  aboutImage: '/images/about/getfund-7th-board-inauguration.jpg',
-  aboutImageAlt: 'GETFund Office Building',
-  ctaText: 'Learn More About Us',
-  ctaLink: '/who-we-are',
-  aboutGETFundHeading: 'About GETFund',
-  aboutGETFundContent: ['The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development.'],
-  relevantFactors: [
-    'Established by Act 581 in 2000',
-    'Funded through a 2.5% VAT levy',
-    'Supports all levels of education',
-    'Provides scholarships and infrastructure'
-  ],
   newsTitle: 'Latest News & Updates',
-  newsSubtitle: 'Stay informed about our latest projects, events, and educational initiatives across Ghana'
+  newsSubtitle: 'Stay informed about our latest projects, events, and educational initiatives across Ghana',
+  videoSection: {
+    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    provider: 'youtube',
+    title: 'See Our Impact in Action',
+    subtitle: 'Watch how GETFund is transforming education and building futures across Ghana'
+  }
 };
 
 export default function Home() {
@@ -118,28 +82,17 @@ export default function Home() {
           response.sections.forEach((section: any) => {
             if (section.section_key === 'hero_slides' && section.content) {
               content.heroSlides = section.content.slides;
-            } else if (section.section_key === 'about_getfund' && section.content) {
-              content.aboutTitle = section.content.aboutTitle;
-              content.aboutSubtitle = section.content.aboutSubtitle;
-              content.aboutDescription = section.content.aboutDescription;
-              content.aboutStats = section.content.aboutStats;
-              content.aboutImage = section.content.aboutImage;
-              content.aboutImageAlt = section.content.aboutImageAlt;
-              content.aboutGETFundHeading = section.content.aboutGETFundHeading;
-              content.relevantFactors = section.content.relevantFactors;
-              content.ctaText = section.content.ctaText;
-              content.ctaLink = section.content.ctaLink;
-              // Map to old structure for About component
-              content.aboutHeading = section.content.aboutTitle;
-              content.aboutSubheading = section.content.aboutSubtitle;
-              content.aboutGETFundContent = [section.content.aboutDescription];
-            } else if (section.section_key === 'vision_mission' && section.content) {
-              content.vision = section.content.vision;
-              content.mission = section.content.mission;
-              content.coreValues = section.content.coreValues;
             } else if (section.section_key === 'news_updates' && section.content) {
               content.newsTitle = section.content.newsTitle;
               content.newsSubtitle = section.content.newsSubtitle;
+            } else if (section.section_type === 'video' && section.content && section.is_active) {
+              content.videoSection = {
+                url: section.content.url,
+                provider: section.content.provider || 'youtube',
+                title: section.content.title,
+                subtitle: section.content.subtitle,
+                thumbnail: section.content.thumbnail
+              };
             }
           });
 
@@ -147,7 +100,6 @@ export default function Home() {
         }
       } catch (error) {
         console.error('Failed to fetch home content from CMS, using defaults:', error);
-        // Keep using default content
       } finally {
         setLoading(false);
       }
@@ -193,89 +145,93 @@ export default function Home() {
 
         {/* Video Section */}
         <VideoSection
-          title="See Our Impact in Action"
-          subtitle="Watch how GETFund is transforming education and building futures across Ghana"
-          videoUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-          provider="youtube"
+          title={pageContent?.videoSection?.title}
+          subtitle={pageContent?.videoSection?.subtitle}
+          videoUrl={pageContent?.videoSection?.url}
+          provider={pageContent?.videoSection?.provider}
+          thumbnailUrl={pageContent?.videoSection?.thumbnail}
         />
 
-        {/* Image-Text Section for About */}
-        <ImageTextSection
-          title="Empowering Ghana Through Education"
-          description={
-            <>
-              <p>The Ghana Education Trust Fund (GETFund) is a statutory body established by Act 581 in 2000 to provide financial resources for educational development across Ghana.</p>
-              <p>We are committed to supplementing government efforts in providing educational infrastructure and facilities at all levels, from basic education to tertiary institutions.</p>
-            </>
-          }
-          imageUrl="/images/about/getfund-7th-board-inauguration.jpg"
-          imageAlt="GETFund Board Inauguration"
-          ctaText="Learn More About Us"
-          ctaLink="/who-we-are"
-          className="bg-white"
-        />
-
-        {/* Animated Stats Section with Background Image */}
-        <StatsBackgroundSection backgroundImage="/images/hero/main-slider-1.jpg">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Our Impact in Numbers
-            </h2>
-            <p className="text-white/80 text-base sm:text-lg max-w-2xl mx-auto">
-              Transforming education across Ghana through strategic investments
-            </p>
+        {/* Empowering Ghana Section with Background Image */}
+        <section className="relative py-16 md:py-20">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <img
+              src="/images/hero/main-slider-1.jpg"
+              alt="GETFund Education"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/60" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                <GraduationCap className="w-8 h-8 text-white" />
-              </div>
-              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-                <AnimatedCounter end={5000} suffix="+" duration={2500} />
-              </div>
-              <p className="text-white/90 font-medium text-lg">Scholarships Awarded</p>
-              <p className="text-white/70 text-sm mt-1">Supporting talented students nationwide</p>
+
+          {/* Content */}
+          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Empowering Ghana Through Education
+              </h2>
+              <p className="text-lg text-white/80">
+                The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.
+              </p>
             </div>
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                <Building2 className="w-8 h-8 text-white" />
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
+                  <AnimatedCounter end={5000} suffix="+" duration={2500} />
+                </div>
+                <p className="font-semibold text-white">Scholarships Awarded</p>
+                <p className="text-sm text-white/70">Supporting talented students</p>
               </div>
-              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-                <AnimatedCounter end={200} suffix="+" duration={2000} />
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
+                  <AnimatedCounter end={200} suffix="+" duration={2000} />
+                </div>
+                <p className="font-semibold text-white">Schools Built</p>
+                <p className="text-sm text-white/70">Across all regions</p>
               </div>
-              <p className="text-white/90 font-medium text-lg">Schools Built</p>
-              <p className="text-white/70 text-sm mt-1">Modern facilities across all regions</p>
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
+                  <AnimatedCounter end={1000} suffix="+" duration={2200} />
+                </div>
+                <p className="font-semibold text-white">Infrastructure Projects</p>
+                <p className="text-sm text-white/70">Completed nationwide</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                <Briefcase className="w-8 h-8 text-white" />
+
+            {/* Mission, Vision, Core Values */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                  <Target className="w-8 h-8 text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Our Mission</h3>
+                <p className="text-white/80">
+                  To mobilize and manage financial resources for the provision and expansion of educational infrastructure at all levels of education in Ghana
+                </p>
               </div>
-              <div className="text-4xl sm:text-5xl font-bold text-white mb-2">
-                <AnimatedCounter end={1000} suffix="+" duration={2200} />
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                  <Eye className="w-8 h-8 text-blue-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Our Vision</h3>
+                <p className="text-white/80">
+                  To be a leading education trust fund in Africa, ensuring quality and accessible education for all Ghanaians
+                </p>
               </div>
-              <p className="text-white/90 font-medium text-lg">Infrastructure Projects</p>
-              <p className="text-white/70 text-sm mt-1">Completed nationwide</p>
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+                  <Heart className="w-8 h-8 text-amber-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Core Values</h3>
+                <p className="text-white/80">
+                  Integrity, transparency, excellence, and commitment to transforming lives through education
+                </p>
+              </div>
             </div>
           </div>
-        </StatsBackgroundSection>
-
-        {/* Original About Section with Vision/Mission */}
-        <About content={pageContent ? {
-          aboutHeading: pageContent.aboutTitle || pageContent.aboutHeading || 'Empowering Ghana Through Education',
-          aboutSubheading: pageContent.aboutSubtitle || pageContent.aboutSubheading || 'Building Brighter Futures',
-          aboutDescription: pageContent.aboutDescription,
-          aboutStats: pageContent.aboutStats,
-          aboutImage: pageContent.aboutImage,
-          aboutImageAlt: pageContent.aboutImageAlt,
-          ctaText: pageContent.ctaText,
-          ctaLink: pageContent.ctaLink,
-          mission: pageContent.mission || { title: 'Our Mission', description: '' },
-          vision: pageContent.vision || { title: 'Our Vision', description: '' },
-          coreValues: pageContent.coreValues || { title: 'Core Values', description: '' },
-          aboutGETFundHeading: pageContent.aboutGETFundHeading || 'About GETFund',
-          aboutGETFundContent: pageContent.aboutGETFundContent || [],
-          relevantFactors: pageContent.relevantFactors || []
-        } : undefined} />
+        </section>
 
         {/* Testimonials Section */}
         <TestimonialsSection

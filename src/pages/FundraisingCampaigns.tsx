@@ -10,7 +10,7 @@ import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
 import DonationModal from '../components/DonationModal';
-import LoadingScreen from '../components/LoadingScreen';
+
 
 interface Campaign {
   id: string;

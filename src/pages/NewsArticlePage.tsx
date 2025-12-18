@@ -4,8 +4,42 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import LoadingScreen from '../components/LoadingScreen';
-import { useState, useEffect } from 'react';
+import ImageCarousel from '../components/ImageCarousel';
+import { useState, useEffect, useMemo } from 'react';
 import { cmsApi, MenuItem } from '../services/cmsApi';
+
+// Helper function to extract images from HTML content
+function extractImagesFromHtml(html: string): { images: string[]; contentWithoutImages: string } {
+  const images: string[] = [];
+
+  // Create a temporary DOM element to parse the HTML
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Find all img elements
+  const imgElements = doc.querySelectorAll('img');
+  imgElements.forEach((img) => {
+    const src = img.getAttribute('src');
+    if (src) {
+      images.push(src);
+    }
+    // Remove the image from the content
+    img.remove();
+  });
+
+  // Also remove empty paragraphs that might have contained only images
+  const paragraphs = doc.querySelectorAll('p');
+  paragraphs.forEach((p) => {
+    if (p.innerHTML.trim() === '' || p.innerHTML.trim() === '&nbsp;') {
+      p.remove();
+    }
+  });
+
+  return {
+    images,
+    contentWithoutImages: doc.body.innerHTML,
+  };
+}
 
 interface NewsArticle {
   id: string;
@@ -112,6 +146,20 @@ export default function NewsArticlePage() {
     { label: article.title, href: `/news/${slug}`, isActive: true }
   ];
 
+  // Extract images from content and combine with featured image
+  const { allImages, contentWithoutImages } = useMemo(() => {
+    const { images: contentImages, contentWithoutImages } = extractImagesFromHtml(article.content || '');
+
+    // Combine featured image with content images (featured image first if it exists)
+    const allImages: string[] = [];
+    if (article.image) {
+      allImages.push(article.image);
+    }
+    allImages.push(...contentImages);
+
+    return { allImages, contentWithoutImages };
+  }, [article.content, article.image]);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
@@ -136,18 +184,9 @@ export default function NewsArticlePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content - Left Column */}
             <div className="lg:col-span-2">
-              {/* Featured Image */}
-              {article.image && (
-                <div className="mb-6">
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-auto object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
-                    }}
-                  />
-                </div>
+              {/* Article Images - Carousel if multiple, single image otherwise */}
+              {allImages.length > 0 && (
+                <ImageCarousel images={allImages} title={article.title} />
               )}
 
               {/* Article Header */}
@@ -183,7 +222,7 @@ export default function NewsArticlePage() {
                     prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4 prose-ol:text-gray-700
                     prose-li:mb-2 prose-li:ml-2 prose-li:leading-relaxed
                     prose-strong:font-bold prose-strong:text-gray-900"
-                  dangerouslySetInnerHTML={{ __html: article.content }}
+                  dangerouslySetInnerHTML={{ __html: contentWithoutImages }}
                 />
               </div>
 
