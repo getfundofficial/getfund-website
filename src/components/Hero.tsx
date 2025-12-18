@@ -40,6 +40,8 @@ import OptimizedImage from './OptimizedImage';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+type FontSize = 'small' | 'medium' | 'large' | 'xlarge';
+
 interface HeroSlide {
   src: string;
   alt: string;
@@ -48,6 +50,8 @@ interface HeroSlide {
   cta: boolean;
   ctaText?: string;
   ctaLink?: string;
+  titleFontSize?: FontSize;
+  subtitleFontSize?: FontSize;
 }
 
 interface CMSSlide {
@@ -56,7 +60,24 @@ interface CMSSlide {
   description: string;
   ctaText?: string;
   ctaLink?: string;
+  titleFontSize?: FontSize;
+  subtitleFontSize?: FontSize;
 }
+
+// Font size class mappings
+const titleFontSizeClasses: Record<FontSize, string> = {
+  small: 'text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl 3xl:text-6xl 4xl:text-7xl',
+  medium: 'text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl 4xl:text-9xl',
+  large: 'text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 3xl:text-9xl',
+  xlarge: 'text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl',
+};
+
+const subtitleFontSizeClasses: Record<FontSize, string> = {
+  small: 'text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl 3xl:text-3xl 4xl:text-4xl',
+  medium: 'text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl 3xl:text-4xl 4xl:text-5xl',
+  large: 'text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl 3xl:text-5xl',
+  xlarge: 'text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl 3xl:text-6xl',
+};
 
 interface HeroProps {
   slides?: CMSSlide[];
@@ -116,6 +137,8 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
         cta: !!slide.ctaText && !!slide.ctaLink,
         ctaText: slide.ctaText,
         ctaLink: slide.ctaLink,
+        titleFontSize: slide.titleFontSize || 'medium',
+        subtitleFontSize: slide.subtitleFontSize || 'medium',
       }));
       console.log('[Hero] Using prop slides:', transformedSlides);
       setSlides(transformedSlides);
@@ -137,6 +160,10 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
             headline: slide.title,
             description: slide.subtitle,
             cta: !!slide.buttonText && !!slide.buttonLink,
+            ctaText: slide.buttonText,
+            ctaLink: slide.buttonLink,
+            titleFontSize: slide.titleFontSize || 'medium',
+            subtitleFontSize: slide.subtitleFontSize || 'medium',
           }));
 
           console.log('[Hero] Setting transformed slides:', transformedSlides);
@@ -205,20 +232,20 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                 <div className="absolute inset-0 z-20 flex items-center justify-center px-3 xs:px-4 sm:px-6 lg:px-8 3xl:px-12">
                   <div className="w-full h-full flex items-center justify-center">
                     <div className="max-w-4xl 3xl:max-w-6xl 4xl:max-w-7xl text-center slide-content pointer-events-auto">
-                      <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 3xl:text-8xl 4xl:text-9xl font-bold mb-3 xs:mb-4 sm:mb-6 md:mb-8 3xl:mb-10 leading-tight tracking-tight drop-shadow-lg">
+                      <h1 className={`${titleFontSizeClasses[slide.titleFontSize || 'medium']} font-bold mb-3 xs:mb-4 sm:mb-6 md:mb-8 3xl:mb-10 leading-tight tracking-tight drop-shadow-lg`}>
                         {slide.headline}
                       </h1>
-                      <p className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl 3xl:text-4xl 4xl:text-5xl mb-4 xs:mb-6 sm:mb-8 md:mb-10 3xl:mb-12 text-green-100 leading-relaxed max-w-3xl 3xl:max-w-5xl 4xl:max-w-6xl mx-auto drop-shadow">
+                      <p className={`${subtitleFontSizeClasses[slide.subtitleFontSize || 'medium']} mb-4 xs:mb-6 sm:mb-8 md:mb-10 3xl:mb-12 text-green-100 leading-relaxed max-w-3xl 3xl:max-w-5xl 4xl:max-w-6xl mx-auto drop-shadow`}>
                         {slide.description}
                       </p>
                       {slide.cta && (
                         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center max-w-2xl 3xl:max-w-3xl mx-auto">
                           <Link
-                            to="/scholarship-apply"
+                            to={slide.ctaLink || "/scholarship-apply"}
                             className="w-full sm:w-auto bg-transparent text-white px-6 xs:px-8 sm:px-10 md:px-12 3xl:px-16 py-3 xs:py-4 md:py-5 3xl:py-6 rounded-sm font-semibold hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-colors border-2 3xl:border-3 border-white text-center uppercase tracking-wide text-sm xs:text-base md:text-lg 3xl:text-xl 4xl:text-2xl min-h-[48px] 3xl:min-h-[64px] flex items-center justify-center touch-manipulation"
-                            aria-label="Apply for GETFund scholarship program"
+                            aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                           >
-                            Apply for Scholarship
+                            {slide.ctaText || "Apply for Scholarship"}
                           </Link>
                         </div>
                       )}
