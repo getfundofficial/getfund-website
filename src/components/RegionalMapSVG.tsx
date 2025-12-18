@@ -1,25 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { select } from 'd3-selection';
-import { geoMercator, geoPath } from 'd3-geo';
-import { getRegionColor, normalizeRegionName, MAP_WIDTH, MAP_HEIGHT } from '../utils/mapUtils';
 
 interface Region {
   name: string;
   totalProjects: number;
-}
-
-interface GeoFeature {
-  type: string;
-  properties: {
-    region: string;
-    capital: string;
-  };
-  geometry: any;
-}
-
-interface GeoJSON {
-  type: string;
-  features: GeoFeature[];
 }
 
 interface RegionalMapSVGProps {
@@ -29,129 +12,160 @@ interface RegionalMapSVGProps {
   selectedRegion: string | null;
 }
 
-export default function RegionalMapSVG({ regions, onRegionHover, onRegionClick, selectedRegion }: RegionalMapSVGProps) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [geoData, setGeoData] = useState<GeoJSON | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// Map SVG IDs to region names
+const regionIdToName: Record<string, string> = {
+  'GHAF': 'Ahafo',
+  'GHAH': 'Ashanti',
+  'GHBO': 'Bono',
+  'GHBE': 'Bono East',
+  'GHCP': 'Central',
+  'GHEP': 'Eastern',
+  'GHAA': 'Greater Accra',
+  'GHNP': 'Northern',
+  'GHNE': 'North East',
+  'GHOT': 'Oti',
+  'GHSV': 'Savannah',
+  'GHUE': 'Upper East',
+  'GHUW': 'Upper West',
+  'GHTV': 'Volta',
+  'GHWP': 'Western',
+  'GHWN': 'Western North',
+};
 
-  // Load GeoJSON data
+export default function RegionalMapSVG({
+  onRegionHover,
+  onRegionClick,
+  selectedRegion
+}: RegionalMapSVGProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [svgContent, setSvgContent] = useState<string>('');
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // Load SVG content
   useEffect(() => {
-    fetch('/data/ghana-regions.geojson')
-      .then(response => {
-        if (!response.ok) throw new Error('Failed to load GeoJSON');
-        return response.json();
+    fetch('/images/gh.svg')
+      .then(response => response.text())
+      .then(text => {
+        setSvgContent(text);
       })
-      .then(data => {
-        console.log('[RegionalMapSVG] GeoJSON loaded:', data.features.length, 'regions');
-        setGeoData(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('[RegionalMapSVG] Error loading GeoJSON:', err);
-        setError(err.message);
-        setLoading(false);
-      });
+      .catch(err => console.error('Failed to load SVG:', err));
   }, []);
 
-  // Render D3 map
+  // Add event listeners to SVG paths
   useEffect(() => {
-    if (!geoData || !svgRef.current) return;
+    if (!containerRef.current || !svgContent) return;
 
-    const svg = select(svgRef.current);
+    const svg = containerRef.current.querySelector('svg');
+    if (!svg) return;
 
-    // Create projection and use fitSize to automatically calculate optimal scale/translate
-    const projection = geoMercator();
-    projection.fitSize([MAP_WIDTH, MAP_HEIGHT], geoData);
+    // Set SVG styling
+    svg.style.width = '100%';
+    svg.style.maxWidth = '500px';
+    svg.style.height = 'auto';
 
-    const pathGenerator = geoPath().projection(projection);
+    const paths = svg.querySelectorAll('path[id^="GH"]');
 
-    console.log('[RegionalMapSVG] Projection configured with fitSize');
+    paths.forEach((path) => {
+      const pathElement = path as SVGPathElement;
+      const regionId = pathElement.id;
+      const regionName = regionIdToName[regionId];
 
-    // Helper function to find region data
-    const findRegionData = (geoRegionName: string) => {
-      return regions.find(r => normalizeRegionName(r.name) === normalizeRegionName(geoRegionName));
-    };
+      // Set base styles
+      pathElement.style.cursor = 'pointer';
+      pathElement.style.transition = 'all 0.3s ease';
+      pathElement.style.transformOrigin = 'center';
+      pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
 
-    // Clear existing paths
-    svg.selectAll('path').remove();
+      // Mouse enter - pop out effect
+      pathElement.addEventListener('mouseenter', () => {
+        setHoveredRegion(regionId);
+        if (regionName) {
+          onRegionHover(regionName);
+        }
 
-    // Render map paths
-    svg.selectAll('path')
-      .data(geoData.features)
-      .enter()
-      .append('path')
-      .attr('d', (d: any) => {
-        const path = pathGenerator(d);
-        console.log(`[RegionalMapSVG] Path for ${d.properties.region}:`, path ? path.substring(0, 100) : 'NULL');
-        return path;
-      })
-      .attr('fill', (d: GeoFeature) => {
-        const regionData = findRegionData(d.properties.region);
-        const color = getRegionColor(regionData?.totalProjects);
-        console.log(`[RegionalMapSVG] Color for ${d.properties.region}: ${color} (${regionData?.totalProjects} projects)`);
-        return color;
-      })
-      .attr('stroke', '#FFFFFF')
-      .attr('stroke-width', 1.5)
-      .attr('class', 'region-path')
-      .style('cursor', 'pointer')
-      .style('transition', 'all 0.2s ease')
-      .on('mouseenter', function(event, d: GeoFeature) {
-        select(this)
-          .attr('stroke-width', 2.5)
-          .style('filter', 'brightness(0.85)');
-        onRegionHover(d.properties.region);
-      })
-      .on('mouseleave', function() {
-        select(this)
-          .attr('stroke-width', 1.5)
-          .style('filter', 'none');
-        onRegionHover(null);
-      })
-      .on('click', (event, d: GeoFeature) => {
-        onRegionClick(d.properties.region);
+        // Apply hover styles
+        pathElement.style.fill = '#047857';
+        pathElement.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))';
+        pathElement.style.transform = 'scale(1.02)';
+
+        // Bring to front by appending to parent
+        const parent = pathElement.parentNode;
+        if (parent) {
+          parent.appendChild(pathElement);
+        }
       });
 
-  }, [geoData, regions, onRegionHover, onRegionClick]);
+      // Mouse leave - reset
+      pathElement.addEventListener('mouseleave', () => {
+        setHoveredRegion(null);
+        onRegionHover(null);
 
-  // Update selected region styling
+        // Reset styles unless selected
+        if (selectedRegion !== regionName) {
+          pathElement.style.fill = '#6f9c76';
+          pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+          pathElement.style.transform = 'scale(1)';
+        }
+      });
+
+      // Click handler
+      pathElement.addEventListener('click', () => {
+        if (regionName) {
+          onRegionClick(regionName);
+        }
+      });
+
+      // Apply selected state styling
+      if (selectedRegion === regionName) {
+        pathElement.style.fill = '#065F46';
+        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))';
+        pathElement.style.transform = 'scale(1.03)';
+      }
+    });
+
+    // Cleanup event listeners
+    return () => {
+      paths.forEach((path) => {
+        const pathElement = path as SVGPathElement;
+        pathElement.replaceWith(pathElement.cloneNode(true));
+      });
+    };
+  }, [svgContent, selectedRegion, onRegionHover, onRegionClick]);
+
+  // Update selected region styling when it changes
   useEffect(() => {
-    if (!svgRef.current) return;
+    if (!containerRef.current) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('path')
-      .attr('stroke-width', (d: any) =>
-        d.properties.region === selectedRegion ? 3 : 1.5
-      )
-      .style('filter', (d: any) =>
-        d.properties.region === selectedRegion ? 'brightness(0.7)' : 'none'
-      );
-  }, [selectedRegion]);
+    const svg = containerRef.current.querySelector('svg');
+    if (!svg) return;
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center" style={{ width: MAP_WIDTH, height: MAP_HEIGHT }}>
-        <div className="text-gray-500">Loading map...</div>
-      </div>
-    );
-  }
+    const paths = svg.querySelectorAll('path[id^="GH"]');
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center" style={{ width: MAP_WIDTH, height: MAP_HEIGHT }}>
-        <div className="text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
+    paths.forEach((path) => {
+      const pathElement = path as SVGPathElement;
+      const regionId = pathElement.id;
+      const regionName = regionIdToName[regionId];
+
+      if (selectedRegion === regionName) {
+        pathElement.style.fill = '#065F46';
+        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))';
+        pathElement.style.transform = 'scale(1.03)';
+      } else if (hoveredRegion !== regionId) {
+        pathElement.style.fill = '#6f9c76';
+        pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+        pathElement.style.transform = 'scale(1)';
+      }
+    });
+  }, [selectedRegion, hoveredRegion]);
 
   return (
-    <svg
-      ref={svgRef}
-      width={MAP_WIDTH}
-      height={MAP_HEIGHT}
-      className="max-w-full h-auto"
-      viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-    />
+    <div className="flex justify-center items-center w-full">
+      <div
+        ref={containerRef}
+        className="relative"
+        style={{ width: '100%', maxWidth: '500px' }}
+        dangerouslySetInnerHTML={{ __html: svgContent }}
+      />
+    </div>
   );
 }
