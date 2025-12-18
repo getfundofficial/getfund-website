@@ -123,6 +123,25 @@ export default function NewsArticlePage() {
     fetchArticle();
   }, [slug]);
 
+  // Extract images from content and combine with featured image
+  // Must be called before any conditional returns to follow Rules of Hooks
+  const { allImages, contentWithoutImages } = useMemo(() => {
+    if (!article) {
+      return { allImages: [], contentWithoutImages: '' };
+    }
+
+    const { images: contentImages, contentWithoutImages } = extractImagesFromHtml(article.content || '');
+
+    // Combine featured image with content images (featured image first if it exists)
+    const allImages: string[] = [];
+    if (article.image) {
+      allImages.push(article.image);
+    }
+    allImages.push(...contentImages);
+
+    return { allImages, contentWithoutImages };
+  }, [article]);
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -145,20 +164,6 @@ export default function NewsArticlePage() {
     { label: 'News & Updates', href: '/news' },
     { label: article.title, href: `/news/${slug}`, isActive: true }
   ];
-
-  // Extract images from content and combine with featured image
-  const { allImages, contentWithoutImages } = useMemo(() => {
-    const { images: contentImages, contentWithoutImages } = extractImagesFromHtml(article.content || '');
-
-    // Combine featured image with content images (featured image first if it exists)
-    const allImages: string[] = [];
-    if (article.image) {
-      allImages.push(article.image);
-    }
-    allImages.push(...contentImages);
-
-    return { allImages, contentWithoutImages };
-  }, [article.content, article.image]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
