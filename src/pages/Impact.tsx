@@ -251,7 +251,7 @@ export default function Impact() {
             </div>
 
             {/* Interactive Regional Map */}
-            <div className="max-w-6xl mx-auto">
+            <div>
               <GhanaRegionalMap
                 regions={pageContent?.regions || [
                   { name: 'Ashanti', totalProjects: 748, basicEducation: 451, secondaryEducation: 281, tertiaryEducation: 12, modelSchools: 2, tvetCenters: 2 },
