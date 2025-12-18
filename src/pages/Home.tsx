@@ -19,6 +19,14 @@ interface VideoSection {
   thumbnail?: string;
 }
 
+interface SlideOverlay {
+  tintColor?: string;
+  tintColor2?: string;
+  useGradient?: boolean;
+  gradientDirection?: 'to right' | 'to bottom' | 'to bottom right' | 'to top right';
+  tintOpacity?: number;
+}
+
 interface PageContent {
   newsTitle?: string;
   newsSubtitle?: string;
@@ -30,6 +38,7 @@ interface PageContent {
     ctaLink?: string;
     titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
     subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
+    overlay?: SlideOverlay;
   }>;
   videoSection?: VideoSection;
 }
