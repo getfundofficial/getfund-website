@@ -15,7 +15,7 @@ interface RegionalDetailPanelProps {
 
 export default function RegionalDetailPanel({ region, onClose }: RegionalDetailPanelProps) {
   return (
-    <div className="mt-8 bg-white rounded-2xl shadow-2xl p-8 border-4 border-getfund-primary animate-fadeIn">
+    <div className="bg-white rounded-2xl shadow-2xl p-8 border-4 border-getfund-primary animate-fadeIn h-full">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-3xl font-bold text-gray-900 mb-1">
@@ -34,9 +34,9 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
         </button>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {/* Total Projects */}
-        <div className="col-span-2 sm:col-span-3 lg:col-span-4 bg-gradient-to-br from-getfund-primary via-red-600 to-red-700 text-white rounded-xl p-6 shadow-lg">
+        <div className="col-span-2 bg-gradient-to-br from-getfund-primary via-red-600 to-red-700 text-white rounded-xl p-6 shadow-lg">
           <div className="text-5xl font-bold mb-2">{region.totalProjects.toLocaleString()}</div>
           <div className="text-lg opacity-95">Total Projects</div>
         </div>
