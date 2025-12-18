@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface Region {
   name: string;
@@ -32,7 +32,18 @@ const regionIdToName: Record<string, string> = {
   'GHWN': 'Western North',
 };
 
+// Get color based on project count (matching the legend)
+function getColorByProjectCount(count: number | undefined): string {
+  if (count === undefined || count === 0) return '#D1D5DB'; // No data - gray
+  if (count >= 500) return '#065F46'; // 500+ - very dark green
+  if (count >= 200) return '#047857'; // 200-499 - dark green
+  if (count >= 100) return '#10B981'; // 100-199 - medium green
+  if (count >= 50) return '#34D399';  // 50-99 - light green
+  return '#6EE7B7';                    // 1-49 - very light green
+}
+
 export default function RegionalMapSVG({
+  regions,
   onRegionHover,
   onRegionClick,
   selectedRegion
@@ -40,6 +51,18 @@ export default function RegionalMapSVG({
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgContent, setSvgContent] = useState<string>('');
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // Find region data by name
+  const findRegionData = useCallback((regionName: string): Region | undefined => {
+    const normalize = (name: string) => name.trim().toLowerCase();
+    return regions.find(r => normalize(r.name) === normalize(regionName));
+  }, [regions]);
+
+  // Get base color for a region based on its project count
+  const getRegionBaseColor = useCallback((regionName: string): string => {
+    const regionData = findRegionData(regionName);
+    return getColorByProjectCount(regionData?.totalProjects);
+  }, [findRegionData]);
 
   // Load SVG content
   useEffect(() => {
@@ -69,12 +92,14 @@ export default function RegionalMapSVG({
       const pathElement = path as SVGPathElement;
       const regionId = pathElement.id;
       const regionName = regionIdToName[regionId];
+      const baseColor = getRegionBaseColor(regionName);
 
-      // Set base styles
+      // Set base styles with color based on project count
       pathElement.style.cursor = 'pointer';
       pathElement.style.transition = 'all 0.3s ease';
       pathElement.style.transformOrigin = 'center';
       pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+      pathElement.style.fill = baseColor;
 
       // Mouse enter - pop out effect
       pathElement.addEventListener('mouseenter', () => {
@@ -83,9 +108,8 @@ export default function RegionalMapSVG({
           onRegionHover(regionName);
         }
 
-        // Apply hover styles
-        pathElement.style.fill = '#047857';
-        pathElement.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))';
+        // Apply hover styles - darken the color slightly
+        pathElement.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(0.9)';
         pathElement.style.transform = 'scale(1.02)';
 
         // Bring to front by appending to parent
@@ -102,7 +126,7 @@ export default function RegionalMapSVG({
 
         // Reset styles unless selected
         if (selectedRegion !== regionName) {
-          pathElement.style.fill = '#6f9c76';
+          pathElement.style.fill = baseColor;
           pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
           pathElement.style.transform = 'scale(1)';
         }
@@ -117,8 +141,7 @@ export default function RegionalMapSVG({
 
       // Apply selected state styling
       if (selectedRegion === regionName) {
-        pathElement.style.fill = '#065F46';
-        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))';
+        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) brightness(0.85)';
         pathElement.style.transform = 'scale(1.03)';
       }
     });
@@ -130,9 +153,9 @@ export default function RegionalMapSVG({
         pathElement.replaceWith(pathElement.cloneNode(true));
       });
     };
-  }, [svgContent, selectedRegion, onRegionHover, onRegionClick]);
+  }, [svgContent, selectedRegion, onRegionHover, onRegionClick, getRegionBaseColor]);
 
-  // Update selected region styling when it changes
+  // Update region colors when data changes
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -145,18 +168,19 @@ export default function RegionalMapSVG({
       const pathElement = path as SVGPathElement;
       const regionId = pathElement.id;
       const regionName = regionIdToName[regionId];
+      const baseColor = getRegionBaseColor(regionName);
 
       if (selectedRegion === regionName) {
-        pathElement.style.fill = '#065F46';
-        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))';
+        pathElement.style.fill = baseColor;
+        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) brightness(0.85)';
         pathElement.style.transform = 'scale(1.03)';
       } else if (hoveredRegion !== regionId) {
-        pathElement.style.fill = '#6f9c76';
+        pathElement.style.fill = baseColor;
         pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
         pathElement.style.transform = 'scale(1)';
       }
     });
-  }, [selectedRegion, hoveredRegion]);
+  }, [selectedRegion, hoveredRegion, getRegionBaseColor]);
 
   return (
     <div className="flex justify-center items-center w-full">
