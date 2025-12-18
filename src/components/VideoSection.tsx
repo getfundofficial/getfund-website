@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { Play } from 'lucide-react';
+import { useRef } from 'react';
 
 interface VideoSectionProps {
   title?: string;
   subtitle?: string;
-  videoUrl?: string; // YouTube URL or uploaded video URL
-  thumbnailUrl?: string; // For uploaded videos
+  videoUrl?: string;
+  thumbnailUrl?: string;
   provider?: 'youtube' | 'vimeo' | 'upload';
   className?: string;
+  autoplay?: boolean;
 }
 
 export default function VideoSection({
   title = 'See Our Impact in Action',
   subtitle = 'Watch how GETFund is transforming education across Ghana',
-  videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Default placeholder
-  thumbnailUrl,
+  videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   provider = 'youtube',
   className = '',
+  autoplay = true,
 }: VideoSectionProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
+  const videoRef = useRef<HTMLVideoElement>(null);
   // Extract video ID from YouTube URL
   const getYouTubeId = (url: string) => {
     const match = url.match(
@@ -39,13 +38,14 @@ export default function VideoSection({
       const videoId = getYouTubeId(videoUrl);
       if (!videoId) return null;
 
+      // YouTube embed with autoplay, muted (required for autoplay), loop, and minimal controls
       return (
         <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full pointer-events-none"
         />
       );
     }
@@ -56,82 +56,49 @@ export default function VideoSection({
 
       return (
         <iframe
-          src={`https://player.vimeo.com/video/${videoId}?autoplay=1`}
+          src={`https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&loop=1&background=1`}
           title={title}
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full pointer-events-none"
         />
       );
     }
 
-    // Uploaded video
+    // Uploaded video with autoplay, muted, loop
     return (
       <video
+        ref={videoRef}
         src={videoUrl}
-        controls
-        autoPlay
+        autoPlay={autoplay}
+        muted
+        loop
+        playsInline
         className="absolute inset-0 w-full h-full object-cover"
       />
     );
   };
 
-  const renderThumbnail = () => {
-    if (provider === 'youtube') {
-      const videoId = getYouTubeId(videoUrl);
-      const thumb = thumbnailUrl || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-      return thumb;
-    }
-    return thumbnailUrl || '/images/video-placeholder.jpg';
-  };
-
   return (
-    <section className={`py-12 sm:py-16 md:py-20 bg-white ${className}`}>
+    <section className={`py-8 sm:py-12 md:py-16 bg-gray-50 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Video Container - Immersive Layout */}
-        <div className="max-w-7xl mx-auto">
-          <div className="relative aspect-[16/9] md:aspect-[21/9] lg:h-[550px] bg-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
-            {isPlaying ? (
-              renderVideo()
-            ) : (
-              <>
-                {/* Thumbnail */}
-                <img
-                  src={renderThumbnail()}
-                  alt={title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+        {/* Video Container - Full Width with Rounded Edges */}
+        <div className="relative aspect-[16/9] lg:aspect-[21/9] bg-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
+          {/* Video */}
+          {renderVideo()}
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  {/* Play Button */}
-                  <button
-                    onClick={() => setIsPlaying(true)}
-                    className="group relative w-20 h-20 sm:w-24 sm:h-24 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-xl"
-                    aria-label="Play video"
-                  >
-                    <Play className="w-8 h-8 sm:w-10 sm:h-10 text-getfund-primary ml-1" fill="currentColor" />
-
-                    {/* Pulse animation */}
-                    <span className="absolute inset-0 rounded-full bg-white/50 animate-ping opacity-75" />
-                  </button>
-                </div>
-
-                {/* Video Info Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                  <div className="max-w-2xl">
-                    <h2 className="text-white font-bold text-xl sm:text-2xl md:text-3xl mb-2">
-                      {title}
-                    </h2>
-                    {subtitle && (
-                      <p className="text-white/80 text-sm sm:text-base md:text-lg">
-                        {subtitle}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
+          {/* Video Info Overlay - Bottom left */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none">
+            <div className="max-w-2xl">
+              <h2 className="text-white font-bold text-lg sm:text-xl md:text-2xl mb-1">
+                {title}
+              </h2>
+              {subtitle && (
+                <p className="text-white/80 text-sm sm:text-base">
+                  {subtitle}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
