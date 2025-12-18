@@ -153,8 +153,16 @@ export default function FundraisingCampaigns() {
 
     console.log('Fetching campaigns from:', apiUrl);
 
+    const fetchOptions = {
+      cache: 'no-store' as RequestCache,
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+    };
+
     Promise.all([
-      fetch(`${apiUrl}/campaigns`)
+      fetch(`${apiUrl}/campaigns`, fetchOptions)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
@@ -163,7 +171,7 @@ export default function FundraisingCampaigns() {
           console.error('Failed to fetch campaigns:', err);
           return { campaigns: [] };
         }),
-      fetch(`${apiUrl}/lottery/config`)
+      fetch(`${apiUrl}/lottery/config`, fetchOptions)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
