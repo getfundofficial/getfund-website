@@ -57,7 +57,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       {/* Map and Detail Panel - Side by Side Layout */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left Side - Map */}
-        <div className={`${selectedData ? 'lg:w-1/2' : 'w-full'} transition-all duration-300`}>
+        <div className={`${selectedData ? 'lg:w-2/3' : 'w-full'} transition-all duration-300`}>
           {/* Map Container */}
           <div className="relative bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
             <RegionalMapSVG
@@ -117,7 +117,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
 
         {/* Right Side - Detail Panel */}
         {selectedData && (
-          <div className="lg:w-1/2">
+          <div className="lg:w-1/3">
             <RegionalDetailPanel
               region={selectedData}
               onClose={() => setSelectedRegion(null)}
