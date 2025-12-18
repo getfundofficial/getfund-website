@@ -248,7 +248,7 @@ export default function SecondaryEducationImprovementProgramme() {
                     <span className="w-2 h-8 bg-purple-600 rounded"></span>
                     {content.impactMetrics?.heading}
                   </h2>
-                  <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-8 rounded-xl">
+                  <div className="bg-purple-600 p-8 rounded-xl">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                       {content.impactMetrics?.metrics?.map((metric, idx) => (
                         <div key={idx} className="text-center">

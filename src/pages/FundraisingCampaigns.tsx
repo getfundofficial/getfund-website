@@ -256,7 +256,7 @@ export default function FundraisingCampaigns() {
           </div>
         </section>
         {/* GETfund Scholarship Lottery Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section className="py-16 sm:py-20 lg:py-24 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -342,7 +342,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           />
         </div>
       ) : (
-        <div className="relative h-48 bg-gradient-to-br from-getfund-primary to-getfund-secondary flex items-center justify-center">
+        <div className="relative h-48 bg-getfund-primary flex items-center justify-center">
           <Gift className="w-16 h-16 text-white/50" />
         </div>
       )}
@@ -378,7 +378,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-blue-600 to-blue-800 h-2.5 rounded-full transition-all duration-500 ease-out"
+              className="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${Math.max(percentageFunded, 2)}%` }}
             />
           </div>
@@ -445,10 +445,10 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
     };
 
     const frontContent = (
-      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gradient-to-r from-gray-800 to-gray-900 ${accentStyles[rank].border} rounded-lg flex items-center justify-between shadow-lg ${accentStyles[rank].glow} hover:shadow-xl transition-shadow duration-300`}>
+      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gray-800 ${accentStyles[rank].border} rounded-lg flex items-center justify-between shadow-lg ${accentStyles[rank].glow} hover:shadow-xl transition-shadow duration-300`}>
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Rank badge */}
-          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br ${accentStyles[rank].gradient} flex items-center justify-center shadow-lg`}>
+          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-${rank === 1 ? 'yellow-400' : rank === 2 ? 'slate-300' : 'orange-500'} flex items-center justify-center shadow-lg`}>
             <span className="text-gray-900 font-black text-sm sm:text-base">{rankLabels[rank]}</span>
           </div>
           <div>
@@ -462,7 +462,7 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
     );
 
     const backContent = prize.flip_description ? (
-      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gradient-to-r ${accentStyles[rank].gradient} rounded-lg flex items-center justify-center text-center shadow-lg`}>
+      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-${rank === 1 ? 'yellow-400' : rank === 2 ? 'slate-300' : 'orange-500'} rounded-lg flex items-center justify-center text-center shadow-lg`}>
         <div>
           <div className="text-gray-900 font-black text-sm mb-1">{rankLabels[rank]} PRIZE</div>
           <p className="text-gray-900/80 text-sm leading-relaxed">{prize.flip_description}</p>
@@ -529,7 +529,7 @@ const LotteryHowItWorks: React.FC<{
 
   // Step card back content
   const StepBack: React.FC<{ step: LotteryStep }> = ({ step }) => (
-    <div className="bg-gradient-to-br from-getfund-primary to-green-700 rounded-lg p-4 h-full flex flex-col justify-center">
+    <div className="bg-getfund-primary rounded-lg p-4 h-full flex flex-col justify-center">
       <div className="flex items-center mb-2">
         <div className="bg-white/20 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3 font-bold text-sm">
           {step.step}
@@ -556,7 +556,7 @@ const LotteryHowItWorks: React.FC<{
       </div>
 
       {/* Countdown Timer */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 sm:p-5 mb-4">
+      <div className="bg-gray-900 rounded-lg p-4 sm:p-5 mb-4">
         <div className="text-center mb-3">
           <span className="text-sm font-medium text-white/80">Time Until Next Draw</span>
         </div>
@@ -585,7 +585,7 @@ const LotteryHowItWorks: React.FC<{
 
       <button
         onClick={() => window.location.href = '/fundraising/ways-to-donate'}
-        className="w-full bg-gradient-to-r from-getfund-primary to-red-700 hover:from-red-700 hover:to-getfund-primary text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+        className="w-full bg-getfund-primary hover:bg-red-700 text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
       >
         Participate Now - Donate & Enter
       </button>

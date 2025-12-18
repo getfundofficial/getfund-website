@@ -43,9 +43,9 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
   ] as const;
 
   return (
-    <div className={`bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-getfund-primary to-getfund-green px-6 py-5">
+      <div className="bg-getfund-primary px-6 py-5">
         <h3 className="text-2xl font-bold text-white flex items-center gap-3">
           <Heart className="w-6 h-6" />
           Make a Donation
@@ -180,7 +180,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-getfund-red to-red-600 text-white py-4 rounded-xl font-bold text-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:scale-[1.01] active:scale-[0.99]"
+            className="w-full bg-getfund-red text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:scale-[1.01] active:scale-[0.99]"
             aria-label="Proceed to donation"
           >
             Donate Now

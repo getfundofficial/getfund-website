@@ -36,14 +36,14 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
 
       <div className="grid grid-cols-2 gap-4">
         {/* Total Projects */}
-        <div className="col-span-2 bg-gradient-to-br from-getfund-primary via-red-600 to-red-700 text-white rounded-xl p-6 shadow-lg">
+        <div className="col-span-2 bg-getfund-primary text-white rounded-xl p-6 shadow-lg">
           <div className="text-5xl font-bold mb-2">{region.totalProjects.toLocaleString()}</div>
           <div className="text-lg opacity-95">Total Projects</div>
         </div>
 
         {/* Basic Education */}
         {region.basicEducation !== undefined && region.basicEducation > 0 && (
-          <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="bg-emerald-600 text-white rounded-xl p-5 shadow-lg">
             <div className="text-3xl font-bold mb-1">{region.basicEducation.toLocaleString()}</div>
             <div className="text-sm opacity-90">Basic Education</div>
           </div>
@@ -51,7 +51,7 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
 
         {/* Secondary Education */}
         {region.secondaryEducation !== undefined && region.secondaryEducation > 0 && (
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="bg-blue-600 text-white rounded-xl p-5 shadow-lg">
             <div className="text-3xl font-bold mb-1">{region.secondaryEducation.toLocaleString()}</div>
             <div className="text-sm opacity-90">Secondary Education</div>
           </div>
@@ -59,7 +59,7 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
 
         {/* Tertiary Education */}
         {region.tertiaryEducation !== undefined && region.tertiaryEducation > 0 && (
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="bg-purple-600 text-white rounded-xl p-5 shadow-lg">
             <div className="text-3xl font-bold mb-1">{region.tertiaryEducation.toLocaleString()}</div>
             <div className="text-sm opacity-90">Tertiary Education</div>
           </div>
@@ -67,7 +67,7 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
 
         {/* Model Schools */}
         {region.modelSchools !== undefined && region.modelSchools > 0 && (
-          <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="bg-amber-500 text-white rounded-xl p-5 shadow-lg">
             <div className="text-3xl font-bold mb-1">{region.modelSchools.toLocaleString()}</div>
             <div className="text-sm opacity-90">Model Schools</div>
           </div>
@@ -75,7 +75,7 @@ export default function RegionalDetailPanel({ region, onClose }: RegionalDetailP
 
         {/* TVET Centers */}
         {region.tvetCenters !== undefined && region.tvetCenters > 0 && (
-          <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl p-5 shadow-lg">
+          <div className="bg-indigo-600 text-white rounded-xl p-5 shadow-lg">
             <div className="text-3xl font-bold mb-1">{region.tvetCenters.toLocaleString()}</div>
             <div className="text-sm opacity-90">TVET Centers</div>
           </div>

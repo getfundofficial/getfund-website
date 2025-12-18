@@ -334,7 +334,7 @@ export default function WhoWeAre() {
         {/* Footer Message */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <div className="bg-gradient-to-r from-getfund-primary to-getfund-secondary text-white rounded-2xl p-12 text-center">
+            <div className="bg-getfund-primary text-white rounded-2xl p-12 text-center">
               <h2 className="text-3xl md:text-4xl font-bold">
                 {pageContent?.footerMessage || 'Supporting the delivery of quality education.'}
               </h2>
