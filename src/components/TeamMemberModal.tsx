@@ -1,16 +1,24 @@
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
 
+interface GalleryItem {
+  name: string;
+  title: string;
+  image: string;
+  dateRange?: string;
+}
+
 interface TeamMemberModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   content: string;
   image?: string;
-  type: 'individual' | 'group';
+  type: 'individual' | 'group' | 'gallery';
+  galleryItems?: GalleryItem[];
 }
 
-export default function TeamMemberModal({ isOpen, onClose, title, content, image, type }: TeamMemberModalProps) {
+export default function TeamMemberModal({ isOpen, onClose, title, content, image, type, galleryItems }: TeamMemberModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -49,7 +57,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
       aria-labelledby="modal-title"
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate-slideUp"
+        className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative animate-slideUp"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -61,7 +69,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
         </button>
 
         <div className="p-8 md:p-12">
-          {image && (
+          {image && type !== 'gallery' && (
             <div className="mb-8 flex justify-center">
               <img
                 src={image}
@@ -71,7 +79,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
             </div>
           )}
 
-          <div className={`${type === 'individual' ? 'bg-gray-900' : 'bg-getfund-primary'} text-white px-6 py-4 rounded-t-lg mb-6`}>
+          <div className={`${type === 'group' ? 'bg-getfund-primary' : 'bg-gray-900'} text-white px-6 py-4 rounded-t-lg mb-6`}>
             <h2 id="modal-title" className="text-2xl md:text-3xl font-bold">
               {title}
             </h2>
@@ -83,6 +91,34 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
+
+          {/* Gallery Grid for team members */}
+          {type === 'gallery' && galleryItems && galleryItems.length > 0 && (
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
+              {galleryItems.map((item, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg overflow-hidden shadow-md">
+                  <div className="aspect-square bg-gray-200 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover object-top"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/placeholder.jpg';
+                      }}
+                    />
+                  </div>
+                  <div className="p-3 bg-gray-900 text-white">
+                    <h4 className="font-bold text-sm">{item.name}</h4>
+                    <p className="text-xs text-gray-300">{item.title}</p>
+                    {item.dateRange && (
+                      <p className="text-xs text-getfund-gold mt-1">{item.dateRange}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

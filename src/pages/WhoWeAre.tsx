@@ -295,7 +295,6 @@ export default function WhoWeAre() {
           sectionTitle={pageContent?.leadershipTitle || 'Leadership & Governance'}
           sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-          managementGroupImage="/images/about/getfund-7th-board-inauguration.jpg"
           chairman={teamMembers.chairman ? {
             name: teamMembers.chairman.name,
             title: teamMembers.chairman.title,
