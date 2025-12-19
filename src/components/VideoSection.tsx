@@ -39,14 +39,18 @@ export default function VideoSection({
       if (!videoId) return null;
 
       // YouTube embed with autoplay, muted (required for autoplay), loop, and minimal controls
+      // Scale up iframe to fill container (simulating object-cover)
       return (
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full pointer-events-none"
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] min-w-full min-h-full pointer-events-none"
+            style={{ aspectRatio: '16/9' }}
+          />
+        </div>
       );
     }
 
@@ -55,13 +59,16 @@ export default function VideoSection({
       if (!videoId) return null;
 
       return (
-        <iframe
-          src={`https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&loop=1&background=1`}
-          title={title}
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full pointer-events-none"
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <iframe
+            src={`https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&loop=1&background=1`}
+            title={title}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] min-w-full min-h-full pointer-events-none"
+            style={{ aspectRatio: '16/9' }}
+          />
+        </div>
       );
     }
 

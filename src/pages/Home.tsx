@@ -108,6 +108,15 @@ export default function Home() {
               if (section.content.newsSubtitle) {
                 content.newsSubtitle = section.content.newsSubtitle;
               }
+              // Read video section from page_content
+              if (section.content.videoSection) {
+                content.videoSection = {
+                  url: section.content.videoSection.url,
+                  provider: section.content.videoSection.provider || 'youtube',
+                  title: section.content.videoSection.title,
+                  subtitle: section.content.videoSection.subtitle
+                };
+              }
             }
             // Handle separate hero_slides section (legacy format)
             else if (section.section_key === 'hero_slides' && section.content) {
