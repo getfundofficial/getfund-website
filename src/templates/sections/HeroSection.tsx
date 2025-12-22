@@ -105,7 +105,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 height={1080}
                 priority={idx === 0}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-getfund-primary/80 to-getfund-primary/95 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-b from-getfund-primary/60 via-getfund-primary/80 to-teal-700/90 z-10" />
 
               <div className="absolute inset-0 z-20 flex items-center justify-center px-4 sm:px-6 lg:px-8">
                 <div className="w-full h-full flex items-center justify-center">

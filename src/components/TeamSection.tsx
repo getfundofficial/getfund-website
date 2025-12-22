@@ -173,13 +173,13 @@ export default function TeamSection({
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleManagementTeamClick}
-                className="px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium shadow-sm hover:bg-gray-50 hover:shadow-md transition-all"
+                className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
               >
                 Management Team
               </button>
               <button
                 onClick={handlePastAdministratorsClick}
-                className="px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium shadow-sm hover:bg-gray-50 hover:shadow-md transition-all"
+                className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
               >
                 Past Administrators
               </button>
@@ -193,7 +193,7 @@ export default function TeamSection({
               {chairman ? (
                 <div className="lg:col-span-1">
                   <div
-                    className="group bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl h-full"
+                    className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-all duration-300 h-full"
                     onClick={handleChairmanClick}
                     role="button"
                     tabIndex={0}
@@ -243,7 +243,7 @@ export default function TeamSection({
               {/* Current Administrator Card */}
               {currentAdministrator ? (
                 <div className="lg:col-span-1">
-                  <div className="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl h-full">
+                  <div className="group glass-card rounded-xl overflow-hidden transition-all duration-300 h-full">
                     {/* Image */}
                     <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
                       <img
@@ -286,7 +286,7 @@ export default function TeamSection({
               {/* Group Photo Card (Big Picture) */}
               <div className="lg:col-span-1">
                 <div
-                  className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group transition-all hover:shadow-2xl h-full"
+                  className="glass-card rounded-xl overflow-hidden cursor-pointer group transition-all h-full"
                   onClick={handleBoardGroupClick}
                   role="button"
                   tabIndex={0}

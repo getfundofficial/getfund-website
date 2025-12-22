@@ -179,7 +179,7 @@ export default function InfrastructureProjects() {
           title={content.hero?.title}
           subtitle={content.hero?.subtitle}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(to right, #059669, #1e3a5f)"
+          defaultGradient="#059669"
         />
 
         {/* Main Content */}

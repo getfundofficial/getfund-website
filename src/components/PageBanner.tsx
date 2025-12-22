@@ -29,7 +29,7 @@ export default function PageBanner({
   const hasBackgroundImage = bannerBackground?.imageUrl;
   const useGradient = bannerBackground?.useGradient ?? false;
 
-  // Generate tint overlay style
+  // Generate tint overlay style - supports both solid and gradient
   const getTintStyle = () => {
     if (!hasBackgroundImage) return {};
 
@@ -51,16 +51,34 @@ export default function PageBanner({
     }
   };
 
+  // Generate background style - supports CMS gradient settings when no image
+  const getBackgroundStyle = () => {
+    if (hasBackgroundImage) {
+      return {
+        backgroundImage: `url(${bannerBackground.imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
+
+    // No image - use gradient from CMS settings or default
+    if (useGradient && bannerBackground?.tintColor && bannerBackground?.tintColor2) {
+      const direction = bannerBackground.gradientDirection || 'to right';
+      return {
+        background: `linear-gradient(${direction}, ${bannerBackground.tintColor}, ${bannerBackground.tintColor2})`,
+      };
+    }
+
+    // Use solid color or default gradient
+    return {
+      background: bannerBackground?.tintColor || defaultGradient,
+    };
+  };
+
   return (
     <section
       className="relative text-white py-16 overflow-hidden"
-      style={{
-        background: hasBackgroundImage
-          ? `url(${bannerBackground.imageUrl})`
-          : defaultGradient,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
+      style={getBackgroundStyle()}
     >
       {/* Tint Overlay - Only show if background image exists */}
       {hasBackgroundImage && (

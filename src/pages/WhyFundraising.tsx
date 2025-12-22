@@ -95,7 +95,7 @@ export default function WhyFundraising() {
           title={content.hero?.title || 'Why Fundraising?'}
           subtitle={content.hero?.subtitle || 'Your support helps us expand access to quality education'}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+          defaultGradient="#DC143C"
         />
 
         {/* CTA Button below banner */}

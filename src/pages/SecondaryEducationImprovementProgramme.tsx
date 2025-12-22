@@ -170,7 +170,7 @@ export default function SecondaryEducationImprovementProgramme() {
           title={content.hero?.title}
           subtitle={content.hero?.subtitle}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(135deg, #7c3aed, #8b5cf6, #6d28d9)"
+          defaultGradient="#7c3aed"
         />
 
         {/* Content Section */}

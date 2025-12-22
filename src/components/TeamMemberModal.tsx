@@ -57,7 +57,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
       aria-labelledby="modal-title"
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative animate-slideUp"
+        className="glass-modal rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative animate-slideUp"
         onClick={(e) => e.stopPropagation()}
       >
         <button

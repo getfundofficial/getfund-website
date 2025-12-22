@@ -1,6 +1,7 @@
 /**
  * Hero Section Renderer
  * Displays a hero banner with title, subtitle, background image, and CTA button
+ * Supports CMS-controlled gradient and tint settings
  */
 
 import { PageSection } from '../../../services/cmsApi';
@@ -11,19 +12,59 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ section }: HeroSectionProps) {
-  const { title, subtitle, backgroundImage, ctaText, ctaLink } = section.content;
+  const { title, subtitle, backgroundImage, ctaText, ctaLink, bannerBackground } = section.content;
+
+  // Get tint overlay style
+  const getTintStyle = () => {
+    if (!backgroundImage) return {};
+
+    const opacity = (bannerBackground?.tintOpacity ?? 80) / 100;
+    const useGradient = bannerBackground?.useGradient ?? false;
+
+    if (useGradient && bannerBackground?.tintColor2) {
+      const direction = bannerBackground.gradientDirection || 'to right';
+      return {
+        backgroundImage: `linear-gradient(${direction}, ${bannerBackground.tintColor || '#DC143C'}, ${bannerBackground.tintColor2})`,
+        opacity,
+      };
+    }
+
+    return {
+      backgroundColor: bannerBackground?.tintColor || '#DC143C',
+      opacity,
+    };
+  };
+
+  // Get background style
+  const getBackgroundStyle = () => {
+    if (backgroundImage) {
+      return {
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
+
+    const useGradient = bannerBackground?.useGradient ?? false;
+    if (useGradient && bannerBackground?.tintColor && bannerBackground?.tintColor2) {
+      const direction = bannerBackground.gradientDirection || 'to right';
+      return {
+        background: `linear-gradient(${direction}, ${bannerBackground.tintColor}, ${bannerBackground.tintColor2})`,
+      };
+    }
+
+    return {
+      backgroundColor: bannerBackground?.tintColor || '#DC143C',
+    };
+  };
 
   return (
     <section
-      className="relative bg-gradient-to-br from-getfund-primary via-red-800 to-red-900 text-white pt-20 pb-16"
-      style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
+      className="relative text-white pt-20 pb-16"
+      style={getBackgroundStyle()}
     >
       {backgroundImage && (
-        <div className="absolute inset-0 bg-gradient-to-br from-getfund-primary/90 via-red-800/90 to-red-900/90" />
+        <div className="absolute inset-0" style={getTintStyle()} />
       )}
 
       <div className="container mx-auto px-4 relative z-10">

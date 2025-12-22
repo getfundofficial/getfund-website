@@ -91,7 +91,7 @@ export default function Partnerships() {
         <PageBanner
           title={content.hero?.title || 'Partnerships with GETFund'}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+          defaultGradient="#DC143C"
         />
 
         {/* Intro Paragraph */}

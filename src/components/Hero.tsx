@@ -84,7 +84,7 @@ const defaultOverlay: SlideOverlay = {
   tintOpacity: 60,
 };
 
-// Helper to generate overlay style
+// Helper to generate overlay style - supports both solid and gradient (CMS-controllable)
 function getOverlayStyle(overlay?: SlideOverlay): React.CSSProperties {
   const settings = { ...defaultOverlay, ...overlay };
   const opacity = (settings.tintOpacity ?? 60) / 100;
