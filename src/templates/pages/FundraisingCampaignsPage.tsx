@@ -34,6 +34,9 @@ interface LotteryConfig {
   is_active: boolean;
   banner_color: string;
   current_entries_count: number;
+  section_title?: string;
+  section_description?: string;
+  prize_box_title?: string;
 }
 
 interface FundraisingCampaignsPageProps {
@@ -171,16 +174,16 @@ export const FundraisingCampaignsPage: React.FC<FundraisingCampaignsPageProps> =
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-10 sm:mb-12">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {content.lotteryTitle || 'GETfund Scholarship Lottery'}
+                {lotteryConfig.section_title || content.lotteryTitle || 'GETfund Scholarship Lottery'}
               </h2>
               <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto">
-                {content.lotterySubtitle || 'Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.'}
+                {lotteryConfig.section_description || content.lotterySubtitle || 'Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.'}
               </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
               {/* Prize Box */}
-              <LotteryPrizeBox prizes={lotteryConfig.prizes} bannerColor={lotteryConfig.banner_color} />
+              <LotteryPrizeBox prizes={lotteryConfig.prizes} bannerColor={lotteryConfig.banner_color} prizeBoxTitle={lotteryConfig.prize_box_title} />
 
               {/* How It Works */}
               <LotteryHowItWorks
@@ -272,7 +275,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
 };
 
 // Lottery Prize Box Component
-const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string }> = ({ prizes, bannerColor }) => {
+const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string; prizeBoxTitle?: string }> = ({ prizes, bannerColor, prizeBoxTitle }) => {
   const mainPrizes = prizes.filter(p => typeof p.rank === 'number');
   const additionalPrizes = prizes.filter(p => p.rank === 'additional');
 
@@ -280,7 +283,7 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
     <div className="bg-white rounded-xl shadow-xl p-6 sm:p-8 border-t-4" style={{ borderTopColor: bannerColor }}>
       <div className="text-center mb-6 sm:mb-8">
         <Award className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-bounce" style={{ color: bannerColor }} />
-        <h3 className="text-xl sm:text-2xl font-bold text-gray-900">This Month's Lottery Prizes</h3>
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{prizeBoxTitle || "This Month's Lottery Prizes"}</h3>
         <p className="text-sm text-gray-600 mt-2">Support education and win amazing scholarships</p>
       </div>
 
