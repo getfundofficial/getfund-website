@@ -69,7 +69,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
   return (
     <div className="about-page">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-getfund-primary via-red-800 to-red-900 text-white pt-20 pb-16">
+      <section className="relative bg-getfund-primary text-white pt-20 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">

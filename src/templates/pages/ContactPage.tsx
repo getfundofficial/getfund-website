@@ -71,7 +71,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ pageData, content }) =
   return (
     <div className="contact-page">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-getfund-primary to-getfund-secondary py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-getfund-primary py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             {pageData.title}

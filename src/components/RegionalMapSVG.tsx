@@ -64,6 +64,31 @@ export default function RegionalMapSVG({
     return getColorByProjectCount(regionData?.totalProjects);
   }, [findRegionData]);
 
+  // Inject pulsate animation styles
+  useEffect(() => {
+    const styleId = 'region-pulsate-style';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        @keyframes regionPulsate {
+          0%, 100% {
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)) brightness(0.85);
+            transform: scale(1.03);
+          }
+          50% {
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.7)) brightness(1);
+            transform: scale(1.06);
+          }
+        }
+        .region-selected {
+          animation: regionPulsate 1.5s ease-in-out infinite;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   // Load SVG content
   useEffect(() => {
     fetch('/images/gh.svg')
@@ -139,10 +164,16 @@ export default function RegionalMapSVG({
         }
       });
 
-      // Apply selected state styling
+      // Apply selected state styling with pulsate animation
       if (selectedRegion === regionName) {
-        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) brightness(0.85)';
-        pathElement.style.transform = 'scale(1.03)';
+        pathElement.classList.add('region-selected');
+        // Bring selected region to front
+        const parent = pathElement.parentNode;
+        if (parent) {
+          parent.appendChild(pathElement);
+        }
+      } else {
+        pathElement.classList.remove('region-selected');
       }
     });
 
@@ -172,12 +203,19 @@ export default function RegionalMapSVG({
 
       if (selectedRegion === regionName) {
         pathElement.style.fill = baseColor;
-        pathElement.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) brightness(0.85)';
-        pathElement.style.transform = 'scale(1.03)';
-      } else if (hoveredRegion !== regionId) {
-        pathElement.style.fill = baseColor;
-        pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
-        pathElement.style.transform = 'scale(1)';
+        pathElement.classList.add('region-selected');
+        // Bring selected region to front
+        const parent = pathElement.parentNode;
+        if (parent) {
+          parent.appendChild(pathElement);
+        }
+      } else {
+        pathElement.classList.remove('region-selected');
+        if (hoveredRegion !== regionId) {
+          pathElement.style.fill = baseColor;
+          pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+          pathElement.style.transform = 'scale(1)';
+        }
       }
     });
   }, [selectedRegion, hoveredRegion, getRegionBaseColor]);

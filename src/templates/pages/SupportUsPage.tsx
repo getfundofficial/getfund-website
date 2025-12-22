@@ -153,16 +153,8 @@ export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
   return (
     <div className="support-us-page">
       {/* Hero Section */}
-      <section
-        className="relative text-white py-20 overflow-hidden"
-        style={getBackgroundStyle()}
-      >
-        {/* Tint Overlay - Only show if background image exists */}
-        {hasBackgroundImage && (
-          <div className="absolute inset-0" style={getTintStyle()} />
-        )}
-
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="relative bg-green-700 text-white py-20">
+        <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1
               className="text-4xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg"
@@ -350,7 +342,7 @@ export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
 
       {/* Scholarship Section */}
       {content.scholarshipTitle && (
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <section className="py-16 bg-blue-50">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
@@ -411,7 +403,7 @@ export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
       )}
 
       {/* Final CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-getfund-primary to-red-800 text-white">
+      <section className="py-16 bg-getfund-primary text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">

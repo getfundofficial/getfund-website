@@ -124,9 +124,9 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
   if (success) {
     return (
-      <div className={`bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
+      <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-getfund-gold to-amber-500 px-6 py-5">
+        <div className="bg-getfund-gold px-6 py-5">
           <h3 className="text-2xl font-bold text-white flex items-center gap-3">
             <HeartHandshake className="w-6 h-6" />
             Pledge Your Support
@@ -136,7 +136,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         <div className="p-6">
           <div className="text-center py-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <svg className="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -147,7 +147,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             </p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-8 py-3 bg-gradient-to-r from-getfund-primary to-green-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg shadow-green-500/30"
+              className="px-8 py-3 bg-getfund-primary text-white rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-500/30"
             >
               Submit Another Pledge
             </button>
@@ -164,9 +164,9 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
   }
 
   return (
-    <div className={`bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-getfund-gold to-amber-500 px-6 py-5">
+      <div className="bg-getfund-gold px-6 py-5">
         <h3 className="text-2xl font-bold text-white flex items-center gap-3">
           <HeartHandshake className="w-6 h-6" />
           Pledge Your Support
@@ -330,7 +330,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-getfund-primary to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+          className="w-full bg-getfund-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
         >
           {isSubmitting ? (
             <>

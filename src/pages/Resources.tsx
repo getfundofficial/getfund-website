@@ -577,7 +577,7 @@ export default function Resources() {
         </section>
 
         {/* Newsletter Subscription Section */}
-        <section className="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-getfund-primary text-white">
+        <section className="py-16 bg-gray-900 text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">

@@ -84,11 +84,12 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
     <div className="mb-6 relative">
       <style>{`
         .custom-dots {
-          bottom: -30px;
+          position: relative;
+          bottom: 0;
           display: flex !important;
           justify-content: center;
           gap: 8px;
-          padding: 0;
+          padding: 12px 0 0 0;
           margin: 0;
           list-style: none;
         }
@@ -116,7 +117,7 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
           </div>
         ))}
       </Slider>
-      <div className="text-center text-sm text-gray-500 mt-10">
+      <div className="text-center text-sm text-gray-500 mt-2">
         {currentSlide + 1} / {images.length}
       </div>
     </div>

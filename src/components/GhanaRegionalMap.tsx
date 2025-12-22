@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import RegionalDetailPanel from './RegionalDetailPanel';
 import RegionalMapSVG from './RegionalMapSVG';
 
@@ -18,7 +18,15 @@ interface GhanaRegionalMapProps {
 }
 
 export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegionalMapProps) {
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  // Find the region with highest totalProjects on initialization
+  const highestImpactRegion = useMemo(() => {
+    if (!regions || regions.length === 0) return null;
+    return regions.reduce((max, region) =>
+      region.totalProjects > max.totalProjects ? region : max
+    , regions[0]).name;
+  }, [regions]);
+
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(highestImpactRegion);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   const findRegionData = (regionName: string): Region | undefined => {
@@ -49,7 +57,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
       {/* Map and Detail Panel - Side by Side Layout */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left Side - Map */}
-        <div className={`${selectedData ? 'lg:w-1/2' : 'w-full'} transition-all duration-300`}>
+        <div className={`${selectedData ? 'lg:w-1/3' : 'w-full'} transition-all duration-300`}>
           {/* Map Container */}
           <div className="relative bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
             <RegionalMapSVG
@@ -74,7 +82,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
           </div>
 
           {/* Legend */}
-          <div className="mt-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 shadow-md">
+          <div className="mt-6 bg-gray-50 rounded-xl p-6 shadow-md">
             <h4 className="text-sm font-semibold text-gray-700 mb-4 text-center">
               Project Distribution Scale
             </h4>
@@ -109,7 +117,7 @@ export default function GhanaRegionalMap({ regions, className = '' }: GhanaRegio
 
         {/* Right Side - Detail Panel */}
         {selectedData && (
-          <div className="lg:w-1/2">
+          <div className="lg:w-2/3">
             <RegionalDetailPanel
               region={selectedData}
               onClose={() => setSelectedRegion(null)}

@@ -64,7 +64,7 @@ export const ScholarshipProgrammePage: React.FC<ScholarshipProgrammePageProps> =
   return (
     <div className="scholarship-programme-page">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-getfund-primary via-red-800 to-red-900 text-white pt-20 pb-16">
+      <section className="relative bg-getfund-primary text-white pt-20 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <GraduationCap className="w-20 h-20 mx-auto mb-6" />
@@ -238,7 +238,7 @@ export const ScholarshipProgrammePage: React.FC<ScholarshipProgrammePageProps> =
 
       {/* CTA Section */}
       {content.ctaTitle && (
-        <section className="py-16 bg-gradient-to-r from-getfund-primary to-red-800 text-white">
+        <section className="py-16 bg-getfund-primary text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">

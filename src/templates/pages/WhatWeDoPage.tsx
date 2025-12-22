@@ -63,7 +63,7 @@ export const WhatWeDoPage: React.FC<WhatWeDoPageProps> = ({ pageData, content })
   return (
     <div className="what-we-do-page">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-getfund-primary via-red-800 to-red-900 text-white pt-20 pb-16">
+      <section className="relative bg-getfund-primary text-white pt-20 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -179,7 +179,7 @@ export const WhatWeDoPage: React.FC<WhatWeDoPageProps> = ({ pageData, content })
 
       {/* Impact Stats Section */}
       {content.impactStats && content.impactStats.length > 0 && (
-        <section className="py-16 bg-gradient-to-r from-getfund-primary to-red-800 text-white">
+        <section className="py-16 bg-getfund-primary text-white">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-3 gap-8">
               {content.impactStats.map((stat, index) => (

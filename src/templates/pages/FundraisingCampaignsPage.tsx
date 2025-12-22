@@ -115,7 +115,7 @@ export const FundraisingCampaignsPage: React.FC<FundraisingCampaignsPageProps> =
   return (
     <div className="fundraising-campaigns-page">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-getfund-primary via-red-800 to-red-900 text-white pt-24 pb-16">
+      <section className="relative bg-getfund-primary text-white pt-24 pb-16">
         <div className="absolute inset-0 bg-black opacity-10"></div>
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -170,7 +170,7 @@ export const FundraisingCampaignsPage: React.FC<FundraisingCampaignsPageProps> =
 
       {/* GETfund Scholarship Lottery Section */}
       {lotteryConfig && lotteryConfig.is_active && (
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section className="py-12 sm:py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-10 sm:mb-12">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -214,7 +214,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
             alt={campaign.title}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
       )}
 
@@ -251,7 +251,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-getfund-primary to-red-700 h-3 rounded-full transition-all duration-500 ease-out relative"
+              className="bg-getfund-primary h-3 rounded-full transition-all duration-500 ease-out relative"
               style={{ width: `${percentageFunded}%` }}
             >
               <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
@@ -291,7 +291,7 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
         {mainPrizes.map((prize, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow"
+            className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-100 hover:shadow-md transition-shadow"
           >
             <div>
               <div className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
@@ -345,7 +345,7 @@ const LotteryHowItWorks: React.FC<{
       </div>
 
       {/* Draw Info */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 sm:p-5 mb-6 border border-gray-200">
+      <div className="bg-gray-50 rounded-lg p-4 sm:p-5 mb-6 border border-gray-200">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-600">Next Draw:</span>
           <span className="font-bold text-base sm:text-lg text-getfund-primary">
@@ -366,7 +366,7 @@ const LotteryHowItWorks: React.FC<{
 
       <button
         onClick={() => (window.location.href = '/fundraising/campaigns')}
-        className="w-full bg-gradient-to-r from-getfund-primary to-red-700 hover:from-red-700 hover:to-getfund-primary text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+        className="w-full bg-getfund-primary hover:bg-red-700 text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
       >
         Participate Now - Donate & Enter
       </button>

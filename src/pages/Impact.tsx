@@ -234,6 +234,50 @@ export default function Impact() {
           }}
         />
 
+        {/* Regional Impact - First section after banner */}
+        <section className="py-16 md:py-20 bg-blue-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                {pageContent?.regionalTitle || 'Regional Impact'}
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+                {pageContent?.regionalSubtitle || 'Ensuring equitable distribution of educational resources across all regions'}
+              </p>
+              {pageContent?.regionalDescription && (
+                <p className="text-gray-700 max-w-4xl mx-auto">
+                  {pageContent.regionalDescription}
+                </p>
+              )}
+            </div>
+
+            {/* Interactive Regional Map */}
+            <div>
+              <GhanaRegionalMap
+                regions={pageContent?.regions || [
+                  { name: 'Ashanti', totalProjects: 748, basicEducation: 451, secondaryEducation: 281, tertiaryEducation: 12, modelSchools: 2, tvetCenters: 2 },
+                  { name: 'Eastern', totalProjects: 541, basicEducation: 301, secondaryEducation: 230, tertiaryEducation: 8, modelSchools: 1, tvetCenters: 1 },
+                  { name: 'Northern', totalProjects: 172, basicEducation: 101, secondaryEducation: 66, tertiaryEducation: 5 },
+                  { name: 'Greater Accra', totalProjects: 77, basicEducation: 66, secondaryEducation: 1, modelSchools: 10 },
+                  { name: 'Upper East', totalProjects: 121, basicEducation: 68, secondaryEducation: 47, tertiaryEducation: 6 },
+                  { name: 'Bono', totalProjects: 142, basicEducation: 73, secondaryEducation: 64, tertiaryEducation: 4, modelSchools: 1 },
+                  { name: 'Western', totalProjects: 110, basicEducation: 54, secondaryEducation: 55, tertiaryEducation: 1 },
+                  { name: 'Ahafo', totalProjects: 102, basicEducation: 62, secondaryEducation: 34, tertiaryEducation: 5, modelSchools: 1 },
+                  { name: 'Central', totalProjects: 91, basicEducation: 91 },
+                  { name: 'Volta', totalProjects: 93, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 5 },
+                  { name: 'Oti', totalProjects: 90, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 2 },
+                  { name: 'Upper West', totalProjects: 86, basicEducation: 41, secondaryEducation: 41, tertiaryEducation: 4 },
+                  { name: 'Bono East', totalProjects: 55, basicEducation: 23, secondaryEducation: 31, modelSchools: 1 },
+                  { name: 'Western North', totalProjects: 51, basicEducation: 24, secondaryEducation: 19, tertiaryEducation: 7, modelSchools: 1 },
+                  { name: 'North East', totalProjects: 50, basicEducation: 20, secondaryEducation: 27, tertiaryEducation: 2, modelSchools: 1 },
+                  { name: 'Savannah', totalProjects: 34, basicEducation: 13, secondaryEducation: 21 }
+                ]}
+                className="bg-white rounded-xl shadow-lg p-6"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Impact Statistics */}
         <section className="py-16 md:py-20 bg-white">
           <div className="container mx-auto px-4">
@@ -255,7 +299,7 @@ export default function Impact() {
                 { number: '5,026', label: 'Scholarships (2023/24)', description: 'Academic year', icon: 'graduation-cap' },
                 { number: '677,470', label: 'Furniture Items', description: 'Distributed (2019-2021)', icon: 'building' }
               ]).map((stat, index) => (
-                <div key={index} className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
+                <div key={index} className="bg-red-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
                   <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-getfund-primary">
                     {getIconComponent(stat.icon)}
                   </div>
@@ -326,7 +370,7 @@ export default function Impact() {
                 { type: 'Vehicles', count: 2718, period: '2019-2021', image: '/images/impact/vehicles-1.jpg' },
                 { type: 'Furniture Items', count: 677470, period: '2019-2021', image: '/images/impact/furniture-1.jpg' }
               ]).map((resource, index) => (
-                <div key={index} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                <div key={index} className="bg-blue-50 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   {resource.image && (
                     <div className="h-56">
                       <OptimizedImage
@@ -421,7 +465,7 @@ export default function Impact() {
             {/* Total Scholars and Growth */}
             <div className="max-w-5xl mx-auto mb-12">
               <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-8 text-center">
+                <div className="bg-green-50 rounded-xl p-8 text-center">
                   <div className="text-6xl font-bold text-getfund-primary mb-2">
                     {pageContent?.totalScholars || '16,000+'}
                   </div>
@@ -429,7 +473,7 @@ export default function Impact() {
                   <p className="text-gray-600">Lifetime achievement across local and foreign institutions</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-8">
+                <div className="bg-yellow-50 rounded-xl p-8">
                   <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Scholarship Growth</h3>
                   <div className="flex items-center justify-between">
                     <div className="text-center">
@@ -584,114 +628,8 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* Regional Impact */}
-        <section className="py-16 md:py-20 bg-blue-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {pageContent?.regionalTitle || 'Regional Impact'}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
-                {pageContent?.regionalSubtitle || 'Ensuring equitable distribution of educational resources across all regions'}
-              </p>
-              {pageContent?.regionalDescription && (
-                <p className="text-gray-700 max-w-4xl mx-auto">
-                  {pageContent.regionalDescription}
-                </p>
-              )}
-            </div>
-
-            {/* Interactive Regional Map */}
-            <div className="max-w-6xl mx-auto mb-12">
-              <GhanaRegionalMap
-                regions={pageContent?.regions || [
-                  { name: 'Ashanti', totalProjects: 748, basicEducation: 451, secondaryEducation: 281, tertiaryEducation: 12, modelSchools: 2, tvetCenters: 2 },
-                  { name: 'Eastern', totalProjects: 541, basicEducation: 301, secondaryEducation: 230, tertiaryEducation: 8, modelSchools: 1, tvetCenters: 1 },
-                  { name: 'Northern', totalProjects: 172, basicEducation: 101, secondaryEducation: 66, tertiaryEducation: 5 },
-                  { name: 'Greater Accra', totalProjects: 77, basicEducation: 66, secondaryEducation: 1, modelSchools: 10 },
-                  { name: 'Upper East', totalProjects: 121, basicEducation: 68, secondaryEducation: 47, tertiaryEducation: 6 },
-                  { name: 'Bono', totalProjects: 142, basicEducation: 73, secondaryEducation: 64, tertiaryEducation: 4, modelSchools: 1 },
-                  { name: 'Western', totalProjects: 110, basicEducation: 54, secondaryEducation: 55, tertiaryEducation: 1 },
-                  { name: 'Ahafo', totalProjects: 102, basicEducation: 62, secondaryEducation: 34, tertiaryEducation: 5, modelSchools: 1 },
-                  { name: 'Central', totalProjects: 91, basicEducation: 91 },
-                  { name: 'Volta', totalProjects: 93, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 5 },
-                  { name: 'Oti', totalProjects: 90, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 2 },
-                  { name: 'Upper West', totalProjects: 86, basicEducation: 41, secondaryEducation: 41, tertiaryEducation: 4 },
-                  { name: 'Bono East', totalProjects: 55, basicEducation: 23, secondaryEducation: 31, modelSchools: 1 },
-                  { name: 'Western North', totalProjects: 51, basicEducation: 24, secondaryEducation: 19, tertiaryEducation: 7, modelSchools: 1 },
-                  { name: 'North East', totalProjects: 50, basicEducation: 20, secondaryEducation: 27, tertiaryEducation: 2, modelSchools: 1 },
-                  { name: 'Savannah', totalProjects: 34, basicEducation: 13, secondaryEducation: 21 }
-                ]}
-                className="bg-white rounded-xl shadow-lg p-6"
-              />
-            </div>
-
-            {/* Optional: Regional Cards Grid (if needed as additional detail) */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-              {(pageContent?.regions || [
-                { name: 'Ashanti', totalProjects: 748, basicEducation: 451, secondaryEducation: 281, tertiaryEducation: 12, modelSchools: 2, tvetCenters: 2 },
-                { name: 'Eastern', totalProjects: 541, basicEducation: 301, secondaryEducation: 230, tertiaryEducation: 8, modelSchools: 1, tvetCenters: 1 },
-                { name: 'Northern', totalProjects: 172, basicEducation: 101, secondaryEducation: 66, tertiaryEducation: 5 },
-                { name: 'Greater Accra', totalProjects: 77, basicEducation: 66, secondaryEducation: 1, modelSchools: 10 },
-                { name: 'Upper East', totalProjects: 121, basicEducation: 68, secondaryEducation: 47, tertiaryEducation: 6 },
-                { name: 'Bono', totalProjects: 142, basicEducation: 73, secondaryEducation: 64, tertiaryEducation: 4, modelSchools: 1 },
-                { name: 'Western', totalProjects: 110, basicEducation: 54, secondaryEducation: 55, tertiaryEducation: 1 },
-                { name: 'Ahafo', totalProjects: 102, basicEducation: 62, secondaryEducation: 34, tertiaryEducation: 5, modelSchools: 1 },
-                { name: 'Central', totalProjects: 91, basicEducation: 91 },
-                { name: 'Volta', totalProjects: 93, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 5 },
-                { name: 'Oti', totalProjects: 90, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 2 },
-                { name: 'Upper West', totalProjects: 86, basicEducation: 41, secondaryEducation: 41, tertiaryEducation: 4 },
-                { name: 'Bono East', totalProjects: 55, basicEducation: 23, secondaryEducation: 31, modelSchools: 1 },
-                { name: 'Western North', totalProjects: 51, basicEducation: 24, secondaryEducation: 19, tertiaryEducation: 7, modelSchools: 1 },
-                { name: 'North East', totalProjects: 50, basicEducation: 20, secondaryEducation: 27, tertiaryEducation: 2, modelSchools: 1 },
-                { name: 'Savannah', totalProjects: 34, basicEducation: 13, secondaryEducation: 21 }
-              ]).map((region, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">{region.name}</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                      <span className="text-gray-900 font-semibold">Total Projects:</span>
-                      <span className="text-2xl font-bold text-getfund-primary">{region.totalProjects.toLocaleString()}</span>
-                    </div>
-                    {region.basicEducation && (
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Basic:</span>
-                        <span className="font-semibold text-gray-900">{region.basicEducation}</span>
-                      </div>
-                    )}
-                    {region.secondaryEducation && (
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Secondary:</span>
-                        <span className="font-semibold text-gray-900">{region.secondaryEducation}</span>
-                      </div>
-                    )}
-                    {region.tertiaryEducation && (
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Tertiary:</span>
-                        <span className="font-semibold text-gray-900">{region.tertiaryEducation}</span>
-                      </div>
-                    )}
-                    {region.modelSchools && (
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Model Schools:</span>
-                        <span className="font-semibold text-gray-900">{region.modelSchools}</span>
-                      </div>
-                    )}
-                    {region.tvetCenters && (
-                      <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">TVET:</span>
-                        <span className="font-semibold text-gray-900">{region.tvetCenters}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Call to Action */}
-        <section className="py-16 bg-gradient-to-br from-getfund-primary to-getfund-secondary text-white">
+        <section className="py-16 bg-getfund-primary text-white">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
