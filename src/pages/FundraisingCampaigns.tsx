@@ -10,6 +10,24 @@ import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
 import DonationModal from '../components/DonationModal';
+import { cmsApi } from '../services/cmsApi';
+import { BannerBackground } from '../types/bannerBackground';
+
+interface PageContent {
+  // Hero Section
+  heroTitle?: string;
+  heroSubtitle?: string;
+  bannerBackground?: BannerBackground;
+
+  // Featured Campaigns Section
+  campaignsSectionTitle?: string;
+  campaignsSectionSubtitle?: string;
+  viewAllButtonText?: string;
+
+  // Lottery Section
+  lotterySectionTitle?: string;
+  lotterySectionSubtitle?: string;
+}
 
 interface Campaign {
   id: string;
@@ -140,9 +158,27 @@ const defaultLotteryConfig: LotteryConfig = {
   current_entries_count: 12847
 };
 
+// Default page content
+const defaultPageContent: PageContent = {
+  heroTitle: 'Support Education Through Giving',
+  heroSubtitle: 'Your donations directly fund scholarships, infrastructure, and educational programs across Ghana',
+  bannerBackground: {
+    imageUrl: '/images/hero/main-slider-3.jpg',
+    tintColor: '#DC143C',
+    tintColor2: '#2563EB',
+    useGradient: true,
+    tintOpacity: 75,
+    gradientDirection: 'to right'
+  },
+  campaignsSectionTitle: 'Featured Fundraising Campaigns',
+  campaignsSectionSubtitle: 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.',
+  viewAllButtonText: 'View All Campaigns'
+};
+
 export default function FundraisingCampaigns() {
   const [campaigns, setCampaigns] = useState<Campaign[]>(defaultCampaigns);
   const [lotteryConfig, setLotteryConfig] = useState<LotteryConfig>(defaultLotteryConfig);
+  const [pageContent, setPageContent] = useState<PageContent>(defaultPageContent);
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -171,11 +207,18 @@ export default function FundraisingCampaigns() {
         .catch(err => {
           console.error('Failed to fetch lottery config:', err);
           return { config: null };
+        }),
+      // Fetch page content from CMS
+      cmsApi.getPageBySlug('fundraising-campaigns')
+        .catch(err => {
+          console.error('Failed to fetch page content:', err);
+          return null;
         })
     ])
-      .then(([campaignsData, lotteryData]) => {
+      .then(([campaignsData, lotteryData, pageData]) => {
         console.log('Campaigns data:', campaignsData);
         console.log('Lottery data:', lotteryData);
+        console.log('Page data:', pageData);
 
         if (campaignsData.campaigns && campaignsData.campaigns.length > 0) {
           // Filter for active campaigns and sort by display_order
@@ -190,6 +233,32 @@ export default function FundraisingCampaigns() {
         if (lotteryData.config) {
           setLotteryConfig(lotteryData.config);
         }
+
+        // Process page content from CMS
+        if (pageData && pageData.sections) {
+          const content: PageContent = { ...defaultPageContent };
+
+          pageData.sections.forEach((section: any) => {
+            if (section.section_type === 'page_content' && section.content && section.is_active) {
+              // Hero section
+              if (section.content.heroTitle) content.heroTitle = section.content.heroTitle;
+              if (section.content.heroSubtitle) content.heroSubtitle = section.content.heroSubtitle;
+              if (section.content.bannerBackground) content.bannerBackground = section.content.bannerBackground;
+
+              // Campaigns section
+              if (section.content.campaignsSectionTitle) content.campaignsSectionTitle = section.content.campaignsSectionTitle;
+              if (section.content.campaignsSectionSubtitle) content.campaignsSectionSubtitle = section.content.campaignsSectionSubtitle;
+              if (section.content.viewAllButtonText) content.viewAllButtonText = section.content.viewAllButtonText;
+
+              // Lottery section
+              if (section.content.lotterySectionTitle) content.lotterySectionTitle = section.content.lotterySectionTitle;
+              if (section.content.lotterySectionSubtitle) content.lotterySectionSubtitle = section.content.lotterySectionSubtitle;
+            }
+          });
+
+          setPageContent(content);
+        }
+
         setIsLoading(false);
       })
       .catch(err => {
@@ -208,9 +277,9 @@ export default function FundraisingCampaigns() {
       <Header />
       <Breadcrumb />
       <PageBanner
-        title="Support Education Through Giving"
-        subtitle="Your donations directly fund scholarships, infrastructure, and educational programs across Ghana"
-        bannerBackground={{
+        title={pageContent.heroTitle || 'Support Education Through Giving'}
+        subtitle={pageContent.heroSubtitle || 'Your donations directly fund scholarships, infrastructure, and educational programs across Ghana'}
+        bannerBackground={pageContent.bannerBackground || {
           imageUrl: '/images/hero/main-slider-3.jpg',
           tintColor: '#DC143C',
           tintColor2: '#2563EB',
@@ -225,10 +294,10 @@ export default function FundraisingCampaigns() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Featured Fundraising Campaigns
+                {pageContent.campaignsSectionTitle || 'Featured Fundraising Campaigns'}
               </h2>
               <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-                Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.
+                {pageContent.campaignsSectionSubtitle || 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.'}
               </p>
             </div>
 
@@ -250,7 +319,7 @@ export default function FundraisingCampaigns() {
                 href="/fundraising/all-campaigns"
                 className="inline-block bg-getfund-secondary hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg"
               >
-                View All Campaigns
+                {pageContent.viewAllButtonText || 'View All Campaigns'}
               </a>
             </div>
           </div>
@@ -260,10 +329,10 @@ export default function FundraisingCampaigns() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {lotteryConfig.section_title || 'GETFund Scholarship Lottery'}
+                {pageContent.lotterySectionTitle || lotteryConfig.section_title || 'GETFund Scholarship Lottery'}
               </h1>
               <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto">
-                {lotteryConfig.section_description ||
+                {pageContent.lotterySectionSubtitle || lotteryConfig.section_description ||
                   'Every contribution to our campaigns automatically enters you into our monthly scholarship lottery. Win full scholarships for yourself or your loved ones while supporting education in Ghana.'}
               </p>
             </div>
@@ -331,7 +400,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
   const currencySymbol = campaign.currency === 'GHS' ? 'GH₵' : campaign.currency === 'USD' ? '$' : '€';
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col">
+    <div className="glass-card rounded-xl overflow-hidden transition-all duration-300 flex flex-col">
       {/* Campaign Image */}
       {campaign.image_url ? (
         <div className="relative h-48 overflow-hidden">
@@ -480,9 +549,9 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
+    <div className="glass-card rounded-2xl overflow-hidden">
       {/* Header */}
-      <div className="relative px-8 py-6 border-b border-gray-200">
+      <div className="relative px-8 py-6 border-b border-white/20">
         <div className="text-center">
           <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
             {prizeBoxTitle || 'Monthly Scholarship Prizes'}
@@ -541,7 +610,7 @@ const LotteryHowItWorks: React.FC<{
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-xl p-6 sm:p-8 flex flex-col border border-gray-100">
+    <div className="glass-card rounded-xl p-6 sm:p-8 flex flex-col">
       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">How It Works</h3>
 
       <div className="space-y-5 sm:space-y-6 mb-8 flex-1">
@@ -564,7 +633,7 @@ const LotteryHowItWorks: React.FC<{
       </div>
 
       {/* Draw Info */}
-      <div className="bg-gray-50 rounded-lg p-4 sm:p-5 mb-6 border border-gray-200">
+      <div className="glass-solid rounded-lg p-4 sm:p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-600">Next Draw</span>
           <span className="font-bold text-lg text-getfund-primary">

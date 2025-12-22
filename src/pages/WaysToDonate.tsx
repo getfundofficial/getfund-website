@@ -128,7 +128,7 @@ export default function WaysToDonate() {
           title={content.hero?.title || 'Ways to Donate'}
           subtitle={content.hero?.subtitle || "Investing in Education. Building Ghana's Tomorrow."}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+          defaultGradient="#DC143C"
         />
 
         {/* Impact Visualized - TOP LEFT */}

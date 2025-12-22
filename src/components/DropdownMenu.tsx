@@ -76,7 +76,7 @@ export default function DropdownMenu({ item }: DropdownMenuProps) {
 
       {isOpen && item.children && item.children.length > 0 && (
         <div className="absolute top-full left-0 pt-2 z-50">
-          <div className="w-64 bg-white border border-gray-200 rounded-lg shadow-xl">
+          <div className="w-64 glass-dropdown rounded-lg">
             <ul className="py-2" role="menu">
               {item.children.map((child) => {
                 // Handle different slug formats:

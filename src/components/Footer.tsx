@@ -86,7 +86,7 @@ export default function Footer() {
     : defaultQuickLinks;
 
   return (
-    <footer id="contact" className="text-white" style={{ backgroundColor }}>
+    <footer id="contact" className="text-white glass-footer" style={{ backgroundColor }}>
       <div className="container mx-auto px-3 xs:px-4 sm:px-6 3xl:px-8 4xl:px-12 max-w-9xl py-12 sm:py-16 3xl:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 3xl:gap-16 mb-8 sm:mb-12">
           <div>
@@ -107,7 +107,7 @@ export default function Footer() {
                   <a
                     key={social.label}
                     href={social.href}
-                    className="bg-gray-800 w-10 h-10 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14 rounded-lg flex items-center justify-center hover:bg-getfund-primary transition-colors touch-manipulation"
+                    className="glass-icon w-10 h-10 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14 rounded-lg flex items-center justify-center touch-manipulation"
                     aria-label={social.label}
                   >
                     <Icon className="w-5 h-5 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7" aria-hidden="true" />

@@ -149,7 +149,7 @@ export default function EducationSectorSupport() {
           title={content.hero?.title}
           subtitle={content.hero?.subtitle}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(135deg, #059669, #047857, #065f46)"
+          defaultGradient="#059669"
         />
 
         {/* Content Section */}

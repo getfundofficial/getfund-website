@@ -1,6 +1,17 @@
 import React from 'react';
 import { Heart, Building2, Users, Mail, Phone, ExternalLink } from 'lucide-react';
 
+interface BannerBackground {
+  imageUrl?: string | null;
+  tintColor?: string;
+  tintColor2?: string;
+  gradientDirection?: 'to right' | 'to bottom' | 'to bottom right' | 'to top right';
+  useGradient?: boolean;
+  tintOpacity?: number;
+  titleColor?: string;
+  subtitleColor?: string;
+}
+
 interface SupportUsPageProps {
   pageData: {
     title: string;
@@ -14,6 +25,7 @@ interface SupportUsPageProps {
     heroSubtitle?: string;
     heroCtaText?: string;
     heroCtaLink?: string;
+    bannerBackground?: BannerBackground;
 
     // Impact Stats Section
     impactTitle?: string;
@@ -69,6 +81,47 @@ interface SupportUsPageProps {
 }
 
 export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
+  const bannerBg = content.bannerBackground;
+  const hasBackgroundImage = bannerBg?.imageUrl;
+  const useGradient = bannerBg?.useGradient ?? false;
+
+  // Generate tint overlay style
+  const getTintStyle = (): React.CSSProperties => {
+    if (!hasBackgroundImage) return {};
+    const opacity = (bannerBg?.tintOpacity ?? 50) / 100;
+    if (useGradient && bannerBg?.tintColor2) {
+      const direction = bannerBg.gradientDirection || 'to right';
+      return {
+        backgroundImage: `linear-gradient(${direction}, ${bannerBg.tintColor || '#059669'}, ${bannerBg.tintColor2})`,
+        opacity,
+      };
+    }
+    return {
+      backgroundColor: bannerBg?.tintColor || '#059669',
+      opacity,
+    };
+  };
+
+  // Generate background style
+  const getBackgroundStyle = (): React.CSSProperties => {
+    if (hasBackgroundImage) {
+      return {
+        backgroundImage: `url(${bannerBg?.imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      };
+    }
+    if (useGradient && bannerBg?.tintColor && bannerBg?.tintColor2) {
+      const direction = bannerBg.gradientDirection || 'to right';
+      return {
+        background: `linear-gradient(${direction}, ${bannerBg.tintColor}, ${bannerBg.tintColor2})`,
+      };
+    }
+    return {
+      background: bannerBg?.tintColor || 'linear-gradient(to bottom right, #059669, #047857, #065f46)',
+    };
+  };
+
   // Icon mapping for stats
   const getStatIcon = (iconName?: string) => {
     switch (iconName) {
@@ -100,13 +153,27 @@ export const SupportUsPage: React.FC<SupportUsPageProps> = ({ content }) => {
   return (
     <div className="support-us-page">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-700 via-green-600 to-green-800 text-white py-20">
-        <div className="container mx-auto px-4">
+      <section
+        className="relative text-white py-20 overflow-hidden"
+        style={getBackgroundStyle()}
+      >
+        {/* Tint Overlay - Only show if background image exists */}
+        {hasBackgroundImage && (
+          <div className="absolute inset-0" style={getTintStyle()} />
+        )}
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1
+              className="text-4xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg"
+              style={{ color: bannerBg?.titleColor || '#FFFFFF' }}
+            >
               {content.heroTitle || "Support Ghana's Educational Future"}
             </h1>
-            <p className="text-xl mb-8 text-green-100">
+            <p
+              className="text-xl mb-8 leading-relaxed drop-shadow-md"
+              style={{ color: bannerBg?.subtitleColor || '#BBF7D0' }}
+            >
               {content.heroSubtitle || "Join us in transforming lives through education. Every contribution helps build a brighter tomorrow for Ghanaian students."}
             </p>
             {content.heroCtaText && (

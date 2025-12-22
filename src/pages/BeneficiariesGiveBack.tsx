@@ -78,7 +78,7 @@ export default function BeneficiariesGiveBack() {
         <PageBanner
           title={content.hero?.title || 'GETFund Beneficiaries'}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(to right, #DC143C, #2563EB)"
+          defaultGradient="#DC143C"
         />
 
         {/* Main Content */}

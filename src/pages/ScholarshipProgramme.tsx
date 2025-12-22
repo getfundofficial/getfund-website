@@ -165,7 +165,7 @@ export default function ScholarshipProgramme() {
             title={content.hero?.title}
             subtitle={content.hero?.subtitle}
             bannerBackground={content.bannerBackground}
-            defaultGradient="linear-gradient(to right, #DC143C, #1e3a5f)"
+            defaultGradient="#DC143C"
           />
         )}
 

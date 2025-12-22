@@ -120,7 +120,7 @@ export default function CommunitySHSProgramme() {
           title={content.hero?.title}
           subtitle={content.hero?.subtitle}
           bannerBackground={content.bannerBackground}
-          defaultGradient="linear-gradient(135deg, #1e40af, #3b82f6, #1e3a8a)"
+          defaultGradient="#1e40af"
         />
 
         {/* Content Section */}

@@ -130,7 +130,7 @@ export default function CMSPage() {
       <>
         {/* Legacy Hero Section */}
         {page.content.hero && (
-          <div className="relative bg-gradient-to-r from-getfund-red to-red-600 text-white">
+          <div className="relative bg-getfund-red text-white">
             <div className="container mx-auto px-4 py-20">
               <div className="max-w-4xl">
                 <h1 className="text-5xl md:text-6xl font-bold mb-6">
