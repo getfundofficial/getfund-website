@@ -10,16 +10,16 @@ import ScrollProgressBar from './ScrollProgressBar';
 // Default menu items (shown immediately, may be updated from CMS)
 // These match the actual routes defined in App.tsx
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
-  { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'WHO WE ARE' },
-  { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'WHAT WE DO' },
-  { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'OUR WORK & IMPACT' },
-  { id: '4', slug: 'news', title: 'News & Updates', label: 'NEWS & UPDATES' },
-  { id: '5', slug: 'resources', title: 'Resources', label: 'RESOURCES' },
+  { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'Who We Are' },
+  { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
+  { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'Our Work & Impact' },
+  { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
+  { id: '5', slug: 'resources', title: 'Resources', label: 'Resources' },
   {
     id: '6',
     slug: 'fundraising',
     title: 'Fundraising',
-    label: 'FUNDRAISING',
+    label: 'Fundraising',
     children: [
       { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
       { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
@@ -96,7 +96,7 @@ export default function Header() {
                   to={`/${item.slug}`}
                   className={`${
                     location.pathname.startsWith(`/${item.slug}`) ? 'text-getfund-primary font-semibold' : 'text-getfund-secondary'
-                  } hover:text-getfund-primary font-medium transition-colors text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap`}
+                  } hover:text-getfund-primary font-medium transition-colors text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap`}
                 >
                   {item.label}
                 </Link>
@@ -108,7 +108,7 @@ export default function Header() {
           <li>
             <Link
               to="/fundraising/ways-to-donate"
-              className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap"
+              className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap"
               title="Donate"
             >
               Donate
@@ -133,7 +133,7 @@ export default function Header() {
                       to={`/${item.slug}`}
                       className={`block px-4 py-3 ${
                         location.pathname.startsWith(`/${item.slug}`) ? 'text-getfund-primary font-semibold' : 'text-getfund-secondary'
-                      } hover:text-getfund-primary hover:bg-gray-50 font-medium transition-colors text-sm uppercase tracking-wide`}
+                      } hover:text-getfund-primary hover:bg-gray-50 font-medium transition-colors text-sm tracking-wide`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.label}
@@ -144,7 +144,7 @@ export default function Header() {
               <li>
                 <Link
                   to="/fundraising/ways-to-donate"
-                  className="block mx-4 mt-2 bg-getfund-gold text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm uppercase tracking-wide text-center"
+                  className="block mx-4 mt-2 bg-getfund-gold text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm tracking-wide text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Donate
