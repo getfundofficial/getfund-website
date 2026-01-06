@@ -131,43 +131,14 @@ export default function Partnerships() {
           </div>
         </section>
 
-        {/* Why Support Us */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
-              {content.whySupport?.heading}
-            </h2>
-
-            <div className="space-y-8">
-              {(content.whySupport?.benefits || []).map((benefit, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-50 p-6 rounded-lg"
-                >
-                  <h3 className="text-xl font-bold text-getfund-primary mb-3">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed">{benefit.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Our Partners */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-5xl">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
               {content.ourPartners?.heading || 'Our Partners'}
             </h2>
 
             <div className="bg-white p-8 md:p-12 rounded-lg shadow-md">
-              {content.ourPartners?.description && (
-                <p className="text-center text-gray-600 mb-8">
-                  {content.ourPartners.description}
-                </p>
-              )}
-
               {partners.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                   {partners.map((partner) => (
@@ -206,6 +177,29 @@ export default function Partnerships() {
                   <p className="text-gray-500">Partner logos will be displayed here.</p>
                 </div>
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Support Us */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-5xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
+              {content.whySupport?.heading}
+            </h2>
+
+            <div className="space-y-8">
+              {(content.whySupport?.benefits || []).map((benefit, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded-lg"
+                >
+                  <h3 className="text-xl font-bold text-getfund-primary mb-3">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">{benefit.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
