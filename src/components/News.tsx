@@ -124,70 +124,75 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
   }
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
       {/* Scroll anchor with offset for fixed header */}
       <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16 md:mb-20">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">{title || 'News & Updates'}</h2>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            {subtitle || 'Stay updated with the latest developments and achievements from GETFund.'}
-          </p>
+        {/* Header with title and View All link */}
+        <div className="flex items-start justify-between mb-8 sm:mb-12">
+          <div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{title || 'Latest News & Updates'}</h2>
+            <div className="w-16 h-1 bg-getfund-primary"></div>
+          </div>
+          <Link
+            to="/news"
+            className="hidden sm:inline-flex items-center gap-2 text-getfund-primary font-medium hover:gap-3 transition-all"
+          >
+            View All <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 mb-8 sm:mb-10 md:mb-12">
-          {articles.slice(0, 3).map((article) => (
-            <article
+        {/* News Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {[...articles]
+            .sort((a, b) => {
+              const dateA = new Date(a.publishedAt || a.date || 0).getTime();
+              const dateB = new Date(b.publishedAt || b.date || 0).getTime();
+              return dateB - dateA; // Latest first
+            })
+            .slice(0, 3)
+            .map((article) => (
+            <Link
               key={article.title}
-              className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col hover:-translate-y-1"
+              to={`/news/${article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+              className="group block"
             >
-              <div className="relative h-40 sm:h-48 md:h-52 overflow-hidden">
-                <OptimizedImage
-                  src={article.image || '/images/news/news-placeholder.svg'}
-                  alt={`${article.title} - GETFund infrastructure project`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  fallbackSrc="/images/news/news-placeholder.svg"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              </div>
-              <div className="p-4 sm:p-6 flex flex-col flex-1">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
-                  <span className="bg-getfund-primary/10 text-getfund-primary px-3 py-1 rounded-full text-xs sm:text-sm font-medium w-fit">
-                    {article.category}
-                  </span>
-                  <div className="flex items-center gap-1 text-gray-500 text-xs sm:text-sm">
-                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
-                    <time dateTime={(article.publishedAt || article.date || '')}>
-                      {(article.publishedAt || article.date)
-                        ? new Date((article.publishedAt || article.date) as string).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })
-                        : '—'}
-                    </time>
-                  </div>
+              <article>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4">
+                  <OptimizedImage
+                    src={article.image || '/images/news/news-placeholder.svg'}
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fallbackSrc="/images/news/news-placeholder.svg"
+                  />
                 </div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight">{article.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed mb-4 sm:mb-6 flex-1">{article.excerpt}</p>
-                <Link
-                  to={`/news/${article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                  className="inline-flex items-center gap-2 text-getfund-primary font-semibold hover:gap-3 transition-all text-sm sm:text-base min-h-[44px] mt-auto"
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 group-hover:text-getfund-primary transition-colors line-clamp-2">
+                  {article.title}
+                </h3>
+                <time
+                  dateTime={article.publishedAt || article.date || ''}
+                  className="text-sm text-gray-500"
                 >
-                  Read More <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                </Link>
-              </div>
-            </article>
+                  {(article.publishedAt || article.date)
+                    ? new Date((article.publishedAt || article.date) as string).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    : '—'}
+                </time>
+              </article>
+            </Link>
           ))}
         </div>
 
-        <div className="text-center">
+        {/* Mobile View All link */}
+        <div className="text-center mt-8 sm:hidden">
           <Link
             to="/news"
-            className="inline-block bg-getfund-primary text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-sm font-semibold hover:bg-green-700 transition-colors shadow-lg uppercase tracking-wide text-sm sm:text-base md:text-lg min-h-[48px] flex items-center justify-center max-w-xs mx-auto"
-            aria-label="View all news articles"
+            className="inline-flex items-center gap-2 text-getfund-primary font-medium"
           >
-            View All News
+            View All <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

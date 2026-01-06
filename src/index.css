@@ -61,7 +61,6 @@
 
   /* Glass footer */
   .glass-footer {
-    background: rgba(30, 58, 95, 0.95) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);

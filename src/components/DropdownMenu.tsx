@@ -66,7 +66,7 @@ export default function DropdownMenu({ item }: DropdownMenuProps) {
         onKeyDown={handleKeyDown}
         className={`${
           isActive ? 'text-getfund-primary font-semibold' : 'text-getfund-secondary'
-        } hover:text-getfund-primary font-medium transition-colors text-xs lg:text-sm xl:text-base 3xl:text-lg uppercase tracking-wide whitespace-nowrap flex items-center gap-1`}
+        } hover:text-getfund-primary font-medium transition-colors text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap flex items-center gap-1`}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >

@@ -315,7 +315,13 @@ export default function FundraisingCampaigns() {
                 <p className="text-gray-600 text-lg">No active campaigns at the moment. Check back soon!</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              <div className={`grid gap-6 sm:gap-8 ${
+                campaigns.length === 1
+                  ? 'grid-cols-1 max-w-md mx-auto'
+                  : campaigns.length === 2
+                    ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
+                    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+              }`}>
                 {campaigns.slice(0, 3).map((campaign) => (
                   <CampaignCard key={campaign.id} campaign={campaign} />
                 ))}
@@ -362,8 +368,7 @@ export default function FundraisingCampaigns() {
 
                 {/* Social Sharing - Vertical */}
                 {lotteryConfig.sharing_enabled !== false && (
-                  <div className="flex lg:flex-col items-center justify-center gap-3 lg:gap-4 py-4 lg:py-0">
-                    <p className="text-xs text-gray-500 font-medium lg:-rotate-90 lg:whitespace-nowrap lg:mb-2">Share</p>
+                  <div className="flex lg:flex-col items-start gap-3 lg:gap-4 pt-2 lg:pt-0">
                     <SocialShareButtons
                       shareText={lotteryConfig.share_text || 'Support education in Ghana and enter the GETFund Scholarship Lottery! Every donation gives you a chance to win.'}
                       shareUrl={typeof window !== 'undefined' ? `${window.location.origin}/fundraising-campaigns` : ''}
@@ -478,7 +483,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
   );
 };
 
-// Lottery Prize Box Component - Modern Dark Theme
+// Lottery Prize Box Component - Clean Modern Design with Flip
 const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: string; prizeBoxTitle?: string }> = ({ prizes, prizeBoxTitle }) => {
   const mainPrizes = prizes.filter(p => typeof p.rank === 'number');
 
@@ -488,61 +493,50 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
   const secondPrize = getPrize(2);
   const thirdPrize = getPrize(3);
 
-  // Prize card component with dark theme and metallic accents
   const PrizeCard: React.FC<{ prize: LotteryPrize; rank: 1 | 2 | 3 }> = ({ prize, rank }) => {
-    const rankLabels = { 1: '1ST', 2: '2ND', 3: '3RD' };
-
-    // Metallic accent colors and gradients
-    const accentStyles = {
+    const styles = {
       1: {
+        bg: 'bg-gradient-to-r from-yellow-50 to-amber-50',
         border: 'border-l-4 border-yellow-400',
-        gradient: 'from-yellow-400 to-amber-500',
-        text: 'text-yellow-400',
-        glow: 'shadow-yellow-400/20',
+        badge: 'bg-yellow-400 text-yellow-900',
+        amount: 'text-gray-900',
+        backBg: 'bg-yellow-400',
       },
       2: {
-        border: 'border-l-4 border-slate-300',
-        gradient: 'from-slate-300 to-slate-400',
-        text: 'text-slate-300',
-        glow: 'shadow-slate-300/20',
+        bg: 'bg-gradient-to-r from-gray-50 to-slate-100',
+        border: 'border-l-4 border-gray-400',
+        badge: 'bg-gray-400 text-white',
+        amount: 'text-gray-900',
+        backBg: 'bg-gray-400',
       },
       3: {
+        bg: 'bg-gradient-to-r from-orange-50 to-amber-50',
         border: 'border-l-4 border-orange-400',
-        gradient: 'from-orange-400 to-orange-600',
-        text: 'text-orange-400',
-        glow: 'shadow-orange-400/20',
+        badge: 'bg-orange-400 text-white',
+        amount: 'text-gray-900',
+        backBg: 'bg-orange-400',
       },
-    };
-
-    // Progressive sizing with explicit heights for FlipCard
-    const sizeStyles = {
-      1: { height: 'h-28 sm:h-32', padding: 'py-8', rankSize: 'text-3xl', amountSize: 'text-4xl sm:text-5xl' },
-      2: { height: 'h-24 sm:h-28', padding: 'py-6', rankSize: 'text-2xl', amountSize: 'text-3xl sm:text-4xl' },
-      3: { height: 'h-20 sm:h-24', padding: 'py-5', rankSize: 'text-xl', amountSize: 'text-2xl sm:text-3xl' },
     };
 
     const frontContent = (
-      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-gray-800 ${accentStyles[rank].border} rounded-lg flex items-center justify-between shadow-lg ${accentStyles[rank].glow} hover:shadow-xl transition-shadow duration-300`}>
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* Rank badge */}
-          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-${rank === 1 ? 'yellow-400' : rank === 2 ? 'slate-300' : 'orange-500'} flex items-center justify-center shadow-lg`}>
-            <span className="text-gray-900 font-black text-sm sm:text-base">{rankLabels[rank]}</span>
-          </div>
-          <div>
-            <span className={`${accentStyles[rank].text} font-semibold text-xs sm:text-sm uppercase tracking-widest`}>Prize</span>
-          </div>
+      <div className={`${styles[rank].bg} ${styles[rank].border} rounded-lg p-4 sm:p-5 flex items-center justify-between h-full`}>
+        <div className="flex items-center gap-3">
+          <span className={`${styles[rank].badge} w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-bold`}>
+            {rank === 1 ? '1st' : rank === 2 ? '2nd' : '3rd'}
+          </span>
+          <span className="text-gray-500 font-medium text-sm sm:text-base">Prize</span>
         </div>
-        <div className={`${sizeStyles[rank].amountSize} font-bold text-white`}>
-          <span className={`${accentStyles[rank].text}`}>GH₵</span>{prize.amount.toLocaleString()}
-        </div>
+        <span className={`text-xl sm:text-2xl lg:text-3xl font-bold ${styles[rank].amount}`}>
+          GH₵{prize.amount.toLocaleString()}
+        </span>
       </div>
     );
 
     const backContent = prize.flip_description ? (
-      <div className={`${sizeStyles[rank].padding} px-5 sm:px-6 bg-${rank === 1 ? 'yellow-400' : rank === 2 ? 'slate-300' : 'orange-500'} rounded-lg flex items-center justify-center text-center shadow-lg`}>
+      <div className={`${styles[rank].backBg} rounded-lg p-4 sm:p-5 flex items-center justify-center text-center h-full`}>
         <div>
-          <div className="text-gray-900 font-black text-sm mb-1">{rankLabels[rank]} PRIZE</div>
-          <p className="text-gray-900/80 text-sm leading-relaxed">{prize.flip_description}</p>
+          <div className="text-white font-bold text-sm mb-1">{rank === 1 ? '1st' : rank === 2 ? '2nd' : '3rd'} Prize</div>
+          <p className="text-white/90 text-sm">{prize.flip_description}</p>
         </div>
       </div>
     ) : null;
@@ -551,29 +545,22 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
       <FlipCard
         frontContent={frontContent}
         backContent={backContent}
-        className={sizeStyles[rank].height}
+        className="h-20 sm:h-24"
       />
     );
   };
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="relative px-8 py-6 border-b border-white/20">
-        <div className="text-center">
-          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            {prizeBoxTitle || 'Monthly Scholarship Prizes'}
-          </h3>
-          <div className="mt-3 flex justify-center gap-1.5">
-            <span className="w-10 h-1.5 bg-yellow-400 rounded-full"></span>
-            <span className="w-10 h-1.5 bg-slate-400 rounded-full"></span>
-            <span className="w-10 h-1.5 bg-orange-400 rounded-full"></span>
-          </div>
-        </div>
+      <div className="px-6 py-5 bg-getfund-secondary">
+        <h3 className="text-xl sm:text-2xl font-bold text-white text-center">
+          {prizeBoxTitle || 'Prizes'}
+        </h3>
       </div>
 
-      {/* Prizes stacked vertically */}
-      <div className="p-6 sm:p-8 flex flex-col gap-4">
+      {/* Prizes */}
+      <div className="p-5 space-y-3">
         {firstPrize && <PrizeCard prize={firstPrize} rank={1} />}
         {secondPrize && <PrizeCard prize={secondPrize} rank={2} />}
         {thirdPrize && <PrizeCard prize={thirdPrize} rank={3} />}

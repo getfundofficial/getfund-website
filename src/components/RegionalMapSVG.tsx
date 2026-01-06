@@ -106,9 +106,10 @@ export default function RegionalMapSVG({
     const svg = containerRef.current.querySelector('svg');
     if (!svg) return;
 
-    // Set SVG styling
+    // Remove fixed width/height attributes and set responsive styling
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
     svg.style.width = '100%';
-    svg.style.maxWidth = '500px';
     svg.style.height = 'auto';
 
     const paths = svg.querySelectorAll('path[id^="GH"]');
@@ -224,8 +225,7 @@ export default function RegionalMapSVG({
     <div className="flex justify-center items-center w-full">
       <div
         ref={containerRef}
-        className="relative"
-        style={{ width: '100%', maxWidth: '500px' }}
+        className="relative w-full"
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Heart, RefreshCw, Calendar, Shield } from 'lucide-react';
-import DonationModal from './DonationModal';
+import { Heart, RefreshCw, Calendar, Shield, Loader2 } from 'lucide-react';
+import { paymentService } from '../services/paymentService';
 
 interface DonationInterfaceProps {
   className?: string;
@@ -11,7 +11,10 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
   const [amount, setAmount] = useState<number | 'other'>(100);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [donorType, setDonorType] = useState<string>('Individual');
-  const [modalOpen, setModalOpen] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [paymentMethod, setPaymentMethod] = useState<string>('mobile-money');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const amounts = [50, 100, 200, 500, 1000];
 
@@ -26,14 +29,54 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
     return `GH₵${formatNumberWithCommas(amount)}`;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getFinalAmount = (): number => {
+    if (amount === 'other') {
+      return parseFloat(customAmount.replace(/,/g, '')) || 0;
+    }
+    return amount;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Donation submission:', {
-      frequency,
-      amount: amount === 'other' ? customAmount : amount,
-      donorType,
-    });
-    setModalOpen(true);
+    setError(null);
+
+    const finalAmount = getFinalAmount();
+
+    // Validation
+    if (finalAmount <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await paymentService.initiatePayment({
+        amount: finalAmount,
+        currency: 'GHS',
+        paymentMethod,
+        customerEmail: email,
+        campaignTitle: 'General Donation',
+        donorName: donorType,
+      });
+
+      if (response.success && response.data?.paymentUrl) {
+        // Redirect to Xcel payment gateway
+        window.location.href = response.data.paymentUrl;
+      } else {
+        setError(response.error || 'Failed to initiate payment. Please try again.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      setError('An error occurred. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   const frequencyOptions = [
@@ -54,6 +97,13 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+            {error}
+          </div>
+        )}
+
         {/* Frequency Selection */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-3">
@@ -164,6 +214,39 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           </select>
         </div>
 
+        {/* Email */}
+        <div>
+          <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary transition-all font-medium text-gray-700"
+            placeholder="your@email.com"
+            required
+          />
+        </div>
+
+        {/* Payment Method */}
+        <div>
+          <label htmlFor="paymentMethod" className="block text-sm font-semibold text-gray-800 mb-2">
+            Payment Method
+          </label>
+          <select
+            id="paymentMethod"
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary bg-white transition-all cursor-pointer font-medium text-gray-700"
+          >
+            <option value="mobile-money">Mobile Money</option>
+            <option value="credit-card">Credit/Debit Card</option>
+            <option value="bank-transfer">Bank Transfer</option>
+          </select>
+        </div>
+
         {/* Amount Display & Submit */}
         <div className="pt-2">
           <div className="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
@@ -180,10 +263,18 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
           <button
             type="submit"
-            className="w-full bg-getfund-red text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:scale-[1.01] active:scale-[0.99]"
+            disabled={isLoading}
+            className="w-full bg-getfund-red text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
             aria-label="Proceed to donation"
           >
-            Donate Now
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              'Donate Now'
+            )}
           </button>
 
           {/* Trust Badge */}
@@ -193,15 +284,6 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           </div>
         </div>
       </form>
-
-      {/* Donation Modal */}
-      <DonationModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title="General Donation"
-        amount={amount === 'other' ? parseFloat(customAmount.replace(/,/g, '')) || 0 : amount}
-        description={`${frequency === 'one-time' ? 'One-time' : frequency === 'monthly' ? 'Monthly' : 'Yearly'} donation as ${donorType}`}
-      />
     </div>
   );
 }

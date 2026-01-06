@@ -20,7 +20,7 @@ export default function MobileDropdownMenu({ item, onItemClick }: MobileDropdown
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 py-3 ${
           isActive ? 'text-getfund-primary font-semibold' : 'text-getfund-secondary'
-        } hover:text-getfund-primary hover:bg-gray-50 font-medium transition-colors text-sm uppercase tracking-wide`}
+        } hover:text-getfund-primary hover:bg-gray-50 font-medium transition-colors text-sm tracking-wide`}
         aria-expanded={isOpen}
       >
         <span>{item.label}</span>
