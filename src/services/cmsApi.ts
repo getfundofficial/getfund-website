@@ -471,6 +471,29 @@ class CMSApiClient {
       return null;
     }
   }
+
+  /**
+   * Fetch active partners
+   */
+  async getPartners(): Promise<Partner[]> {
+    try {
+      const url = `${this.baseUrl}/partners`;
+      console.log('[CMS API] Fetching partners:', url);
+      const response = await this.fetchWithTimeout(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch partners: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('[CMS API] Received partners:', data.data?.length || 0);
+
+      return data.data || [];
+    } catch (error) {
+      console.error('[CMS API] Error fetching partners:', error);
+      return [];
+    }
+  }
 }
 
 export interface MenuItem {
@@ -516,6 +539,16 @@ export interface LotteryConfig {
   is_active: boolean;
   banner_color: string;
   current_entries_count: number;
+}
+
+export interface Partner {
+  id: string;
+  name: string;
+  logo_url: string;
+  website_url?: string;
+  description?: string;
+  display_order: number;
+  is_active: boolean;
 }
 
 // Export a singleton instance

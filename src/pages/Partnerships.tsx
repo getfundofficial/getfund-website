@@ -7,7 +7,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import LoadingScreen from '../components/LoadingScreen';
-import { cmsApi } from '../services/cmsApi';
+import { cmsApi, Partner } from '../services/cmsApi';
 
 interface PartnershipBenefit {
   title: string;
@@ -43,16 +43,24 @@ interface PartnershipsContent {
 
 export default function Partnerships() {
   const [content, setContent] = useState<PartnershipsContent | null>(null);
+  const [partners, setPartners] = useState<Partner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const page = await cmsApi.getPageBySlug('partnerships');
-        const section = page.sections?.find(s => s.section_type === 'page_content');
+        // Fetch page content and partners in parallel
+        const [page, partnersData] = await Promise.all([
+          cmsApi.getPageBySlug('partnerships'),
+          cmsApi.getPartners()
+        ]);
+
+        const section = page?.sections?.find(s => s.section_type === 'page_content');
         if (section?.content) {
           setContent(section.content as PartnershipsContent);
         }
+
+        setPartners(partnersData);
       } catch (error) {
         console.error('Failed to load page content:', error);
       } finally {
@@ -150,24 +158,54 @@ export default function Partnerships() {
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 max-w-5xl">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              {content.ourPartners?.heading}
+              {content.ourPartners?.heading || 'Our Partners'}
             </h2>
 
-            <div className="bg-white p-12 rounded-lg shadow-md">
-              <p className="text-center text-gray-600">
-                {content.ourPartners?.description}
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
-                {/* Placeholder for partner logos */}
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center"
-                  >
-                    <span className="text-gray-400">Partner {i}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-white p-8 md:p-12 rounded-lg shadow-md">
+              {content.ourPartners?.description && (
+                <p className="text-center text-gray-600 mb-8">
+                  {content.ourPartners.description}
+                </p>
+              )}
+
+              {partners.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                  {partners.map((partner) => (
+                    <div key={partner.id} className="flex items-center justify-center">
+                      {partner.website_url ? (
+                        <a
+                          href={partner.website_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors w-full h-24 md:h-28"
+                          title={partner.name}
+                        >
+                          <img
+                            src={partner.logo_url}
+                            alt={partner.name}
+                            className="w-full h-full object-contain"
+                          />
+                        </a>
+                      ) : (
+                        <div
+                          className="p-4 rounded-lg bg-gray-50 w-full h-24 md:h-28"
+                          title={partner.name}
+                        >
+                          <img
+                            src={partner.logo_url}
+                            alt={partner.name}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Partner logos will be displayed here.</p>
+                </div>
+              )}
             </div>
           </div>
         </section>
