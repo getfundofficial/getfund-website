@@ -32,9 +32,7 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        console.log('[News Component] Fetching news from CMS...');
         const cmsArticles = await cmsApi.getRecentNews(3);
-        console.log('[News Component] Received CMS articles:', cmsArticles.length);
 
         if (cmsArticles.length > 0) {
           // Transform CMS articles to component format
@@ -52,26 +50,20 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
             content: article.content,
           }));
 
-          console.log('[News Component] Setting articles:', transformedArticles.length);
           setArticles(transformedArticles);
         } else {
-          console.log('[News Component] No CMS articles found');
           setArticles([]);
         }
-      } catch (error) {
-        console.error('[News Component] Failed to fetch news from CMS:', error);
+      } catch {
         setArticles([]);
       } finally {
         setIsLoadingCMS(false);
       }
     };
 
-    // Only fetch if propArticles wasn't provided
     if (!propArticles || propArticles.length === 0) {
-      console.log('[News Component] No prop articles, fetching from CMS');
       fetchNews();
     } else {
-      console.log('[News Component] Using prop articles:', propArticles.length);
       setArticles(propArticles);
       setIsLoadingCMS(false);
     }

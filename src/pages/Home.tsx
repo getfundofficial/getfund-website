@@ -9,7 +9,7 @@ import VideoSection from '../components/VideoSection';
 import { TestimonialsSection } from '../components/TestimonialCard';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { cmsApi } from '../services/cmsApi';
-import { GraduationCap, Building2, Briefcase, Target, Eye, Heart } from 'lucide-react';
+import { Target, Eye, Heart } from 'lucide-react';
 
 interface VideoSection {
   url: string;
@@ -138,8 +138,8 @@ export default function Home() {
 
           setPageContent(content);
         }
-      } catch (error) {
-        console.error('Failed to fetch home content from CMS, using defaults:', error);
+      } catch {
+        // Use default content if CMS fails
       } finally {
         setLoading(false);
       }

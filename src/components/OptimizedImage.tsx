@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -10,18 +10,25 @@ interface OptimizedImageProps {
   priority?: boolean;
 }
 
-export default function OptimizedImage({ 
-  src, 
-  alt, 
-  className = '', 
-  width, 
-  height, 
+export default function OptimizedImage({
+  src,
+  alt,
+  className = '',
+  width,
+  height,
   fallbackSrc,
-  priority = false 
+  priority = false
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(src);
+
+  // Update currentSrc when src prop changes
+  useEffect(() => {
+    setCurrentSrc(src);
+    setIsLoading(true);
+    setHasError(false);
+  }, [src]);
 
   const handleLoad = () => {
     setIsLoading(false);

@@ -28,6 +28,9 @@ interface HeroSlideResponse {
   link_url?: string;
   title_font_size?: string;
   subtitle_font_size?: string;
+  blue_box_text?: string;
+  blue_box_color?: string;
+  blue_box_opacity?: number;
 }
 
 interface NewsArticleResponse {
@@ -44,6 +47,12 @@ interface NewsArticleResponse {
   author?: string;
 }
 
+export interface BlueBoxSettings {
+  text?: string;
+  color?: string;
+  opacity?: number;
+}
+
 export interface HeroSlide {
   id: string;
   title: string;
@@ -53,6 +62,8 @@ export interface HeroSlide {
   buttonLink?: string;
   titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
   subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
+  blueBoxText?: string;
+  blueBox?: BlueBoxSettings;
 }
 
 export interface NewsArticle {
@@ -198,9 +209,14 @@ class CMSApiClient {
         buttonLink: slide.link_url || '',
         titleFontSize: (slide.title_font_size as HeroSlide['titleFontSize']) || 'medium',
         subtitleFontSize: (slide.subtitle_font_size as HeroSlide['subtitleFontSize']) || 'medium',
+        blueBoxText: slide.blue_box_text || '',
+        blueBox: {
+          text: slide.blue_box_text || '',
+          color: slide.blue_box_color || '#2a3f75',
+          opacity: slide.blue_box_opacity ?? 100,
+        },
       }));
-    } catch (error) {
-      console.error('Error fetching hero slides:', error);
+    } catch {
       return [];
     }
   }
@@ -210,20 +226,16 @@ class CMSApiClient {
    */
   async getNewsArticles(limit?: number): Promise<NewsArticle[]> {
     try {
-      console.log('[CMS API] Fetching news from:', `${this.baseUrl}/news`);
       const response = await this.fetchWithTimeout(`${this.baseUrl}/news`);
-
-      console.log('[CMS API] Response status:', response.status, response.statusText);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch news articles: ${response.statusText}`);
       }
 
       const data: NewsArticleResponse[] = await response.json();
-      console.log('[CMS API] Received articles:', data.length);
 
       // Transform database format to website format
-      const transformed = data.map((article) => ({
+      return data.map((article) => ({
         id: article.id.toString(),
         slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
         title: article.title,
@@ -235,11 +247,7 @@ class CMSApiClient {
         tags: article.category ? [article.category] : ['News'],
         category: article.category || 'NEWS',
       })).slice(0, limit);
-
-      console.log('[CMS API] Transformed articles:', transformed.length);
-      return transformed;
-    } catch (error) {
-      console.error('[CMS API] Error fetching news articles:', error);
+    } catch {
       return [];
     }
   }
@@ -277,8 +285,7 @@ class CMSApiClient {
         tags: article.category ? [article.category] : ['News'],
         category: article.category || 'NEWS',
       };
-    } catch (error) {
-      console.error(`Error fetching news article by slug (${slug}):`, error);
+    } catch {
       return null;
     }
   }
@@ -298,10 +305,7 @@ class CMSApiClient {
       // Add timestamp to prevent any caching
       const timestamp = Date.now();
       const url = `${this.baseUrl}/pages/${slug}?_t=${timestamp}`;
-      console.log('[CMS API] Fetching page:', url);
       const response = await this.fetchWithTimeout(url);
-
-      console.log('[CMS API] Page response status:', response.status, response.statusText);
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -313,17 +317,13 @@ class CMSApiClient {
       const data = await response.json();
       const page: CMSPage = data.page;
 
-      console.log('[CMS API] Received page:', page.title, 'with', page.sections?.length || 0, 'sections');
-
       // Only return if it's published
       if (!page.is_active) {
-        console.log('[CMS API] Page is not published');
         return null;
       }
 
       return page;
-    } catch (error) {
-      console.error(`[CMS API] Error fetching page by slug (${slug}):`, error);
+    } catch {
       return null;
     }
   }
@@ -334,20 +334,14 @@ class CMSApiClient {
   async getMenuConfig(): Promise<{ menuItems: MenuItem[]; ctaButton: MenuItem | null }> {
     try {
       const url = `${this.baseUrl}/menu`;
-      console.log('[CMS API] Fetching menu config:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch menu: ${response.statusText}`);
       }
 
-      const data = await response.json();
-      console.log('[CMS API] Received menu:', data);
-
-      return data;
-    } catch (error) {
-      console.error('[CMS API] Error fetching menu config:', error);
-      // Return empty menu on error
+      return await response.json();
+    } catch {
       return { menuItems: [], ctaButton: null };
     }
   }
@@ -358,7 +352,6 @@ class CMSApiClient {
   async getTeamMembers(): Promise<TeamMembersResponse> {
     try {
       const url = `${this.baseUrl}/team-members`;
-      console.log('[CMS API] Fetching team members:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -366,12 +359,8 @@ class CMSApiClient {
       }
 
       const result = await response.json();
-      console.log('[CMS API] Received team members:', result);
-
       return result.data;
-    } catch (error) {
-      console.error('[CMS API] Error fetching team members:', error);
-      // Return empty data on error
+    } catch {
       return { chairman: null, management: [], historical_admins: [] };
     }
   }
@@ -382,20 +371,14 @@ class CMSApiClient {
   async getFooterConfig(): Promise<FooterConfig | null> {
     try {
       const url = `${this.baseUrl}/footer-config`;
-      console.log('[CMS API] Fetching footer config:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch footer config: ${response.statusText}`);
       }
 
-      const data: FooterConfig = await response.json();
-      console.log('[CMS API] Received footer config:', data);
-
-      return data;
-    } catch (error) {
-      console.error('[CMS API] Error fetching footer config:', error);
-      // Return null on error - Footer component will use fallback
+      return await response.json();
+    } catch {
       return null;
     }
   }
@@ -406,7 +389,6 @@ class CMSApiClient {
   async getCampaigns(featured: boolean = false): Promise<Campaign[]> {
     try {
       const url = `${this.baseUrl}/campaigns${featured ? '?featured=true' : ''}`;
-      console.log('[CMS API] Fetching campaigns:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -414,11 +396,8 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      console.log('[CMS API] Received campaigns:', data.campaigns?.length || 0);
-
       return data.campaigns || [];
-    } catch (error) {
-      console.error('[CMS API] Error fetching campaigns:', error);
+    } catch {
       return [];
     }
   }
@@ -429,7 +408,6 @@ class CMSApiClient {
   async getCampaignBySlug(slug: string): Promise<Campaign | null> {
     try {
       const url = `${this.baseUrl}/campaigns/${slug}`;
-      console.log('[CMS API] Fetching campaign:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -440,11 +418,8 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      console.log('[CMS API] Received campaign:', data.campaign?.title);
-
       return data.campaign || null;
-    } catch (error) {
-      console.error(`[CMS API] Error fetching campaign by slug (${slug}):`, error);
+    } catch {
       return null;
     }
   }
@@ -455,7 +430,6 @@ class CMSApiClient {
   async getLotteryConfig(): Promise<LotteryConfig | null> {
     try {
       const url = `${this.baseUrl}/lottery/config`;
-      console.log('[CMS API] Fetching lottery config:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -463,11 +437,8 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      console.log('[CMS API] Received lottery config:', data.config);
-
       return data.config || null;
-    } catch (error) {
-      console.error('[CMS API] Error fetching lottery config:', error);
+    } catch {
       return null;
     }
   }
@@ -478,7 +449,6 @@ class CMSApiClient {
   async getPartners(): Promise<Partner[]> {
     try {
       const url = `${this.baseUrl}/partners`;
-      console.log('[CMS API] Fetching partners:', url);
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -486,11 +456,8 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      console.log('[CMS API] Received partners:', data.data?.length || 0);
-
       return data.data || [];
-    } catch (error) {
-      console.error('[CMS API] Error fetching partners:', error);
+    } catch {
       return [];
     }
   }

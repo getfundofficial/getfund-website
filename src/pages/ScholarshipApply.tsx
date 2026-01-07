@@ -1,4 +1,3 @@
-// DO NOT ADD ANYTHING BELOW THIS LINE. This is the end of the file.
 import { ExternalLink, GraduationCap } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
