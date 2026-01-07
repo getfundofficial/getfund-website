@@ -68,19 +68,14 @@ export default function NewsPage() {
           setContent(section.content as NewsUpdatesContent);
         }
 
-        // Fetch articles
-        console.log('[NewsPage] Fetching all news articles...');
         const cmsArticles = await cmsApi.getNewsArticles();
-        console.log('[NewsPage] Received articles:', cmsArticles.length);
 
         if (cmsArticles.length > 0) {
           setArticles(cmsArticles);
         } else {
-          console.warn('[NewsPage] No articles returned from CMS');
           setArticles([]);
         }
-      } catch (error) {
-        console.error('[NewsPage] Failed to fetch data:', error);
+      } catch {
         setArticles([]);
       } finally {
         setLoading(false);
@@ -161,12 +156,6 @@ export default function NewsPage() {
 
     return pageNumbers;
   };
-
-  console.log('[NewsPage] Total articles:', articles.length);
-  console.log('[NewsPage] Filtered articles:', filteredArticles.length);
-  console.log('[NewsPage] Current page:', currentPage);
-  console.log('[NewsPage] Total pages:', totalPages);
-  console.log('[NewsPage] Search term:', searchTerm);
 
   if (loading) {
     return <LoadingScreen />;

@@ -331,12 +331,26 @@
 /* Hero slide text: only show content for active slide (slick assigns .slick-active) */
 .slick-slide .slide-content {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 500ms ease, transform 500ms ease;
+  transform: translateY(20px);
+  transition: opacity 600ms ease-out 200ms, transform 600ms ease-out 200ms;
 }
 .slick-slide.slick-active .slide-content {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Ensure smooth slide transitions */
+.slick-slider .slick-track,
+.slick-slider .slick-list {
+  transform: translate3d(0, 0, 0);
+}
+
+.slick-slide {
+  visibility: hidden;
+}
+
+.slick-slide.slick-active {
+  visibility: visible;
 }
 
 /* Prevent hero slide content from forcing page scroll on small screens */

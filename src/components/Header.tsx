@@ -45,20 +45,13 @@ export default function Header() {
         const menuConfig = await cmsApi.getMenuConfig();
         // Only use CMS menu if it has valid items and matches our routes
         if (menuConfig.menuItems.length > 0) {
-          console.log('[Header] Loaded menu from CMS:', menuConfig.menuItems);
           setMenuItems(menuConfig.menuItems);
-        } else {
-          console.log('[Header] Using default menu (CMS returned empty)');
         }
-      } catch (error) {
-        console.error('Failed to load menu from CMS, using default menu:', error);
+      } catch {
         // Keep using default menu items (already set in state)
       }
     };
 
-    // Temporarily disable CMS menu to always use defaults with correct routes
-    // fetchMenu();
-    console.log('[Header] Using default hardcoded menu');
   }, []);
 
   return (
