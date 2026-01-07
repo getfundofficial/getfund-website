@@ -9,7 +9,7 @@ import VideoSection from '../components/VideoSection';
 import { TestimonialsSection } from '../components/TestimonialCard';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { cmsApi } from '../services/cmsApi';
-import { GraduationCap, Building2, Briefcase, Target, Eye, Heart } from 'lucide-react';
+import { Target, Eye, Heart } from 'lucide-react';
 
 interface VideoSection {
   url: string;
@@ -39,6 +39,11 @@ interface PageContent {
     titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
     subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
     overlay?: SlideOverlay;
+    // Content box fields per slide
+    boxTitle?: string;
+    boxDescription?: string;
+    exploreText?: string;
+    exploreLink?: string;
   }>;
   videoSection?: VideoSection;
 }
