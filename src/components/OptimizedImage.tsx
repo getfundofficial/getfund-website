@@ -55,7 +55,7 @@ export default function OptimizedImage({
   // to the <img> (and to the error/fallback) so sizing and visual styles are
   // preserved without affecting stacking.
   return (
-    <div className="relative h-full">
+    <div className="relative w-full h-full">
       {isLoading && (
         <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
           <div className="text-gray-400">Loading...</div>

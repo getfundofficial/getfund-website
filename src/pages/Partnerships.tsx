@@ -8,6 +8,49 @@ import PageBanner from '../components/PageBanner';
 import ContactSection from '../components/ContactSection';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi, Partner } from '../services/cmsApi';
+import {
+  Building2,
+  GraduationCap,
+  Gift,
+  Shirt,
+  BookOpen,
+  Laptop,
+  Armchair,
+  UtensilsCrossed,
+  HandHeart
+} from 'lucide-react';
+
+// Helper function to get icon based on partnership type
+function getPartnershipIcon(way: string) {
+  const lowerWay = way.toLowerCase();
+
+  if (lowerWay.includes('infrastructure') || lowerWay.includes('building')) {
+    return <Building2 className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('scholarship')) {
+    return <GraduationCap className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('in-kind') || lowerWay.includes('contribution')) {
+    return <Gift className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('uniform')) {
+    return <Shirt className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('stationary') || lowerWay.includes('book')) {
+    return <BookOpen className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('laptop') || lowerWay.includes('computer')) {
+    return <Laptop className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('furniture') || lowerWay.includes('desk') || lowerWay.includes('chair')) {
+    return <Armchair className="w-8 h-8 text-getfund-primary" />;
+  }
+  if (lowerWay.includes('feeding') || lowerWay.includes('food') || lowerWay.includes('meal')) {
+    return <UtensilsCrossed className="w-8 h-8 text-getfund-primary" />;
+  }
+  // Default icon
+  return <HandHeart className="w-8 h-8 text-getfund-primary" />;
+}
 
 interface PartnershipBenefit {
   title: string;
@@ -111,26 +154,6 @@ export default function Partnerships() {
           </div>
         </section>
 
-        {/* Ways to Partner */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              {content.waysToPartner?.heading}
-            </h2>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(content.waysToPartner?.ways || []).map((way, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-md text-center"
-                >
-                  <p className="text-lg font-semibold text-gray-900">{way}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Our Partners */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-5xl">
@@ -140,15 +163,15 @@ export default function Partnerships() {
 
             <div className="bg-white p-8 md:p-12 rounded-lg shadow-md">
               {partners.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                <div className="flex flex-wrap justify-center gap-6 md:gap-8">
                   {partners.map((partner) => (
-                    <div key={partner.id} className="flex items-center justify-center">
+                    <div key={partner.id} className="w-36 md:w-44">
                       {partner.website_url ? (
                         <a
                           href={partner.website_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors w-full h-24 md:h-28"
+                          className="block p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors h-24 md:h-28"
                           title={partner.name}
                         >
                           <img
@@ -159,7 +182,7 @@ export default function Partnerships() {
                         </a>
                       ) : (
                         <div
-                          className="p-4 rounded-lg bg-gray-50 w-full h-24 md:h-28"
+                          className="p-4 rounded-lg bg-gray-50 h-24 md:h-28"
                           title={partner.name}
                         >
                           <img
@@ -181,23 +204,46 @@ export default function Partnerships() {
           </div>
         </section>
 
-        {/* Why Support Us */}
-        <section className="py-16 bg-gray-50">
+        {/* Ways to Partner */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+              {content.waysToPartner?.heading}
+            </h2>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {(content.waysToPartner?.ways || []).map((way, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-5 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex justify-center mb-3">
+                    {getPartnershipIcon(way)}
+                  </div>
+                  <p className="text-sm font-semibold text-gray-900">{way}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Support Us - Two Column Cards */}
+        <section className="py-10 bg-gray-50">
           <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
               {content.whySupport?.heading}
             </h2>
 
-            <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-4">
               {(content.whySupport?.benefits || []).map((benefit, index) => (
                 <div
                   key={index}
-                  className="bg-white p-6 rounded-lg"
+                  className="bg-gray-50 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <h3 className="text-xl font-bold text-getfund-primary mb-3">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
                     {benefit.title}
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">{benefit.description}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{benefit.description}</p>
                 </div>
               ))}
             </div>
