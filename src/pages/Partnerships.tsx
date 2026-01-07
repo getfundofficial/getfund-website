@@ -155,7 +155,7 @@ export default function Partnerships() {
         </section>
 
         {/* Our Partners */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-5xl">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
               {content.ourPartners?.heading || 'Our Partners'}
