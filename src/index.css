@@ -184,41 +184,17 @@
 }
 
 @layer utilities {
-  /* Responsive scroll offset for fixed header */
-  /* Use a responsive CSS variable for the header height so other parts of
-     the site (breadcrumbs, anchor scroll offsets) automatically follow any
-     future header size changes. The values below match the header/logo
-     sizing used in the header component. */
+  /* Fixed header height - consistent across all screen sizes */
   :root {
-    --header-height: 88px; /* xs: logo h-14 (56px) + 2*12px padding */
-  }
-
-  @media (min-width: 475px) {
-    :root { --header-height: 96px; } /* xs: logo h-16 (64px) + 2*16px padding */
+    --header-height: 80px;
   }
 
   @media (min-width: 640px) {
-    :root { --header-height: 112px; } /* sm: logo h-20 (80px) + 2*16px padding */
+    :root { --header-height: 90px; }
   }
 
   @media (min-width: 768px) {
-    :root { --header-height: 128px; } /* md: logo h-24 (96px) + 32px padding */
-  }
-
-  @media (min-width: 1024px) {
-    :root { --header-height: 144px; } /* lg: logo h-28 (112px) + 32px padding */
-  }
-
-  @media (min-width: 1280px) {
-    :root { --header-height: 160px; } /* xl: logo h-32 (128px) + 32px padding */
-  }
-
-  @media (min-width: 1920px) {
-    :root { --header-height: 176px; } /* 3xl: logo h-36 (144px) + 32px padding */
-  }
-
-  @media (min-width: 2560px) {
-    :root { --header-height: 208px; } /* 4xl: logo h-40 (160px) + 48px padding */
+    :root { --header-height: 100px; }
   }
 
   html { scroll-padding-top: var(--header-height); }
@@ -233,17 +209,9 @@
     }
   }
 
-  /* Responsive text rendering for large screens */
-  @media (min-width: 1920px) {
-    html {
-      font-size: 18px;
-    }
-  }
-
-  @media (min-width: 2560px) {
-    html {
-      font-size: 20px;
-    }
+  /* Keep consistent base font size across all screen sizes */
+  html {
+    font-size: 16px;
   }
 
   /* Slow rotation animation for logos */

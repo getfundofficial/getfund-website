@@ -127,33 +127,33 @@ function getOverlayStyle(overlay?: SlideOverlay): React.CSSProperties {
   };
 }
 
-// Helper to get headline font size classes
+// Helper to get headline font size classes - fixed sizes that don't scale on large screens
 function getHeadlineSizeClasses(size?: FontSize): string {
   switch (size) {
     case 'small':
-      return 'text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl 3xl:text-5xl';
+      return 'text-xl sm:text-2xl md:text-3xl';
     case 'large':
-      return 'text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl 3xl:text-7xl';
+      return 'text-3xl sm:text-4xl md:text-5xl';
     case 'xlarge':
-      return 'text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl 3xl:text-8xl';
+      return 'text-4xl sm:text-5xl md:text-6xl';
     case 'medium':
     default:
-      return 'text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl 3xl:text-6xl';
+      return 'text-2xl sm:text-3xl md:text-4xl';
   }
 }
 
-// Helper to get description font size classes
+// Helper to get description font size classes - fixed sizes that don't scale on large screens
 function getDescriptionSizeClasses(size?: FontSize): string {
   switch (size) {
     case 'small':
-      return 'text-xs sm:text-sm md:text-base lg:text-lg 3xl:text-xl';
+      return 'text-sm md:text-base';
     case 'large':
-      return 'text-base sm:text-lg md:text-xl lg:text-2xl 3xl:text-3xl';
+      return 'text-lg md:text-xl';
     case 'xlarge':
-      return 'text-lg sm:text-xl md:text-2xl lg:text-3xl 3xl:text-4xl';
+      return 'text-xl md:text-2xl';
     case 'medium':
     default:
-      return 'text-sm sm:text-base md:text-lg lg:text-xl 3xl:text-2xl';
+      return 'text-base md:text-lg';
   }
 }
 
@@ -283,27 +283,27 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                 />
 
 
-                {/* Blue Content Box - Bottom Left */}
-                <div className="absolute inset-0 z-20 flex items-end justify-start px-4 sm:px-8 md:px-12 lg:px-16 3xl:px-20 pb-12 sm:pb-16 md:pb-20 lg:pb-24 3xl:pb-32">
+                {/* Blue Content Box - Bottom Left - Fixed size */}
+                <div className="absolute inset-0 z-20 flex items-end justify-start px-4 sm:px-8 md:px-12 pb-12 sm:pb-16 md:pb-20">
                   <div
-                    className="slide-content pointer-events-auto p-6 sm:p-8 md:p-10 lg:p-12 3xl:p-14 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl 3xl:max-w-3xl"
+                    className="slide-content pointer-events-auto p-6 sm:p-8 md:p-10 max-w-xl"
                     style={getBlueBoxStyle(slide.blueBox)}
                   >
                     {(slide.blueBox?.text || slide.blueBoxText) && (
-                      <span className="inline-block text-xs sm:text-sm md:text-base 3xl:text-lg text-blue-200 mb-2 sm:mb-3 uppercase tracking-wider font-medium">
+                      <span className="inline-block text-sm text-blue-200 mb-2 uppercase tracking-wider font-medium">
                         {slide.blueBox?.text || slide.blueBoxText}
                       </span>
                     )}
-                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-3 sm:mb-4 md:mb-5 leading-tight text-white`}>
+                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-4 leading-tight text-white`}>
                       {slide.headline}
                     </h1>
-                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-4 sm:mb-5 md:mb-6 text-gray-200 leading-relaxed`}>
+                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-5 text-gray-200 leading-relaxed`}>
                       {slide.description}
                     </p>
                     {slide.cta && (
                       <Link
                         to={slide.ctaLink || "/scholarship-apply"}
-                        className="inline-flex items-center gap-2 text-white text-sm sm:text-base md:text-lg 3xl:text-xl uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        className="inline-flex items-center gap-2 text-white text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
                         aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                       >
                         {slide.ctaText || "Apply Now"}
