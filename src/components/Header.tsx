@@ -24,9 +24,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
       { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
       { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
       { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
-      { id: '6-4', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
-      { id: '6-5', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
-      { id: '6-6', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
+      { id: '6-4', slug: 'fundraising/lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '6' },
+      { id: '6-5', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
+      { id: '6-6', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
+      { id: '6-7', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
     ]
   }
 ];
