@@ -24,6 +24,7 @@ import PaymentCallback from './pages/PaymentCallback';
 import TestSuccess from './pages/payment/TestSuccess';
 import ScrollToTop from './components/ScrollToTop';
 import FundraisingCampaigns from './pages/FundraisingCampaigns';
+import Lottery from './pages/Lottery';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/fundraising-campaigns" element={<FundraisingCampaigns />} />
           <Route path="/fundraising/why-fundraising" element={<WhyFundraising />} />
           <Route path="/fundraising/ways-to-donate" element={<WaysToDonate />} />
+          <Route path="/fundraising/lottery" element={<Lottery />} />
           <Route path="/fundraising/partnerships" element={<Partnerships />} />
           <Route path="/fundraising/beneficiaries-give-back" element={<BeneficiariesGiveBack />} />
           <Route path="/fundraising/events" element={<Events />} />
