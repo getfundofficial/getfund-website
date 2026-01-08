@@ -1,11 +1,9 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Eye, Target, Heart } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
 import TeamSection from '../components/TeamSection';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi, TeamMember as TeamMemberType } from '../services/cmsApi';
 
@@ -14,7 +12,6 @@ interface PageContent {
   // Hero Section
   heroTitle?: string;
   heroSubtitle?: string;
-  bannerBackground?: BannerBackground;
 
   // About GETFund Section
   mainImage?: string;
@@ -153,23 +150,19 @@ export default function WhoWeAre() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        {/* Hero Section */}
-        <PageBanner
-          title={pageContent?.heroTitle || 'About Us'}
-          subtitle={pageContent?.heroSubtitle || 'Supporting the delivery of quality education to Ghanaians from basic to tertiary level'}
-          bannerBackground={pageContent?.bannerBackground || {
-            imageUrl: '/images/about/getfund-7th-board-inauguration.jpg',
-            tintColor: '#DC143C',
-            tintColor2: '#1e3a5f',
-            useGradient: true,
-            tintOpacity: 70,
-            gradientDirection: 'to bottom right'
-          }}
-        />
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {pageContent?.heroTitle || 'About Us'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
 
         {/* Main Content - Ghana Education Trust Fund */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="container mx-auto px-4">
+        <section className="py-12 md:py-16 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
               <div>
                 <img

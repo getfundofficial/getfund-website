@@ -192,17 +192,14 @@ export default function Home() {
           thumbnailUrl={pageContent?.videoSection?.thumbnail}
         />
 
-        {/* Empowering Ghana Section with Background Image */}
-        <section className="relative py-16 md:py-20">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <img
-              src="/images/hero/main-slider-1.jpg"
-              alt="GETFund Education"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/60" />
-          </div>
+        {/* Empowering Ghana Section with Parallax Background */}
+        <section className="relative py-16 md:py-20 overflow-hidden">
+          {/* Parallax Background - bg-fixed for desktop, bg-scroll for mobile (iOS doesn't support fixed) */}
+          <div
+            className="absolute inset-0 bg-scroll md:bg-fixed bg-center bg-cover"
+            style={{ backgroundImage: "url('/images/hero/main-slider-1.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-black/60" />
 
           {/* Content */}
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">

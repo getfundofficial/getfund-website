@@ -1,10 +1,9 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { CheckCircle, TrendingUp, Target } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
@@ -22,7 +21,6 @@ interface FundingHighlight {
 }
 
 interface InfrastructureProjectsContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -175,122 +173,159 @@ export default function InfrastructureProjects() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title}
-          subtitle={content.hero?.subtitle}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#059669"
-        />
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Infrastructure Projects'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
 
-        {/* Main Content */}
-        <div className="container mx-auto px-4 py-12">
-          <p className="mb-6 text-lg text-gray-800">
-            {content.mainIntro?.paragraph}
-          </p>
+        {/* Intro Section */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                  {content.mainIntro?.paragraph}
+                </p>
+                {content.mandateSection?.paragraph && (
+                  <p className="text-gray-600 leading-relaxed">
+                    {content.mandateSection?.paragraph}
+                  </p>
+                )}
+              </div>
+              <div>
+                <img
+                  src="/images/infrastructure/school-building.jpg"
+                  alt="Infrastructure Project"
+                  className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {/* Project Highlights */}
-          {content.projectHighlights?.items?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mt-8 mb-4">{content.projectHighlights?.heading}</h2>
-              <ul className="list-disc list-inside mb-8 text-gray-700">
+        {/* Project Highlights */}
+        {content.projectHighlights?.items?.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 max-w-6xl">
+              <div className="mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  {content.projectHighlights?.heading || 'Project Highlights'}
+                </h2>
+                <div className="w-12 h-1 bg-green-600" />
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
                 {content.projectHighlights?.items?.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Recent Projects */}
-          {content.recentProjects?.projects?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mt-8 mb-4">{content.recentProjects?.heading}</h2>
-              <div className="grid md:grid-cols-2 gap-8">
-                {content.recentProjects?.projects?.map((project, idx) => (
-                  <div key={idx} className="bg-gray-100 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                    <p>{project.description}</p>
+                  <div key={idx} className="flex items-start gap-3 bg-white p-5 rounded-lg shadow-sm">
+                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-700">{item}</p>
                   </div>
                 ))}
               </div>
-            </section>
-          )}
+            </div>
+          </section>
+        )}
 
-          {/* Mandate Section */}
-          {content.mandateSection?.paragraph && (
-            <section className="mb-12 mt-12">
-              <p className="mb-8 text-gray-700 text-lg">
-                {content.mandateSection?.paragraph}
-              </p>
-            </section>
-          )}
+        {/* Recent Projects */}
+        {content.recentProjects?.projects?.length > 0 && (
+          <section className="py-16 bg-white">
+            <div className="container mx-auto px-4 max-w-6xl">
+              <div className="mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  {content.recentProjects?.heading || 'Recent Projects'}
+                </h2>
+                <div className="w-12 h-1 bg-green-600" />
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {content.recentProjects?.projects?.map((project, idx) => (
+                  <div key={idx} className="bg-gray-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div className="h-32 bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center">
+                      <Building2 className="w-12 h-12 text-white/80" />
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">{project.title}</h3>
+                      <p className="text-sm text-gray-600">{project.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
-          {/* Achievements & Funding Highlights */}
-          {(content.achievements?.items?.length > 0 || content.fundingHighlights?.items?.length > 0) && (
-            <section className="mb-12">
-              <div className="grid md:grid-cols-2 gap-8">
+        {/* Achievements & Funding - Side by Side */}
+        {(content.achievements?.items?.length > 0 || content.fundingHighlights?.items?.length > 0) && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 max-w-6xl">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Achievements */}
                 {content.achievements?.items?.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 bg-blue-600 rounded-full"></span>
-                      {content.achievements?.heading}
-                    </h3>
-                    <ul className="space-y-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-6 h-6 text-blue-600" />
+                      <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                        {content.achievements?.heading || 'Key Achievements'}
+                      </h2>
+                    </div>
+                    <div className="w-12 h-1 mb-6 ml-8" style={{ backgroundColor: '#2a3f75' }} />
+                    <div className="space-y-4">
                       {content.achievements?.items?.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="mt-1 w-2 h-2 bg-blue-500 rounded-full inline-block"></span>
-                          {item.text}
-                        </li>
+                        <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
+                          <CheckCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                          <p className="text-gray-700">{item.text}</p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
+                {/* Funding Highlights */}
                 {content.fundingHighlights?.items?.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 bg-green-600 rounded-full"></span>
-                      {content.fundingHighlights?.heading}
-                    </h3>
-                    <ul className="space-y-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="w-6 h-6 text-green-600" />
+                      <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                        {content.fundingHighlights?.heading || 'Funding Highlights'}
+                      </h2>
+                    </div>
+                    <div className="w-12 h-1 bg-green-600 mb-6 ml-8" />
+                    <div className="space-y-4">
                       {content.fundingHighlights?.items?.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="mt-1 w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-                          {item.text}
-                        </li>
+                        <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
+                          <div className="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-bold flex-shrink-0">
+                            {idx + 1}
+                          </div>
+                          <p className="text-gray-700">{item.text}</p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
               </div>
-            </section>
-          )}
+            </div>
+          </section>
+        )}
 
-          {/* Impact Section */}
-          {content.impactSection?.paragraph && (
-            <section className="mb-12">
-              <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                <span className="inline-block w-2 h-2 bg-purple-600 rounded-full"></span>
-                {content.impactSection?.heading}
-              </h3>
-              <p className="mb-4 text-gray-700 text-lg">
-                {content.impactSection?.paragraph}
-              </p>
-            </section>
-          )}
-
-          {/* Ongoing Commitment */}
-          {content.ongoingCommitment?.paragraph && (
-            <section className="mb-12">
-              <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                <span className="inline-block w-2 h-2 bg-yellow-500 rounded-full"></span>
-                {content.ongoingCommitment?.heading}
-              </h3>
-              <p className="mb-4 text-gray-700 text-lg">
+        {/* Impact & Commitment */}
+        <section className="py-16 bg-green-600">
+          <div className="container mx-auto px-4 max-w-4xl text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              {content.impactSection?.heading || 'Our Impact'}
+            </h2>
+            <p className="text-lg text-green-100 mb-8 max-w-2xl mx-auto">
+              {content.impactSection?.paragraph || "GETFund's investments have enhanced the learning environment and strengthened Ghana's capacity to train a new generation of skilled professionals."}
+            </p>
+            {content.ongoingCommitment?.paragraph && (
+              <p className="text-green-100 max-w-2xl mx-auto">
                 {content.ongoingCommitment?.paragraph}
               </p>
-            </section>
-          )}
-        </div>
+            )}
+          </div>
+        </section>
       </main>
 
       <Footer />

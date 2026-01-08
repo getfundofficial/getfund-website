@@ -1,10 +1,8 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { TrendingUp, Users, Building, Award, BookOpen, GraduationCap } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import OptimizedImage from '../components/OptimizedImage';
 import GhanaRegionalMap from '../components/GhanaRegionalMap';
@@ -51,8 +49,6 @@ interface ScholarshipCategory {
 }
 
 interface PageContent {
-  bannerBackground?: BannerBackground;
-
   // Hero Section
   heroTitle?: string;
   heroSubtitle?: string;
@@ -221,20 +217,20 @@ export default function Impact() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        <PageBanner
-          title={pageContent?.heroTitle || 'Our Impact'}
-          subtitle={pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
-          bannerBackground={pageContent?.bannerBackground || {
-            imageUrl: '/images/scholarship/OME1079.jpg',
-            tintColor: '#DC143C',
-            tintColor2: '#059669',
-            useGradient: true,
-            tintOpacity: 70,
-            gradientDirection: 'to right'
-          }}
-        />
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {pageContent?.heroTitle || 'Our Impact'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <p className="text-gray-600 mt-4 max-w-3xl">
+              {pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
+            </p>
+          </div>
+        </section>
 
-        {/* Regional Impact - First section after banner */}
+        {/* Regional Impact - First section after title */}
         <section className="py-16 md:py-20 bg-blue-50">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
@@ -296,11 +292,11 @@ export default function Impact() {
                 { number: '5,026', label: 'Scholarships (2023/24)', description: 'Academic year', icon: 'graduation-cap' },
                 { number: '677,470', label: 'Furniture Items', description: 'Distributed (2019-2021)', icon: 'building' }
               ]).map((stat, index) => (
-                <div key={index} className="bg-red-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
-                  <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-getfund-primary">
+                <div key={index} className="bg-blue-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
+                  <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ color: '#2a3f75' }}>
                     {getIconComponent(stat.icon)}
                   </div>
-                  <div className="text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stat.number}</div>
+                  <div className="text-4xl md:text-5xl font-bold mb-2" style={{ color: '#2a3f75' }}>{stat.number}</div>
                   <div className="text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
                   <p className="text-gray-600 text-sm">{stat.description}</p>
                 </div>
@@ -340,7 +336,7 @@ export default function Impact() {
                     </div>
                   )}
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold text-getfund-primary mb-2">{project.count.toLocaleString()}</h3>
+                    <h3 className="text-2xl font-bold mb-2" style={{ color: '#2a3f75' }}>{project.count.toLocaleString()}</h3>
                     <h4 className="text-lg font-semibold text-gray-900 mb-2">{project.category}</h4>
                     <p className="text-gray-600 text-sm">{project.description}</p>
                   </div>
@@ -379,7 +375,7 @@ export default function Impact() {
                     </div>
                   )}
                   <div className="p-8 text-center">
-                    <div className="text-5xl font-bold text-getfund-primary mb-2">{resource.count.toLocaleString()}</div>
+                    <div className="text-5xl font-bold mb-2" style={{ color: '#2a3f75' }}>{resource.count.toLocaleString()}</div>
                     <h3 className="text-2xl font-semibold text-gray-900 mb-2">{resource.type}</h3>
                     <p className="text-gray-600">Distributed to various agencies and institutions ({resource.period})</p>
                   </div>
@@ -435,7 +431,7 @@ export default function Impact() {
                     />
                   </div>
                   <div className="p-6">
-                    <span className="inline-block bg-red-100 text-getfund-primary text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                    <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
                       {story.category}
                     </span>
                     <p className="text-gray-700 italic mb-4">"{story.story}"</p>
@@ -462,15 +458,15 @@ export default function Impact() {
             {/* Total Scholars and Growth */}
             <div className="max-w-5xl mx-auto mb-12">
               <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-green-50 rounded-xl p-8 text-center">
-                  <div className="text-6xl font-bold text-getfund-primary mb-2">
+                <div className="bg-blue-50 rounded-xl p-8 text-center">
+                  <div className="text-6xl font-bold mb-2" style={{ color: '#2a3f75' }}>
                     {pageContent?.totalScholars || '16,000+'}
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-2">Total Scholars Supported</h3>
                   <p className="text-gray-600">Lifetime achievement across local and foreign institutions</p>
                 </div>
 
-                <div className="bg-yellow-50 rounded-xl p-8">
+                <div className="bg-gray-50 rounded-xl p-8">
                   <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Scholarship Growth</h3>
                   <div className="flex items-center justify-between">
                     <div className="text-center">
@@ -479,16 +475,16 @@ export default function Impact() {
                       </div>
                       <div className="text-sm text-gray-600">{pageContent?.scholarshipGrowth?.from.year || '2019/20'}</div>
                     </div>
-                    <div className="text-4xl text-getfund-primary">→</div>
+                    <div className="text-4xl" style={{ color: '#2a3f75' }}>→</div>
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-getfund-primary mb-1">
+                      <div className="text-4xl font-bold mb-1" style={{ color: '#2a3f75' }}>
                         {pageContent?.scholarshipGrowth?.to.count.toLocaleString() || '5,026'}
                       </div>
                       <div className="text-sm text-gray-600">{pageContent?.scholarshipGrowth?.to.year || '2023/24'}</div>
                     </div>
                   </div>
                   <div className="mt-6 text-center">
-                    <span className="inline-block bg-getfund-primary text-white px-4 py-2 rounded-full font-semibold">
+                    <span className="inline-block text-white px-4 py-2 rounded-full font-semibold" style={{ backgroundColor: '#2a3f75' }}>
                       199% Growth
                     </span>
                   </div>
@@ -498,7 +494,7 @@ export default function Impact() {
               {/* Percentage to Public Universities */}
               <div className="mt-6 text-center">
                 <p className="text-lg text-gray-700">
-                  <span className="font-bold text-getfund-primary">{pageContent?.percentToPublicUniversities || '74%'}</span> of local scholarship awards go to public universities
+                  <span className="font-bold" style={{ color: '#2a3f75' }}>{pageContent?.percentToPublicUniversities || '74%'}</span> of local scholarship awards go to public universities
                 </p>
               </div>
             </div>
@@ -513,7 +509,7 @@ export default function Impact() {
                   { title: 'Professional Enhancement & Capacity Building', description: 'For government organizations - Police, Prison, Fire, Judicial, Parliamentary Services' },
                   { title: 'Educational Programme & Activity Sponsorship', description: 'NSMQ, Robotics Competitions, STEM Programmes' }
                 ]).map((category, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-6 border-l-4 border-getfund-primary">
+                  <div key={index} className="bg-gray-50 rounded-lg p-6 border-l-4" style={{ borderLeftColor: '#2a3f75' }}>
                     <h4 className="text-lg font-semibold text-gray-900 mb-2">{category.title}</h4>
                     <p className="text-gray-600">{category.description}</p>
                   </div>
@@ -534,7 +530,7 @@ export default function Impact() {
                   'Scholarship Programme Monitoring'
                 ]).map((reform, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-green-500 flex-shrink-0 mt-1 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full flex-shrink-0 mt-1 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
@@ -609,12 +605,12 @@ export default function Impact() {
                 ]).map((achievement, index) => (
                   <div key={index} className="flex gap-6 items-start">
                     <div className="flex-shrink-0 w-24 text-right">
-                      <span className="inline-block bg-getfund-primary text-white text-lg font-bold px-4 py-2 rounded-lg">
+                      <span className="inline-block text-white text-lg font-bold px-4 py-2 rounded-lg" style={{ backgroundColor: '#2a3f75' }}>
                         {achievement.year}
                       </span>
                     </div>
-                    <div className="flex-1 pb-8 border-l-4 border-red-200 pl-6 relative">
-                      <div className="absolute w-4 h-4 bg-getfund-primary rounded-full -left-[10px] top-2"></div>
+                    <div className="flex-1 pb-8 border-l-4 border-blue-200 pl-6 relative">
+                      <div className="absolute w-4 h-4 rounded-full -left-[10px] top-2" style={{ backgroundColor: '#2a3f75' }}></div>
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{achievement.title}</h3>
                       <p className="text-gray-600">{achievement.description}</p>
                     </div>
@@ -626,18 +622,19 @@ export default function Impact() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-16 bg-getfund-primary text-white">
+        <section className="py-16 text-white" style={{ backgroundColor: '#1e3a5f' }}>
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 {pageContent?.ctaTitle || 'Be Part of Our Impact Story'}
               </h2>
-              <p className="text-xl text-red-100 mb-8">
+              <p className="text-xl text-white/80 mb-8">
                 {pageContent?.ctaDescription || 'Join us in transforming education and creating opportunities for future generations'}
               </p>
-              <a 
+              <a
                 href={pageContent?.ctaButtonLink || '/support-us'}
-                className="inline-block bg-white text-getfund-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                className="inline-block bg-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                style={{ color: '#1e3a5f' }}
               >
                 {pageContent?.ctaButtonText || 'Support Our Mission'}
               </a>

@@ -88,7 +88,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
   return (
     <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-getfund-primary px-6 py-5">
+      <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
         <h3 className="text-2xl font-bold text-white flex items-center gap-3">
           <Heart className="w-6 h-6" />
           Make a Donation
@@ -117,9 +117,10 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                 onClick={() => setFrequency(value)}
                 className={`relative py-3 px-3 rounded-xl font-medium transition-all duration-200 flex flex-col items-center gap-1 ${
                   frequency === value
-                    ? 'bg-getfund-primary text-white shadow-lg shadow-getfund-primary/30 scale-[1.02]'
-                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 hover:border-getfund-primary/30'
+                    ? 'text-white shadow-lg scale-[1.02]'
+                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                 }`}
+                style={frequency === value ? { backgroundColor: '#2a3f75', boxShadow: '0 10px 15px -3px rgba(42, 63, 117, 0.3)' } : {}}
                 aria-pressed={frequency === value}
               >
                 <Icon className="w-5 h-5" />
@@ -187,7 +188,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                     setCustomAmount(formatted);
                   }
                 }}
-                className="w-full pl-14 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary transition-all text-lg font-medium"
+                className="w-full pl-14 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all text-lg font-medium"
+                style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
                 placeholder="0"
                 required
                 aria-required="true"
@@ -205,7 +207,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
             id="donorType"
             value={donorType}
             onChange={(e) => setDonorType(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary bg-white transition-all cursor-pointer font-medium text-gray-700"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             aria-label="Select donor type"
           >
             <option value="Individual">An Individual</option>
@@ -224,7 +227,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary transition-all font-medium text-gray-700"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium text-gray-700"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="your@email.com"
             required
           />
@@ -239,7 +243,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
             id="paymentMethod"
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-primary focus:border-getfund-primary bg-white transition-all cursor-pointer font-medium text-gray-700"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
           >
             <option value="mobile-money">Mobile Money</option>
             <option value="credit-card">Credit/Debit Card</option>
@@ -252,7 +257,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           <div className="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Your donation</span>
-              <span className="text-2xl font-bold text-getfund-primary">{getDisplayAmount()}</span>
+              <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>{getDisplayAmount()}</span>
             </div>
             {frequency !== 'one-time' && (
               <p className="text-sm text-gray-500 mt-1">
@@ -264,7 +269,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-getfund-red text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+            className="w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+            style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
             aria-label="Proceed to donation"
           >
             {isLoading ? (

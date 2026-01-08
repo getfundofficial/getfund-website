@@ -1,10 +1,8 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { Calendar, ArrowRight, Search } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import OptimizedImage from '../components/OptimizedImage';
 import { Link } from 'react-router-dom';
@@ -26,7 +24,6 @@ interface NewsArticle {
 
 
 interface NewsUpdatesContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -161,6 +158,16 @@ export default function NewsPage() {
     return <LoadingScreen />;
   }
 
+  // Filter tab categories
+  const categories = [
+    { key: 'ALL', label: 'All' },
+    { key: 'NEWS', label: 'News' },
+    { key: 'ANNOUNCEMENT', label: 'Announcements' },
+    { key: 'EVENT', label: 'Events' },
+    { key: 'UPDATE', label: 'Updates' },
+    { key: 'PRESS_RELEASE', label: 'Press Releases' },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
@@ -174,105 +181,61 @@ export default function NewsPage() {
       <Header />
       <Breadcrumb />
 
-      <PageBanner
-        title={content?.hero?.title || 'News & Updates'}
-        subtitle={content?.hero?.subtitle || 'Transforming Ghana\'s educational landscape through strategic investments and partnerships'}
-        bannerBackground={content?.bannerBackground || {
-          imageUrl: '/images/hero/main-slider-1.jpg',
-          tintColor: '#DC143C',
-          tintColor2: '#1F2937',
-          useGradient: true,
-          tintOpacity: 75,
-          gradientDirection: 'to right'
-        }}
-      />
+      <main className="flex-1">
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content?.hero?.title || 'News & Events'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
 
-      <main className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          {/* Category Filter */}
-          <div className="mb-6 max-w-2xl mx-auto">
-            <div className="flex flex-wrap gap-2 justify-center">
-              <button
-                onClick={() => setSelectedCategory('ALL')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'ALL'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setSelectedCategory('NEWS')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'NEWS'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                News
-              </button>
-              <button
-                onClick={() => setSelectedCategory('ANNOUNCEMENT')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'ANNOUNCEMENT'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Announcement
-              </button>
-              <button
-                onClick={() => setSelectedCategory('EVENT')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'EVENT'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Event
-              </button>
-              <button
-                onClick={() => setSelectedCategory('UPDATE')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'UPDATE'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Update
-              </button>
-              <button
-                onClick={() => setSelectedCategory('PRESS_RELEASE')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === 'PRESS_RELEASE'
-                    ? 'bg-getfund-primary text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Press Release
-              </button>
+        {/* Filter Tabs and Search */}
+        <section className="bg-white border-b border-gray-200">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-4">
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap gap-1">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.key}
+                    onClick={() => setSelectedCategory(cat.key)}
+                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${
+                      selectedCategory === cat.key
+                        ? 'text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                    style={selectedCategory === cat.key ? { backgroundColor: '#2a3f75' } : {}}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-full md:w-72">
+                <input
+                  type="text"
+                  placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Search Bar */}
-          <div className="mb-8 max-w-2xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-getfund-primary focus:border-transparent shadow-sm"
-              />
-              <Search className="w-5 h-5 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2" />
-            </div>
-          </div>
+        {/* News Grid Section */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
 
-          {/* News Grid */}
-          <div>
+            {/* News Grid */}
             {filteredArticles.length === 0 ? (
-              <div className="bg-white shadow p-12 text-center">
+              <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <p className="text-gray-600 text-lg">
                   {content?.emptyState?.noArticlesMessage || 'No articles found matching your criteria.'}
                 </p>
@@ -282,7 +245,7 @@ export default function NewsPage() {
                 {currentArticles.map((article) => (
                   <article
                     key={article.id}
-                    className="bg-white shadow hover:shadow-lg transition-shadow overflow-hidden group"
+                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
                   >
                     <Link to={`/news/${article.slug}`} className="block">
                       <div className="relative h-48">
@@ -293,13 +256,13 @@ export default function NewsPage() {
                           fallbackSrc="/images/news/news-placeholder.svg"
                         />
                         <div className="absolute top-4 left-4 z-10">
-                          <span className="bg-getfund-primary text-white px-3 py-1 text-xs font-semibold uppercase">
-                            {article.tags[0] || 'Announcement'}
+                          <span className="text-white px-3 py-1 text-xs font-semibold rounded" style={{ backgroundColor: '#2a3f75' }}>
+                            {article.category?.replace('_', ' ') || article.tags[0] || 'News'}
                           </span>
                         </div>
                       </div>
-                      <div className="p-6">
-                        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
+                      <div className="p-5">
+                        <div className="flex items-center gap-1 text-gray-500 text-sm mb-2">
                           <Calendar className="w-4 h-4" aria-hidden="true" />
                           {article.date && !isNaN(Date.parse(article.date)) ? (
                             <time dateTime={article.date}>
@@ -311,11 +274,11 @@ export default function NewsPage() {
                             </time>
                           ) : null}
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-getfund-primary transition-colors line-clamp-2">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
                           {article.title}
                         </h3>
                         <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">{article.excerpt}</p>
-                        <span className="inline-flex items-center gap-2 text-getfund-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                        <span className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all">
                           Read more <ArrowRight className="w-4 h-4" aria-hidden="true" />
                         </span>
                       </div>
@@ -323,72 +286,73 @@ export default function NewsPage() {
                   </article>
                 ))}
               </div>
-              )}
+            )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-12">
-                  {/* Previous button */}
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 transition-colors ${
-                      currentPage === 1
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                    aria-label="Previous page"
-                  >
-                    <ArrowRight className="w-4 h-4 rotate-180" />
-                  </button>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-12">
+                {/* Previous button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-2 rounded transition-colors ${
+                    currentPage === 1
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                  aria-label="Previous page"
+                >
+                  <ArrowRight className="w-4 h-4 rotate-180" />
+                </button>
 
-                  {/* Page numbers */}
-                  {generatePageNumbers().map((pageNum, index) => {
-                    if (pageNum === '...') {
-                      return (
-                        <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
-                          ...
-                        </span>
-                      );
-                    }
-
-                    const pageNumber = pageNum as number;
+                {/* Page numbers */}
+                {generatePageNumbers().map((pageNum, index) => {
+                  if (pageNum === '...') {
                     return (
-                      <button
-                        key={pageNumber}
-                        onClick={() => handlePageChange(pageNumber)}
-                        className={`px-4 py-2 font-semibold transition-colors ${
-                          currentPage === pageNumber
-                            ? 'text-white bg-getfund-primary'
-                            : 'text-gray-600 hover:bg-gray-100'
-                        }`}
-                        aria-label={`Page ${pageNumber}`}
-                        aria-current={currentPage === pageNumber ? 'page' : undefined}
-                      >
-                        {pageNumber}
-                      </button>
+                      <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
+                        ...
+                      </span>
                     );
-                  })}
+                  }
 
-                  {/* Next button */}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 transition-colors ${
-                      currentPage === totalPages
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                    aria-label="Next page"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
+                  const pageNumber = pageNum as number;
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => handlePageChange(pageNumber)}
+                      className={`px-4 py-2 rounded font-medium transition-colors ${
+                        currentPage === pageNumber
+                          ? 'text-white'
+                          : 'text-gray-600 hover:bg-gray-200'
+                      }`}
+                      style={currentPage === pageNumber ? { backgroundColor: '#2a3f75' } : {}}
+                      aria-label={`Page ${pageNumber}`}
+                      aria-current={currentPage === pageNumber ? 'page' : undefined}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+
+                {/* Next button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-2 rounded transition-colors ${
+                    currentPage === totalPages
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                  aria-label="Next page"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        </section>
       </main>
-      
+
       <Footer />
     </div>
   );

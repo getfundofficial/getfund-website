@@ -66,7 +66,7 @@ export default function Header() {
           <img
             src="/images/logos/GETFund logo_200cm Wide -  Black.png"
             alt="Ghana Education Trust Fund"
-            className="h-12 sm:h-14 md:h-16 w-auto object-contain max-w-[180px] sm:max-w-[280px] md:max-w-[350px]"
+            className="h-14 sm:h-18 md:h-22 lg:h-24 w-auto object-contain max-w-[200px] sm:max-w-[300px] md:max-w-[380px] lg:max-w-[420px] -my-1 sm:-my-2 md:-my-3 lg:-my-4"
           />
         </Link>
 

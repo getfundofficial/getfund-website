@@ -47,17 +47,17 @@ export default function FloatingContact() {
       {/* Expanded Contact Panel */}
       {isOpen && (
         <div className="absolute right-40 top-1/2 -translate-y-1/2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden animate-scale-in">
-          <div className="bg-gradient-to-r from-getfund-primary to-green-600 p-4">
+          <div className="p-4" style={{ backgroundColor: '#1e3a5f' }}>
             <h3 className="text-white font-semibold text-lg">Get in Touch</h3>
-            <p className="text-green-100 text-sm">We're here to help</p>
+            <p className="text-blue-200 text-sm">We're here to help</p>
           </div>
           <div className="p-4 space-y-3">
             <a
               href={`tel:${phoneLink}`}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 bg-getfund-primary/10 rounded-full flex items-center justify-center group-hover:bg-getfund-primary/20 transition-colors">
-                <Phone className="w-5 h-5 text-getfund-primary" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
+                <Phone className="w-5 h-5" style={{ color: '#1e3a5f' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Call Us</p>
@@ -68,8 +68,8 @@ export default function FloatingContact() {
               href={`mailto:${contactInfo.email}`}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 bg-getfund-gold/10 rounded-full flex items-center justify-center group-hover:bg-getfund-gold/20 transition-colors">
-                <Mail className="w-5 h-5 text-getfund-gold" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
+                <Mail className="w-5 h-5" style={{ color: '#1e3a5f' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Email Us</p>
@@ -82,8 +82,8 @@ export default function FloatingContact() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 bg-teal-500/10 rounded-full flex items-center justify-center group-hover:bg-teal-500/20 transition-colors">
-                <MapPin className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
+                <MapPin className="w-5 h-5" style={{ color: '#1e3a5f' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Visit Us</p>
@@ -103,7 +103,7 @@ export default function FloatingContact() {
         aria-label={isOpen ? 'Close contact panel' : 'Open contact panel'}
       >
         {/* Outer glow ring */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-getfund-primary to-green-500 opacity-80 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-300"></div>
+        <div className="absolute inset-0 rounded-full opacity-80 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-300" style={{ backgroundColor: '#1e3a5f' }}></div>
 
         {/* Glass effect background */}
         <div className={`absolute inset-1 rounded-full backdrop-blur-md border border-white/30 shadow-2xl transition-all duration-300 ${
@@ -113,7 +113,7 @@ export default function FloatingContact() {
         }`}></div>
 
         {/* Inner gradient ring */}
-        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-getfund-primary to-green-600 opacity-90"></div>
+        <div className="absolute inset-2 rounded-full opacity-90" style={{ backgroundColor: '#1e3a5f' }}></div>
 
         {/* Content */}
         <div className="relative z-10">
