@@ -1,14 +1,12 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi, Partner } from '../services/cmsApi';
-import { Building2, GraduationCap, BookOpen, Laptop, HandHeart, Users, Briefcase, Heart } from 'lucide-react';
+import { Building2, GraduationCap, BookOpen, Laptop, HandHeart, Users, Briefcase, Heart, ArrowRight } from 'lucide-react';
 
 // Helper function to get icon based on partnership type
 function getPartnershipIcon(way: string) {
@@ -28,9 +26,7 @@ interface PartnershipBenefit {
   description: string;
 }
 
-
 interface PartnershipsContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -40,6 +36,7 @@ interface PartnershipsContent {
   };
   intro: {
     paragraph: string;
+    image?: string;
   };
   waysToPartner: {
     heading: string;
@@ -52,6 +49,12 @@ interface PartnershipsContent {
   ourPartners: {
     heading: string;
     description: string;
+  };
+  cta: {
+    heading: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
   };
 }
 
@@ -110,85 +113,104 @@ export default function Partnerships() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'Partnerships with GETFund'}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
-
-        {/* Intro Paragraph */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {content.intro?.paragraph}
-            </p>
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Partnerships'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
           </div>
         </section>
 
-        {/* Our Partners - Moved above Ways to Partner */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              {content.ourPartners?.heading || 'Our Partners'}
-            </h2>
-
-            <div className="bg-white p-8 md:p-12 rounded-lg shadow-md">
-              {partners.length > 0 ? (
-                <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-                  {partners.map((partner) => (
-                    <div key={partner.id} className="flex items-center justify-center w-36 md:w-44">
-                      {partner.website_url ? (
-                        <a
-                          href={partner.website_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors w-full h-24 md:h-28"
-                          title={partner.name}
-                        >
-                          <img
-                            src={partner.logo_url}
-                            alt={partner.name}
-                            className="w-full h-full object-contain"
-                          />
-                        </a>
-                      ) : (
-                        <div
-                          className="p-4 rounded-lg bg-gray-50 w-full h-24 md:h-28"
-                          title={partner.name}
-                        >
-                          <img
-                            src={partner.logo_url}
-                            alt={partner.name}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">Partner logos will be displayed here.</p>
-                </div>
-              )}
+        {/* Two-column Intro Section */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Text Content - Left */}
+              <div>
+                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                  {content.intro?.paragraph || 'GETFund partners with organizations, institutions, and individuals who share our commitment to transforming education in Ghana. Through strategic partnerships, we can expand our reach and impact, ensuring every Ghanaian child has access to quality education.'}
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  Whether you're a corporate entity, non-profit organization, or individual donor, there are numerous ways to collaborate with us in building a brighter future for Ghana's youth.
+                </p>
+              </div>
+              {/* Image - Right */}
+              <div className="relative">
+                <img
+                  src={content.intro?.image || '/images/hero/main-slider-3.jpg'}
+                  alt="Partnership at GETFund"
+                  className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
+                />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Ways to Partner & Benefits - Side by Side */}
+        {/* Our Partners */}
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                {content.ourPartners?.heading || 'Our Partners'}
+              </h2>
+              <div className="w-12 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            </div>
+
+            {partners.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center">
+                {partners.map((partner) => (
+                  <div key={partner.id} className="flex items-center justify-center h-20 md:h-24">
+                    {partner.website_url ? (
+                      <a
+                        href={partner.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full h-full hover:opacity-80 transition-opacity duration-300"
+                        title={partner.name}
+                      >
+                        <img
+                          src={partner.logo_url}
+                          alt={partner.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </a>
+                    ) : (
+                      <div className="w-full h-full" title={partner.name}>
+                        <img
+                          src={partner.logo_url}
+                          alt={partner.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500">Partner logos will be displayed here.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Ways to Partner & Benefits - Side by Side */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Ways to Partner - Left */}
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                  {content.waysToPartner?.heading}
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  {content.waysToPartner?.heading || 'Ways to Partner'}
                 </h2>
+                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
                 <div className="grid grid-cols-2 gap-4">
-                  {(content.waysToPartner?.ways || []).map((way, index) => (
+                  {(content.waysToPartner?.ways || ['Infrastructure Funding', 'Scholarship Support', 'Technology Donations', 'Volunteer Programs']).map((way, index) => (
                     <div
                       key={index}
-                      className="bg-gray-50 p-4 rounded-lg text-center flex flex-col items-center gap-2"
+                      className="bg-white p-4 rounded-lg text-center flex flex-col items-center gap-3 shadow-sm"
                     >
                       {getPartnershipIcon(way)}
                       <p className="text-sm font-semibold text-gray-900">{way}</p>
@@ -199,19 +221,24 @@ export default function Partnerships() {
 
               {/* Benefits of Partnership - Right */}
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                  {content.whySupport?.heading}
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  {content.whySupport?.heading || 'Benefits of Partnership'}
                 </h2>
+                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
                 <div className="space-y-4">
-                  {(content.whySupport?.benefits || []).map((benefit, index) => (
+                  {(content.whySupport?.benefits || [
+                    { title: 'Tax Benefits', description: 'Enjoy tax deductions for your contributions to education.' },
+                    { title: 'Brand Visibility', description: 'Gain recognition through our publications and events.' },
+                    { title: 'Impact Reports', description: 'Receive detailed reports on how your support creates change.' }
+                  ]).map((benefit, index) => (
                     <div
                       key={index}
-                      className="bg-gray-50 p-4 rounded-lg border border-gray-100"
+                      className="bg-white p-4 rounded-lg shadow-sm"
                     >
-                      <h3 className="text-base font-bold text-getfund-primary mb-1">
+                      <h3 className="text-base font-bold text-gray-900 mb-1">
                         {benefit.title}
                       </h3>
-                      <p className="text-sm text-gray-700 leading-relaxed">{benefit.description}</p>
+                      <p className="text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
                     </div>
                   ))}
                 </div>
@@ -220,7 +247,7 @@ export default function Partnerships() {
           </div>
         </section>
 
-        </main>
+      </main>
 
       <Footer />
 

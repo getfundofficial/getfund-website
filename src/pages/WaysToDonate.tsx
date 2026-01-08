@@ -1,10 +1,10 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { CreditCard, Smartphone, Shield, ArrowRight, TrendingUp, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import PledgeToSupportForm from '../components/PledgeToSupportForm';
 import FloatingContact from '../components/FloatingContact';
@@ -27,7 +27,6 @@ interface DonationOption {
 
 
 interface WaysToDonateContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -124,61 +123,81 @@ export default function WaysToDonate() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'Ways to Donate'}
-          subtitle={content.hero?.subtitle || "Investing in Education. Building Ghana's Tomorrow."}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
-
-        {/* Impact Visualized - TOP LEFT */}
-        <section className="py-8 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <div className="bg-white border border-gray-200 rounded-lg p-6 inline-block">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Your Impact Visualized</h3>
-                <div className="flex gap-8">
-                  <div>
-                    <div className="text-sm text-gray-600 mb-1">Total Raised</div>
-                    <div className="text-3xl font-bold text-getfund-primary">
-                      {content.impactVisualized?.totalRaised || 'GH₵ [TBD]'}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600 mb-1">Total Donations</div>
-                    <div className="text-3xl font-bold text-getfund-gold">
-                      {content.impactVisualized?.totalDonations || '[TBD]'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Ways to Donate'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            {content.hero?.subtitle && (
+              <p className="text-gray-600 mt-4 max-w-3xl">
+                {content.hero.subtitle}
+              </p>
+            )}
           </div>
         </section>
 
-        {/* Donation Options */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-              There are many ways you can donate and support:
-            </h2>
+        {/* There Are Many Ways to Donate Section - MOVED ABOVE */}
+        {(content.donationOptions || []).length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 max-w-6xl">
+              {/* Impact Visualized Stats */}
+              {content.impactVisualized && (
+                <div className="flex flex-wrap gap-8 mb-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                      <TrendingUp className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                    </div>
+                    <div>
+                      <span className="text-3xl font-bold" style={{ color: '#2a3f75' }}>
+                        {content.impactVisualized.totalRaised}
+                      </span>
+                      <span className="text-gray-500 text-sm ml-2">Total Raised</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                      <Users className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                    </div>
+                    <div>
+                      <span className="text-3xl font-bold" style={{ color: '#2a3f75' }}>
+                        {content.impactVisualized.totalDonations}
+                      </span>
+                      <span className="text-gray-500 text-sm ml-2">Donations</span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-              {(content.donationOptions || []).map((option, index) => (
-                <DonationCard
-                  key={index}
-                  {...option}
-                  buttonAction={() => {
-                    setSelectedDonation({
-                      title: option.title,
-                      amount: donationAmounts[option.title] || 5000,
-                      description: option.description,
-                      presetAmounts: option.presetAmounts,
-                    });
-                    setModalOpen(true);
-                  }}
-                />
-              ))}
+              <div className="text-center mb-12">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                  Choose How You Want to Make an Impact
+                </h2>
+                <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                  Select a cause that resonates with you and directly support education in Ghana.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {(content.donationOptions || []).map((option, index) => (
+                  <DonationCard
+                    key={index}
+                    title={option.title}
+                    description={option.description}
+                    buttonText={option.buttonText || 'Donate Now'}
+                    buttonAction={() => {
+                      setSelectedDonation({
+                        title: option.title,
+                        amount: donationAmounts[option.title] || 5000,
+                        description: option.description,
+                        presetAmounts: option.presetAmounts,
+                      });
+                      setModalOpen(true);
+                    }}
+                  />
+                ))}
+              </div>
             </div>
 
             {selectedDonation && (
@@ -194,13 +213,21 @@ export default function WaysToDonate() {
                 presetAmounts={selectedDonation.presetAmounts}
               />
             )}
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Split Card: Donation Interface + Pledge to Support */}
-        <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        {/* Main Donation Section - Donation Interface + Pledge Side by Side */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                Make a Direct Donation
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Give a one-time or recurring donation to support GETFund's mission.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-8">
               {/* Left: Donation Interface */}
               <DonationInterface />
 
@@ -210,44 +237,76 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* Other Ways of Donating */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              {content.otherWays?.heading}
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {content.otherWays?.cheque?.title}
+        {/* Other Ways + Trust - Combined Section */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-5xl">
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Bank Transfer */}
+              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                  <CreditCard className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {content.otherWays?.cheque?.title || 'Bank Transfer'}
                 </h3>
-                <p className="text-gray-700">{content.otherWays?.cheque?.description}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{content.otherWays?.cheque?.description}</p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {content.otherWays?.mobileMoney?.title}
+              {/* Mobile Money */}
+              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 bg-yellow-50">
+                  <Smartphone className="w-6 h-6 text-yellow-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {content.otherWays?.mobileMoney?.title || 'Mobile Money'}
                 </h3>
-                <p className="text-gray-700">{content.otherWays?.mobileMoney?.description}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{content.otherWays?.mobileMoney?.description}</p>
+              </div>
+
+              {/* Trust/Security */}
+              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                  <Shield className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {content.giveWithConfidence?.heading || 'Give with Confidence'}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {content.giveWithConfidence?.description || 'Your donation is secure and goes directly to supporting education in Ghana.'}
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Give with Confidence */}
-        <section className="py-16 bg-white">
+        {/* CTA Section */}
+        <section className="py-16" style={{ backgroundColor: '#1e3a5f' }}>
           <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              {content.giveWithConfidence?.heading}
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Ready to Make a Difference?
             </h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {content.giveWithConfidence?.description}
+            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+              Every donation, no matter the size, helps transform education in Ghana. Join thousands of donors who are building a brighter future.
             </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/fundraising-campaigns"
+                className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300"
+                style={{ color: '#1e3a5f' }}
+              >
+                View Campaigns
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/fundraising/partnerships"
+                className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300"
+              >
+                Become a Partner
+              </Link>
+            </div>
           </div>
         </section>
-
-        </main>
+      </main>
 
       <Footer />
 

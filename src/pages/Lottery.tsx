@@ -327,7 +327,7 @@ const LotteryPrizeBox: React.FC<{ prizes: LotteryConfig['prizes']; bannerColor: 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-5 bg-getfund-secondary">
+      <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
         <h3 className="text-xl sm:text-2xl font-bold text-white text-center">
           {prizeBoxTitle || 'Prizes'}
         </h3>
@@ -351,21 +351,21 @@ const LotteryHowItWorks: React.FC<{
 }> = ({ steps, nextDrawDate, currentEntries }) => {
   const StepFront: React.FC<{ step: LotteryStep }> = ({ step }) => (
     <div className="flex items-start">
-      <div className="bg-getfund-primary text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0 mr-4 font-bold text-lg shadow-lg">
+      <div className="text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0 mr-4 font-bold text-lg shadow-lg" style={{ backgroundColor: '#2a3f75' }}>
         {step.step}
       </div>
       <div className="flex-1">
         <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">{step.title}</h4>
         <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{step.description}</p>
         {step.flip_description && (
-          <span className="text-xs text-getfund-primary font-medium mt-1 block">Tap for more →</span>
+          <span className="text-xs font-medium mt-1 block" style={{ color: '#2a3f75' }}>Tap for more →</span>
         )}
       </div>
     </div>
   );
 
   const StepBack: React.FC<{ step: LotteryStep }> = ({ step }) => (
-    <div className="bg-getfund-primary rounded-lg p-4 h-full flex flex-col justify-center">
+    <div className="rounded-lg p-4 h-full flex flex-col justify-center" style={{ backgroundColor: '#2a3f75' }}>
       <div className="flex items-center mb-2">
         <div className="bg-white/20 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-3 font-bold text-sm">
           {step.step}
@@ -403,7 +403,7 @@ const LotteryHowItWorks: React.FC<{
       <div className="glass-solid rounded-lg p-4 sm:p-5 mb-6">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-gray-600">Next Draw</span>
-          <span className="font-bold text-lg text-getfund-primary">
+          <span className="font-bold text-lg" style={{ color: '#2a3f75' }}>
             {new Date(nextDrawDate).toLocaleDateString('en-GB', {
               month: 'long',
               day: 'numeric',
@@ -421,7 +421,8 @@ const LotteryHowItWorks: React.FC<{
 
       <button
         onClick={() => window.location.href = '/fundraising/ways-to-donate'}
-        className="w-full bg-getfund-primary hover:bg-red-700 text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+        className="w-full text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:opacity-90"
+        style={{ backgroundColor: '#1e3a5f' }}
       >
         Participate Now - Donate & Enter
       </button>

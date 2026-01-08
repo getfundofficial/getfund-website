@@ -239,7 +239,8 @@ export default function FundraisingCampaigns() {
             <div className="text-center mt-10 sm:mt-12">
               <a
                 href="/fundraising/all-campaigns"
-                className="inline-block bg-getfund-secondary hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg"
+                className="inline-block text-white font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg hover:opacity-90"
+                style={{ backgroundColor: '#1e3a5f' }}
               >
                 {pageContent.viewAllButtonText || 'View All Campaigns'}
               </a>
@@ -289,7 +290,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           />
         </div>
       ) : (
-        <div className="relative h-48 bg-getfund-primary flex items-center justify-center">
+        <div className="relative h-48 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
           <Gift className="w-16 h-16 text-white/50" />
         </div>
       )}
@@ -325,8 +326,8 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
             <div
-              className="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${Math.max(percentageFunded, 2)}%` }}
+              className="h-2.5 rounded-full transition-all duration-500 ease-out"
+              style={{ backgroundColor: '#2a3f75', width: `${Math.max(percentageFunded, 2)}%` }}
             />
           </div>
           <div className="text-xs text-gray-500 mt-1">
@@ -339,7 +340,8 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
             setSelectedCampaign(campaign);
             setModalOpen(true);
           }}
-          className="w-full bg-getfund-gold hover:bg-yellow-600 text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
+          className="w-full text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:opacity-90 flex items-center justify-center"
+          style={{ backgroundColor: '#1e3a5f' }}
         >
           {campaign.button_text || 'Donate Now'}
         </button>

@@ -131,7 +131,7 @@ export default function CommunitySHSProgramme() {
               {content.infrastructureIntervention?.paragraph && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                    <span className="w-2 h-8 bg-blue-600 rounded"></span>
+                    <span className="w-2 h-8 rounded" style={{ backgroundColor: '#2a3f75' }}></span>
                     {content.infrastructureIntervention?.heading}
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed">

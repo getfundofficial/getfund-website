@@ -1,18 +1,14 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { GraduationCap } from 'lucide-react';
+import { CheckCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
-import OptimizedImage from '../components/OptimizedImage';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 interface ScholarshipProgrammeContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -127,11 +123,8 @@ export default function ScholarshipProgramme() {
     return <LoadingScreen />;
   }
 
-  // Determine if we're using the custom hero image banner or PageBanner
-  const useCustomHero = !content.bannerBackground?.imageUrl;
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Helmet>
         <title>{content.meta?.title}</title>
         <meta name="description" content={content.meta?.description} />
@@ -141,111 +134,158 @@ export default function ScholarshipProgramme() {
       <Breadcrumb />
 
       <main className="flex-1">
-        {useCustomHero ? (
-          // Custom Hero Banner with image
-          <section className="relative h-[320px] sm:h-[400px] md:h-[480px] lg:h-[520px] flex items-center justify-center mb-8">
-            <OptimizedImage
-              src={content.hero?.heroImage || '/images/scholarship/GETFund-Scholarship-Programme.jpg'}
-              alt={content.hero?.title}
-              className="absolute inset-0 w-full h-full object-cover object-center z-0"
-              width={1920}
-              height={520}
-              priority
-            />
-            <div className="absolute inset-0 bg-black/60 z-10" />
-            <div className="relative z-20 flex flex-col items-center justify-center text-center text-white px-4">
-              <GraduationCap className="w-14 h-14 mb-4 text-getfund-gold drop-shadow-lg" />
-              <h1 className="text-4xl sm:text-5xl font-bold mb-2 drop-shadow-lg">{content.hero?.title}</h1>
-              <p className="text-lg sm:text-xl max-w-2xl drop-shadow">{content.hero?.subtitle}</p>
+        {/* Page Title Section */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'GETFund Scholarship Programme'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
+
+        {/* Two-column Intro */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                  The GETFund Scholarship Programme is a flagship initiative designed to provide financial support to Ghanaian students pursuing tertiary education, both locally and internationally.
+                </p>
+                {content.overview?.paragraph && (
+                  <p className="text-gray-600 leading-relaxed">
+                    {content.overview?.paragraph}
+                  </p>
+                )}
+              </div>
+              <div>
+                <img
+                  src={content.hero?.heroImage || '/images/scholarship/GETFund-Scholarship-Programme.jpg'}
+                  alt="Scholarship Programme"
+                  className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Key Objectives */}
+        {content.objectives?.items?.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 max-w-6xl">
+              <div className="mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                  {content.objectives?.heading || 'Key Objectives'}
+                </h2>
+                <div className="w-12 h-1" style={{ backgroundColor: '#2a3f75' }} />
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {content.objectives?.items?.map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 bg-white p-5 rounded-lg shadow-sm">
+                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-700">{item}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
-        ) : (
-          // PageBanner with CMS background
-          <PageBanner
-            title={content.hero?.title}
-            subtitle={content.hero?.subtitle}
-            bannerBackground={content.bannerBackground}
-            defaultGradient="#DC143C"
-          />
         )}
 
-        <div className="max-w-4xl mx-auto px-4 py-16">
-          <p className="mb-6 text-lg text-gray-800">
-            The GETFund Scholarship Programme is a flagship initiative designed to provide financial support to Ghanaian students pursuing tertiary education, both locally and internationally. The programme aims to bridge the financial gap for brilliant but needy students, empowering them to achieve their academic and professional aspirations.
-          </p>
-
-          {/* Programme Overview */}
-          {content.overview?.paragraph && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">{content.overview?.heading}</h2>
-              <p className="mb-4 text-gray-700">
-                {content.overview?.paragraph}
-              </p>
-            </section>
-          )}
-
-          {/* Key Objectives */}
-          {content.objectives?.items?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">{content.objectives?.heading}</h2>
-              <ul className="list-disc list-inside mb-4 text-gray-700">
-                {content.objectives?.items?.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Eligibility Criteria */}
-          {content.eligibility?.items?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">{content.eligibility?.heading}</h2>
-              <ul className="list-disc list-inside mb-4 text-gray-700">
-                {content.eligibility?.items?.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Application Process */}
-          {content.applicationProcess?.steps?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">{content.applicationProcess?.heading}</h2>
-              <ol className="list-decimal list-inside mb-4 text-gray-700">
-                {content.applicationProcess?.steps?.map((step, idx) => (
-                  <li key={idx}>{step}</li>
-                ))}
-              </ol>
-            </section>
-          )}
-
-          {/* Important Notes */}
-          {content.importantNotes?.items?.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">{content.importantNotes?.heading}</h2>
-              <ul className="list-disc list-inside mb-4 text-gray-700">
-                {content.importantNotes?.items?.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* Closing */}
-          {content.closingParagraph && (
-            <p className="mt-8 text-gray-800">
-              {content.closingParagraph.split('Resources page').length > 1 ? (
-                <>
-                  For detailed guidelines, application timelines, and frequently asked questions, please visit the{' '}
-                  <Link to="/resources" className="text-getfund-primary underline">Resources</Link> page or contact us for assistance.
-                </>
-              ) : (
-                content.closingParagraph
+        {/* Eligibility & Application Process - Side by Side */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Eligibility */}
+              {content.eligibility?.items?.length > 0 && (
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    {content.eligibility?.heading || 'Eligibility Criteria'}
+                  </h2>
+                  <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
+                  <div className="space-y-4">
+                    {content.eligibility?.items?.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                        <div className="w-6 h-6 rounded-full text-white flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                          {idx + 1}
+                        </div>
+                        <p className="text-gray-700">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
+
+              {/* Application Process */}
+              {content.applicationProcess?.steps?.length > 0 && (
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    {content.applicationProcess?.heading || 'Application Process'}
+                  </h2>
+                  <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
+                  <div className="space-y-4">
+                    {content.applicationProcess?.steps?.map((step, idx) => (
+                      <div key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                        <div className="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                          {idx + 1}
+                        </div>
+                        <p className="text-gray-700">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Important Notes */}
+        {content.importantNotes?.items?.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 max-w-6xl">
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  {content.importantNotes?.heading || 'Important Notes'}
+                </h2>
+                <ul className="space-y-3">
+                  {content.importantNotes?.items?.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0" />
+                      <p className="text-gray-700">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* CTA Section */}
+        <section className="py-16" style={{ backgroundColor: '#2a3f75' }}>
+          <div className="container mx-auto px-4 max-w-4xl text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Ready to Apply?
+            </h2>
+            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+              {content.closingParagraph || 'For detailed guidelines, application timelines, and frequently asked questions, visit our resources page.'}
             </p>
-          )}
-        </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/scholarship-apply"
+                className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300"
+                style={{ color: '#2a3f75' }}
+              >
+                Apply Now
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/resources"
+                className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300"
+              >
+                View Resources
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />

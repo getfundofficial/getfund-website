@@ -126,7 +126,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
     return (
       <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
         {/* Header */}
-        <div className="bg-getfund-gold px-6 py-5">
+        <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
           <h3 className="text-2xl font-bold text-white flex items-center gap-3">
             <HeartHandshake className="w-6 h-6" />
             Pledge Your Support
@@ -136,8 +136,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         <div className="p-6">
           <div className="text-center py-8">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <svg className="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+              <svg className="w-10 h-10" style={{ color: '#2a3f75' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -147,7 +147,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             </p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-8 py-3 bg-getfund-primary text-white rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-500/30"
+              className="px-8 py-3 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg"
+              style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
             >
               Submit Another Pledge
             </button>
@@ -166,7 +167,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
   return (
     <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-getfund-gold px-6 py-5">
+      <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
         <h3 className="text-2xl font-bold text-white flex items-center gap-3">
           <HeartHandshake className="w-6 h-6" />
           Pledge Your Support
@@ -197,7 +198,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               id="first_name"
               value={formData.first_name}
               onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="John"
               required
             />
@@ -212,7 +214,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               id="last_name"
               value={formData.last_name}
               onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="Doe"
               required
             />
@@ -230,7 +233,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             id="email"
             value={formData.email}
             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="john.doe@example.com"
             required
           />
@@ -246,7 +250,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             id="country"
             value={formData.country}
             onChange={(e) => handleCountryChange(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold bg-white transition-all cursor-pointer font-medium"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             required
           >
             {COUNTRY_DATA.map(country => (
@@ -267,7 +272,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             <select
               value={formData.phone_country_code}
               onChange={(e) => setFormData(prev => ({ ...prev, phone_country_code: e.target.value }))}
-              className="w-24 px-3 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold bg-white text-sm font-medium"
+              className="w-24 px-3 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white text-sm font-medium"
+              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             >
               {COUNTRY_DATA.map(country => (
                 <option key={`${country.flag}-code`} value={country.code}>
@@ -283,7 +289,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 const value = e.target.value.replace(/\D/g, '');
                 setFormData(prev => ({ ...prev, phone_number: value }));
               }}
-              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium"
+              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="XX XXX XXXX"
               required
             />
@@ -301,7 +308,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             id="address"
             value={formData.address}
             onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="Your address"
           />
         </div>
@@ -317,7 +325,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             value={formData.donation_description}
             onChange={(e) => setFormData(prev => ({ ...prev, donation_description: e.target.value }))}
             rows={3}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-getfund-gold focus:border-getfund-gold transition-all font-medium resize-none"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium resize-none"
+            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="Describe how you would like to support GETFund..."
             required
           />
@@ -330,7 +339,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-getfund-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+          className="w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+          style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
         >
           {isSubmitting ? (
             <>
