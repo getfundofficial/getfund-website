@@ -13,11 +13,11 @@ function NextArrow(props: ArrowProps) {
   return (
     <button
       type="button"
-      className="absolute top-1/2 right-2 xs:right-4 sm:right-6 md:right-8 3xl:right-12 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-getfund-primary rounded-full p-1.5 xs:p-2 md:p-2.5 3xl:p-3 shadow-lg transition-colors border border-white focus:outline-none focus:ring-2 focus:ring-getfund-primary touch-manipulation"
+      className="hero-nav-arrow absolute top-1/2 right-4 sm:right-6 md:right-8 -translate-y-1/2 z-20 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
       onClick={onClick}
       aria-label="Next slide"
     >
-      <ChevronRight className="w-5 h-5 xs:w-6 xs:h-6 md:w-7 md:h-7 3xl:w-9 3xl:h-9" />
+      <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" strokeWidth={2.5} />
     </button>
   );
 }
@@ -27,11 +27,11 @@ function PrevArrow(props: ArrowProps) {
   return (
     <button
       type="button"
-      className="absolute top-1/2 left-2 xs:left-4 sm:left-6 md:left-8 3xl:left-12 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-getfund-primary rounded-full p-1.5 xs:p-2 md:p-2.5 3xl:p-3 shadow-lg transition-colors border border-white focus:outline-none focus:ring-2 focus:ring-getfund-primary touch-manipulation"
+      className="hero-nav-arrow absolute top-1/2 left-4 sm:left-6 md:left-8 -translate-y-1/2 z-20 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
       onClick={onClick}
       aria-label="Previous slide"
     >
-      <ChevronLeft className="w-5 h-5 xs:w-6 xs:h-6 md:w-7 md:h-7 3xl:w-9 3xl:h-9" />
+      <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" strokeWidth={2.5} />
     </button>
   );
 }
@@ -259,7 +259,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   }
 
   return (
-    <section className="relative bg-transparent text-white overflow-hidden mt-[80px]">
+    <section className="group relative bg-transparent text-white overflow-hidden mt-[80px]">
       {/* Carousel Background */}
       <Slider {...settings} className="w-full">
         {slides.map((slide, idx) => {

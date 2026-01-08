@@ -64,9 +64,7 @@ export default function OptimizedImage({
   return (
     <div className="relative h-full">
       {isLoading && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-          <div className="text-gray-400">Loading...</div>
-        </div>
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
       )}
       <img
         src={currentSrc}

@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
-import ContactSection from '../components/ContactSection';
+import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi, Partner } from '../services/cmsApi';
 import { Building2, GraduationCap, BookOpen, Laptop, HandHeart, Users, Briefcase, Heart } from 'lucide-react';
@@ -85,7 +85,7 @@ export default function Partnerships() {
   }, []);
 
   if (isLoading) {
-    return <LoadingScreen message="Loading..." />;
+    return <LoadingScreen />;
   }
 
   if (!content) {
@@ -219,11 +219,12 @@ export default function Partnerships() {
           </div>
         </section>
 
-        {/* Contact Section - HARDCODED COMPONENT */}
-        <ContactSection />
-      </main>
+        </main>
 
       <Footer />
+
+      {/* Floating Contact Button */}
+      <FloatingContact />
     </div>
   );
 }

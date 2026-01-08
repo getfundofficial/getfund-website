@@ -18,25 +18,27 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://getfund-cms-b
 
 export default function ImpactStats({ className = '', page }: ImpactStatsProps) {
   const [stats, setStats] = useState<ImpactStat[]>([]);
+  const [title, setTitle] = useState('Our Impact');
   const [subtitle, setSubtitle] = useState('25+ years of giving');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const url = page 
+        const url = page
           ? `${API_BASE_URL}/impact-stats?page=${page}`
           : `${API_BASE_URL}/impact-stats`;
-        
+
         const response = await fetch(url);
         const data = await response.json();
-        
+
         if (data.success) {
           setStats(data.data.stats || []);
+          setTitle(data.data.title || 'Our Impact');
           setSubtitle(data.data.subtitle || '25+ years of giving');
         }
-      } catch (error) {
-        console.error('Error fetching impact stats:', error);
+      } catch {
+        // Keep default values on error
       } finally {
         setLoading(false);
       }
@@ -86,7 +88,7 @@ export default function ImpactStats({ className = '', page }: ImpactStatsProps) 
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Our Impact
+            {title}
           </h2>
           <p className="text-xl md:text-2xl text-gray-600 mt-2">
             {subtitle}
