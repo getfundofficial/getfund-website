@@ -7,7 +7,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import PledgeToSupportForm from '../components/PledgeToSupportForm';
-import ContactSection from '../components/ContactSection';
+import FloatingContact from '../components/FloatingContact';
 import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
 import LoadingScreen from '../components/LoadingScreen';
@@ -247,11 +247,12 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* Contact Section - HARDCODED COMPONENT */}
-        <ContactSection />
-      </main>
+        </main>
 
       <Footer />
+
+      {/* Floating Contact Button */}
+      <FloatingContact />
     </div>
   );
 }

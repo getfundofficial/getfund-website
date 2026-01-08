@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
-import ContactSection from '../components/ContactSection';
+import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
@@ -105,11 +105,12 @@ export default function BeneficiariesGiveBack() {
           </div>
         </section>
 
-        {/* Contact Section */}
-        <ContactSection />
-      </main>
+        </main>
 
       <Footer />
+
+      {/* Floating Contact Button */}
+      <FloatingContact />
     </div>
   );
 }

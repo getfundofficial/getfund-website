@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
-import ContactSection from '../components/ContactSection';
+import FloatingContact from '../components/FloatingContact';
 import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
@@ -277,7 +277,7 @@ export default function FundraisingCampaigns() {
   }, []);
 
   if (isLoading) {
-    return <LoadingScreen message="Loading fundraising campaigns..." />;
+    return <LoadingScreen />;
   }
 
   return (
@@ -382,10 +382,11 @@ export default function FundraisingCampaigns() {
           </div>
         </section>
 
-        {/* Get in Touch Section */}
-        <ContactSection />
-      </main>
+        </main>
       <Footer />
+
+      {/* Floating Contact Button */}
+      <FloatingContact />
 
       {/* Donation Modal */}
       {selectedCampaign && (

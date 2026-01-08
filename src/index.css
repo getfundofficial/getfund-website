@@ -331,6 +331,27 @@
 /* Ensure slider controls are above overlays */
 .slick-prev, .slick-next, .slick-dots { z-index: 30 !important; }
 
+/* Hero navigation arrows - hidden by default, shown on hover */
+.hero-nav-arrow {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Show arrows when focused (for accessibility) */
+.hero-nav-arrow:focus {
+  opacity: 1 !important;
+}
+
+/* On touch devices, keep arrows slightly visible */
+@media (hover: none) {
+  .hero-nav-arrow {
+    opacity: 0.6 !important;
+  }
+  .hero-nav-arrow:active {
+    opacity: 1 !important;
+  }
+}
+
 /* Dropdown menu hover persistence */
 .dropdown-container:hover .dropdown-menu,
 .dropdown-menu:hover {

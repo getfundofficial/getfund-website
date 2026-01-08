@@ -7,9 +7,10 @@ import Breadcrumb from '../components/Breadcrumb';
 import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
-import ContactSection from '../components/ContactSection';
+import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
+import { Shield, Heart, Users } from 'lucide-react';
 
 
 interface WhyFundraisingContent {
@@ -21,7 +22,6 @@ interface WhyFundraisingContent {
   hero: {
     title: string;
     subtitle: string;
-    ctaButtonText: string;
   };
   mainContent: {
     paragraph: string;
@@ -51,19 +51,14 @@ export default function WhyFundraising() {
         if (section?.content) {
           setContent(section.content as WhyFundraisingContent);
         }
-      } catch (error) {
-        console.error('Failed to load page content:', error);
+      } catch {
+        // Keep loading state false to show error
       } finally {
         setIsLoading(false);
       }
     };
     fetchContent();
   }, []);
-
-  const scrollToDonation = () => {
-    const element = document.getElementById('donation-section');
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -98,20 +93,8 @@ export default function WhyFundraising() {
           defaultGradient="#DC143C"
         />
 
-        {/* CTA Button below banner */}
-        <div className="bg-gray-50 py-8">
-          <div className="container mx-auto px-4 text-center">
-            <button
-              onClick={scrollToDonation}
-              className="inline-block bg-getfund-gold text-white px-8 py-4 rounded-md font-semibold hover:bg-yellow-600 transition-colors text-lg"
-            >
-              {content.hero?.ctaButtonText}
-            </button>
-          </div>
-        </div>
-
         {/* Main Content */}
-        <section className="py-16 bg-white">
+        <section className="py-12 bg-white">
           <div className="container mx-auto px-4 max-w-4xl">
             <p className="text-lg text-gray-700 leading-relaxed">
               {content.mainContent?.paragraph}
@@ -122,47 +105,66 @@ export default function WhyFundraising() {
         {/* Impact Stats - CMS-POWERED */}
         <ImpactStats page="why-fundraising" />
 
-        {/* Why Donate Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              {content.whyDonate?.heading}
-            </h2>
+        {/* Two Column Section: Why Donate & Get Involved */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Why Donate - Give with Confidence */}
+              <div className="bg-gray-50 rounded-xl p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-getfund-primary/10 rounded-full flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-getfund-primary" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                    {content.whyDonate?.heading || 'Why Donate to Us?'}
+                  </h2>
+                </div>
+                <div className="space-y-4 text-gray-700 leading-relaxed">
+                  {content.whyDonate?.paragraph1 && <p>{content.whyDonate.paragraph1}</p>}
+                  {content.whyDonate?.paragraph2 && <p>{content.whyDonate.paragraph2}</p>}
+                  {content.whyDonate?.paragraph3 && <p>{content.whyDonate.paragraph3}</p>}
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Shield className="w-4 h-4 text-getfund-primary" />
+                    <span>Transparent</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Heart className="w-4 h-4 text-getfund-gold" />
+                    <span>Impactful</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Users className="w-4 h-4 text-teal-600" />
+                    <span>Community-driven</span>
+                  </div>
+                </div>
+              </div>
 
-            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-              <p>{content.whyDonate?.paragraph1}</p>
-              <p>{content.whyDonate?.paragraph2}</p>
-              <p>{content.whyDonate?.paragraph3}</p>
+              {/* Vertical Divider - visible on lg screens */}
+              <div className="hidden lg:block absolute left-1/2 top-4 bottom-4 w-px bg-gray-200" />
+
+              {/* Get Involved */}
+              <div className="bg-getfund-secondary rounded-xl p-6 md:p-8 text-white">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                  {content.getInvolved?.heading || 'Get Involved'}
+                </h2>
+                <p className="text-gray-200 leading-relaxed mb-6">
+                  {content.getInvolved?.description}
+                </p>
+                <h3 className="text-xl font-semibold mb-4">
+                  {content.getInvolved?.donationHeading || 'Make a Donation'}
+                </h3>
+                <DonationInterface />
+              </div>
             </div>
           </div>
         </section>
-
-        {/* Get Involved Section */}
-        <section id="donation-section" className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 text-center">
-              {content.getInvolved?.heading}
-            </h2>
-
-            <p className="text-lg text-gray-700 leading-relaxed mb-8 text-center">
-              {content.getInvolved?.description}
-            </p>
-
-            <div className="max-w-2xl mx-auto">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
-                {content.getInvolved?.donationHeading}
-              </h3>
-              {/* HARDCODED COMPONENT */}
-              <DonationInterface />
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section - HARDCODED COMPONENT */}
-        <ContactSection />
       </main>
 
       <Footer />
+
+      {/* Floating Contact Button */}
+      <FloatingContact />
     </div>
   );
 }

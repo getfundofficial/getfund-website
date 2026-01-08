@@ -74,15 +74,14 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
     return (
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-4">
+          <div className="flex justify-center">
+            <div className="w-20 h-20">
               <img
                 src="/images/logos/getfund-cropped-icon.png"
-                alt="Loading..."
+                alt="Loading"
                 className="w-full h-full object-contain animate-spin-slow"
               />
             </div>
-            <p className="text-gray-600">Loading news...</p>
           </div>
         </div>
       </section>
