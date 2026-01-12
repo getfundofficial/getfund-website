@@ -191,15 +191,15 @@ export default function Lottery() {
 
       <main className="flex-1">
         {/* Page Title Section - Clean, minimal */}
-        <section className="bg-white pt-8 pb-6">
+        <section className="bg-white pt-8 pb-4">
           <div className="container mx-auto px-4 max-w-6xl">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Scholarship Lottery'}
             </h1>
             <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
-            {content.hero?.subtitle && (
+            {content.intro?.paragraph && (
               <p className="text-gray-600 mt-4 max-w-3xl">
-                {content.hero.subtitle}
+                {content.intro.paragraph}
               </p>
             )}
           </div>
@@ -207,7 +207,7 @@ export default function Lottery() {
 
         {/* Featured Image Section - CMS Editable */}
         {content.featuredImage?.url && (
-          <section className="py-8 bg-white">
+          <section className="py-6 bg-white">
             <div className="container mx-auto px-4 max-w-4xl">
               <div className="rounded-xl overflow-hidden shadow-lg">
                 <img
@@ -225,19 +225,8 @@ export default function Lottery() {
           </section>
         )}
 
-        {/* Intro Paragraph */}
-        {content.intro?.paragraph && (
-          <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
-            <div className="container mx-auto px-4 max-w-4xl">
-              <p className="text-lg text-gray-700 leading-relaxed text-center">
-                {content.intro.paragraph}
-              </p>
-            </div>
-          </section>
-        )}
-
         {/* Lottery Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-gray-50">
+        <section className="py-8 sm:py-10 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto items-start">
               {/* Prize Box */}
