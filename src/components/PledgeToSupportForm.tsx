@@ -126,28 +126,28 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
     return (
       <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
         {/* Header */}
-        <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <HeartHandshake className="w-6 h-6" />
+        <div className="px-4 py-3" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+          <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
+            <HeartHandshake className="w-4 h-4" />
             Pledge Your Support
           </h3>
-          <p className="text-white/80 text-sm mt-1">Promise to give, we'll follow up</p>
+          <p className="text-xs mt-0.5 text-gray-600">Promise to give, we'll follow up</p>
         </div>
 
-        <div className="p-6">
-          <div className="text-center py-8">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-              <svg className="w-10 h-10" style={{ color: '#2a3f75' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="p-4">
+          <div className="text-center py-6">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+              <svg className="w-8 h-8" style={{ color: '#2a3f75' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
-            <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Thank You!</h3>
+            <p className="text-gray-600 mb-4 max-w-sm mx-auto text-sm">
               Your pledge to support has been submitted successfully. Our team will contact you soon.
             </p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-8 py-3 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg"
+              className="px-6 py-2 text-white rounded-lg font-semibold transition-all duration-200 shadow-lg text-sm"
               style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
             >
               Submit Another Pledge
@@ -155,7 +155,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
           </div>
 
           {/* Trust Badge */}
-          <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-100 mt-4">
+          <div className="flex items-center justify-center gap-2 pt-3 border-t border-gray-100 mt-3">
             <Shield className="w-4 h-4 text-gray-400" />
             <span className="text-xs text-gray-500">Secure & Encrypted</span>
           </div>
@@ -167,15 +167,15 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
   return (
     <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
-        <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-          <HeartHandshake className="w-6 h-6" />
+      <div className="px-4 py-3" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+        <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
+          <HeartHandshake className="w-4 h-4" />
           Pledge Your Support
         </h3>
-        <p className="text-white/80 text-sm mt-1">Promise to give, we'll follow up</p>
+        <p className="text-xs mt-0.5 text-gray-600">Promise to give, we'll follow up</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-5">
+      <form onSubmit={handleSubmit} className="p-4 space-y-3">
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
@@ -187,10 +187,10 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         )}
 
         {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="first_name" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-              <User className="w-4 h-4 text-gray-400" />
+            <label htmlFor="first_name" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+              <User className="w-3 h-3 text-gray-400" />
               First Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -198,15 +198,15 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               id="first_name"
               value={formData.first_name}
               onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
               style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="John"
               required
             />
           </div>
           <div>
-            <label htmlFor="last_name" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-              <User className="w-4 h-4 text-gray-400" />
+            <label htmlFor="last_name" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+              <User className="w-3 h-3 text-gray-400" />
               Last Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -214,7 +214,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               id="last_name"
               value={formData.last_name}
               onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
               style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="Doe"
               required
@@ -224,8 +224,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <Mail className="w-4 h-4 text-gray-400" />
+          <label htmlFor="email" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+            <Mail className="w-3 h-3 text-gray-400" />
             Email <span className="text-red-500">*</span>
           </label>
           <input
@@ -233,7 +233,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             id="email"
             value={formData.email}
             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="john.doe@example.com"
             required
@@ -242,15 +242,15 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         {/* Country */}
         <div>
-          <label htmlFor="country" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <Globe className="w-4 h-4 text-gray-400" />
+          <label htmlFor="country" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+            <Globe className="w-3 h-3 text-gray-400" />
             Country <span className="text-red-500">*</span>
           </label>
           <select
             id="country"
             value={formData.country}
             onChange={(e) => handleCountryChange(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white transition-all cursor-pointer font-medium text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             required
           >
@@ -264,15 +264,15 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         {/* Phone with Country Code */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <Phone className="w-4 h-4 text-gray-400" />
+          <label htmlFor="phone" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+            <Phone className="w-3 h-3 text-gray-400" />
             Phone Number <span className="text-red-500">*</span>
           </label>
           <div className="flex gap-2">
             <select
               value={formData.phone_country_code}
               onChange={(e) => setFormData(prev => ({ ...prev, phone_country_code: e.target.value }))}
-              className="w-24 px-3 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white text-sm font-medium"
+              className="w-20 px-2 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white text-xs font-medium"
               style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             >
               {COUNTRY_DATA.map(country => (
@@ -289,7 +289,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 const value = e.target.value.replace(/\D/g, '');
                 setFormData(prev => ({ ...prev, phone_number: value }));
               }}
-              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+              className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
               style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
               placeholder="XX XXX XXXX"
               required
@@ -299,8 +299,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         {/* Address */}
         <div>
-          <label htmlFor="address" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gray-400" />
+          <label htmlFor="address" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-gray-400" />
             Address <span className="text-gray-400 font-normal">(optional)</span>
           </label>
           <input
@@ -308,7 +308,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             id="address"
             value={formData.address}
             onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="Your address"
           />
@@ -316,16 +316,16 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         {/* Donation Description */}
         <div>
-          <label htmlFor="donation_description" className="block text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <FileText className="w-4 h-4 text-gray-400" />
+          <label htmlFor="donation_description" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
+            <FileText className="w-3 h-3 text-gray-400" />
             How would you like to help? <span className="text-red-500">*</span>
           </label>
           <textarea
             id="donation_description"
             value={formData.donation_description}
             onChange={(e) => setFormData(prev => ({ ...prev, donation_description: e.target.value }))}
-            rows={3}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium resize-none"
+            rows={2}
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium resize-none text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="Describe how you would like to support GETFund..."
             required
@@ -339,8 +339,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
-          style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
+          className="w-full py-3 rounded-lg font-bold text-base transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center bg-amber-500/60 hover:bg-amber-500/80"
+          style={{ color: '#1e3a5f' }}
         >
           {isSubmitting ? (
             <>
@@ -356,7 +356,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         </button>
 
         {/* Trust Badge */}
-        <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-100 mt-2">
+        <div className="flex items-center justify-center gap-2 pt-3 border-t border-gray-100 mt-2">
           <Shield className="w-4 h-4 text-gray-400" />
           <span className="text-xs text-gray-500">Secure & Encrypted</span>
         </div>

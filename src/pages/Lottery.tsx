@@ -3,17 +3,14 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import FloatingContact from '../components/FloatingContact';
 import { FlipCard } from '../components/lottery/FlipCard';
 import { CountdownTimer } from '../components/lottery/CountdownTimer';
 import { SocialShareButtons } from '../components/lottery/SocialShareButtons';
 import { cmsApi } from '../services/cmsApi';
-import { BannerBackground } from '../types/bannerBackground';
 
 interface LotteryPageContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -24,6 +21,11 @@ interface LotteryPageContent {
   };
   intro: {
     paragraph: string;
+  };
+  featuredImage?: {
+    url: string;
+    alt: string;
+    caption?: string;
   };
 }
 
@@ -91,17 +93,12 @@ const defaultLotteryConfig: LotteryConfig = {
 
 // Default page content
 const defaultPageContent: LotteryPageContent = {
-  bannerBackground: {
-    imageUrl: '/images/hero/main-slider-3.jpg',
-    tintColor: '#DC143C',
-    tintOpacity: 75
-  },
   meta: {
     title: 'Scholarship Lottery | GETFund',
     description: 'Enter the GETFund Scholarship Lottery - every donation gives you a chance to win educational scholarships for yourself or loved ones.'
   },
   hero: {
-    title: 'GETFund Scholarship Lottery',
+    title: 'Scholarship Lottery',
     subtitle: 'Every contribution gives you a chance to win full scholarships while supporting education in Ghana'
   },
   intro: {
@@ -193,16 +190,44 @@ export default function Lottery() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'GETFund Scholarship Lottery'}
-          subtitle={content.hero?.subtitle}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Scholarship Lottery'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            {content.hero?.subtitle && (
+              <p className="text-gray-600 mt-4 max-w-3xl">
+                {content.hero.subtitle}
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* Featured Image Section - CMS Editable */}
+        {content.featuredImage?.url && (
+          <section className="py-8 bg-white">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img
+                  src={content.featuredImage.url}
+                  alt={content.featuredImage.alt || 'Scholarship Lottery'}
+                  className="w-full h-auto object-cover"
+                />
+                {content.featuredImage.caption && (
+                  <p className="text-sm text-gray-500 text-center py-3 bg-gray-50">
+                    {content.featuredImage.caption}
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Intro Paragraph */}
         {content.intro?.paragraph && (
-          <section className="py-12 bg-white">
+          <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
             <div className="container mx-auto px-4 max-w-4xl">
               <p className="text-lg text-gray-700 leading-relaxed text-center">
                 {content.intro.paragraph}

@@ -1,18 +1,15 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
 
 interface BeneficiariesGiveBackContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
@@ -25,6 +22,11 @@ interface BeneficiariesGiveBackContent {
     paragraph1: string;
     paragraph2: string;
     ctaButtonText: string;
+  };
+  featuredImage?: {
+    url: string;
+    alt: string;
+    caption?: string;
   };
 }
 
@@ -75,14 +77,38 @@ export default function BeneficiariesGiveBack() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'GETFund Beneficiaries'}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'GETFund Beneficiaries'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
+
+        {/* Featured Image Section - CMS Editable */}
+        {content.featuredImage?.url && (
+          <section className="py-8 bg-white">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img
+                  src={content.featuredImage.url}
+                  alt={content.featuredImage.alt || 'GETFund Beneficiaries'}
+                  className="w-full h-auto object-cover"
+                />
+                {content.featuredImage.caption && (
+                  <p className="text-sm text-gray-500 text-center py-3 bg-gray-50">
+                    {content.featuredImage.caption}
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Main Content */}
-        <section className="py-20 bg-white">
+        <section className="py-20" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
               {content.mainContent?.heading}
@@ -97,7 +123,8 @@ export default function BeneficiariesGiveBack() {
             <div className="flex justify-center">
               <Link
                 to="/fundraising/ways-to-donate"
-                className="inline-block bg-getfund-gold text-white px-12 py-4 rounded-md font-semibold hover:bg-yellow-600 transition-colors text-lg"
+                className="inline-block px-12 py-4 rounded-md font-semibold transition-colors text-lg shadow-lg hover:shadow-xl"
+                style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
               >
                 {content.mainContent?.ctaButtonText || 'Make a Donation'}
               </Link>

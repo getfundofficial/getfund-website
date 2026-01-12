@@ -12,11 +12,13 @@ interface ImpactStat {
 interface ImpactStatsProps {
   className?: string;
   page?: string;
+  variant?: 'dark' | 'light';
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://getfund-cms-backend.vercel.app/api';
 
-export default function ImpactStats({ className = '', page = 'all' }: ImpactStatsProps) {
+export default function ImpactStats({ className = '', page = 'all', variant = 'dark' }: ImpactStatsProps) {
+  const isLight = variant === 'light';
   const [stats, setStats] = useState<ImpactStat[]>([]);
   const [title, setTitle] = useState('Our Impact');
   const [subtitle, setSubtitle] = useState('25+ years of giving');
@@ -87,16 +89,16 @@ export default function ImpactStats({ className = '', page = 'all' }: ImpactStat
 
   if (loading) {
     return (
-      <section className={`py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 ${className}`}>
-        <div className="container mx-auto px-4">
+      <div className={`${isLight ? '' : 'py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900'} ${className}`}>
+        <div className={isLight ? '' : 'container mx-auto px-4'}>
           <div className="text-center">
             <div className="animate-pulse">
-              <div className="h-8 bg-white/10 rounded w-48 mx-auto mb-4"></div>
-              <div className="h-6 bg-white/5 rounded w-32 mx-auto"></div>
+              <div className={`h-8 ${isLight ? 'bg-gray-200' : 'bg-white/10'} rounded w-48 mx-auto mb-4`}></div>
+              <div className={`h-6 ${isLight ? 'bg-gray-100' : 'bg-white/5'} rounded w-32 mx-auto`}></div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 
@@ -104,6 +106,40 @@ export default function ImpactStats({ className = '', page = 'all' }: ImpactStat
     return null;
   }
 
+  // Light variant - compact, no background
+  if (isLight) {
+    return (
+      <div className={className}>
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-gray-900 mb-1">{title}</h3>
+          <p className="text-sm text-gray-500">{subtitle}</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((stat) => {
+            const accentColor = getAccentColor(stat.color);
+            return (
+              <div
+                key={stat.id}
+                className="bg-gray-50 rounded-xl p-4 text-center border border-gray-100 hover:shadow-md transition-all duration-200"
+              >
+                <div
+                  className="text-2xl font-bold mb-1"
+                  style={{ color: accentColor }}
+                >
+                  {stat.value}
+                </div>
+                <div className="text-gray-600 text-xs font-medium leading-tight">
+                  {stat.title}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Dark variant - full width section with background
   return (
     <section className={`py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden ${className}`}>
       {/* Background decorative elements */}
