@@ -1,10 +1,9 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Calendar, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
@@ -19,13 +18,13 @@ interface Event {
 
 
 interface EventsContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
   };
   hero: {
     title: string;
+    subtitle?: string;
   };
   upcomingEvents: {
     heading: string;
@@ -81,53 +80,72 @@ export default function Events() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'Events'}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Events'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            {content.hero?.subtitle && (
+              <p className="text-gray-600 mt-4 max-w-3xl">
+                {content.hero.subtitle}
+              </p>
+            )}
+          </div>
+        </section>
 
         {/* Upcoming Events */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
-              {content.upcomingEvents?.heading}
-            </h2>
+        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                {content.upcomingEvents?.heading || 'Upcoming Events'}
+              </h2>
+              <div className="w-12 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            </div>
 
             {events.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="bg-gray-50 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                    className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-transparent hover:-translate-y-1"
                   >
                     {/* Event image or placeholder */}
                     {event.imageUrl ? (
                       <img src={event.imageUrl} alt={event.title} className="aspect-video w-full object-cover" />
                     ) : (
-                      <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-400 text-lg">Event Flyer</span>
+                      <div className="aspect-video flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                        <Calendar className="w-12 h-12" style={{ color: '#2a3f75' }} />
                       </div>
                     )}
 
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{event.title}</h3>
-                      <p className="text-gray-600 mb-4">{event.date}</p>
-                      <p className="text-gray-700">{event.description}</p>
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#2a3f75] transition-colors">
+                        {event.title}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                        <Clock className="w-4 h-4" />
+                        <span>{event.date}</span>
+                      </div>
+                      <p className="text-gray-600 text-sm leading-relaxed">{event.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">{content.upcomingEvents?.emptyStateTitle}</p>
-                <p className="text-gray-500 mt-2">{content.upcomingEvents?.emptyStateSubtitle}</p>
+              <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                  <Calendar className="w-8 h-8" style={{ color: '#2a3f75' }} />
+                </div>
+                <p className="text-gray-700 text-lg font-medium">{content.upcomingEvents?.emptyStateTitle || 'No upcoming events'}</p>
+                <p className="text-gray-500 mt-2 text-sm">{content.upcomingEvents?.emptyStateSubtitle || 'Check back soon for new events!'}</p>
               </div>
             )}
           </div>
         </section>
-
-        </main>
+      </main>
 
       <Footer />
 

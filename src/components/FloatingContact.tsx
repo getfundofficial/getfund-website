@@ -5,6 +5,7 @@ interface ContactInfo {
   phone: string;
   email: string;
   address: string;
+  button_text?: string;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://getfund-cms-backend.vercel.app/api';
@@ -15,20 +16,28 @@ export default function FloatingContact() {
     phone: '+233 30 266 4061',
     email: 'info@getfund.gov.gh',
     address: 'GETFund House, Accra',
+    button_text: 'GET IN TOUCH WITH FUNDRAISING!',
   });
 
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/fundraising-contact`);
+        const response = await fetch(`${API_BASE_URL}/fundraising-contact`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+          },
+        });
         if (response.ok) {
           const data = await response.json();
-          if (data.phone || data.email || data.address) {
-            setContactInfo({
-              phone: data.phone || contactInfo.phone,
-              email: data.email || contactInfo.email,
-              address: data.address || contactInfo.address,
-            });
+          if (data.phone || data.email || data.address || data.button_text) {
+            setContactInfo(prev => ({
+              phone: data.phone || prev.phone,
+              email: data.email || prev.email,
+              address: data.address || prev.address,
+              button_text: data.button_text || prev.button_text,
+            }));
           }
         }
       } catch (error) {
@@ -120,15 +129,9 @@ export default function FloatingContact() {
           {isOpen ? (
             <X className="w-10 h-10 text-white drop-shadow-lg" />
           ) : (
-            <div className="text-center">
-              <span className="text-white font-bold text-base leading-tight drop-shadow-lg block">
-                GET IN TOUCH
-              </span>
-              <span className="text-white font-semibold text-sm leading-tight drop-shadow block mt-0.5">
-                WITH
-              </span>
-              <span className="text-white font-bold text-base leading-tight drop-shadow-lg block">
-                FUNDRAISING!
+            <div className="text-center px-2">
+              <span className="text-white font-bold text-sm leading-tight drop-shadow-lg block">
+                {contactInfo.button_text || 'GET IN TOUCH WITH FUNDRAISING!'}
               </span>
             </div>
           )}

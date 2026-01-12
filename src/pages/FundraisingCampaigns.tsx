@@ -3,23 +3,26 @@ import { Gift, TrendingUp } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import FloatingContact from '../components/FloatingContact';
 import DonationModal from '../components/DonationModal';
 import { cmsApi } from '../services/cmsApi';
-import { BannerBackground } from '../types/bannerBackground';
 
 interface PageContent {
   // Hero Section
   heroTitle?: string;
-  heroSubtitle?: string;
-  bannerBackground?: BannerBackground;
 
   // Featured Campaigns Section
   campaignsSectionTitle?: string;
   campaignsSectionSubtitle?: string;
   viewAllButtonText?: string;
+
+  // Featured Image
+  featuredImage?: {
+    url: string;
+    alt: string;
+    caption?: string;
+  };
 }
 
 interface Campaign {
@@ -91,16 +94,7 @@ const defaultCampaigns: Campaign[] = [
 
 // Default page content
 const defaultPageContent: PageContent = {
-  heroTitle: 'Support Education Through Giving',
-  heroSubtitle: 'Your donations directly fund scholarships, infrastructure, and educational programs across Ghana',
-  bannerBackground: {
-    imageUrl: '/images/hero/main-slider-3.jpg',
-    tintColor: '#DC143C',
-    tintColor2: '#2563EB',
-    useGradient: true,
-    tintOpacity: 75,
-    gradientDirection: 'to right'
-  },
+  heroTitle: 'Fundraising Campaigns',
   campaignsSectionTitle: 'Featured Fundraising Campaigns',
   campaignsSectionSubtitle: 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.',
   viewAllButtonText: 'View All Campaigns'
@@ -162,13 +156,14 @@ export default function FundraisingCampaigns() {
             if (section.section_type === 'page_content' && section.content && section.is_active) {
               // Hero section
               if (section.content.heroTitle) content.heroTitle = section.content.heroTitle;
-              if (section.content.heroSubtitle) content.heroSubtitle = section.content.heroSubtitle;
-              if (section.content.bannerBackground) content.bannerBackground = section.content.bannerBackground;
 
               // Campaigns section
               if (section.content.campaignsSectionTitle) content.campaignsSectionTitle = section.content.campaignsSectionTitle;
               if (section.content.campaignsSectionSubtitle) content.campaignsSectionSubtitle = section.content.campaignsSectionSubtitle;
               if (section.content.viewAllButtonText) content.viewAllButtonText = section.content.viewAllButtonText;
+
+              // Featured Image
+              if (section.content.featuredImage) content.featuredImage = section.content.featuredImage;
             }
           });
 
@@ -192,30 +187,44 @@ export default function FundraisingCampaigns() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <Breadcrumb />
-      <PageBanner
-        title={pageContent.heroTitle || 'Support Education Through Giving'}
-        subtitle={pageContent.heroSubtitle || 'Your donations directly fund scholarships, infrastructure, and educational programs across Ghana'}
-        bannerBackground={pageContent.bannerBackground || {
-          imageUrl: '/images/hero/main-slider-3.jpg',
-          tintColor: '#DC143C',
-          tintColor2: '#2563EB',
-          useGradient: true,
-          tintOpacity: 75,
-          gradientDirection: 'to right'
-        }}
-      />
-      <main className="flex-1">
-        {/* Featured Campaigns Section */}
-        <section className="py-16 sm:py-20 lg:py-24 bg-white">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                {pageContent.campaignsSectionTitle || 'Featured Fundraising Campaigns'}
-              </h2>
-              <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-                {pageContent.campaignsSectionSubtitle || 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.'}
-              </p>
+
+      {/* Page Title Section - Clean, minimal */}
+      <section className="bg-white pt-8 pb-6">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            {pageContent.heroTitle || 'Fundraising Campaigns'}
+          </h1>
+          <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          <p className="text-gray-600 mt-4 max-w-3xl">
+            {pageContent.campaignsSectionSubtitle || 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.'}
+          </p>
+        </div>
+      </section>
+
+      {/* Featured Image Section - CMS Editable */}
+      {pageContent.featuredImage?.url && (
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="rounded-xl overflow-hidden shadow-lg">
+              <img
+                src={pageContent.featuredImage.url}
+                alt={pageContent.featuredImage.alt || 'Fundraising Campaigns'}
+                className="w-full h-auto object-cover"
+              />
+              {pageContent.featuredImage.caption && (
+                <p className="text-sm text-gray-500 text-center py-3 bg-gray-50">
+                  {pageContent.featuredImage.caption}
+                </p>
+              )}
             </div>
+          </div>
+        </section>
+      )}
+
+      <main className="flex-1">
+        {/* Campaigns Section */}
+        <section className="py-12 sm:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+          <div className="container mx-auto px-4 sm:px-6">
 
             {campaigns.length === 0 ? (
               <div className="text-center py-12">
@@ -239,8 +248,8 @@ export default function FundraisingCampaigns() {
             <div className="text-center mt-10 sm:mt-12">
               <a
                 href="/fundraising/all-campaigns"
-                className="inline-block text-white font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg hover:opacity-90"
-                style={{ backgroundColor: '#1e3a5f' }}
+                className="inline-block font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg hover:opacity-90"
+                style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
               >
                 {pageContent.viewAllButtonText || 'View All Campaigns'}
               </a>

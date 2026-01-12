@@ -6,6 +6,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import FloatingContact from '../components/FloatingContact';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi, Partner } from '../services/cmsApi';
+import { Link } from 'react-router-dom';
 import { Building2, GraduationCap, BookOpen, Laptop, HandHeart, Users, Briefcase, Heart, ArrowRight } from 'lucide-react';
 
 // Helper function to get icon based on partnership type
@@ -124,7 +125,7 @@ export default function Partnerships() {
         </section>
 
         {/* Two-column Intro Section */}
-        <section className="py-12 bg-white">
+        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Text Content - Left */}
@@ -149,7 +150,7 @@ export default function Partnerships() {
         </section>
 
         {/* Our Partners */}
-        <section className="py-16 bg-white">
+        <section className="py-16" style={{ backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="mb-10">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -208,13 +209,14 @@ export default function Partnerships() {
                 <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
                 <div className="grid grid-cols-2 gap-4">
                   {(content.waysToPartner?.ways || ['Infrastructure Funding', 'Scholarship Support', 'Technology Donations', 'Volunteer Programs']).map((way, index) => (
-                    <div
+                    <Link
                       key={index}
-                      className="bg-white p-4 rounded-lg text-center flex flex-col items-center gap-3 shadow-sm"
+                      to="/fundraising/ways-to-donate"
+                      className="bg-white p-4 rounded-lg text-center flex flex-col items-center gap-3 shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 cursor-pointer"
                     >
                       {getPartnershipIcon(way)}
                       <p className="text-sm font-semibold text-gray-900">{way}</p>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>

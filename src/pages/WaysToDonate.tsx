@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { CreditCard, Smartphone, Shield, ArrowRight, TrendingUp, Users } from 'lucide-react';
+import { Shield, ArrowRight, TrendingUp, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -140,46 +140,46 @@ export default function WaysToDonate() {
 
         {/* There Are Many Ways to Donate Section - MOVED ABOVE */}
         {(content.donationOptions || []).length > 0 && (
-          <section className="py-16 bg-gray-50">
+          <section className="py-10 bg-gray-50">
             <div className="container mx-auto px-4 max-w-6xl">
               {/* Impact Visualized Stats */}
               {content.impactVisualized && (
-                <div className="flex flex-wrap gap-8 mb-10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                      <TrendingUp className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                <div className="flex flex-wrap gap-6 mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                      <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} />
                     </div>
                     <div>
-                      <span className="text-3xl font-bold" style={{ color: '#2a3f75' }}>
+                      <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
                         {content.impactVisualized.totalRaised}
                       </span>
-                      <span className="text-gray-500 text-sm ml-2">Total Raised</span>
+                      <span className="text-gray-500 text-xs ml-2">Total Raised</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                      <Users className="w-6 h-6" style={{ color: '#2a3f75' }} />
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                      <Users className="w-5 h-5" style={{ color: '#2a3f75' }} />
                     </div>
                     <div>
-                      <span className="text-3xl font-bold" style={{ color: '#2a3f75' }}>
+                      <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
                         {content.impactVisualized.totalDonations}
                       </span>
-                      <span className="text-gray-500 text-sm ml-2">Donations</span>
+                      <span className="text-gray-500 text-xs ml-2">Donations</span>
                     </div>
                   </div>
                 </div>
               )}
 
-              <div className="text-center mb-12">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              <div className="text-center mb-6">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
                   Choose How You Want to Make an Impact
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                <p className="text-gray-600 max-w-2xl mx-auto">
                   Select a cause that resonates with you and directly support education in Ghana.
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {(content.donationOptions || []).map((option, index) => (
                   <DonationCard
                     key={index}
@@ -217,61 +217,55 @@ export default function WaysToDonate() {
         )}
 
         {/* Main Donation Section - Donation Interface + Pledge Side by Side */}
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+        <section className="py-10" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+          <div className="container mx-auto px-4 max-w-5xl">
+            <div className="text-center mb-8">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
                 Make a Direct Donation
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 max-w-xl mx-auto text-sm">
                 Give a one-time or recurring donation to support GETFund's mission.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-6 items-stretch max-w-4xl mx-auto">
               {/* Left: Donation Interface */}
               <DonationInterface />
 
               {/* Right: Pledge to Support Form */}
               <PledgeToSupportForm />
             </div>
+
+            {/* Other Ways to Donate - Text below both cards */}
+            <div className="mt-6 space-y-3 max-w-4xl mx-auto">
+              <h3 className="text-base font-semibold text-gray-900">
+                {content.otherWays?.heading || 'Other Ways to Give'}
+              </h3>
+              <div className="space-y-2 text-gray-600 text-sm leading-relaxed">
+                <p>
+                  <span className="font-medium text-gray-900">{content.otherWays?.cheque?.title || 'Bank Transfer'}:</span>{' '}
+                  {content.otherWays?.cheque?.description}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-900">{content.otherWays?.mobileMoney?.title || 'Mobile Money'}:</span>{' '}
+                  {content.otherWays?.mobileMoney?.description}
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Other Ways + Trust - Combined Section */}
-        <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-5xl">
-            <div className="grid md:grid-cols-3 gap-6">
-              {/* Bank Transfer */}
-              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                  <CreditCard className="w-6 h-6" style={{ color: '#2a3f75' }} />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {content.otherWays?.cheque?.title || 'Bank Transfer'}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{content.otherWays?.cheque?.description}</p>
+        {/* Trust Section */}
+        <section className="py-12" style={{ backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                <Shield className="w-6 h-6" style={{ color: '#2a3f75' }} />
               </div>
-
-              {/* Mobile Money */}
-              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4 bg-yellow-50">
-                  <Smartphone className="w-6 h-6 text-yellow-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {content.otherWays?.mobileMoney?.title || 'Mobile Money'}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{content.otherWays?.mobileMoney?.description}</p>
-              </div>
-
-              {/* Trust/Security */}
-              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                  <Shield className="w-6 h-6" style={{ color: '#2a3f75' }} />
-                </div>
+              <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {content.giveWithConfidence?.heading || 'Give with Confidence'}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 leading-relaxed">
                   {content.giveWithConfidence?.description || 'Your donation is secure and goes directly to supporting education in Ghana.'}
                 </p>
               </div>

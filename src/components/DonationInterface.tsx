@@ -88,15 +88,15 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
   return (
     <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="px-6 py-5" style={{ backgroundColor: '#2a3f75' }}>
-        <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-          <Heart className="w-6 h-6" />
+      <div className="px-4 py-3" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+        <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
+          <Heart className="w-4 h-4" />
           Make a Donation
         </h3>
-        <p className="text-white/80 text-sm mt-1">Your generosity transforms lives</p>
+        <p className="text-xs mt-0.5 text-gray-600">Your generosity transforms lives</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="p-4 space-y-3">
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
@@ -106,7 +106,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
         {/* Frequency Selection */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-3">
+          <label className="block text-xs font-semibold text-gray-800 mb-2">
             How often would you like to give?
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -115,7 +115,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                 key={value}
                 type="button"
                 onClick={() => setFrequency(value)}
-                className={`relative py-3 px-3 rounded-xl font-medium transition-all duration-200 flex flex-col items-center gap-1 ${
+                className={`relative py-2 px-2 rounded-lg font-medium transition-all duration-200 flex flex-col items-center gap-1 text-sm ${
                   frequency === value
                     ? 'text-white shadow-lg scale-[1.02]'
                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
@@ -123,8 +123,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                 style={frequency === value ? { backgroundColor: '#2a3f75', boxShadow: '0 10px 15px -3px rgba(42, 63, 117, 0.3)' } : {}}
                 aria-pressed={frequency === value}
               >
-                <Icon className="w-5 h-5" />
-                <span className="text-sm">{label}</span>
+                <Icon className="w-4 h-4" />
+                <span className="text-xs">{label}</span>
               </button>
             ))}
           </div>
@@ -132,7 +132,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
         {/* Amount Selection */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-3">
+          <label className="block text-xs font-semibold text-gray-800 mb-2">
             Select an amount
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -144,7 +144,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                   setAmount(amt);
                   setCustomAmount('');
                 }}
-                className={`py-3 px-3 rounded-xl font-semibold transition-all duration-200 ${
+                className={`py-2 px-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
                   amount === amt
                     ? 'bg-getfund-gold text-white shadow-lg shadow-getfund-gold/30 scale-[1.02]'
                     : 'bg-white text-gray-700 hover:bg-getfund-gold/10 border border-gray-200 hover:border-getfund-gold/50'
@@ -157,7 +157,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
             <button
               type="button"
               onClick={() => setAmount('other')}
-              className={`py-3 px-3 rounded-xl font-semibold transition-all duration-200 ${
+              className={`py-2 px-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
                 amount === 'other'
                   ? 'bg-getfund-gold text-white shadow-lg shadow-getfund-gold/30 scale-[1.02]'
                   : 'bg-white text-gray-700 hover:bg-getfund-gold/10 border border-gray-200 hover:border-getfund-gold/50'
@@ -172,11 +172,11 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
         {/* Custom Amount Input */}
         {amount === 'other' && (
           <div className="animate-fadeIn">
-            <label htmlFor="customAmount" className="block text-sm font-semibold text-gray-800 mb-2">
+            <label htmlFor="customAmount" className="block text-xs font-semibold text-gray-800 mb-1">
               Enter your amount
             </label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">GH₵</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">GH₵</span>
               <input
                 type="text"
                 id="customAmount"
@@ -188,7 +188,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                     setCustomAmount(formatted);
                   }
                 }}
-                className="w-full pl-14 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all text-lg font-medium"
+                className="w-full pl-12 pr-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all text-base font-medium"
                 style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
                 placeholder="0"
                 required
@@ -200,14 +200,14 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
         {/* Donor Type */}
         <div>
-          <label htmlFor="donorType" className="block text-sm font-semibold text-gray-800 mb-2">
+          <label htmlFor="donorType" className="block text-xs font-semibold text-gray-800 mb-1">
             I am donating as
           </label>
           <select
             id="donorType"
             value={donorType}
             onChange={(e) => setDonorType(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700 text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             aria-label="Select donor type"
           >
@@ -219,7 +219,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2">
+          <label htmlFor="email" className="block text-xs font-semibold text-gray-800 mb-1">
             Email Address
           </label>
           <input
@@ -227,7 +227,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 transition-all font-medium text-gray-700"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-gray-700 text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
             placeholder="your@email.com"
             required
@@ -236,14 +236,14 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
 
         {/* Payment Method */}
         <div>
-          <label htmlFor="paymentMethod" className="block text-sm font-semibold text-gray-800 mb-2">
+          <label htmlFor="paymentMethod" className="block text-xs font-semibold text-gray-800 mb-1">
             Payment Method
           </label>
           <select
             id="paymentMethod"
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white transition-all cursor-pointer font-medium text-gray-700 text-sm"
             style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
           >
             <option value="mobile-money">Mobile Money</option>
@@ -253,14 +253,14 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
         </div>
 
         {/* Amount Display & Submit */}
-        <div className="pt-2">
-          <div className="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
+        <div className="pt-1">
+          <div className="bg-gray-50 rounded-lg p-3 mb-3 border border-gray-100">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Your donation</span>
-              <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>{getDisplayAmount()}</span>
+              <span className="text-gray-600 text-sm">Your donation</span>
+              <span className="text-xl font-bold" style={{ color: '#2a3f75' }}>{getDisplayAmount()}</span>
             </div>
             {frequency !== 'one-time' && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Billed {frequency === 'monthly' ? 'every month' : 'once a year'}
               </p>
             )}
@@ -269,8 +269,8 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full text-white py-4 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-            style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
+            className="w-full py-3 rounded-lg font-bold text-base transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 bg-amber-500/60 hover:bg-amber-500/80"
+            style={{ color: '#1e3a5f' }}
             aria-label="Proceed to donation"
           >
             {isLoading ? (
@@ -284,7 +284,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
           </button>
 
           {/* Trust Badge */}
-          <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-100 mt-4">
+          <div className="flex items-center justify-center gap-2 pt-3 border-t border-gray-100 mt-3">
             <Shield className="w-4 h-4 text-gray-400" />
             <span className="text-xs text-gray-500">Secure & Encrypted</span>
           </div>

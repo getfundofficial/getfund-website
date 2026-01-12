@@ -1,10 +1,8 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import PageBanner from '../components/PageBanner';
 import DonationInterface from '../components/DonationInterface';
 import ImpactStats from '../components/ImpactStats';
 import FloatingContact from '../components/FloatingContact';
@@ -13,14 +11,12 @@ import { cmsApi } from '../services/cmsApi';
 
 
 interface WhyFundraisingContent {
-  bannerBackground?: BannerBackground;
   meta: {
     title: string;
     description: string;
   };
   hero: {
     title: string;
-    subtitle: string;
   };
   mainContent: {
     paragraph: string;
@@ -35,6 +31,11 @@ interface WhyFundraisingContent {
     heading: string;
     description: string;
     donationHeading: string;
+  };
+  featuredImage?: {
+    url: string;
+    alt: string;
+    caption?: string;
   };
 }
 
@@ -85,15 +86,38 @@ export default function WhyFundraising() {
       <Breadcrumb />
 
       <main className="flex-1">
-        <PageBanner
-          title={content.hero?.title || 'Why Fundraising?'}
-          subtitle={content.hero?.subtitle || 'Your support helps us expand access to quality education'}
-          bannerBackground={content.bannerBackground}
-          defaultGradient="#DC143C"
-        />
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {content.hero?.title || 'Why Fundraising?'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
+
+        {/* Featured Image Section - CMS Editable */}
+        {content.featuredImage?.url && (
+          <section className="py-8 bg-white">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img
+                  src={content.featuredImage.url}
+                  alt={content.featuredImage.alt || 'Why Fundraising'}
+                  className="w-full h-auto object-cover"
+                />
+                {content.featuredImage.caption && (
+                  <p className="text-sm text-gray-500 text-center py-3 bg-gray-50">
+                    {content.featuredImage.caption}
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Main Content */}
-        <section className="py-12 bg-white">
+        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <p className="text-lg text-gray-700 leading-relaxed">
               {content.mainContent?.paragraph}
@@ -102,7 +126,11 @@ export default function WhyFundraising() {
         </section>
 
         {/* Impact Stats - CMS-POWERED */}
-        <ImpactStats page="why-fundraising" />
+        <section className="py-12" style={{ backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
+          <div className="container mx-auto px-4 max-w-6xl">
+            <ImpactStats page="why-fundraising" variant="light" />
+          </div>
+        </section>
 
         {/* Why Donate & Get Involved - Two Column */}
         <section className="py-12 bg-white">
@@ -128,9 +156,6 @@ export default function WhyFundraising() {
                 <p className="text-gray-700 leading-relaxed mb-6">
                   {content.getInvolved?.description}
                 </p>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  {content.getInvolved?.donationHeading || 'Make a Donation'}
-                </h3>
                 <DonationInterface />
               </div>
             </div>
