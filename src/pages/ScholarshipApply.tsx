@@ -1,66 +1,182 @@
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { ExternalLink, GraduationCap } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import OptimizedImage from '../components/OptimizedImage';
+import LoadingScreen from '../components/LoadingScreen';
+import { cmsApi } from '../services/cmsApi';
+
+interface ScholarshipApplyContent {
+  meta?: {
+    title: string;
+    description: string;
+  };
+  hero?: {
+    title: string;
+    subtitle?: string;
+  };
+  requiredDocuments?: {
+    heading: string;
+    items: string[];
+  };
+  howToApply?: {
+    heading: string;
+    steps: string[];
+  };
+  applyButton?: {
+    text: string;
+    url: string;
+  };
+  footerNote?: string;
+}
+
+const defaultContent: ScholarshipApplyContent = {
+  meta: {
+    title: 'Apply for Scholarship | GETFund',
+    description: 'Apply for GETFund scholarship - review eligibility criteria and guidelines before submitting your application.'
+  },
+  hero: {
+    title: 'Apply for GETFund Scholarship',
+    subtitle: 'Please review the eligibility criteria and guidelines before submitting your application.'
+  },
+  requiredDocuments: {
+    heading: 'Required Documents',
+    items: [
+      'Completed online application form',
+      'Admission letter from an accredited tertiary institution',
+      'Academic transcripts and certificates',
+      'National ID (Ghana Card, Passport, etc.)',
+      'Proof of financial need (if applicable)',
+      'Any other documents specified in the application guidelines'
+    ]
+  },
+  howToApply: {
+    heading: 'How to Apply',
+    steps: [
+      'Fill out the online application form during the open application window.',
+      'Upload all required documents as specified.',
+      'Submit your application before the published deadline.'
+    ]
+  },
+  applyButton: {
+    text: 'Start Application',
+    url: 'https://scholarships.getfund.gov.gh/'
+  },
+  footerNote: 'For more information on the application process, eligibility, and deadlines, please refer to the Resources page or contact us for assistance.'
+};
 
 export default function ScholarshipApply() {
+  const [content, setContent] = useState<ScholarshipApplyContent>(defaultContent);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await cmsApi.getPageBySlug('scholarship-apply');
+        if (response?.sections) {
+          const section = response.sections.find(
+            (s: any) => s.section_type === 'page_content' && s.is_active
+          );
+          if (section?.content) {
+            setContent({ ...defaultContent, ...section.content });
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch scholarship apply content:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Helmet>
+        <title>{content.meta?.title || 'Apply for Scholarship | GETFund'}</title>
+        <meta name="description" content={content.meta?.description || 'Apply for GETFund scholarship'} />
+      </Helmet>
+
       <Header />
       <Breadcrumb />
-      {/* Hero Banner */}
-      <section className="relative h-[320px] sm:h-[400px] md:h-[480px] lg:h-[520px] flex items-center justify-center mb-8">
-        <OptimizedImage
-          src="/images/scholarship/GETFund-Scholarship-Programme.jpg"
-          alt="GETFund Scholarship Application"
-          className="absolute inset-0 w-full h-full object-cover object-center z-0"
-          width={1920}
-          height={520}
-          priority
-        />
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        <div className="relative z-20 flex flex-col items-center justify-center text-center text-white px-4">
-          <GraduationCap className="w-14 h-14 mb-4 text-getfund-gold drop-shadow-lg" />
-          <h1 className="text-4xl sm:text-5xl font-bold mb-2 drop-shadow-lg">Apply for GETFund Scholarship</h1>
-          <p className="text-lg sm:text-xl max-w-2xl drop-shadow">Please review the eligibility criteria and guidelines before submitting your application.</p>
+
+      {/* Page Title Section - Clean, minimal */}
+      <section className="bg-white pt-8 pb-6">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="flex items-center gap-3 mb-2">
+            <GraduationCap className="w-8 h-8" style={{ color: '#2a3f75' }} />
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+              {content.hero?.title || 'Apply for GETFund Scholarship'}
+            </h1>
+          </div>
+          <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          {content.hero?.subtitle && (
+            <p className="text-gray-600 mt-4 max-w-3xl">
+              {content.hero.subtitle}
+            </p>
+          )}
         </div>
       </section>
-      <main className="flex-1 max-w-4xl mx-auto px-4 py-16">
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-primary">Required Documents</h2>
-          <ul className="list-disc list-inside mb-4 text-gray-700">
-            <li>Completed online application form</li>
-            <li>Admission letter from an accredited tertiary institution</li>
-            <li>Academic transcripts and certificates</li>
-            <li>National ID (Ghana Card, Passport, etc.)</li>
-            <li>Proof of financial need (if applicable)</li>
-            <li>Any other documents specified in the application guidelines</li>
-          </ul>
+
+      <main className="flex-1">
+        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+          <div className="container mx-auto px-4 max-w-4xl">
+            {/* Required Documents */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+              <h2 className="text-2xl font-semibold mb-4" style={{ color: '#2a3f75' }}>
+                {content.requiredDocuments?.heading || 'Required Documents'}
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-gray-700">
+                {(content.requiredDocuments?.items || defaultContent.requiredDocuments?.items || []).map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* How to Apply */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+              <h2 className="text-2xl font-semibold mb-4" style={{ color: '#2a3f75' }}>
+                {content.howToApply?.heading || 'How to Apply'}
+              </h2>
+              <ol className="list-decimal list-inside space-y-2 text-gray-700">
+                {(content.howToApply?.steps || defaultContent.howToApply?.steps || []).map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Apply Button */}
+            <div className="text-center">
+              <a
+                href={content.applyButton?.url || 'https://scholarships.getfund.gov.gh/'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                style={{ backgroundColor: '#2a3f75' }}
+              >
+                {content.applyButton?.text || 'Start Application'}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+
+            {/* Footer Note */}
+            <p className="mt-8 text-gray-600 text-center text-sm">
+              {content.footerNote || defaultContent.footerNote}
+              {' '}
+              <a href="/resources" className="underline" style={{ color: '#2a3f75' }}>Resources</a>
+              {' '}page or{' '}
+              <a href="/contact" className="underline" style={{ color: '#2a3f75' }}>contact us</a>
+              {' '}for assistance.
+            </p>
+          </div>
         </section>
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-primary">How to Apply</h2>
-          <ol className="list-decimal list-inside mb-4 text-gray-700">
-            <li>Fill out the online application form during the open application window.</li>
-            <li>Upload all required documents as specified.</li>
-            <li>Submit your application before the published deadline.</li>
-          </ol>
-        </section>
-        <div className="mt-8 text-center">
-          <a
-            href="https://scholarships.getfund.gov.gh/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-getfund-red text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-lg"
-          >
-            Start Application
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
-        <p className="mt-8 text-gray-700 text-center">
-          For more information on the application process, eligibility, and deadlines, please refer to the <a href="/resources" className="text-primary underline">Resources</a> page or <a href="/contact" className="text-primary underline">contact us</a> for assistance.
-        </p>
       </main>
+
       <Footer />
     </div>
   );
