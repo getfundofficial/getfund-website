@@ -16,7 +16,7 @@ export default function FloatingContact() {
     phone: '+233 30 266 4061',
     email: 'info@getfund.gov.gh',
     address: 'GETFund House, Accra',
-    button_text: 'GET IN TOUCH WITH FUNDRAISING!',
+    button_text: 'Contact Fundraising Unit',
   });
 
   useEffect(() => {
@@ -103,40 +103,40 @@ export default function FloatingContact() {
         </div>
       )}
 
-      {/* Floating Glass Circle Button */}
+      {/* Floating Circle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative w-36 h-36 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 group ${
-          isOpen ? '' : ''
-        }`}
         aria-label={isOpen ? 'Close contact panel' : 'Open contact panel'}
+        style={{
+          width: '120px',
+          height: '120px',
+          borderRadius: '50%',
+          backgroundColor: '#1e3a5f',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: 'none',
+          cursor: 'pointer',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+          transition: 'transform 0.3s ease',
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
       >
-        {/* Outer glow ring */}
-        <div className="absolute inset-0 rounded-full opacity-80 blur-sm group-hover:opacity-100 group-hover:blur-md transition-all duration-300" style={{ backgroundColor: '#1e3a5f' }}></div>
-
-        {/* Glass effect background */}
-        <div className={`absolute inset-1 rounded-full backdrop-blur-md border border-white/30 shadow-2xl transition-all duration-300 ${
-          isOpen
-            ? 'bg-gray-800/90'
-            : 'bg-white/20'
-        }`}></div>
-
-        {/* Inner gradient ring */}
-        <div className="absolute inset-2 rounded-full opacity-90" style={{ backgroundColor: '#1e3a5f' }}></div>
-
-        {/* Content */}
-        <div className="relative z-10">
-          {isOpen ? (
-            <X className="w-10 h-10 text-white drop-shadow-lg" />
-          ) : (
-            <div className="text-center px-2">
-              <span className="text-white font-bold text-sm leading-tight drop-shadow-lg block">
-                {contactInfo.button_text || 'GET IN TOUCH WITH FUNDRAISING!'}
-              </span>
-            </div>
-          )}
-        </div>
-
+        {isOpen ? (
+          <X className="w-10 h-10 text-white" />
+        ) : (
+          <span style={{
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '12px',
+            textAlign: 'center',
+            lineHeight: '1.3',
+            padding: '10px',
+          }}>
+            {contactInfo.button_text || 'Contact Fundraising Unit'}
+          </span>
+        )}
       </button>
     </div>
   );

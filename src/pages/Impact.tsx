@@ -218,33 +218,28 @@ export default function Impact() {
       <Breadcrumb />
       <main className="flex-1">
         {/* Page Title Section */}
-        <section className="bg-white pt-8 pb-6">
+        <section className="bg-white pt-8 pb-4">
           <div className="container mx-auto px-4 max-w-6xl">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {pageContent?.heroTitle || 'Our Impact'}
             </h1>
             <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
-            <p className="text-gray-600 mt-4 max-w-3xl">
+            <p className="text-gray-600 mt-3 max-w-3xl">
               {pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
             </p>
           </div>
         </section>
 
         {/* Regional Impact - First section after title */}
-        <section className="py-16 md:py-20 bg-blue-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-blue-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.regionalTitle || 'Regional Impact'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.regionalSubtitle || 'Ensuring equitable distribution of educational resources across all regions'}
               </p>
-              {pageContent?.regionalDescription && (
-                <p className="text-gray-700 max-w-4xl mx-auto">
-                  {pageContent.regionalDescription}
-                </p>
-              )}
             </div>
 
             {/* Interactive Regional Map */}
@@ -272,33 +267,30 @@ export default function Impact() {
         </section>
 
         {/* Impact Statistics */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.statsTitle || 'Our Impact in Numbers'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.statsSubtitle || 'Measurable results that showcase our commitment to educational excellence'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {(pageContent?.stats || [
                 { number: '11,248', label: 'Total Projects', description: 'Since inception', icon: 'building' },
-                { number: '16,000+', label: 'Scholars Supported', description: 'Local and foreign institutions', icon: 'graduation-cap' },
+                { number: '16,000+', label: 'Scholars Supported', description: 'Local and foreign', icon: 'graduation-cap' },
                 { number: '2,749+', label: 'Recent Projects', description: 'Since 2017', icon: 'trending-up' },
-                { number: '16', label: 'Regions Covered', description: 'Nationwide impact', icon: 'award' },
-                { number: '5,026', label: 'Scholarships (2023/24)', description: 'Academic year', icon: 'graduation-cap' },
-                { number: '677,470', label: 'Furniture Items', description: 'Distributed (2019-2021)', icon: 'building' }
+                { number: '16', label: 'Regions Covered', description: 'Nationwide', icon: 'award' },
+                { number: '5,026', label: 'Scholarships', description: '2023/24', icon: 'graduation-cap' },
+                { number: '677,470', label: 'Furniture Items', description: '2019-2021', icon: 'building' }
               ]).map((stat, index) => (
-                <div key={index} className="bg-blue-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
-                  <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ color: '#2a3f75' }}>
-                    {getIconComponent(stat.icon)}
-                  </div>
-                  <div className="text-4xl md:text-5xl font-bold mb-2" style={{ color: '#2a3f75' }}>{stat.number}</div>
-                  <div className="text-lg font-semibold text-gray-900 mb-1">{stat.label}</div>
-                  <p className="text-gray-600 text-sm">{stat.description}</p>
+                <div key={index} className="bg-blue-50 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                  <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stat.number}</div>
+                  <div className="text-sm font-semibold text-gray-900 mb-1">{stat.label}</div>
+                  <p className="text-gray-500 text-xs">{stat.description}</p>
                 </div>
               ))}
             </div>
@@ -306,27 +298,27 @@ export default function Impact() {
         </section>
 
         {/* Project Portfolio Breakdown */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.portfolioTitle || 'Project Portfolio'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.portfolioSubtitle || 'Our comprehensive investment across all levels of education'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {(pageContent?.projectCategories || [
-                { category: 'Basic Education', count: 6272, description: 'Primary and elementary schools', image: '/images/impact/infrastructure-1.jpg' },
-                { category: 'Secondary Education', count: 3863, description: 'Secondary and high schools', image: '/images/impact/infrastructure-2.jpg' },
-                { category: 'Tertiary Education', count: 999, description: 'Universities and colleges', image: '/images/impact/infrastructure-3.jpg' },
-                { category: 'TVET Centers', count: 4, description: 'Technical and vocational training', image: '/images/impact/infrastructure-4.jpg' }
+                { category: 'Basic Education', count: 6272, description: 'Primary schools', image: '/images/impact/infrastructure-1.jpg' },
+                { category: 'Secondary Education', count: 3863, description: 'High schools', image: '/images/impact/infrastructure-2.jpg' },
+                { category: 'Tertiary Education', count: 999, description: 'Universities', image: '/images/impact/infrastructure-3.jpg' },
+                { category: 'TVET Centers', count: 4, description: 'Vocational training', image: '/images/impact/infrastructure-4.jpg' }
               ]).map((project, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                   {project.image && (
-                    <div className="h-48">
+                    <div className="h-32">
                       <OptimizedImage
                         src={project.image}
                         alt={project.category}
@@ -335,10 +327,10 @@ export default function Impact() {
                       />
                     </div>
                   )}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-2" style={{ color: '#2a3f75' }}>{project.count.toLocaleString()}</h3>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">{project.category}</h4>
-                    <p className="text-gray-600 text-sm">{project.description}</p>
+                  <div className="p-4">
+                    <h3 className="text-xl font-bold mb-1" style={{ color: '#2a3f75' }}>{project.count.toLocaleString()}</h3>
+                    <h4 className="text-sm font-semibold text-gray-900">{project.category}</h4>
+                    <p className="text-gray-500 text-xs">{project.description}</p>
                   </div>
                 </div>
               ))}
@@ -347,25 +339,25 @@ export default function Impact() {
         </section>
 
         {/* Resources Distributed */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.resourcesTitle || 'Resources Distributed'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.resourcesSubtitle || 'Supporting education with essential equipment and resources'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-4">
               {(pageContent?.resources || [
                 { type: 'Vehicles', count: 2718, period: '2019-2021', image: '/images/impact/vehicles-1.jpg' },
                 { type: 'Furniture Items', count: 677470, period: '2019-2021', image: '/images/impact/furniture-1.jpg' }
               ]).map((resource, index) => (
-                <div key={index} className="bg-blue-50 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                <div key={index} className="bg-blue-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex">
                   {resource.image && (
-                    <div className="h-56">
+                    <div className="w-32 h-32 flex-shrink-0">
                       <OptimizedImage
                         src={resource.image}
                         alt={resource.type}
@@ -374,10 +366,10 @@ export default function Impact() {
                       />
                     </div>
                   )}
-                  <div className="p-8 text-center">
-                    <div className="text-5xl font-bold mb-2" style={{ color: '#2a3f75' }}>{resource.count.toLocaleString()}</div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">{resource.type}</h3>
-                    <p className="text-gray-600">Distributed to various agencies and institutions ({resource.period})</p>
+                  <div className="p-4 flex flex-col justify-center">
+                    <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{resource.count.toLocaleString()}</div>
+                    <h3 className="text-lg font-semibold text-gray-900">{resource.type}</h3>
+                    <p className="text-gray-500 text-sm">Distributed ({resource.period})</p>
                   </div>
                 </div>
               ))}
@@ -386,18 +378,18 @@ export default function Impact() {
         </section>
 
         {/* Impact Stories */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.storiesTitle || 'Stories of Impact'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.storiesSubtitle || 'Real people, real transformations, real futures'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-4">
               {(pageContent?.stories || [
                 {
                   id: '1',
@@ -409,20 +401,20 @@ export default function Impact() {
                 {
                   id: '2',
                   name: 'Kofi Asante',
-                  story: 'The new science laboratory at our school has transformed how we teach and learn. Students are now excelling in STEM subjects.',
+                  story: 'The new science laboratory at our school has transformed how we teach and learn. Students are now excelling in STEM.',
                   image: '/images/impact/teacher-1.jpg',
                   category: 'Teacher'
                 },
                 {
                   id: '3',
                   name: 'Ama Owusu',
-                  story: 'Thanks to GETFund\'s infrastructure support, our school now has modern classrooms and a library. Enrollment has doubled!',
+                  story: 'Thanks to GETFund\'s infrastructure support, our school now has modern classrooms and a library.',
                   image: '/images/impact/principal-1.jpg',
                   category: 'School Principal'
                 }
               ]).map((story) => (
-                <div key={story.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                  <div className="h-48">
+                <div key={story.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="h-32">
                     <OptimizedImage
                       src={story.image}
                       alt={story.name}
@@ -430,12 +422,12 @@ export default function Impact() {
                       fallbackSrc="/images/placeholder.jpg"
                     />
                   </div>
-                  <div className="p-6">
-                    <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
+                  <div className="p-4">
+                    <span className="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-2" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
                       {story.category}
                     </span>
-                    <p className="text-gray-700 italic mb-4">"{story.story}"</p>
-                    <p className="font-bold text-gray-900">— {story.name}</p>
+                    <p className="text-gray-600 text-sm italic mb-2">"{story.story}"</p>
+                    <p className="font-semibold text-gray-900 text-sm">— {story.name}</p>
                   </div>
                 </div>
               ))}
@@ -444,98 +436,89 @@ export default function Impact() {
         </section>
 
         {/* Scholarship Program */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.scholarshipTitle || 'Scholarship Program'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.scholarshipSubtitle || 'Transforming lives through educational opportunities'}
               </p>
             </div>
 
             {/* Total Scholars and Growth */}
-            <div className="max-w-5xl mx-auto mb-12">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-blue-50 rounded-xl p-8 text-center">
-                  <div className="text-6xl font-bold mb-2" style={{ color: '#2a3f75' }}>
-                    {pageContent?.totalScholars || '16,000+'}
-                  </div>
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">Total Scholars Supported</h3>
-                  <p className="text-gray-600">Lifetime achievement across local and foreign institutions</p>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-blue-50 rounded-lg p-4 text-center">
+                <div className="text-3xl md:text-4xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                  {pageContent?.totalScholars || '16,000+'}
                 </div>
-
-                <div className="bg-gray-50 rounded-xl p-8">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Scholarship Growth</h3>
-                  <div className="flex items-center justify-between">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-700 mb-1">
-                        {pageContent?.scholarshipGrowth?.from.count.toLocaleString() || '1,680'}
-                      </div>
-                      <div className="text-sm text-gray-600">{pageContent?.scholarshipGrowth?.from.year || '2019/20'}</div>
-                    </div>
-                    <div className="text-4xl" style={{ color: '#2a3f75' }}>→</div>
-                    <div className="text-center">
-                      <div className="text-4xl font-bold mb-1" style={{ color: '#2a3f75' }}>
-                        {pageContent?.scholarshipGrowth?.to.count.toLocaleString() || '5,026'}
-                      </div>
-                      <div className="text-sm text-gray-600">{pageContent?.scholarshipGrowth?.to.year || '2023/24'}</div>
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <span className="inline-block text-white px-4 py-2 rounded-full font-semibold" style={{ backgroundColor: '#2a3f75' }}>
-                      199% Growth
-                    </span>
-                  </div>
-                </div>
+                <h3 className="text-lg font-semibold text-gray-900">Total Scholars Supported</h3>
+                <p className="text-gray-500 text-sm">Across local and foreign institutions</p>
               </div>
 
-              {/* Percentage to Public Universities */}
-              <div className="mt-6 text-center">
-                <p className="text-lg text-gray-700">
-                  <span className="font-bold" style={{ color: '#2a3f75' }}>{pageContent?.percentToPublicUniversities || '74%'}</span> of local scholarship awards go to public universities
-                </p>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">Scholarship Growth</h3>
+                <div className="flex items-center justify-between">
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-gray-600">
+                      {pageContent?.scholarshipGrowth?.from.count.toLocaleString() || '1,680'}
+                    </div>
+                    <div className="text-xs text-gray-500">{pageContent?.scholarshipGrowth?.from.year || '2019/20'}</div>
+                  </div>
+                  <div className="text-2xl" style={{ color: '#2a3f75' }}>→</div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                      {pageContent?.scholarshipGrowth?.to.count.toLocaleString() || '5,026'}
+                    </div>
+                    <div className="text-xs text-gray-500">{pageContent?.scholarshipGrowth?.to.year || '2023/24'}</div>
+                  </div>
+                </div>
+                <div className="mt-3 text-center">
+                  <span className="inline-block text-white text-xs px-3 py-1 rounded-full font-semibold" style={{ backgroundColor: '#2a3f75' }}>
+                    199% Growth
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Scholarship Categories */}
-            <div className="max-w-5xl mx-auto mb-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Scholarship Categories</h3>
-              <div className="grid md:grid-cols-2 gap-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Scholarship Categories</h3>
+              <div className="grid md:grid-cols-2 gap-3">
                 {(pageContent?.scholarshipCategories || [
-                  { title: 'General Scholarships', description: 'Applications from general population for Tertiary education' },
-                  { title: 'Faculty Development Programmes', description: 'PhD scholarships through GTEC applications' },
-                  { title: 'Professional Enhancement & Capacity Building', description: 'For government organizations - Police, Prison, Fire, Judicial, Parliamentary Services' },
-                  { title: 'Educational Programme & Activity Sponsorship', description: 'NSMQ, Robotics Competitions, STEM Programmes' }
+                  { title: 'General Scholarships', description: 'Applications for Tertiary education' },
+                  { title: 'Faculty Development', description: 'PhD scholarships through GTEC' },
+                  { title: 'Professional Enhancement', description: 'Government organizations support' },
+                  { title: 'Educational Sponsorship', description: 'NSMQ, Robotics, STEM Programmes' }
                 ]).map((category, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-6 border-l-4" style={{ borderLeftColor: '#2a3f75' }}>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">{category.title}</h4>
-                    <p className="text-gray-600">{category.description}</p>
+                  <div key={index} className="bg-gray-50 rounded-lg p-3 border-l-3" style={{ borderLeftWidth: '3px', borderLeftColor: '#2a3f75' }}>
+                    <h4 className="text-sm font-semibold text-gray-900">{category.title}</h4>
+                    <p className="text-gray-500 text-xs">{category.description}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Reforms */}
-            <div className="max-w-4xl mx-auto mb-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Key Reforms Implemented</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+            <div className="mb-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Key Reforms</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {(pageContent?.reforms || [
-                  'Streamlined eligibility criteria',
-                  'Digitized application process',
-                  'Emphasis on STEM subjects',
-                  'Increased support for Girl-child Education',
-                  'Overhauled payment bottlenecks for foreign scholars',
-                  'Scholarship Programme Monitoring'
+                  'Streamlined eligibility',
+                  'Digitized applications',
+                  'STEM emphasis',
+                  'Girl-child Education',
+                  'Payment optimization',
+                  'Programme Monitoring'
                 ]).map((reform, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full flex-shrink-0 mt-1 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <div key={index} className="flex items-center gap-2 text-sm">
+                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
+                      <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <p className="text-gray-700">{reform}</p>
+                    <p className="text-gray-600 text-xs">{reform}</p>
                   </div>
                 ))}
               </div>
@@ -543,33 +526,15 @@ export default function Impact() {
 
             {/* University Logos */}
             {pageContent?.universityLogos && pageContent.universityLogos.length > 0 && (
-              <div className="max-w-5xl mx-auto mb-12">
-                <h3 className="text-xl font-semibold text-gray-700 mb-6 text-center">Partner Universities</h3>
-                <div className="flex flex-wrap justify-center items-center gap-8">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">Partner Universities</h3>
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {pageContent.universityLogos.map((logo, index) => (
-                    <div key={index} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow h-24 w-32">
+                    <div key={index} className="bg-white rounded-lg p-3 flex items-center justify-center aspect-square hover:shadow-md transition-shadow">
                       <OptimizedImage
                         src={logo}
                         alt={`University ${index + 1}`}
-                        className="h-16 w-auto object-contain"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Scholarship Images */}
-            {pageContent?.scholarshipImages && pageContent.scholarshipImages.length > 0 && (
-              <div className="max-w-6xl mx-auto">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {pageContent.scholarshipImages.map((image, index) => (
-                    <div key={index} className="rounded-xl overflow-hidden shadow-md h-64">
-                      <OptimizedImage
-                        src={image}
-                        alt={`Scholarship Program ${index + 1}`}
-                        className="w-full h-64 object-cover"
-                        fallbackSrc="/images/placeholder.jpg"
+                        className="max-h-12 max-w-full object-contain"
                       />
                     </div>
                   ))}
@@ -580,60 +545,49 @@ export default function Impact() {
         </section>
 
         {/* Achievements Timeline */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.achievementsTitle || 'Key Achievements'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.achievementsSubtitle || 'Milestones in our journey to transform education in Ghana'}
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto">
-              <div className="space-y-8">
-                {(pageContent?.achievements || [
-                  { year: '2000', title: 'GETFund Established', description: 'Ghana Education Trust Fund established by Act of Parliament (Act 581) to provide supplementary funding for education.' },
-                  { year: '2005', title: '1,000 Schools Supported', description: 'Reached milestone of supporting infrastructure development in 1,000 schools across Ghana.' },
-                  { year: '2010', title: 'International Scholarship Program', description: 'Launched comprehensive international scholarship program for postgraduate studies.' },
-                  { year: '2015', title: 'STEM Initiative', description: 'Major investment in Science, Technology, Engineering, and Mathematics education infrastructure.' },
-                  { year: '2019/20', title: '1,680 Local Scholarships Awarded', description: 'Significant expansion of local scholarship program to support students in Ghanaian tertiary institutions.' },
-                  { year: '2020', title: 'Digital Learning Infrastructure', description: 'Implemented digital learning infrastructure to support education during pandemic and beyond.' },
-                  { year: '2023/24', title: '5,026 Scholarships - 199% Growth', description: 'Achieved remarkable 199% growth in local scholarships, with majority (74%) going to public universities.' },
-                  { year: '2024', title: '11,248 Total Projects', description: 'Celebrated reaching 11,248 total educational projects since inception across all 16 regions of Ghana.' }
-                ]).map((achievement, index) => (
-                  <div key={index} className="flex gap-6 items-start">
-                    <div className="flex-shrink-0 w-24 text-right">
-                      <span className="inline-block text-white text-lg font-bold px-4 py-2 rounded-lg" style={{ backgroundColor: '#2a3f75' }}>
-                        {achievement.year}
-                      </span>
-                    </div>
-                    <div className="flex-1 pb-8 border-l-4 border-blue-200 pl-6 relative">
-                      <div className="absolute w-4 h-4 rounded-full -left-[10px] top-2" style={{ backgroundColor: '#2a3f75' }}></div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{achievement.title}</h3>
-                      <p className="text-gray-600">{achievement.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {(pageContent?.achievements || [
+                { year: '2000', title: 'GETFund Established', description: 'Founded by Act of Parliament' },
+                { year: '2010', title: 'International Scholarships', description: 'Postgraduate program launched' },
+                { year: '2020', title: 'Digital Infrastructure', description: 'E-learning support deployed' },
+                { year: '2024', title: '11,248 Projects', description: 'Across all 16 regions' }
+              ]).map((achievement, index) => (
+                <div key={index} className="bg-white rounded-lg p-4 shadow-sm border-t-3" style={{ borderTopWidth: '3px', borderTopColor: '#2a3f75' }}>
+                  <span className="inline-block text-white text-xs font-bold px-2 py-1 rounded mb-2" style={{ backgroundColor: '#2a3f75' }}>
+                    {achievement.year}
+                  </span>
+                  <h3 className="text-sm font-bold text-gray-900 mb-1">{achievement.title}</h3>
+                  <p className="text-gray-500 text-xs">{achievement.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Call to Action */}
-        <section className="py-16 text-white" style={{ backgroundColor: '#1e3a5f' }}>
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <section className="py-10 text-white" style={{ backgroundColor: '#1e3a5f' }}>
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
                 {pageContent?.ctaTitle || 'Be Part of Our Impact Story'}
               </h2>
-              <p className="text-xl text-white/80 mb-8">
-                {pageContent?.ctaDescription || 'Join us in transforming education and creating opportunities for future generations'}
+              <p className="text-white/80 mb-4">
+                {pageContent?.ctaDescription || 'Join us in transforming education and creating opportunities'}
               </p>
               <a
                 href={pageContent?.ctaButtonLink || '/support-us'}
-                className="inline-block bg-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                className="inline-block bg-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
                 style={{ color: '#1e3a5f' }}
               >
                 {pageContent?.ctaButtonText || 'Support Our Mission'}
