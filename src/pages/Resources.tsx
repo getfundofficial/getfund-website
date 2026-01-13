@@ -1,10 +1,9 @@
-import { BannerBackground } from '../types/bannerBackground';
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Download, Eye, FileText, Calendar, FileCheck } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
-import PageBanner from '../components/PageBanner';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
@@ -22,7 +21,11 @@ interface ResourceDocument {
 
 
 interface PageContent {
-  bannerBackground?: BannerBackground;
+  // Meta
+  meta?: {
+    title: string;
+    description: string;
+  };
 
   // Hero Section
   heroTitle?: string;
@@ -167,66 +170,63 @@ export default function Resources() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{pageContent?.meta?.title || 'Resources & Publications | GETFund'}</title>
+        <meta name="description" content={pageContent?.meta?.description || "Access our comprehensive collection of reports, policies, research studies, and strategic documents."} />
+      </Helmet>
+
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        <PageBanner
-          title={pageContent?.heroTitle || 'Resources & Publications'}
-          subtitle={pageContent?.heroSubtitle || "Access our comprehensive collection of reports, policies, research studies, and strategic documents that showcase Ghana's educational development journey."}
-          bannerBackground={pageContent?.bannerBackground}
-        />
-
-        {/* Quick Action Buttons */}
-        <div className="bg-gray-50 py-8">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap justify-center gap-4">
-              <button className="bg-white text-getfund-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2 shadow-sm border border-gray-200">
-                <Download className="w-5 h-5" />
-                Browse All Resources
-              </button>
-              <button className="bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
-                Subscribe to Updates
-              </button>
-            </div>
+        {/* Page Title Section - Clean, minimal */}
+        <section className="bg-white pt-8 pb-4">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              {pageContent?.heroTitle || 'Resources & Publications'}
+            </h1>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <p className="text-gray-600 mt-3 max-w-3xl">
+              {pageContent?.heroSubtitle || "Access our comprehensive collection of reports, policies, research studies, and strategic documents."}
+            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Stats Section */}
-        <section className="py-12 bg-white border-b">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {/* Stats Section - Compact */}
+        <section className="py-6" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stats.documentsAvailable}+</div>
-                <div className="text-gray-600 font-medium">Documents Available</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.documentsAvailable}+</div>
+                <div className="text-gray-600 text-sm">Documents</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stats.policyDocuments}</div>
-                <div className="text-gray-600 font-medium">Policy Documents</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.policyDocuments}</div>
+                <div className="text-gray-600 text-sm">Policies</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stats.researchStudies}</div>
-                <div className="text-gray-600 font-medium">Research Studies</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.researchStudies}</div>
+                <div className="text-gray-600 text-sm">Research Studies</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-getfund-primary mb-2">{stats.annualReports}</div>
-                <div className="text-gray-600 font-medium">Annual Reports</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.annualReports}</div>
+                <div className="text-gray-600 text-sm">Annual Reports</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Annual Reports Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-red-100 text-getfund-primary px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                <FileText className="w-4 h-4" />
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-red-100 text-getfund-primary px-3 py-1 rounded-full text-xs font-semibold mb-2">
+                <FileText className="w-3 h-3" />
                 Annual Reports
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.annualReports?.title || 'Annual Reports'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.annualReports?.description || "Comprehensive yearly summaries of our activities, achievements, and financial performance"}
               </p>
             </div>
@@ -309,17 +309,17 @@ export default function Resources() {
         </section>
 
         {/* Policies & Guidelines Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                <FileCheck className="w-4 h-4" />
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+                <FileCheck className="w-3 h-3" />
                 Policy Documents
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.policiesGuidelines?.title || 'Policies & Guidelines'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.policiesGuidelines?.description || "Official policies, guidelines, and frameworks governing our operations and programs"}
               </p>
             </div>
@@ -402,17 +402,17 @@ export default function Resources() {
         </section>
 
         {/* Research & Studies Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                <FileText className="w-4 h-4" />
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+                <FileText className="w-3 h-3" />
                 Research
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.researchStudies?.title || 'Research & Studies'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.researchStudies?.description || "In-depth research studies and impact assessments of our educational initiatives"}
               </p>
             </div>
@@ -495,17 +495,17 @@ export default function Resources() {
         </section>
 
         {/* Strategic Publications Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                <Calendar className="w-4 h-4" />
+        <section className="py-10 bg-white">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">
+                <Calendar className="w-3 h-3" />
                 Strategic Plans
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {pageContent?.strategicPublications?.title || 'Strategic Publications'}
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-gray-600 max-w-2xl">
                 {pageContent?.strategicPublications?.description || "Strategic plans, frameworks, and roadmaps for Ghana's educational development"}
               </p>
             </div>
@@ -577,42 +577,36 @@ export default function Resources() {
         </section>
 
         {/* Newsletter Subscription Section */}
-        <section className="py-16 bg-gray-900 text-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {pageContent?.newsletterTitle || 'Stay Updated with Our Latest Publications'}
+        <section className="py-10" style={{ backgroundColor: '#1e3a5f' }}>
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="text-center text-white">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                {pageContent?.newsletterTitle || 'Stay Updated'}
               </h2>
-              <p className="text-xl text-gray-300 mb-8">
-                {pageContent?.newsletterSubtitle || 'Subscribe to our newsletter to receive notifications about new reports, policies, and research studies as published.'}
+              <p className="text-gray-300 mb-6">
+                {pageContent?.newsletterSubtitle || 'Subscribe to receive notifications about new publications.'}
               </p>
-              
-              <form className="flex flex-col sm:flex-row gap-4 mb-6">
-                <input 
-                  type="email" 
-                  placeholder={pageContent?.newsletterPlaceholder || "Enter your email address"}
-                  className="flex-1 px-6 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-getfund-gold"
+
+              <form className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-4">
+                <input
+                  type="email"
+                  placeholder={pageContent?.newsletterPlaceholder || "Enter your email"}
+                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
-                <button 
+                <button
                   type="submit"
-                  className="bg-getfund-gold text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-500 transition-colors whitespace-nowrap"
+                  className="bg-amber-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors whitespace-nowrap"
                 >
                   {pageContent?.newsletterButtonText || 'Subscribe'}
                 </button>
               </form>
-              
-              <p className="text-sm text-gray-400 mb-6">
-                {pageContent?.newsletterFooterText || "Need help finding a specific document?"}
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
-                <a href={`mailto:${pageContent?.newsletterContactEmail || 'info@getfund.gov.gh'}`} className="text-getfund-gold hover:underline">
-                  Email: {pageContent?.newsletterContactEmail || 'info@getfund.gov.gh'}
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-300">
+                <a href={`mailto:${pageContent?.newsletterContactEmail || 'info@getfund.gov.gh'}`} className="text-amber-400 hover:underline">
+                  {pageContent?.newsletterContactEmail || 'info@getfund.gov.gh'}
                 </a>
-                <span className="hidden sm:inline text-gray-600">|</span>
-                <span className="text-gray-300">
-                  Phone: {pageContent?.newsletterContactPhone || '+233 (0)302 664 928-930'}
-                </span>
+                <span className="hidden sm:inline">|</span>
+                <span>{pageContent?.newsletterContactPhone || '+233 (0)302 664 928-930'}</span>
               </div>
             </div>
           </div>

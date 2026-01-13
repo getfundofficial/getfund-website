@@ -1,4 +1,4 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollDirection } from '../hooks/useScrollDirection';
@@ -6,6 +6,7 @@ import { cmsApi, MenuItem } from '../services/cmsApi';
 import DropdownMenu from './DropdownMenu';
 import MobileDropdownMenu from './MobileDropdownMenu';
 import ScrollProgressBar from './ScrollProgressBar';
+import SearchModal from './SearchModal';
 
 // Default menu items (shown immediately, may be updated from CMS)
 // These match the actual routes defined in App.tsx
@@ -34,9 +35,22 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(DEFAULT_MENU_ITEMS);
   const location = useLocation();
   const { scrollDirection, isScrolled } = useScrollDirection(50);
+
+  // Keyboard shortcut for search (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
@@ -98,6 +112,18 @@ export default function Header() {
             )
           ))}
 
+          {/* Search Button */}
+          <li>
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 text-getfund-secondary hover:text-getfund-primary hover:bg-gray-100 rounded-lg transition-colors"
+              title="Search (Ctrl+K)"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+          </li>
+
           {/* Donate Button */}
           <li>
             <Link
@@ -113,6 +139,17 @@ export default function Header() {
         {/* Mobile menu */}
         {isMenuOpen && (
           <div className="absolute top-full left-0 right-0 glass-mobile-menu lg:hidden max-h-[calc(100vh-80px)] overflow-y-auto">
+            {/* Mobile Search Button */}
+            <button
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsSearchOpen(true);
+              }}
+              className="flex items-center gap-2 w-full px-4 py-3 text-getfund-secondary hover:text-getfund-primary hover:bg-gray-50 border-b border-gray-100"
+            >
+              <Search className="w-5 h-5" />
+              <span className="font-medium">Search</span>
+            </button>
             <ul className="py-2 xs:py-4">
               {menuItems.map((item) => (
                 item.children && item.children.length > 0 ? (
@@ -149,6 +186,9 @@ export default function Header() {
         )}
       </nav>
     </header>
+
+    {/* Search Modal */}
+    <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }
