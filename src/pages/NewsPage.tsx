@@ -1,4 +1,4 @@
-import { Calendar, ArrowRight, Search } from 'lucide-react';
+import { Calendar, ArrowRight, Search, ArrowUpDown } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -49,6 +49,7 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 12;
 
@@ -95,10 +96,10 @@ export default function NewsPage() {
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
-      // Sort by date in descending order (latest first)
+      // Sort by date based on sortOrder
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return dateB - dateA;
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
     });
 
   // Pagination calculations
@@ -107,10 +108,10 @@ export default function NewsPage() {
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  // Reset to page 1 when search or category changes
+  // Reset to page 1 when search, category, or sort changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, sortOrder]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -214,16 +215,32 @@ export default function NewsPage() {
                 ))}
               </div>
 
-              {/* Search Bar */}
-              <div className="relative w-full md:w-72">
-                <input
-                  type="text"
-                  placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              {/* Search and Sort */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                {/* Search Bar */}
+                <div className="relative w-full sm:w-64">
+                  <input
+                    type="text"
+                    placeholder={content?.sidebar?.searchPlaceholder || 'Search articles...'}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                </div>
+
+                {/* Sort Dropdown */}
+                <div className="relative w-full sm:w-44">
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest')}
+                    className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
+                  >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                  </select>
+                  <ArrowUpDown className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
               </div>
             </div>
           </div>
