@@ -73,9 +73,6 @@ export default function WhoWeAre() {
 
         // Fetch team members
         const members = await cmsApi.getTeamMembers();
-        console.log('[WhoWeAre] Team members from API:', members);
-        console.log('[WhoWeAre] Deputy Administrator:', members.deputy_administrator);
-        console.log('[WhoWeAre] Financial Controller:', members.financial_controller);
         setTeamMembers(members);
 
         if (response && response.sections) {
