@@ -15,7 +15,7 @@ interface SearchResult {
 // Static pages that can be searched
 const STATIC_PAGES: SearchResult[] = [
   { id: 'home', type: 'page', title: 'Home', description: 'Ghana Education Trust Fund - Transforming Education', url: '/' },
-  { id: 'who-we-are', type: 'page', title: 'Who We Are', description: 'Learn about GETFund\'s history, mission, vision and leadership', url: '/who-we-are' },
+  { id: 'about', type: 'page', title: 'About', description: 'Learn about GETFund\'s history, mission, vision and leadership', url: '/about' },
   { id: 'what-we-do', type: 'page', title: 'What We Do', description: 'Discover our programmes and initiatives in education', url: '/what-we-do' },
   { id: 'impact', type: 'page', title: 'Our Impact', description: 'See the measurable impact of our work across Ghana', url: '/impact' },
   { id: 'news', type: 'page', title: 'News & Updates', description: 'Latest news and announcements from GETFund', url: '/news' },

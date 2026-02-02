@@ -10,7 +10,6 @@ import ImageSection from './sections/ImageSection';
 import CTASection from './sections/CTASection';
 import StatsSection from './sections/StatsSection';
 import GallerySection from './sections/GallerySection';
-import VideoSection from './sections/VideoSection';
 
 interface SectionRendererProps {
   section: PageSection;
@@ -40,9 +39,6 @@ export default function SectionRenderer({ section }: SectionRendererProps) {
 
     case 'gallery':
       return <GallerySection section={section} />;
-
-    case 'video':
-      return <VideoSection section={section} />;
 
     default:
       console.warn(`Unknown section type: ${section.section_type}`);

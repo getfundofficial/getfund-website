@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { RegionalCompletionData } from '../data/regionalCompletion';
 
 interface Region {
   name: string;
   totalProjects: number;
 }
 
+type ViewMode = 'projects' | 'completion';
+
 interface RegionalMapSVGProps {
   regions: Region[];
   onRegionHover: (regionName: string | null) => void;
   onRegionClick: (regionName: string) => void;
   selectedRegion: string | null;
+  viewMode?: ViewMode;
+  completionData?: RegionalCompletionData[];
 }
 
 // Map SVG IDs to region names
@@ -42,11 +47,21 @@ function getColorByProjectCount(count: number | undefined): string {
   return '#6EE7B7';                    // 1-49 - very light green
 }
 
+// Get color based on completion score
+function getColorByCompletionScore(score: number | undefined): string {
+  if (score === undefined) return '#D1D5DB'; // No data - gray
+  if (score < 40) return '#dc2626';  // Low - red
+  if (score < 60) return '#f59e0b';  // Medium - gold
+  return '#10b981';                   // High - green
+}
+
 export default function RegionalMapSVG({
   regions,
   onRegionHover,
   onRegionClick,
-  selectedRegion
+  selectedRegion,
+  viewMode = 'projects',
+  completionData = []
 }: RegionalMapSVGProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgContent, setSvgContent] = useState<string>('');
@@ -58,11 +73,21 @@ export default function RegionalMapSVG({
     return regions.find(r => normalize(r.name) === normalize(regionName));
   }, [regions]);
 
-  // Get base color for a region based on its project count
+  // Find completion data by name
+  const findCompletionData = useCallback((regionName: string): RegionalCompletionData | undefined => {
+    const normalize = (name: string) => name.trim().toLowerCase();
+    return completionData.find(r => normalize(r.name) === normalize(regionName));
+  }, [completionData]);
+
+  // Get base color for a region based on view mode
   const getRegionBaseColor = useCallback((regionName: string): string => {
+    if (viewMode === 'completion') {
+      const data = findCompletionData(regionName);
+      return getColorByCompletionScore(data?.completionScore);
+    }
     const regionData = findRegionData(regionName);
     return getColorByProjectCount(regionData?.totalProjects);
-  }, [findRegionData]);
+  }, [viewMode, findRegionData, findCompletionData]);
 
   // Inject pulsate animation styles
   useEffect(() => {
@@ -120,7 +145,7 @@ export default function RegionalMapSVG({
       const regionName = regionIdToName[regionId];
       const baseColor = getRegionBaseColor(regionName);
 
-      // Set base styles with color based on project count
+      // Set base styles with color based on view mode
       pathElement.style.cursor = 'pointer';
       pathElement.style.transition = 'all 0.3s ease';
       pathElement.style.transformOrigin = 'center';
@@ -187,7 +212,7 @@ export default function RegionalMapSVG({
     };
   }, [svgContent, selectedRegion, onRegionHover, onRegionClick, getRegionBaseColor]);
 
-  // Update region colors when data changes
+  // Update region colors when data or view mode changes
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -219,7 +244,7 @@ export default function RegionalMapSVG({
         }
       }
     });
-  }, [selectedRegion, hoveredRegion, getRegionBaseColor]);
+  }, [selectedRegion, hoveredRegion, getRegionBaseColor, viewMode]);
 
   return (
     <div className="flex justify-center items-center w-full">

@@ -38,8 +38,8 @@ function App() {
           {/* What We Do - CMS-powered with Programs component */}
           <Route path="/what-we-do" element={<WhatWeDo />} />
           
-          {/* Who We Are - Dedicated CMS-powered page */}
-          <Route path="/who-we-are" element={<WhoWeAre />} />
+          {/* About - Dedicated CMS-powered page */}
+          <Route path="/about" element={<WhoWeAre />} />
           
           {/* Impact - Dedicated CMS-powered page */}
           <Route path="/impact" element={<Impact />} />
@@ -48,7 +48,7 @@ function App() {
           <Route path="/resources" element={<Resources />} />
 
           {/* CMS-Powered Pages */}
-          <Route path="/who-we-are/:slug" element={<CMSPage />} />
+          <Route path="/about/:slug" element={<CMSPage />} />
           <Route path="/impact/:slug" element={<CMSPage />} />
           <Route path="/resources/:slug" element={<CMSPage />} />
           <Route path="/support-us/:slug?" element={<CMSPage />} />

@@ -6,7 +6,20 @@ import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
 import OptimizedImage from '../components/OptimizedImage';
 import GhanaRegionalMap from '../components/GhanaRegionalMap';
+import AnimatedCounter from '../components/AnimatedCounter';
 import { cmsApi } from '../services/cmsApi';
+import { REGIONS_DATA } from '../data/regional-data';
+
+// New visualization components
+import { PortfolioTimeline, CompletionDonut, CompletionStackedBars, ChartLegend, SectorProgressGrid, SectorTabs } from '../components/visualizations';
+import SectorGauges from '../components/visualizations/SectorGauges';
+import SectorProgressBars from '../components/visualizations/SectorProgressBars';
+import SectorRadialBars from '../components/visualizations/SectorRadialBars';
+import SectorWaffleCharts from '../components/visualizations/SectorWaffleCharts';
+import SectorStatCards from '../components/visualizations/SectorStatCards';
+import SectorVerticalBars from '../components/visualizations/SectorVerticalBars';
+import CompletionVerticalChart from '../components/visualizations/CompletionVerticalChart';
+import { DONUT_CHART_DATA, SECTOR_COMPLETION_DATA, COMPLETION_COLORS } from '../data/completionData';
 
 interface StatItem {
   number: string;
@@ -52,6 +65,15 @@ interface PageContent {
   // Hero Section
   heroTitle?: string;
   heroSubtitle?: string;
+
+  // Video Section
+  videoSection?: {
+    url: string;
+    provider: 'youtube' | 'vimeo' | 'upload';
+    title?: string;
+    subtitle?: string;
+    thumbnail?: string;
+  };
 
   // Impact Statistics
   statsTitle?: string;
@@ -179,6 +201,14 @@ export default function Impact() {
                 content.ctaDescription = section.content.description;
                 content.ctaButtonText = section.content.buttonText;
                 content.ctaButtonLink = section.content.buttonLink;
+              } else if (section.section_type === 'video' && section.content && section.is_active) {
+                content.videoSection = {
+                  url: section.content.url,
+                  provider: section.content.provider || 'youtube',
+                  title: section.content.title,
+                  subtitle: section.content.subtitle,
+                  thumbnail: section.content.thumbnail
+                };
               }
             });
 
@@ -221,7 +251,7 @@ export default function Impact() {
         <section className="bg-white pt-8 pb-4">
           <div className="container mx-auto px-4 max-w-6xl">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              {pageContent?.heroTitle || 'Our Impact'}
+              {pageContent?.heroTitle || 'Our Work & Impact'}
             </h1>
             <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
             <p className="text-gray-600 mt-3 max-w-3xl">
@@ -230,152 +260,83 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* Regional Impact - First section after title */}
-        <section className="py-10 bg-blue-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.regionalTitle || 'Regional Impact'}
-              </h2>
-              <p className="text-gray-600 max-w-2xl">
-                {pageContent?.regionalSubtitle || 'Ensuring equitable distribution of educational resources across all regions'}
-              </p>
-            </div>
-
-            {/* Interactive Regional Map */}
-            <GhanaRegionalMap
-              regions={pageContent?.regions || [
-                { name: 'Ashanti', totalProjects: 748, basicEducation: 451, secondaryEducation: 281, tertiaryEducation: 12, modelSchools: 2, tvetCenters: 2 },
-                { name: 'Eastern', totalProjects: 541, basicEducation: 301, secondaryEducation: 230, tertiaryEducation: 8, modelSchools: 1, tvetCenters: 1 },
-                { name: 'Northern', totalProjects: 172, basicEducation: 101, secondaryEducation: 66, tertiaryEducation: 5 },
-                { name: 'Greater Accra', totalProjects: 77, basicEducation: 66, secondaryEducation: 1, modelSchools: 10 },
-                { name: 'Upper East', totalProjects: 121, basicEducation: 68, secondaryEducation: 47, tertiaryEducation: 6 },
-                { name: 'Bono', totalProjects: 142, basicEducation: 73, secondaryEducation: 64, tertiaryEducation: 4, modelSchools: 1 },
-                { name: 'Western', totalProjects: 110, basicEducation: 54, secondaryEducation: 55, tertiaryEducation: 1 },
-                { name: 'Ahafo', totalProjects: 102, basicEducation: 62, secondaryEducation: 34, tertiaryEducation: 5, modelSchools: 1 },
-                { name: 'Central', totalProjects: 91, basicEducation: 91 },
-                { name: 'Volta', totalProjects: 93, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 5 },
-                { name: 'Oti', totalProjects: 90, basicEducation: 47, secondaryEducation: 41, tertiaryEducation: 2 },
-                { name: 'Upper West', totalProjects: 86, basicEducation: 41, secondaryEducation: 41, tertiaryEducation: 4 },
-                { name: 'Bono East', totalProjects: 55, basicEducation: 23, secondaryEducation: 31, modelSchools: 1 },
-                { name: 'Western North', totalProjects: 51, basicEducation: 24, secondaryEducation: 19, tertiaryEducation: 7, modelSchools: 1 },
-                { name: 'North East', totalProjects: 50, basicEducation: 20, secondaryEducation: 27, tertiaryEducation: 2, modelSchools: 1 },
-                { name: 'Savannah', totalProjects: 34, basicEducation: 13, secondaryEducation: 21 }
-              ]}
-            />
-          </div>
-        </section>
-
-        {/* Impact Statistics */}
+        {/* Overview Statistics */}
         <section className="py-10 bg-white">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
+            <div className="mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.statsTitle || 'Our Impact in Numbers'}
+                Impact at a Glance
               </h2>
               <p className="text-gray-600 max-w-2xl">
-                {pageContent?.statsSubtitle || 'Measurable results that showcase our commitment to educational excellence'}
+                Key metrics showcasing our commitment to educational excellence
               </p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {(pageContent?.stats || [
-                { number: '11,248', label: 'Total Projects', description: 'Since inception', icon: 'building' },
-                { number: '16,000+', label: 'Scholars Supported', description: 'Local and foreign', icon: 'graduation-cap' },
-                { number: '2,749+', label: 'Recent Projects', description: 'Since 2017', icon: 'trending-up' },
-                { number: '16', label: 'Regions Covered', description: 'Nationwide', icon: 'award' },
-                { number: '5,026', label: 'Scholarships', description: '2023/24', icon: 'graduation-cap' },
-                { number: '677,470', label: 'Furniture Items', description: '2019-2021', icon: 'building' }
-              ]).map((stat, index) => (
-                <div key={index} className="bg-blue-50 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                  <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stat.number}</div>
-                  <div className="text-sm font-semibold text-gray-900 mb-1">{stat.label}</div>
-                  <p className="text-gray-500 text-xs">{stat.description}</p>
+              <div className="bg-getfund-primary text-white p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1">
+                  <AnimatedCounter end={11488} duration={1500} />
                 </div>
-              ))}
+                <div className="text-sm font-semibold opacity-90">Total Projects</div>
+                <p className="text-xs opacity-75 mt-1">Since 2001</p>
+              </div>
+              <div className="bg-blue-50 p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#059669' }}>
+                  <AnimatedCounter end={8553} duration={1500} />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">Completed</div>
+                <p className="text-xs text-gray-500 mt-1">100% finished</p>
+              </div>
+              <div className="bg-blue-50 p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#f59e0b' }}>
+                  <AnimatedCounter end={2935} duration={1500} />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">Ongoing</div>
+                <p className="text-xs text-gray-500 mt-1">In progress</p>
+              </div>
+              <div className="bg-blue-50 p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                  <AnimatedCounter end={16} duration={1500} />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">Regions</div>
+                <p className="text-xs text-gray-500 mt-1">Nationwide</p>
+              </div>
+              <div className="bg-blue-50 p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                  <AnimatedCounter end={5} duration={1500} />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">Sectors</div>
+                <p className="text-xs text-gray-500 mt-1">Education levels</p>
+              </div>
+              <div className="bg-blue-50 p-5 text-center">
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                  <AnimatedCounter end={24} duration={1500} suffix="+" />
+                </div>
+                <div className="text-sm font-semibold text-gray-900">Years</div>
+                <p className="text-xs text-gray-500 mt-1">Of impact</p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Project Portfolio Breakdown */}
-        <section className="py-10 bg-gray-50">
+        {/* Projects Portfolio Timeline - NEW */}
+        <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
+            <div className="mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.portfolioTitle || 'Project Portfolio'}
+                GETFund Projects Portfolio
               </h2>
               <p className="text-gray-600 max-w-2xl">
-                {pageContent?.portfolioSubtitle || 'Our comprehensive investment across all levels of education'}
+                8 major programmes spanning over 24 years of educational infrastructure development
               </p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {(pageContent?.projectCategories || [
-                { category: 'Basic Education', count: 6272, description: 'Primary schools', image: '/images/impact/infrastructure-1.jpg' },
-                { category: 'Secondary Education', count: 3863, description: 'High schools', image: '/images/impact/infrastructure-2.jpg' },
-                { category: 'Tertiary Education', count: 999, description: 'Universities', image: '/images/impact/infrastructure-3.jpg' },
-                { category: 'TVET Centers', count: 4, description: 'Vocational training', image: '/images/impact/infrastructure-4.jpg' }
-              ]).map((project, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  {project.image && (
-                    <div className="h-32">
-                      <OptimizedImage
-                        src={project.image}
-                        alt={project.category}
-                        className="w-full h-full object-cover"
-                        fallbackSrc="/images/placeholder.jpg"
-                      />
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <h3 className="text-xl font-bold mb-1" style={{ color: '#2a3f75' }}>{project.count.toLocaleString()}</h3>
-                    <h4 className="text-sm font-semibold text-gray-900">{project.category}</h4>
-                    <p className="text-gray-500 text-xs">{project.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PortfolioTimeline showDescription />
           </div>
         </section>
 
-        {/* Resources Distributed */}
-        <section className="py-10 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.resourcesTitle || 'Resources Distributed'}
-              </h2>
-              <p className="text-gray-600 max-w-2xl">
-                {pageContent?.resourcesSubtitle || 'Supporting education with essential equipment and resources'}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              {(pageContent?.resources || [
-                { type: 'Vehicles', count: 2718, period: '2019-2021', image: '/images/impact/vehicles-1.jpg' },
-                { type: 'Furniture Items', count: 677470, period: '2019-2021', image: '/images/impact/furniture-1.jpg' }
-              ]).map((resource, index) => (
-                <div key={index} className="bg-blue-50 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex">
-                  {resource.image && (
-                    <div className="w-32 h-32 flex-shrink-0">
-                      <OptimizedImage
-                        src={resource.image}
-                        alt={resource.type}
-                        className="w-full h-full object-cover"
-                        fallbackSrc="/images/placeholder.jpg"
-                      />
-                    </div>
-                  )}
-                  <div className="p-4 flex flex-col justify-center">
-                    <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{resource.count.toLocaleString()}</div>
-                    <h3 className="text-lg font-semibold text-gray-900">{resource.type}</h3>
-                    <p className="text-gray-500 text-sm">Distributed ({resource.period})</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Sector Analysis Tabs - Combines Completion, Regional, and Performance */}
+        <SectorTabs />
 
         {/* Impact Stories */}
         <section className="py-10 bg-gray-50">
@@ -561,7 +522,7 @@ export default function Impact() {
                 { year: '2000', title: 'GETFund Established', description: 'Founded by Act of Parliament' },
                 { year: '2010', title: 'International Scholarships', description: 'Postgraduate program launched' },
                 { year: '2020', title: 'Digital Infrastructure', description: 'E-learning support deployed' },
-                { year: '2024', title: '11,248 Projects', description: 'Across all 16 regions' }
+                { year: '2024', title: '11,488 Projects', description: 'Across all 16 regions' }
               ]).map((achievement, index) => (
                 <div key={index} className="bg-white rounded-lg p-4 shadow-sm border-t-3" style={{ borderTopWidth: '3px', borderTopColor: '#2a3f75' }}>
                   <span className="inline-block text-white text-xs font-bold px-2 py-1 rounded mb-2" style={{ backgroundColor: '#2a3f75' }}>

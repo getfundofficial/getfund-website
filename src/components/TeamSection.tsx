@@ -40,6 +40,8 @@ interface TeamSectionProps {
   chairman?: TeamMember;
   managementTeam?: ManagementMember[];
   currentAdministrator?: CurrentAdmin;
+  deputyAdministrator?: CurrentAdmin;
+  financialController?: CurrentAdmin;
   pastAdministrators?: Administrator[];
 }
 
@@ -50,6 +52,8 @@ export default function TeamSection({
   chairman,
   managementTeam = [],
   currentAdministrator,
+  deputyAdministrator,
+  financialController,
   pastAdministrators = []
 }: TeamSectionProps) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -61,21 +65,39 @@ export default function TeamSection({
     galleryItems?: Array<{ name: string; title: string; image: string; dateRange?: string }>;
   }>({ title: '', content: '', type: 'group' });
 
-  const handleManagementTeamClick = () => {
-    const galleryItems = managementTeam.map(member => ({
-      name: member.name,
-      title: member.title,
-      image: member.image_url || '/images/placeholder.jpg'
-    }));
-
+  const handleBoardOfDirectorsClick = () => {
     setModalContent({
-      title: 'Management Team',
+      title: 'Board of Directors',
       content: `
-        <p class="text-lg mb-4">The GETFund Management Team executes the strategic vision set by the Board of Directors, ensuring operational excellence across all programs and initiatives.</p>
-        <p class="mb-4">The team is led by experienced professionals who oversee daily operations, financial management, and program implementation.</p>
+        <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
+
+        <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
+        <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
+
+        <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Key Responsibilities</h3>
+        <ul class="space-y-3 mb-4">
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+            <span>Setting strategic priorities aligned with national education goals</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+            <span>Ensuring efficient resource utilization and project delivery</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+            <span>Building partnerships across all education sectors</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+            <span>Monitoring performance and educational outcomes</span>
+          </li>
+        </ul>
+
+        <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
       `,
-      type: 'gallery',
-      galleryItems
+      image: boardGroupImage,
+      type: 'group'
     });
     setModalOpen(true);
   };
@@ -95,43 +117,6 @@ export default function TeamSection({
       `,
       type: 'gallery',
       galleryItems
-    });
-    setModalOpen(true);
-  };
-
-  const handleBoardGroupClick = () => {
-    setModalContent({
-      title: 'Board of Directors',
-      content: `
-        <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
-
-        <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
-        <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
-
-        <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Key Responsibilities</h3>
-        <ul class="space-y-2 mb-4">
-          <li class="flex items-start gap-2">
-            <span class="text-getfund-primary font-bold">•</span>
-            <span>Setting strategic priorities aligned with national education goals</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-getfund-primary font-bold">•</span>
-            <span>Ensuring efficient resource utilization and project delivery</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-getfund-primary font-bold">•</span>
-            <span>Building partnerships across all education sectors</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-getfund-primary font-bold">•</span>
-            <span>Monitoring performance and educational outcomes</span>
-          </li>
-        </ul>
-
-        <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
-      `,
-      image: boardGroupImage,
-      type: 'group'
     });
     setModalOpen(true);
   };
@@ -172,10 +157,10 @@ export default function TeamSection({
             {/* Action Buttons */}
             <div className="flex justify-center gap-4">
               <button
-                onClick={handleManagementTeamClick}
+                onClick={handleBoardOfDirectorsClick}
                 className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
               >
-                Management Team
+                Board of Directors
               </button>
               <button
                 onClick={handlePastAdministratorsClick}
@@ -186,133 +171,131 @@ export default function TeamSection({
             </div>
           </div>
 
-          {/* Unified Leadership Section: Chairman, Administrator, and Group Photo */}
+          {/* Leadership Cards: Chairman, Administrator, Deputy Admin, Financial Controller */}
           <div className="mb-12">
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Board Chairman Card */}
               {chairman ? (
-                <div className="lg:col-span-1">
-                  <div
-                    className="group glass-card rounded-xl overflow-hidden cursor-pointer transition-all duration-300 h-full"
-                    onClick={handleChairmanClick}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        handleChairmanClick();
-                      }
-                    }}
-                    aria-label={`View ${chairman.name} profile`}
-                  >
-                    {/* Image */}
-                    <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
-                      <img
-                        src={chairman.image}
-                        alt={chairman.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/board/s8507362-member1.jpg';
-                        }}
-                      />
-                      {/* Badge */}
-                      <div className="absolute top-4 left-4">
-                        <span className="inline-flex items-center gap-2 bg-getfund-primary text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-                          Board Chairman
-                        </span>
-                      </div>
-                    </div>
-                    {/* Info */}
-                    <div className="bg-gray-900 text-white p-5 text-center">
-                      <h3 className="text-xl font-bold mb-1">{chairman.name}</h3>
-                      <p className="text-sm text-gray-300">{chairman.title}</p>
-                      <p className="text-xs text-getfund-gold mt-2">Click to view profile</p>
-                    </div>
+                <div
+                  className="group cursor-pointer"
+                  onClick={handleChairmanClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleChairmanClick();
+                    }
+                  }}
+                  aria-label={`View ${chairman.name} profile`}
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <img
+                      src={chairman.image}
+                      alt={chairman.name}
+                      className="w-full h-full object-cover object-top transition-all duration-300 scale-110 group-hover:scale-[1.15]"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/board/s8507362-member1.jpg';
+                      }}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-xs font-semibold text-getfund-primary uppercase tracking-wider mb-1">Board Chairman</p>
+                    <h3 className="text-lg font-bold text-gray-900">{chairman.name}</h3>
+                    <p className="text-sm text-gray-600">{chairman.title}</p>
                   </div>
                 </div>
               ) : (
-                <div className="lg:col-span-1">
-                  <div className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 p-8 h-full flex items-center justify-center">
-                    <p className="text-gray-500 text-center">
-                      Board Chairman profile coming soon
-                    </p>
-                  </div>
+                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
+                  <p className="text-gray-400 text-center text-sm">
+                    Board Chairman<br />coming soon
+                  </p>
                 </div>
               )}
 
               {/* Current Administrator Card */}
               {currentAdministrator ? (
-                <div className="lg:col-span-1">
-                  <div className="group glass-card rounded-xl overflow-hidden transition-all duration-300 h-full">
-                    {/* Image */}
-                    <div className="relative aspect-[4/5] bg-gray-100 overflow-hidden">
-                      <img
-                        src={currentAdministrator.image_url || '/images/placeholder.jpg'}
-                        alt={currentAdministrator.name}
-                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/placeholder.jpg';
-                        }}
-                      />
-                      {/* Badge */}
-                      <div className="absolute top-4 left-4">
-                        <span className="inline-flex items-center gap-2 bg-getfund-gold text-gray-900 px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
-                          <span className="w-1.5 h-1.5 bg-gray-900 rounded-full animate-pulse"></span>
-                          Administrator
-                        </span>
-                      </div>
-                    </div>
-                    {/* Info */}
-                    <div className="bg-gray-900 text-white p-5 text-center">
-                      <h3 className="text-xl font-bold mb-1">{currentAdministrator.name}</h3>
-                      <p className="text-sm text-gray-300">{currentAdministrator.title}</p>
-                      {currentAdministrator.date_range && (
-                        <p className="text-xs text-getfund-gold mt-2">{currentAdministrator.date_range}</p>
-                      )}
-                    </div>
+                <div className="group">
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <img
+                      src={currentAdministrator.image_url || '/images/placeholder.jpg'}
+                      alt={currentAdministrator.name}
+                      className="w-full h-full object-cover object-top transition-all duration-300 scale-105 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/placeholder.jpg';
+                      }}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-xs font-semibold text-getfund-gold uppercase tracking-wider mb-1">Administrator</p>
+                    <h3 className="text-lg font-bold text-gray-900">{currentAdministrator.name}</h3>
+                    <p className="text-sm text-gray-600">{currentAdministrator.title}</p>
                   </div>
                 </div>
               ) : (
-                <div className="lg:col-span-1">
-                  <div className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 p-8 h-full flex items-center justify-center">
-                    <p className="text-gray-500 text-center">
-                      Administrator profile coming soon
-                    </p>
-                  </div>
+                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
+                  <p className="text-gray-400 text-center text-sm">
+                    Administrator<br />coming soon
+                  </p>
                 </div>
               )}
 
-              {/* Group Photo Card (Big Picture) */}
-              <div className="lg:col-span-1">
-                <div
-                  className="glass-card rounded-xl overflow-hidden cursor-pointer group transition-all h-full"
-                  onClick={handleBoardGroupClick}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleBoardGroupClick();
-                    }
-                  }}
-                  aria-label="View Board of Directors details"
-                >
-                  <div className="relative h-full min-h-[400px]">
+              {/* Deputy Administrator Card */}
+              {deputyAdministrator ? (
+                <div className="group">
+                  <div className="relative aspect-[3/4] overflow-hidden">
                     <img
-                      src={boardGroupImage}
-                      alt="Board of Directors Group Photo"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      src={deputyAdministrator.image_url || '/images/placeholder.jpg'}
+                      alt={deputyAdministrator.name}
+                      className="w-full h-full object-cover object-top transition-all duration-300 scale-105 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/placeholder.jpg';
+                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                      <h3 className="text-xl font-bold mb-2">Board of Directors</h3>
-                      <p className="text-sm text-gray-200 group-hover:text-white transition-colors">
-                        Click to view details
-                      </p>
-                    </div>
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">Deputy Administrator</p>
+                    <h3 className="text-lg font-bold text-gray-900">{deputyAdministrator.name}</h3>
+                    <p className="text-sm text-gray-600">{deputyAdministrator.title}</p>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
+                  <p className="text-gray-400 text-center text-sm">
+                    Deputy Administrator<br />coming soon
+                  </p>
+                </div>
+              )}
+
+              {/* Financial Controller Card */}
+              {financialController ? (
+                <div className="group">
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    <img
+                      src={financialController.image_url || '/images/placeholder.jpg'}
+                      alt={financialController.name}
+                      className="w-full h-full object-cover object-top transition-all duration-300 scale-105 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/placeholder.jpg';
+                      }}
+                    />
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Financial Controller</p>
+                    <h3 className="text-lg font-bold text-gray-900">{financialController.name}</h3>
+                    <p className="text-sm text-gray-600">{financialController.title}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
+                  <p className="text-gray-400 text-center text-sm">
+                    Financial Controller<br />coming soon
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

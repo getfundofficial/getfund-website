@@ -11,7 +11,7 @@ import SearchModal from './SearchModal';
 // Default menu items (shown immediately, may be updated from CMS)
 // These match the actual routes defined in App.tsx
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
-  { id: '1', slug: 'who-we-are', title: 'Who We Are', label: 'Who We Are' },
+  { id: '1', slug: 'about', title: 'About', label: 'About' },
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
   { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'Our Work & Impact' },
   { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
