@@ -36,7 +36,7 @@ export default function CMSPage() {
       return cleanPath;
     }
 
-    // For parent pages (e.g., /who-we-are), use the first segment
+    // For parent pages (e.g., /about), use the first segment
     const segments = cleanPath.split('/');
     return segments[0];
   };

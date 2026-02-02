@@ -53,7 +53,7 @@ export default function Footer() {
   ];
 
   const defaultQuickLinks = [
-    { name: 'Who We Are', href: '/who-we-are' },
+    { name: 'About', href: '/about' },
     { name: 'What We Do', href: '/what-we-do' },
     { name: 'Impact', href: '/impact' },
     { name: 'News & Updates', href: '/news' },
@@ -82,7 +82,11 @@ export default function Footer() {
   ].filter(Boolean) : defaultSocialLinks;
 
   const quickLinks = footerConfig?.quick_links && footerConfig.quick_links.length > 0
-    ? footerConfig.quick_links
+    ? footerConfig.quick_links.map(link => ({
+        ...link,
+        name: link.name === 'Who We Are' ? 'About' : link.name,
+        href: link.href === '/who-we-are' ? '/about' : link.href
+      }))
     : defaultQuickLinks;
 
   return (

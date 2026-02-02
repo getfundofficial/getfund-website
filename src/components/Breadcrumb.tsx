@@ -16,7 +16,7 @@ interface BreadcrumbProps {
 // Route to label mapping
 const routeLabels: Record<string, string> = {
   '/': 'Home',
-  '/who-we-are': 'Who We Are',
+  '/about': 'About',
   '/impact': 'Impact',
   '/news': 'News & Updates',
   '/contact': 'Contact',

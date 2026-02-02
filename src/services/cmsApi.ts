@@ -83,7 +83,7 @@ export interface TeamMember {
   id: string;
   name: string;
   title: string;
-  role: 'board_chairman' | 'board_member' | 'management' | 'historical_admin';
+  role: 'board_chairman' | 'board_member' | 'management' | 'historical_admin' | 'deputy_administrator' | 'financial_controller';
   image_url?: string;
   bio?: string;
   date_range?: string;
@@ -95,6 +95,8 @@ export interface TeamMembersResponse {
   chairman: TeamMember | null;
   management: TeamMember[];
   historical_admins: TeamMember[];
+  deputy_administrator?: TeamMember | null;
+  financial_controller?: TeamMember | null;
 }
 
 export interface FooterConfig {
@@ -123,7 +125,7 @@ export interface FooterConfig {
   updated_at: string;
 }
 
-export type SectionType = 'text' | 'html' | 'image' | 'gallery' | 'video' | 'stats' | 'hero' | 'cta' | 'page_content';
+export type SectionType = 'text' | 'html' | 'image' | 'gallery' | 'stats' | 'hero' | 'cta' | 'page_content';
 
 export interface PageSection {
   id: string;
@@ -361,7 +363,7 @@ class CMSApiClient {
       const result = await response.json();
       return result.data;
     } catch {
-      return { chairman: null, management: [], historical_admins: [] };
+      return { chairman: null, management: [], historical_admins: [], deputy_administrator: null, financial_controller: null };
     }
   }
 
