@@ -20,26 +20,26 @@ interface PageContent {
   redHeading?: string;
   paragraph1?: string;
   paragraph2?: string;
-  
+
   // Mission, Vision, Values
   vision?: { title: string; description: string };
   mission?: { title: string; description: string };
   values?: { title: string; description: string };
-  
+
   // Educational Financing
   financingTitle?: string;
   costSharingPolicy?: string;
   publicResponsibility?: string;
-  
+
   // Funding Formula
   fundingFormulaTitle?: string;
   fundingFormulaIntro?: string;
   relevantFactors?: string[];
-  
+
   // Leadership & Governance
   leadershipTitle?: string;
   leadershipSubtitle?: string;
-  
+
   // Board of Directors
   boardImage?: string;
   boardTitle?: string;
@@ -49,21 +49,51 @@ interface PageContent {
     description: string;
     icon: string;
   }>;
-  
+
   // Footer Message
   footerMessage?: string;
+}
+
+// Helper function to find team member by role or title
+function findTeamMember(
+  members: TeamMemberType[],
+  role: string,
+  titleKeywords?: string[]
+): TeamMemberType | null {
+  // First try to find by exact role
+  const byRole = members.find(m => m.role === role && m.status === 'active');
+  if (byRole) return byRole;
+
+  // Fallback: search by title keywords in management members
+  if (titleKeywords) {
+    const byTitle = members.find(m => {
+      const title = m.title.toLowerCase();
+      return titleKeywords.every(kw => title.includes(kw.toLowerCase())) && m.status === 'active';
+    });
+    if (byTitle) return byTitle;
+  }
+
+  return null;
 }
 
 export default function WhoWeAre() {
   const [pageContent, setPageContent] = useState<PageContent | null>(null);
   const [loading, setLoading] = useState(true);
-  const [teamMembers, setTeamMembers] = useState<{
+  const [teamData, setTeamData] = useState<{
     chairman: TeamMemberType | null;
-    management: TeamMemberType[];
-    historical_admins: TeamMemberType[];
-    deputy_administrator?: TeamMemberType | null;
-    financial_controller?: TeamMemberType | null;
-  }>({ chairman: null, management: [], historical_admins: [], deputy_administrator: null, financial_controller: null });
+    administrator: TeamMemberType | null;
+    deputyAdministrator: TeamMemberType | null;
+    financialController: TeamMemberType | null;
+    historicalAdmins: TeamMemberType[];
+    allMembers: TeamMemberType[];
+  }>({
+    chairman: null,
+    administrator: null,
+    deputyAdministrator: null,
+    financialController: null,
+    historicalAdmins: [],
+    allMembers: []
+  });
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -71,9 +101,72 @@ export default function WhoWeAre() {
         // Fetch page content
         const response = await cmsApi.getPageBySlug('about');
 
-        // Fetch team members
-        const members = await cmsApi.getTeamMembers();
-        setTeamMembers(members);
+        // Fetch team members from API
+        const apiResponse = await cmsApi.getTeamMembers();
+        console.log('[WhoWeAre] API Response:', apiResponse);
+
+        // Combine all members into a single array for easier searching
+        const allMembers: TeamMemberType[] = [
+          ...(apiResponse.chairman ? [apiResponse.chairman] : []),
+          ...apiResponse.management,
+          ...apiResponse.historical_admins,
+          ...(apiResponse.deputy_administrator ? [apiResponse.deputy_administrator] : []),
+          ...(apiResponse.financial_controller ? [apiResponse.financial_controller] : [])
+        ];
+
+        // Find each leadership position
+        const chairman = apiResponse.chairman || findTeamMember(allMembers, 'board_chairman');
+
+        // Administrator: look for role=management with title containing "administrator" but not "deputy"
+        const administrator = findTeamMember(
+          apiResponse.management,
+          'administrator', // This won't match, so it'll use title fallback
+          ['administrator']
+        ) || apiResponse.management.find(m =>
+          m.title.toLowerCase().includes('administrator') &&
+          !m.title.toLowerCase().includes('deputy') &&
+          m.status === 'active'
+        ) || null;
+
+        // Deputy Administrator: check dedicated field first, then fallback
+        const deputyAdministrator = apiResponse.deputy_administrator ||
+          findTeamMember(apiResponse.management, 'deputy_administrator', ['deputy', 'administrator']);
+
+        // Financial Controller: check dedicated field first, then fallback
+        const financialController = apiResponse.financial_controller ||
+          findTeamMember(apiResponse.management, 'financial_controller', ['financial', 'controller']);
+
+        // Historical admins: filter out current ones
+        const historicalAdmins = apiResponse.historical_admins
+          .filter(admin =>
+            !admin.date_range?.toLowerCase().includes('date') &&
+            !admin.date_range?.toLowerCase().includes('present')
+          )
+          .sort((a, b) => {
+            const getEndYear = (dateRange?: string) => {
+              if (!dateRange) return 0;
+              const match = dateRange.match(/(\d{4})$/);
+              return match ? parseInt(match[1]) : 0;
+            };
+            return getEndYear(b.date_range) - getEndYear(a.date_range);
+          });
+
+        setTeamData({
+          chairman,
+          administrator,
+          deputyAdministrator,
+          financialController,
+          historicalAdmins,
+          allMembers
+        });
+
+        console.log('[WhoWeAre] Processed team data:', {
+          chairman: chairman?.name,
+          administrator: administrator?.name,
+          deputyAdministrator: deputyAdministrator?.name,
+          financialController: financialController?.name,
+          historicalAdmins: historicalAdmins.map(a => a.name)
+        });
 
         if (response && response.sections) {
           // Look for page_content section first
@@ -291,97 +384,40 @@ export default function WhoWeAre() {
           sectionTitle={pageContent?.leadershipTitle || 'Leadership & Governance'}
           sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-          chairman={teamMembers.chairman ? {
-            name: teamMembers.chairman.name,
-            title: teamMembers.chairman.title,
-            image: teamMembers.chairman.image_url || '/images/board/s8507362-member1.jpg',
-            bio: teamMembers.chairman.bio || ''
+          boardDescription={pageContent?.boardDescription}
+          chairman={teamData.chairman ? {
+            name: teamData.chairman.name,
+            title: teamData.chairman.title,
+            image: teamData.chairman.image_url || '/images/board/s8507362-member1.jpg',
+            bio: teamData.chairman.bio || ''
           } : undefined}
-          managementTeam={teamMembers.management}
-          currentAdministrator={(() => {
-            // First look for an Administrator in management (not Deputy)
-            const adminFromMgmt = teamMembers.management.find(m =>
-              m.title.toLowerCase().includes('administrator') &&
-              !m.title.toLowerCase().includes('deputy')
-            );
-            if (adminFromMgmt) {
-              return {
-                id: adminFromMgmt.id,
-                name: adminFromMgmt.name,
-                title: adminFromMgmt.title,
-                image_url: adminFromMgmt.image_url,
-                date_range: adminFromMgmt.date_range
-              };
-            }
-            // Fallback: look in historical_admins for one marked as "present"
-            return teamMembers.historical_admins.find(
-              admin => admin.date_range?.toLowerCase().includes('present')
-            );
-          })()}
-          deputyAdministrator={(() => {
-            // First check if dedicated field exists from API
-            if (teamMembers.deputy_administrator) {
-              return {
-                id: teamMembers.deputy_administrator.id,
-                name: teamMembers.deputy_administrator.name,
-                title: teamMembers.deputy_administrator.title,
-                image_url: teamMembers.deputy_administrator.image_url
-              };
-            }
-            // Fallback: filter from management by title
-            const deputy = teamMembers.management.find(m =>
-              m.title.toLowerCase().includes('deputy') && m.title.toLowerCase().includes('admin')
-            );
-            return deputy ? {
-              id: deputy.id,
-              name: deputy.name,
-              title: deputy.title,
-              image_url: deputy.image_url
-            } : undefined;
-          })()}
-          financialController={(() => {
-            // First check if dedicated field exists from API
-            if (teamMembers.financial_controller) {
-              return {
-                id: teamMembers.financial_controller.id,
-                name: teamMembers.financial_controller.name,
-                title: teamMembers.financial_controller.title,
-                image_url: teamMembers.financial_controller.image_url
-              };
-            }
-            // Fallback: filter from management by title
-            const fc = teamMembers.management.find(m =>
-              m.title.toLowerCase().includes('financial') && m.title.toLowerCase().includes('controller')
-            );
-            return fc ? {
-              id: fc.id,
-              name: fc.name,
-              title: fc.title,
-              image_url: fc.image_url
-            } : undefined;
-          })()}
-          pastAdministrators={teamMembers.historical_admins
-            .filter(admin =>
-              !admin.date_range?.toLowerCase().includes('date') &&
-              !admin.date_range?.toLowerCase().includes('present')
-            )
-            .sort((a, b) => {
-              const getEndYear = (dateRange?: string) => {
-                if (!dateRange) return 0;
-                const match = dateRange.match(/(\d{4})$/);
-                return match ? parseInt(match[1]) : 0;
-              };
-              return getEndYear(b.date_range) - getEndYear(a.date_range);
-            })
-            .map(admin => ({
-              id: admin.id,
-              name: admin.name,
-              title: admin.title,
-              image_url: admin.image_url,
-              date_range: admin.date_range,
-              display_order: admin.display_order
-            }))
-          }
+          currentAdministrator={teamData.administrator ? {
+            id: teamData.administrator.id,
+            name: teamData.administrator.name,
+            title: teamData.administrator.title,
+            image_url: teamData.administrator.image_url,
+            date_range: teamData.administrator.date_range
+          } : undefined}
+          deputyAdministrator={teamData.deputyAdministrator ? {
+            id: teamData.deputyAdministrator.id,
+            name: teamData.deputyAdministrator.name,
+            title: teamData.deputyAdministrator.title,
+            image_url: teamData.deputyAdministrator.image_url
+          } : undefined}
+          financialController={teamData.financialController ? {
+            id: teamData.financialController.id,
+            name: teamData.financialController.name,
+            title: teamData.financialController.title,
+            image_url: teamData.financialController.image_url
+          } : undefined}
+          pastAdministrators={teamData.historicalAdmins.map(admin => ({
+            id: admin.id,
+            name: admin.name,
+            title: admin.title,
+            image_url: admin.image_url,
+            date_range: admin.date_range,
+            display_order: admin.display_order
+          }))}
         />
         </div>
 
