@@ -8,14 +8,6 @@ interface TeamMember {
   bio: string;
 }
 
-interface ManagementMember {
-  id: string;
-  name: string;
-  title: string;
-  image_url?: string;
-  display_order: number;
-}
-
 interface Administrator {
   id: string;
   name: string;
@@ -37,8 +29,8 @@ interface TeamSectionProps {
   sectionTitle?: string;
   sectionSubtitle?: string;
   boardGroupImage?: string;
+  boardDescription?: string;
   chairman?: TeamMember;
-  managementTeam?: ManagementMember[];
   currentAdministrator?: CurrentAdmin;
   deputyAdministrator?: CurrentAdmin;
   financialController?: CurrentAdmin;
@@ -49,8 +41,8 @@ export default function TeamSection({
   sectionTitle = 'Leadership & Governance',
   sectionSubtitle = 'Strong leadership and transparent governance for educational transformation',
   boardGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
+  boardDescription,
   chairman,
-  managementTeam = [],
   currentAdministrator,
   deputyAdministrator,
   financialController,
@@ -66,36 +58,39 @@ export default function TeamSection({
   }>({ title: '', content: '', type: 'group' });
 
   const handleBoardOfDirectorsClick = () => {
+    // Use CMS content if provided, otherwise use default
+    const defaultContent = `
+      <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
+      <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Key Responsibilities</h3>
+      <ul class="space-y-3 mb-4">
+        <li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>Setting strategic priorities aligned with national education goals</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>Ensuring efficient resource utilization and project delivery</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>Building partnerships across all education sectors</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>Monitoring performance and educational outcomes</span>
+        </li>
+      </ul>
+
+      <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
+    `;
+
     setModalContent({
       title: 'Board of Directors',
-      content: `
-        <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
-
-        <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
-        <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
-
-        <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Key Responsibilities</h3>
-        <ul class="space-y-3 mb-4">
-          <li class="flex items-start gap-3">
-            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-            <span>Setting strategic priorities aligned with national education goals</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-            <span>Ensuring efficient resource utilization and project delivery</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-            <span>Building partnerships across all education sectors</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-            <span>Monitoring performance and educational outcomes</span>
-          </li>
-        </ul>
-
-        <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
-      `,
+      content: boardDescription || defaultContent,
       image: boardGroupImage,
       type: 'group'
     });
