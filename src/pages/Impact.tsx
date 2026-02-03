@@ -28,14 +28,6 @@ interface StatItem {
   icon?: string;
 }
 
-interface ImpactStory {
-  id: string;
-  name: string;
-  story: string;
-  image: string;
-  category: string;
-}
-
 interface Achievement {
   year: string;
   title: string;
@@ -89,11 +81,6 @@ interface PageContent {
   resourcesTitle?: string;
   resourcesSubtitle?: string;
   resources?: ResourceDistribution[];
-
-  // Impact Stories
-  storiesTitle?: string;
-  storiesSubtitle?: string;
-  stories?: ImpactStory[];
 
   // Scholarship Program
   scholarshipTitle?: string;
@@ -172,10 +159,6 @@ export default function Impact() {
                 content.resourcesTitle = section.content.title;
                 content.resourcesSubtitle = section.content.subtitle;
                 content.resources = section.content.resources;
-              } else if (section.section_key === 'impact_stories' && section.content) {
-                content.storiesTitle = section.content.title;
-                content.storiesSubtitle = section.content.subtitle;
-                content.stories = section.content.stories;
               } else if (section.section_key === 'scholarship_program' && section.content) {
                 content.scholarshipTitle = section.content.title;
                 content.scholarshipSubtitle = section.content.subtitle;
@@ -335,175 +318,16 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* Sector Analysis Tabs - Combines Completion, Regional, and Performance */}
-        <SectorTabs />
-
-        {/* Impact Stories */}
-        <section className="py-10 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.storiesTitle || 'Stories of Impact'}
-              </h2>
-              <p className="text-gray-600 max-w-2xl">
-                {pageContent?.storiesSubtitle || 'Real people, real transformations, real futures'}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-4">
-              {(pageContent?.stories || [
-                {
-                  id: '1',
-                  name: 'Akosua Mensah',
-                  story: 'GETFund scholarship enabled me to pursue medical studies abroad. Now I\'m back serving my community as a doctor.',
-                  image: '/images/impact/student-1.jpg',
-                  category: 'Scholarship Beneficiary'
-                },
-                {
-                  id: '2',
-                  name: 'Kofi Asante',
-                  story: 'The new science laboratory at our school has transformed how we teach and learn. Students are now excelling in STEM.',
-                  image: '/images/impact/teacher-1.jpg',
-                  category: 'Teacher'
-                },
-                {
-                  id: '3',
-                  name: 'Ama Owusu',
-                  story: 'Thanks to GETFund\'s infrastructure support, our school now has modern classrooms and a library.',
-                  image: '/images/impact/principal-1.jpg',
-                  category: 'School Principal'
-                }
-              ]).map((story) => (
-                <div key={story.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="h-32">
-                    <OptimizedImage
-                      src={story.image}
-                      alt={story.name}
-                      className="w-full h-full object-cover"
-                      fallbackSrc="/images/placeholder.jpg"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <span className="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-2" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
-                      {story.category}
-                    </span>
-                    <p className="text-gray-600 text-sm italic mb-2">"{story.story}"</p>
-                    <p className="font-semibold text-gray-900 text-sm">— {story.name}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Scholarship Program */}
-        <section className="py-10 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {pageContent?.scholarshipTitle || 'Scholarship Program'}
-              </h2>
-              <p className="text-gray-600 max-w-2xl">
-                {pageContent?.scholarshipSubtitle || 'Transforming lives through educational opportunities'}
-              </p>
-            </div>
-
-            {/* Total Scholars and Growth */}
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-blue-50 rounded-lg p-4 text-center">
-                <div className="text-3xl md:text-4xl font-bold mb-1" style={{ color: '#2a3f75' }}>
-                  {pageContent?.totalScholars || '16,000+'}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">Total Scholars Supported</h3>
-                <p className="text-gray-500 text-sm">Across local and foreign institutions</p>
-              </div>
-
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">Scholarship Growth</h3>
-                <div className="flex items-center justify-between">
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-gray-600">
-                      {pageContent?.scholarshipGrowth?.from.count.toLocaleString() || '1,680'}
-                    </div>
-                    <div className="text-xs text-gray-500">{pageContent?.scholarshipGrowth?.from.year || '2019/20'}</div>
-                  </div>
-                  <div className="text-2xl" style={{ color: '#2a3f75' }}>→</div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
-                      {pageContent?.scholarshipGrowth?.to.count.toLocaleString() || '5,026'}
-                    </div>
-                    <div className="text-xs text-gray-500">{pageContent?.scholarshipGrowth?.to.year || '2023/24'}</div>
-                  </div>
-                </div>
-                <div className="mt-3 text-center">
-                  <span className="inline-block text-white text-xs px-3 py-1 rounded-full font-semibold" style={{ backgroundColor: '#2a3f75' }}>
-                    199% Growth
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Scholarship Categories */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Scholarship Categories</h3>
-              <div className="grid md:grid-cols-2 gap-3">
-                {(pageContent?.scholarshipCategories || [
-                  { title: 'General Scholarships', description: 'Applications for Tertiary education' },
-                  { title: 'Faculty Development', description: 'PhD scholarships through GTEC' },
-                  { title: 'Professional Enhancement', description: 'Government organizations support' },
-                  { title: 'Educational Sponsorship', description: 'NSMQ, Robotics, STEM Programmes' }
-                ]).map((category, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-3 border-l-3" style={{ borderLeftWidth: '3px', borderLeftColor: '#2a3f75' }}>
-                    <h4 className="text-sm font-semibold text-gray-900">{category.title}</h4>
-                    <p className="text-gray-500 text-xs">{category.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Reforms */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Key Reforms</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {(pageContent?.reforms || [
-                  'Streamlined eligibility',
-                  'Digitized applications',
-                  'STEM emphasis',
-                  'Girl-child Education',
-                  'Payment optimization',
-                  'Programme Monitoring'
-                ]).map((reform, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm">
-                    <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
-                      <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-600 text-xs">{reform}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* University Logos */}
-            {pageContent?.universityLogos && pageContent.universityLogos.length > 0 && (
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">Partner Universities</h3>
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                  {pageContent.universityLogos.map((logo, index) => (
-                    <div key={index} className="bg-white rounded-lg p-3 flex items-center justify-center aspect-square hover:shadow-md transition-shadow">
-                      <OptimizedImage
-                        src={logo}
-                        alt={`University ${index + 1}`}
-                        className="max-h-12 max-w-full object-contain"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
+        {/* Sector Analysis Tabs - Combines Completion, Regional, Performance, and Scholarships */}
+        <SectorTabs
+          scholarshipTitle={pageContent?.scholarshipTitle}
+          scholarshipSubtitle={pageContent?.scholarshipSubtitle}
+          totalScholars={pageContent?.totalScholars}
+          scholarshipGrowth={pageContent?.scholarshipGrowth}
+          scholarshipCategories={pageContent?.scholarshipCategories}
+          reforms={pageContent?.reforms}
+          universityLogos={pageContent?.universityLogos}
+        />
 
         {/* Achievements Timeline */}
         <section className="py-10 bg-gray-50">

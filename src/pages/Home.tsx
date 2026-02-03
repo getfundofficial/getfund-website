@@ -2,14 +2,13 @@
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import AchievementsSection from '../components/AchievementsSection';
 import News from '../components/News';
 import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
 import { TestimonialsSection } from '../components/TestimonialCard';
 import AnimatedCounter from '../components/AnimatedCounter';
-import GhanaRegionalMap from '../components/GhanaRegionalMap';
 import { cmsApi } from '../services/cmsApi';
-import { REGIONS_DATA } from '../data/regional-data';
 
 interface SlideOverlay {
   tintColor?: string;
@@ -19,14 +18,16 @@ interface SlideOverlay {
   tintOpacity?: number;
 }
 
-interface RegionData {
-  name: string;
-  totalProjects: number;
-  basicEducation?: number;
-  secondaryEducation?: number;
-  tertiaryEducation?: number;
-  modelSchools?: number;
-  tvetCenters?: number;
+interface AchievementCircle {
+  title: string;
+  value: string;
+}
+
+interface AchievementCategory {
+  title: string;
+  description: string;
+  image: string;
+  link?: string;
 }
 
 interface PageContent {
@@ -41,19 +42,28 @@ interface PageContent {
     titleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
     subtitleFontSize?: 'small' | 'medium' | 'large' | 'xlarge';
     overlay?: SlideOverlay;
+    mediaType?: 'image' | 'video';
+    videoUrl?: string; // YouTube, Vimeo, or direct video URL
   }>;
-  regions?: RegionData[];
+  // Achievements section
+  achievementsTitle?: string;
+  achievementsSubtitle?: string;
+  achievementCircles?: AchievementCircle[];
+  achievementCategories?: AchievementCategory[];
 }
 
 // Default content when CMS is not available
 const defaultContent: PageContent = {
   heroSlides: [
     {
-      image: '/images/hero/main-slider-3.jpg',
+      image: '/images/hero/main-slider-3.jpg', // Fallback image while video loads
       headline: 'Every Ghanaian Child Deserves the Opportunity to be Educated',
       description: 'Supporting the delivery of quality education to Ghanaians from basic to tertiary level',
       ctaText: 'Apply for Scholarship',
-      ctaLink: '/scholarship-apply'
+      ctaLink: '/scholarship-apply',
+      // To use a video, add these two fields:
+      // mediaType: 'video',
+      // videoUrl: 'https://www.youtube.com/watch?v=YOUR_VIDEO_ID',
     },
     {
       image: '/images/hero/main-slider-1.jpg',
@@ -105,6 +115,19 @@ export default function Home() {
               if (section.content.newsSubtitle) {
                 content.newsSubtitle = section.content.newsSubtitle;
               }
+              // Achievements section
+              if (section.content.achievementsTitle) {
+                content.achievementsTitle = section.content.achievementsTitle;
+              }
+              if (section.content.achievementsSubtitle) {
+                content.achievementsSubtitle = section.content.achievementsSubtitle;
+              }
+              if (section.content.achievementCircles) {
+                content.achievementCircles = section.content.achievementCircles;
+              }
+              if (section.content.achievementCategories) {
+                content.achievementCategories = section.content.achievementCategories;
+              }
             }
             // Handle separate hero_slides section (legacy format)
             else if (section.section_key === 'hero_slides' && section.content) {
@@ -115,30 +138,6 @@ export default function Home() {
               content.newsSubtitle = section.content.newsSubtitle;
             }
           });
-        }
-
-        // Fetch regional data from Impact page (so both pages stay in sync)
-        try {
-          const impactResponse = await cmsApi.getPageBySlug('impact');
-          if (impactResponse && impactResponse.sections) {
-            // Look for page_content section first (ImpactEditor unified format)
-            const pageContentSection = impactResponse.sections.find(
-              (s: any) => s.section_type === 'page_content'
-            );
-            if (pageContentSection?.content?.regions) {
-              content.regions = pageContentSection.content.regions;
-            } else {
-              // Fallback: Look for regional_impact section (legacy format)
-              const regionalSection = impactResponse.sections.find(
-                (s: any) => s.section_key === 'regional_impact'
-              );
-              if (regionalSection?.content?.regions) {
-                content.regions = regionalSection.content.regions;
-              }
-            }
-          }
-        } catch {
-          // If Impact page fetch fails, regions will use REGIONS_DATA fallback
         }
 
         setPageContent(content);
@@ -187,21 +186,13 @@ export default function Home() {
       <main className="flex-1">
         <Hero slides={pageContent?.heroSlides} />
 
-        {/* Regional Impact Map Section */}
-        <section className="py-16 bg-blue-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                Our Regional Impact
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Explore how GETFund is transforming education across all 16 regions of Ghana
-              </p>
-            </div>
-
-            <GhanaRegionalMap regions={pageContent?.regions || REGIONS_DATA} />
-          </div>
-        </section>
+        {/* What GETFund Has Done Section */}
+        <AchievementsSection
+          sectionTitle={pageContent?.achievementsTitle}
+          sectionSubtitle={pageContent?.achievementsSubtitle}
+          circles={pageContent?.achievementCircles}
+          categories={pageContent?.achievementCategories}
+        />
 
         {/* Empowering Ghana Section with Parallax Background */}
         <section className="relative py-16 md:py-20 overflow-hidden">
