@@ -23,6 +23,7 @@ interface CurrentAdmin {
   title: string;
   image_url?: string;
   date_range?: string;
+  bio?: string;
 }
 
 interface TeamSectionProps {
@@ -127,10 +128,70 @@ export default function TeamSection({
         </div>
 
         <div class="prose prose-lg">
-          ${chairman.bio}
+          ${chairman.bio || '<p class="text-gray-500 italic">Biography coming soon.</p>'}
         </div>
       `,
       image: chairman.image,
+      type: 'individual'
+    });
+    setModalOpen(true);
+  };
+
+  const handleAdministratorClick = () => {
+    if (!currentAdministrator) return;
+
+    setModalContent({
+      title: currentAdministrator.name,
+      content: `
+        <div class="mb-6">
+          <p class="text-xl font-semibold text-getfund-gold mb-4">${currentAdministrator.title}</p>
+        </div>
+
+        <div class="prose prose-lg">
+          ${currentAdministrator.bio || '<p class="text-gray-500 italic">Biography coming soon.</p>'}
+        </div>
+      `,
+      image: currentAdministrator.image_url,
+      type: 'individual'
+    });
+    setModalOpen(true);
+  };
+
+  const handleDeputyClick = () => {
+    if (!deputyAdministrator) return;
+
+    setModalContent({
+      title: deputyAdministrator.name,
+      content: `
+        <div class="mb-6">
+          <p class="text-xl font-semibold text-blue-600 mb-4">${deputyAdministrator.title}</p>
+        </div>
+
+        <div class="prose prose-lg">
+          ${deputyAdministrator.bio || '<p class="text-gray-500 italic">Biography coming soon.</p>'}
+        </div>
+      `,
+      image: deputyAdministrator.image_url,
+      type: 'individual'
+    });
+    setModalOpen(true);
+  };
+
+  const handleFinancialControllerClick = () => {
+    if (!financialController) return;
+
+    setModalContent({
+      title: financialController.name,
+      content: `
+        <div class="mb-6">
+          <p class="text-xl font-semibold text-emerald-600 mb-4">${financialController.title}</p>
+        </div>
+
+        <div class="prose prose-lg">
+          ${financialController.bio || '<p class="text-gray-500 italic">Biography coming soon.</p>'}
+        </div>
+      `,
+      image: financialController.image_url,
       type: 'individual'
     });
     setModalOpen(true);
@@ -210,7 +271,18 @@ export default function TeamSection({
 
               {/* Current Administrator Card */}
               {currentAdministrator ? (
-                <div className="group">
+                <div
+                  className="group cursor-pointer"
+                  onClick={handleAdministratorClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleAdministratorClick();
+                    }
+                  }}
+                  aria-label={`View ${currentAdministrator.name} profile`}
+                >
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={currentAdministrator.image_url || '/images/placeholder.jpg'}
@@ -238,7 +310,18 @@ export default function TeamSection({
 
               {/* Deputy Administrator Card */}
               {deputyAdministrator ? (
-                <div className="group">
+                <div
+                  className="group cursor-pointer"
+                  onClick={handleDeputyClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDeputyClick();
+                    }
+                  }}
+                  aria-label={`View ${deputyAdministrator.name} profile`}
+                >
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={deputyAdministrator.image_url || '/images/placeholder.jpg'}
@@ -266,7 +349,18 @@ export default function TeamSection({
 
               {/* Financial Controller Card */}
               {financialController ? (
-                <div className="group">
+                <div
+                  className="group cursor-pointer"
+                  onClick={handleFinancialControllerClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleFinancialControllerClick();
+                    }
+                  }}
+                  aria-label={`View ${financialController.name} profile`}
+                >
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={financialController.image_url || '/images/placeholder.jpg'}

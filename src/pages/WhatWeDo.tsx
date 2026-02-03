@@ -6,7 +6,6 @@ import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
-
 interface PageContent {
   servicesTitle?: string;
   servicesSubtitle?: string;
@@ -74,11 +73,7 @@ export default function WhatWeDo() {
         </section>
 
         {/* Programs Section */}
-        <Programs
-          programs={pageContent?.services}
-          stats={pageContent?.impactStats}
-          showTitle={false}
-        />
+        <Programs showTitle={false} />
       </main>
       <Footer />
     </div>

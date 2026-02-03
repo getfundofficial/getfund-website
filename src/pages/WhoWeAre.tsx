@@ -396,19 +396,22 @@ export default function WhoWeAre() {
             name: teamData.administrator.name,
             title: teamData.administrator.title,
             image_url: teamData.administrator.image_url,
-            date_range: teamData.administrator.date_range
+            date_range: teamData.administrator.date_range,
+            bio: teamData.administrator.bio
           } : undefined}
           deputyAdministrator={teamData.deputyAdministrator ? {
             id: teamData.deputyAdministrator.id,
             name: teamData.deputyAdministrator.name,
             title: teamData.deputyAdministrator.title,
-            image_url: teamData.deputyAdministrator.image_url
+            image_url: teamData.deputyAdministrator.image_url,
+            bio: teamData.deputyAdministrator.bio
           } : undefined}
           financialController={teamData.financialController ? {
             id: teamData.financialController.id,
             name: teamData.financialController.name,
             title: teamData.financialController.title,
-            image_url: teamData.financialController.image_url
+            image_url: teamData.financialController.image_url,
+            bio: teamData.financialController.bio
           } : undefined}
           pastAdministrators={teamData.historicalAdmins.map(admin => ({
             id: admin.id,
@@ -428,7 +431,7 @@ export default function WhoWeAre() {
               <h2 className="text-4xl md:text-5xl font-bold">
                 {pageContent?.footerMessage || 'Supporting the delivery of quality education.'}
               </h2>
-              <p className="absolute bottom-4 right-6 text-sm text-white/70">Since 2000</p>
+              <p className="absolute bottom-4 right-6 text-sm text-white/70">Since 2001</p>
             </div>
           </div>
         </section>

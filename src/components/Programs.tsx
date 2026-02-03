@@ -1,51 +1,29 @@
-import { GraduationCap, Users, TrendingUp, BookOpen, Building2, Award } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { GraduationCap, Users, TrendingUp, BookOpen } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
-interface Program {
+interface FocusAreaImage {
+  image: string;
   title: string;
-  description: string;
-  link: string;
-}
-
-interface Stat {
-  number: string;
-  label: string;
-  description: string;
+  description?: string;
 }
 
 interface ProgramsProps {
   title?: string;
-  programs?: Program[];
-  stats?: Stat[];
   showTitle?: boolean;
+  focusAreaImages?: FocusAreaImage[];
 }
 
-export default function Programs({ title, programs: propPrograms, stats, showTitle = true }: ProgramsProps = {}) {
-  const defaultServices = [
-    {
-      icon: Building2,
-      title: 'Educational Infrastructure Projects',
-      description: 'Building and renovating educational facilities across Ghana to provide conducive learning environments for students at all levels.',
-      link: '/service/infrastructure-projects'
-    },
-    {
-      icon: Award,
-      title: 'Scholarship Programme',
-      description: 'Providing financial support to deserving students to pursue higher education both locally and internationally.',
-      link: '/service/scholarship-programme'
-    },
-    {
-      icon: BookOpen,
-      title: 'Education Sector Support',
-      description: 'Supporting initiatives that improve the quality of education delivery and learning outcomes across Ghana.',
-      link: '/service/education-sector-support'
-    },
+export default function Programs({ title, showTitle = true, focusAreaImages }: ProgramsProps = {}) {
+  const defaultImages: FocusAreaImage[] = [
+    { image: '/images/hero/main-slider-1.jpg', title: 'Educational Infrastructure', description: 'Building schools across Ghana' },
+    { image: '/images/hero/main-slider-2.jpg', title: 'Scholarship Programs', description: 'Supporting students nationwide' },
+    { image: '/images/hero/main-slider-3.jpg', title: 'Teacher Training', description: 'Empowering educators' },
+    { image: '/images/hero/main-slider-1.jpg', title: 'STEM Education', description: 'Advancing science and technology' },
+    { image: '/images/hero/main-slider-2.jpg', title: 'Community Schools', description: 'Bringing education closer' },
+    { image: '/images/hero/main-slider-3.jpg', title: 'Research & Development', description: 'Innovating for the future' }
   ];
-  
-  const services = propPrograms?.map(p => ({
-    ...p,
-    icon: Building2
-  })) || defaultServices;
+
+  const images = focusAreaImages || defaultImages;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 3xl:py-28 bg-gray-50">
@@ -61,27 +39,67 @@ export default function Programs({ title, programs: propPrograms, stats, showTit
           </div>
         )}
 
-        {/* Services Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 3xl:gap-12 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <Link
-                key={service.title}
-                to={service.link}
-                className="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-getfund-primary group cursor-pointer min-h-[280px] flex flex-col hover:-translate-y-2"
+        {/* Focus Areas - Navy Blue Circles (same style as homepage) */}
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
+          {[
+            'Educational Infrastructure Support',
+            'Ministry of Education & Agencies Financial Support',
+            'Government Policy & Programme Support',
+            'Scholar & capacity Building Programmes',
+            'Others'
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="group flex flex-col items-center"
+            >
+              {/* Circle with text inside - using aspect-square to ensure perfect circle */}
+              <div
+                className="w-28 md:w-32 lg:w-36 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl p-4"
+                style={{ borderRadius: '50%', backgroundColor: '#2a3f75' }}
               >
-                <div className="bg-getfund-primary/10 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-getfund-primary/20 transition-colors">
-                  <Icon className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-getfund-primary" aria-hidden="true" />
-                </div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-getfund-primary transition-colors">{service.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed flex-1">{service.description}</p>
-              </Link>
-            );
-          })}
+                <span className="text-white text-[10px] md:text-xs lg:text-sm font-bold text-center leading-tight">
+                  {item}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Key Initiatives */}
+      {/* Full Screen Image Grid - 6 Edge-to-Edge Boxes */}
+      <div className="w-full bg-white my-12 sm:my-16 md:my-20">
+        <div className="grid grid-cols-2 md:grid-cols-3">
+          {images.map((item, index) => (
+            <div
+              key={index}
+              className="relative aspect-square overflow-hidden group"
+            >
+              <OptimizedImage
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                fallbackSrc="/images/hero/main-slider-1.jpg"
+              />
+              {/* Overlay with title on hover */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
+                <div className="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
+                  <h3 className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-1">
+                    {item.title}
+                  </h3>
+                  {item.description && (
+                    <p className="text-white/80 text-sm md:text-base">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Key Initiatives */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 max-w-8xl">
         <div className="bg-white p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-lg">
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 md:mb-10 text-center">Key Initiatives (detailed)</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
