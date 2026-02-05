@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, ArrowRight, TrendingUp, Users } from 'lucide-react';
+import { Shield, ArrowRight, TrendingUp, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import DonationInterface from '../components/DonationInterface';
 import PledgeToSupportForm from '../components/PledgeToSupportForm';
 import FloatingContact from '../components/FloatingContact';
-import DonationCard from '../components/DonationCard';
 import DonationModal from '../components/DonationModal';
 import LoadingScreen from '../components/LoadingScreen';
+import OptimizedImage from '../components/OptimizedImage';
 import { cmsApi } from '../services/cmsApi';
 
 interface PresetAmount {
@@ -22,6 +23,7 @@ interface DonationOption {
   title: string;
   description: string;
   buttonText: string;
+  image?: string;
   presetAmounts?: PresetAmount[];
 }
 
@@ -68,6 +70,162 @@ const donationAmounts: Record<string, number> = {
   'ICT & Digital Learning Tools': 10000,
   'School Sanitation & Water Access': 15000,
 };
+
+// Default images for donation options
+const defaultDonationImages: Record<string, string> = {
+  'Classroom construction support': '/images/hero/main-slider-1.jpg',
+  'Student Scholarship (Local)': '/images/hero/main-slider-2.jpg',
+  'Student Scholarship (International)': '/images/hero/main-slider-3.jpg',
+  'School Meals': '/images/hero/main-slider-1.jpg',
+  'Classroom Furniture': '/images/hero/main-slider-2.jpg',
+  'Learning Materials': '/images/hero/main-slider-3.jpg',
+  'ICT & Digital Learning Tools': '/images/hero/main-slider-1.jpg',
+  'School Sanitation & Water Access': '/images/hero/main-slider-2.jpg',
+};
+
+// Impact Slider Component
+interface ImpactSliderProps {
+  donationOptions: DonationOption[];
+  impactVisualized?: {
+    totalRaised: string;
+    totalDonations: string;
+  };
+  donationAmounts: Record<string, number>;
+  onSelectDonation: (option: DonationOption) => void;
+}
+
+function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: ImpactSliderProps) {
+  const sliderRef = useRef<Slider>(null);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <section className="py-10 bg-gray-50">
+      <div className="container mx-auto px-4 max-w-6xl">
+        {/* Impact Visualized Stats */}
+        {impactVisualized && (
+          <div className="flex flex-wrap gap-6 mb-6">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} />
+              </div>
+              <div>
+                <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                  {impactVisualized.totalRaised}
+                </span>
+                <span className="text-gray-500 text-xs ml-2">Total Raised</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
+                <Users className="w-5 h-5" style={{ color: '#2a3f75' }} />
+              </div>
+              <div>
+                <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                  {impactVisualized.totalDonations}
+                </span>
+                <span className="text-gray-500 text-xs ml-2">Donations</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="text-center mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+            Choose How You Want to Make an Impact
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Select a cause that resonates with you and directly support education in Ghana.
+          </p>
+        </div>
+
+        {/* Slider with Navigation */}
+        <div className="relative">
+          {/* Navigation Arrows */}
+          <button
+            onClick={() => sliderRef.current?.slickPrev()}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors hidden md:flex"
+            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
+          >
+            <ChevronLeft className="w-5 h-5" style={{ color: '#2a3f75' }} />
+          </button>
+          <button
+            onClick={() => sliderRef.current?.slickNext()}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors hidden md:flex"
+            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
+          >
+            <ChevronRight className="w-5 h-5" style={{ color: '#2a3f75' }} />
+          </button>
+
+          <Slider ref={sliderRef} {...settings}>
+            {donationOptions.map((option, index) => (
+              <div key={index} className="px-2">
+                <div
+                  className="relative h-80 rounded-xl overflow-hidden cursor-pointer group"
+                  onClick={() => onSelectDonation(option)}
+                >
+                  {/* Background Image */}
+                  <OptimizedImage
+                    src={option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg'}
+                    alt={option.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    fallbackSrc="/images/hero/main-slider-1.jpg"
+                  />
+
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                  {/* Content Overlay - Bottom Left */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h3 className="text-white text-lg font-bold mb-1">
+                      {option.title}
+                    </h3>
+                    <p className="text-white/80 text-sm line-clamp-2 mb-3">
+                      {option.description}
+                    </p>
+                    <button
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 hover:gap-3"
+                      style={{ backgroundColor: '#2a3f75', color: 'white' }}
+                    >
+                      {option.buttonText || 'Donate Now'}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function WaysToDonate() {
   const [content, setContent] = useState<WaysToDonateContent | null>(null);
@@ -138,82 +296,36 @@ export default function WaysToDonate() {
           </div>
         </section>
 
-        {/* There Are Many Ways to Donate Section - MOVED ABOVE */}
+        {/* Impact Slider Section */}
         {(content.donationOptions || []).length > 0 && (
-          <section className="py-10 bg-gray-50">
-            <div className="container mx-auto px-4 max-w-6xl">
-              {/* Impact Visualized Stats */}
-              {content.impactVisualized && (
-                <div className="flex flex-wrap gap-6 mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                      <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} />
-                    </div>
-                    <div>
-                      <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
-                        {content.impactVisualized.totalRaised}
-                      </span>
-                      <span className="text-gray-500 text-xs ml-2">Total Raised</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                      <Users className="w-5 h-5" style={{ color: '#2a3f75' }} />
-                    </div>
-                    <div>
-                      <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
-                        {content.impactVisualized.totalDonations}
-                      </span>
-                      <span className="text-gray-500 text-xs ml-2">Donations</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+          <ImpactSlider
+            donationOptions={content.donationOptions}
+            impactVisualized={content.impactVisualized}
+            donationAmounts={donationAmounts}
+            onSelectDonation={(option) => {
+              setSelectedDonation({
+                title: option.title,
+                amount: donationAmounts[option.title] || 5000,
+                description: option.description,
+                presetAmounts: option.presetAmounts,
+              });
+              setModalOpen(true);
+            }}
+          />
+        )}
 
-              <div className="text-center mb-6">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                  Choose How You Want to Make an Impact
-                </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Select a cause that resonates with you and directly support education in Ghana.
-                </p>
-              </div>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {(content.donationOptions || []).map((option, index) => (
-                  <DonationCard
-                    key={index}
-                    title={option.title}
-                    description={option.description}
-                    buttonText={option.buttonText || 'Donate Now'}
-                    buttonAction={() => {
-                      setSelectedDonation({
-                        title: option.title,
-                        amount: donationAmounts[option.title] || 5000,
-                        description: option.description,
-                        presetAmounts: option.presetAmounts,
-                      });
-                      setModalOpen(true);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {selectedDonation && (
-              <DonationModal
-                isOpen={modalOpen}
-                onClose={() => {
-                  setModalOpen(false);
-                  setSelectedDonation(null);
-                }}
-                title={selectedDonation.title}
-                amount={selectedDonation.amount}
-                description={selectedDonation.description}
-                presetAmounts={selectedDonation.presetAmounts}
-              />
-            )}
-          </section>
+        {selectedDonation && (
+          <DonationModal
+            isOpen={modalOpen}
+            onClose={() => {
+              setModalOpen(false);
+              setSelectedDonation(null);
+            }}
+            title={selectedDonation.title}
+            amount={selectedDonation.amount}
+            description={selectedDonation.description}
+            presetAmounts={selectedDonation.presetAmounts}
+          />
         )}
 
         {/* Main Donation Section - Donation Interface + Pledge Side by Side */}
