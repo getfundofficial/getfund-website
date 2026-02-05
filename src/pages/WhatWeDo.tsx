@@ -6,6 +6,12 @@ import Footer from '../components/Footer';
 import LoadingScreen from '../components/LoadingScreen';
 import { cmsApi } from '../services/cmsApi';
 
+interface FocusAreaImage {
+  image: string;
+  title: string;
+  description?: string;
+}
+
 interface PageContent {
   servicesTitle?: string;
   servicesSubtitle?: string;
@@ -17,6 +23,7 @@ interface PageContent {
     icon: string;
     features?: string[];
   }>;
+  focusAreaImages?: FocusAreaImage[];
 }
 
 export default function WhatWeDo() {
@@ -73,7 +80,7 @@ export default function WhatWeDo() {
         </section>
 
         {/* Programs Section */}
-        <Programs showTitle={false} />
+        <Programs showTitle={false} focusAreaImages={pageContent?.focusAreaImages} />
       </main>
       <Footer />
     </div>
