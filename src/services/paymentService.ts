@@ -8,6 +8,10 @@ export interface InitiatePaymentRequest {
   customerPhone?: string;
   campaignTitle: string;
   donorName?: string;
+  campaignId?: string;
+  campaignSlug?: string;
+  donationType?: 'impact' | 'campaign' | 'general';
+  donationDescription?: string;
 }
 
 export interface PaymentResponse {
@@ -66,6 +70,10 @@ class PaymentService {
         metadata: {
           campaignTitle: paymentData.campaignTitle,
           donorName: paymentData.donorName,
+          campaignId: paymentData.campaignId,
+          campaignSlug: paymentData.campaignSlug,
+          donationType: paymentData.donationType || 'general',
+          donationDescription: paymentData.donationDescription,
         },
       };
 
