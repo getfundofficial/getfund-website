@@ -128,7 +128,8 @@ export default function Header() {
           <li>
             <Link
               to="/fundraising/ways-to-donate"
-              className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap"
+              className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap hover:scale-105"
+              style={{ boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2)' }}
               title="Donate"
             >
               Donate

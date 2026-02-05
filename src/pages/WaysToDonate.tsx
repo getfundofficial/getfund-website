@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, ArrowRight, TrendingUp, Users, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Shield, ArrowRight, TrendingUp, Users, ChevronLeft, ChevronRight, CheckCircle, X } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -96,41 +96,47 @@ interface ImpactSliderProps {
 
 function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: ImpactSliderProps) {
   const sliderRef = useRef<Slider>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 600,
     slidesToShow: 3,
     slidesToScroll: 1,
+    centerMode: true,
+    centerPadding: '0px',
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true,
     arrows: false,
+    beforeChange: (_: number, next: number) => setActiveSlide(next),
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToShow: 1,
+          centerMode: true,
+          centerPadding: '60px',
         },
       },
       {
         breakpoint: 640,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
+          centerMode: true,
+          centerPadding: '30px',
         },
       },
     ],
   };
 
   return (
-    <section className="py-10 bg-gray-50">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section className="py-12 bg-gray-100 overflow-hidden">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Impact Visualized Stats */}
         {impactVisualized && (
-          <div className="flex flex-wrap gap-6 mb-6">
+          <div className="flex flex-wrap gap-6 mb-8">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
                 <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} />
@@ -156,8 +162,8 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
           </div>
         )}
 
-        <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
             Choose How You Want to Make an Impact
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -165,62 +171,109 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
           </p>
         </div>
 
-        {/* Slider with Navigation */}
-        <div className="relative">
+        {/* 3D Perspective Slider */}
+        <div className="relative impact-slider-container">
+          <style>{`
+            .impact-slider-container .slick-slide {
+              transition: all 0.4s ease;
+              opacity: 0.6;
+              transform: scale(0.85);
+              filter: brightness(0.7);
+            }
+            .impact-slider-container .slick-slide.slick-center,
+            .impact-slider-container .slick-slide.slick-current {
+              opacity: 1;
+              transform: scale(1);
+              filter: brightness(1);
+              z-index: 10;
+            }
+            .impact-slider-container .slick-list {
+              overflow: visible;
+              padding: 40px 0 !important;
+            }
+            .impact-slider-container .slick-track {
+              display: flex;
+              align-items: center;
+            }
+          `}</style>
+
           {/* Navigation Arrows */}
           <button
             onClick={() => sliderRef.current?.slickPrev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors hidden md:flex"
-            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-xl flex items-center justify-center hover:bg-white transition-all duration-300"
+            style={{ boxShadow: '0 8px 25px rgba(0,0,0,0.2)' }}
           >
-            <ChevronLeft className="w-5 h-5" style={{ color: '#2a3f75' }} />
+            <ChevronLeft className="w-6 h-6" style={{ color: '#2a3f75' }} />
           </button>
           <button
             onClick={() => sliderRef.current?.slickNext()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors hidden md:flex"
-            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-xl flex items-center justify-center hover:bg-white transition-all duration-300"
+            style={{ boxShadow: '0 8px 25px rgba(0,0,0,0.2)' }}
           >
-            <ChevronRight className="w-5 h-5" style={{ color: '#2a3f75' }} />
+            <ChevronRight className="w-6 h-6" style={{ color: '#2a3f75' }} />
           </button>
 
           <Slider ref={sliderRef} {...settings}>
             {donationOptions.map((option, index) => (
-              <div key={index} className="px-2">
+              <div key={index} className="px-3">
                 <div
-                  className="relative h-80 rounded-xl overflow-hidden cursor-pointer group"
+                  className="relative h-[400px] md:h-[450px] rounded-2xl overflow-hidden cursor-pointer group shadow-2xl"
                   onClick={() => onSelectDonation(option)}
                 >
                   {/* Background Image */}
                   <OptimizedImage
                     src={option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg'}
                     alt={option.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     fallbackSrc="/images/hero/main-slider-1.jpg"
                   />
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300" />
 
-                  {/* Content Overlay - Bottom Left */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-white text-lg font-bold mb-1">
+                  {/* Centered Title and Description */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                    <h3 className="text-white text-base md:text-lg lg:text-xl font-bold text-center leading-tight tracking-wide uppercase drop-shadow-lg mb-2">
                       {option.title}
                     </h3>
-                    <p className="text-white/80 text-sm line-clamp-2 mb-3">
-                      {option.description}
-                    </p>
+                    {option.description && (
+                      <p className="text-white/90 text-xs md:text-sm text-center max-w-[200px] drop-shadow-md">
+                        {option.description}
+                      </p>
+                    )}
+                  </div>
+                  {/* Button at bottom */}
+                  <div className="absolute bottom-[65px] left-0 right-0 flex justify-center">
                     <button
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 hover:gap-3"
-                      style={{ backgroundColor: '#2a3f75', color: 'white' }}
+                      className="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 hover:scale-105"
+                      style={{
+                        backgroundColor: '#2a3f75',
+                        color: 'white',
+                        boxShadow: '0 10px 30px rgba(42, 63, 117, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3)',
+                      }}
                     >
                       {option.buttonText || 'Donate Now'}
-                      <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
               </div>
             ))}
           </Slider>
+
+          {/* Slide Indicators */}
+          <div className="flex justify-center gap-2 mt-6">
+            {donationOptions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => sliderRef.current?.slickGoTo(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  activeSlide === index
+                    ? 'w-8 bg-[#2a3f75]'
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -228,15 +281,34 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
 }
 
 export default function WaysToDonate() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [content, setContent] = useState<WaysToDonateContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+  const [paymentReference, setPaymentReference] = useState<string | null>(null);
   const [selectedDonation, setSelectedDonation] = useState<{
     title: string;
     amount: number;
     description: string;
     presetAmounts?: PresetAmount[];
   } | null>(null);
+
+  // Check for payment success on mount
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment');
+    const reference = searchParams.get('reference');
+
+    if (paymentStatus === 'success') {
+      setShowPaymentSuccess(true);
+      setPaymentReference(reference);
+      // Clear the query params from URL after reading them
+      searchParams.delete('payment');
+      searchParams.delete('reference');
+      searchParams.delete('test');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -279,6 +351,37 @@ export default function WaysToDonate() {
 
       <Header />
       <Breadcrumb />
+
+      {/* Payment Success Banner */}
+      {showPaymentSuccess && (
+        <div className="bg-green-50 border-b border-green-200">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-green-800">Thank you for your donation!</h3>
+                  <p className="text-sm text-green-700">
+                    Your payment has been processed successfully.
+                    {paymentReference && (
+                      <span className="ml-1">Reference: <span className="font-mono">{paymentReference}</span></span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPaymentSuccess(false)}
+                className="p-2 hover:bg-green-100 rounded-full transition-colors"
+                aria-label="Dismiss"
+              >
+                <X className="w-5 h-5 text-green-600" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="flex-1">
         {/* Page Title Section */}
@@ -325,6 +428,7 @@ export default function WaysToDonate() {
             amount={selectedDonation.amount}
             description={selectedDonation.description}
             presetAmounts={selectedDonation.presetAmounts}
+            donationType="impact"
           />
         )}
 

@@ -16,9 +16,10 @@ interface DonationModalProps {
   presetAmounts?: PresetAmount[];
   campaignId?: string;
   campaignSlug?: string;
+  donationType?: 'impact' | 'campaign' | 'general';
 }
 
-export default function DonationModal({ isOpen, onClose, title, amount, description, presetAmounts: customPresetAmounts, campaignId, campaignSlug }: DonationModalProps) {
+export default function DonationModal({ isOpen, onClose, title, amount, description, presetAmounts: customPresetAmounts, campaignId, campaignSlug, donationType = 'general' }: DonationModalProps) {
   const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(amount);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [showNoteField, setShowNoteField] = useState(false);
@@ -93,6 +94,8 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
         donorName: honorName || undefined,
         campaignId: campaignId || undefined,
         campaignSlug: campaignSlug || undefined,
+        donationType,
+        donationDescription: description || undefined,
       });
 
       if (response.success && response.data?.paymentUrl) {
