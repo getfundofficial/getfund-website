@@ -18,7 +18,7 @@ interface GaugeProps {
   animationDelay?: number;
 }
 
-function SemiCircleGauge({ sector, shortName, completionRate, total, completed, color, animationDelay = 0 }: GaugeProps) {
+function SemiCircleGauge({ shortName, completionRate, total, completed, animationDelay = 0 }: GaugeProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const ref = useRef<HTMLDivElement>(null);

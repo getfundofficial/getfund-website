@@ -257,7 +257,6 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     if (propSlides && propSlides.length > 0) {
       const transformedSlides: HeroSlide[] = propSlides.map(slide => {
         // Detect media type from URL if not explicitly set
-        const hasVideo = slide.videoUrl || (slide.mediaType === 'video');
         const detectedMediaType = slide.mediaType || (slide.videoUrl && isVideoUrl(slide.videoUrl) ? 'video' : 'image');
 
         return {

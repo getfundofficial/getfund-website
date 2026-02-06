@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from 'react';
-import RegionalDetailPanel from './RegionalDetailPanel';
 import RegionalMapSVG from './RegionalMapSVG';
 import { REGIONAL_COMPLETION_DATA, RegionalCompletionData, REGIONAL_TOTALS } from '../data/regionalCompletion';
 import { COMPLETION_COLORS } from '../data/completionData';
@@ -47,6 +46,7 @@ export default function GhanaRegionalMap({
     if (highestImpactRegion && !selectedRegion) {
       setSelectedRegion(highestImpactRegion);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [highestImpactRegion]);
 
   const findRegionData = (regionName: string): Region | undefined => {
@@ -68,12 +68,6 @@ export default function GhanaRegionalMap({
   const selectedCompletionData = selectedRegion ? findCompletionData(selectedRegion) : null;
   const hoveredData = hoveredRegion ? findRegionData(hoveredRegion) : null;
   const hoveredCompletionData = hoveredRegion ? findCompletionData(hoveredRegion) : null;
-
-  // Calculate completion percentage for a region
-  const getCompletionPercentage = (data: RegionalCompletionData) => {
-    const weightedScore = (data.progress70to99 * 0.85 + data.progress30to69 * 0.5 + data.belowThreshold * 0.15) / data.total;
-    return Math.round(weightedScore * 100);
-  };
 
   return (
     <div className={className}>

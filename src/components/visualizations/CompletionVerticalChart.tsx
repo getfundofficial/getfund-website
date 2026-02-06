@@ -201,7 +201,7 @@ export default function CompletionVerticalChart({
 
         {/* Sector Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mainSectors.map((sector, index) => {
+          {mainSectors.map((sector) => {
             const colors = SECTOR_COLORS[sector.id] || { complete: '#059669', incomplete: '#e5e7eb' };
             const description = SECTOR_DESCRIPTIONS[sector.id] || '';
             const subSectors = SECTOR_COMPLETION_DATA.filter(s => s.parentId === sector.id);

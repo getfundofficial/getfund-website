@@ -40,7 +40,7 @@ export const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
           text: shareText,
           url: shareUrl,
         });
-      } catch (err) {
+      } catch {
         console.log('Share cancelled or failed');
       }
     }

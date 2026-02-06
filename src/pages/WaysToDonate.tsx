@@ -370,26 +370,38 @@ export default function WaysToDonate() {
 
       {/* Payment Success Banner */}
       {showPaymentSuccess && (
-        <div className="bg-green-50 border-b border-green-200">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-200">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-green-800">Thank you for your donation!</h3>
-                  <p className="text-sm text-green-700">
-                    Your payment has been processed successfully.
+                  <h3 className="text-xl font-bold text-green-800 mb-1">Thank you for your generous donation!</h3>
+                  <p className="text-green-700 mb-3">
+                    Your payment has been processed successfully. Your contribution will help transform education in Ghana.
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-sm">
                     {paymentReference && (
-                      <span className="ml-1">Reference: <span className="font-mono">{paymentReference}</span></span>
+                      <div className="bg-white/70 px-3 py-1.5 rounded-lg">
+                        <span className="text-gray-600">Reference:</span>{' '}
+                        <span className="font-mono font-semibold text-green-800">{paymentReference}</span>
+                      </div>
                     )}
+                    <div className="bg-white/70 px-3 py-1.5 rounded-lg">
+                      <span className="text-gray-600">Status:</span>{' '}
+                      <span className="font-semibold text-green-800">Completed</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-green-600 mt-3">
+                    A confirmation email will be sent to your email address shortly.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowPaymentSuccess(false)}
-                className="p-2 hover:bg-green-100 rounded-full transition-colors"
+                className="p-2 hover:bg-green-100 rounded-full transition-colors flex-shrink-0"
                 aria-label="Dismiss"
               >
                 <X className="w-5 h-5 text-green-600" />
