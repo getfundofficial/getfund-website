@@ -13,6 +13,7 @@ import DonationModal from '../components/DonationModal';
 import LoadingScreen from '../components/LoadingScreen';
 import OptimizedImage from '../components/OptimizedImage';
 import { cmsApi } from '../services/cmsApi';
+import { paymentService } from '../services/paymentService';
 
 interface PresetAmount {
   value: number;
@@ -308,9 +309,19 @@ export default function WaysToDonate() {
     const paymentStatus = searchParams.get('payment');
     const reference = searchParams.get('reference');
 
-    if (paymentStatus === 'success') {
+    if (paymentStatus === 'success' && reference) {
       setShowPaymentSuccess(true);
       setPaymentReference(reference);
+
+      // Call verification API to update donation status in database
+      paymentService.verifyPayment(reference)
+        .then(result => {
+          console.log('[WaysToDonate] Payment verification result:', result);
+        })
+        .catch(err => {
+          console.error('[WaysToDonate] Payment verification error:', err);
+        });
+
       // Clear the query params from URL after reading them
       searchParams.delete('payment');
       searchParams.delete('reference');
