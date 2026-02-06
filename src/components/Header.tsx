@@ -8,34 +8,57 @@ import MobileDropdownMenu from './MobileDropdownMenu';
 import ScrollProgressBar from './ScrollProgressBar';
 import SearchModal from './SearchModal';
 
-// Default menu items (shown immediately, may be updated from CMS)
-// These match the actual routes defined in App.tsx
+// Default menu items (fallback only if no cache and CMS fails)
+// Keep in sync with CMS pages that have show_in_menu = true
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { id: '1', slug: 'about', title: 'About', label: 'About' },
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
-  { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'Our Work & Impact' },
-  { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
+  { id: '3', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
   {
-    id: '5',
+    id: '4',
     slug: 'fundraising',
     title: 'Fundraising',
     label: 'Fundraising',
     children: [
-      { id: '5-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '5' },
-      { id: '5-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '5' },
-      { id: '5-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '5' },
-      { id: '5-4', slug: 'fundraising/lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '5' },
-      { id: '5-5', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '5' },
-      { id: '5-6', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '5' },
-      { id: '5-7', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '5' }
+      { id: '4-1', slug: 'why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising', parentId: '4' },
+      { id: '4-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '4' },
+      { id: '4-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '4' },
+      { id: '4-4', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '4' },
+      { id: '4-5', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '4' },
+      { id: '4-6', slug: 'events', title: 'Events', label: 'Events', parentId: '4' }
     ]
   }
 ];
 
+const MENU_CACHE_KEY = 'getfund_menu_cache';
+
+// Get cached menu from localStorage (synchronous, prevents flash)
+function getCachedMenu(): MenuItem[] | null {
+  try {
+    const cached = localStorage.getItem(MENU_CACHE_KEY);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+  } catch {
+    // Ignore localStorage errors
+  }
+  return null;
+}
+
+// Save menu to localStorage
+function cacheMenu(items: MenuItem[]): void {
+  try {
+    localStorage.setItem(MENU_CACHE_KEY, JSON.stringify(items));
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(DEFAULT_MENU_ITEMS);
+  // Load immediately from cache or defaults
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(() => getCachedMenu() || DEFAULT_MENU_ITEMS);
   const location = useLocation();
   const { scrollDirection, isScrolled } = useScrollDirection(50);
 
@@ -54,19 +77,28 @@ export default function Header() {
   const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMenu = async () => {
       try {
         const menuConfig = await cmsApi.getMenuConfig();
-        // Only use CMS menu if it has valid items and matches our routes
+        if (!isMounted) return;
+
+        // Update menu if CMS has valid items
         if (menuConfig.menuItems.length > 0) {
           setMenuItems(menuConfig.menuItems);
+          cacheMenu(menuConfig.menuItems);
         }
       } catch {
-        // Keep using default menu items (already set in state)
+        // Keep using cached or default menu items
       }
     };
 
     fetchMenu();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
