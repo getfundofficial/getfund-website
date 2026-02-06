@@ -28,7 +28,19 @@ export default {
         '4xl': '2560px',    // 4K displays / TVs
       },
       fontSize: {
-        'xxs': ['0.625rem', { lineHeight: '0.875rem' }],
+        // Consistent typography scale across all GETFund projects
+        'xxs': ['0.625rem', { lineHeight: '1rem' }],        // 10px - tiny labels
+        'xs': ['0.75rem', { lineHeight: '1.125rem' }],      // 12px - captions, badges
+        'sm': ['0.875rem', { lineHeight: '1.375rem' }],     // 14px - secondary text, form labels
+        'base': ['1rem', { lineHeight: '1.625rem' }],       // 16px - body text
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],      // 18px - lead text
+        'xl': ['1.25rem', { lineHeight: '1.875rem' }],      // 20px - small headings
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],          // 24px - h4
+        '3xl': ['1.875rem', { lineHeight: '2.375rem' }],    // 30px - h3
+        '4xl': ['2.25rem', { lineHeight: '2.75rem' }],      // 36px - h2
+        '5xl': ['3rem', { lineHeight: '3.5rem' }],          // 48px - h1
+        '6xl': ['3.75rem', { lineHeight: '4.25rem' }],      // 60px - hero
+        '7xl': ['4.5rem', { lineHeight: '5rem' }],          // 72px - large hero
       },
       maxWidth: {
         '8xl': '88rem',

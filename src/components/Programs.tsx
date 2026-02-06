@@ -38,9 +38,11 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             </p>
           </div>
         )}
+      </div>
 
-        {/* Focus Areas - Navy Blue Circles (same style as homepage) */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
+      {/* Focus Areas - Navy Blue Circles (full width) */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10 xl:gap-12">
           {[
             'Educational Infrastructure Support',
             'Ministry of Education & Agencies Financial Support',
@@ -54,10 +56,10 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             >
               {/* Circle with text inside - using aspect-square to ensure perfect circle */}
               <div
-                className="w-28 md:w-32 lg:w-36 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl p-4"
+                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl p-4"
                 style={{ borderRadius: '50%', backgroundColor: '#2a3f75' }}
               >
-                <span className="text-white text-[10px] md:text-xs lg:text-sm font-bold text-center leading-tight">
+                <span className="text-white text-[11px] md:text-xs lg:text-sm xl:text-base font-bold text-center leading-tight">
                   {item}
                 </span>
               </div>

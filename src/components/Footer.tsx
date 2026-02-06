@@ -25,7 +25,7 @@ import { cmsApi, FooterConfig } from '../services/cmsApi';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [footerConfig, setFooterConfig] = useState<FooterConfig | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFooterConfig = async () => {

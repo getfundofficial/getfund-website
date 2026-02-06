@@ -134,7 +134,7 @@ export default function SectorProgressGrid({
 
                 {/* Bars */}
                 <div className="absolute inset-0 flex items-end justify-around">
-                  {mainSectors.map((sector, sectorIndex) => {
+                  {mainSectors.map((sector) => {
                     const values = [
                       { count: sector.completed, pct: (sector.completed / sector.total) * 100, ...categories[0] },
                       { count: sector.progress70to99, pct: (sector.progress70to99 / sector.total) * 100, ...categories[1] },

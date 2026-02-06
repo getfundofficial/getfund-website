@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Eye, Target, Heart } from 'lucide-react';
 import Header from '../components/Header';
 import Breadcrumb from '../components/Breadcrumb';
 import Footer from '../components/Footer';
@@ -256,66 +255,79 @@ export default function WhoWeAre() {
         </section>
 
         {/* Main Content - Ghana Education Trust Fund */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-              <div>
-                <img
-                  src={pageContent?.mainImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-                  alt={pageContent?.mainImageAlt || 'GETFund Board'}
-                  className="rounded-2xl shadow-xl w-full h-[400px] md:h-[500px] object-cover"
-                />
+        <section className="py-16 md:py-24 bg-white relative overflow-hidden">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+
+          <div className="container mx-auto px-4 max-w-7xl relative">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
+              {/* Image with enhanced styling */}
+              <div className="relative group">
+                <div className="absolute -inset-4 rounded-2xl opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                  <img
+                    src={pageContent?.mainImage || '/images/about/getfund-7th-board-inauguration.jpg'}
+                    alt={pageContent?.mainImageAlt || 'GETFund Board'}
+                    className="w-full h-[400px] md:h-[520px] object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
               </div>
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-5">
-                  {pageContent?.mainHeading || 'Ghana Education Trust Fund'}
-                </h2>
-                <h3 className="text-xl md:text-2xl font-semibold text-getfund-primary mb-8">
-                  {pageContent?.redHeading || 'Since its establishment in 2000,'}
-                </h3>
-                <div className="space-y-5 text-gray-700 leading-relaxed text-lg md:text-xl">
-                  <p>
-                    {pageContent?.paragraph1 || 'The Fund has remained committed to its mandate as enshrined in its governing legislation, Act 581. The object of the Fund is to provide funding to supplement the government\'s efforts in providing educational infrastructure and facilities at all levels.'}
-                  </p>
-                  <p>
-                    {pageContent?.paragraph2 || 'GETFund has, since its inception, remained a significant player in Ghana\'s education sector—not only through providing physical infrastructure, but also through enhancing human capital by awarding scholarships to many deserving citizens.'}
-                  </p>
+
+              {/* Text content with accent styling */}
+              <div className="relative">
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="lg:pl-8">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    {pageContent?.mainHeading || 'Ghana Education Trust Fund'}
+                  </h2>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2a3f75' }} />
+                    <span className="text-sm md:text-base font-semibold" style={{ color: '#2a3f75' }}>
+                      {pageContent?.redHeading || 'Since its establishment in 2000'}
+                    </span>
+                  </div>
+                  <div className="space-y-6 text-gray-600 leading-relaxed text-base md:text-lg">
+                    <p>
+                      {pageContent?.paragraph1 || 'The Fund has remained committed to its mandate as enshrined in its governing legislation, Act 581. The object of the Fund is to provide funding to supplement the government\'s efforts in providing educational infrastructure and facilities at all levels.'}
+                    </p>
+                    <p>
+                      {pageContent?.paragraph2 || 'GETFund has, since its inception, remained a significant player in Ghana\'s education sector—not only through providing physical infrastructure, but also through enhancing human capital by awarding scholarships to many deserving citizens.'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Vision, Mission, Values */}
-            <div className="grid md:grid-cols-3 gap-10 mt-20">
+          </div>
+        </section>
+
+        {/* Vision, Mission, Values */}
+        <section className="py-12 md:py-16 -mt-56 md:-mt-72 pt-60 md:pt-80" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid md:grid-cols-3 gap-10">
               <div className="text-center">
-                <div className="bg-red-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Eye className="w-12 h-12 text-getfund-primary" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5">
                   {pageContent?.vision?.title || 'Our Vision'}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-white/90 leading-relaxed text-lg">
                   {pageContent?.vision?.description || 'To become a leading education trust fund in Africa, ensuring quality and accessible education for all Ghanaians'}
                 </p>
               </div>
               <div className="text-center">
-                <div className="bg-yellow-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Target className="w-12 h-12 text-getfund-gold" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5">
                   {pageContent?.mission?.title || 'Our Mission'}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-white/90 leading-relaxed text-lg">
                   {pageContent?.mission?.description || 'To mobilize and manage financial resources for the provision and expansion of educational infrastructure at all levels of education in Ghana'}
                 </p>
               </div>
               <div className="text-center">
-                <div className="bg-orange-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Heart className="w-12 h-12 text-orange-600" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5">
                   {pageContent?.values?.title || 'Our Values'}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-white/90 leading-relaxed text-lg">
                   {pageContent?.values?.description || 'Integrity, transparency, excellence, and commitment to transforming lives through education'}
                 </p>
               </div>
@@ -334,13 +346,13 @@ export default function WhoWeAre() {
                 </h2>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-bold text-getfund-primary mb-3">The Cost-Sharing Policy</h3>
+                    <h3 className="text-xl font-bold mb-3" style={{ color: '#2a3f75' }}>The Cost-Sharing Policy</h3>
                     <p className="text-gray-700 leading-relaxed">
                       {pageContent?.costSharingPolicy || 'In Ghana, due to the government\'s limited capacity to fully fund tertiary education, a cost-sharing policy has been introduced. This approach requires students and families to contribute towards the cost of higher education, supplementing government funding.'}
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-getfund-primary mb-3">Public Responsibility</h3>
+                    <h3 className="text-xl font-bold mb-3" style={{ color: '#2a3f75' }}>Public Responsibility</h3>
                     <p className="text-gray-700 leading-relaxed">
                       {pageContent?.publicResponsibility || 'While various cost-sharing options exist, the policy recognizes that education remains a public responsibility. The government continues to play a central role in ensuring that higher education funding is adequately supported and equitably distributed.'}
                     </p>
@@ -368,7 +380,7 @@ export default function WhoWeAre() {
                     'Equitable allocation of funds to districts at the pre-tertiary level of education'
                   ]).map((factor, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}></div>
                       <span className="text-gray-700">{factor}</span>
                     </li>
                   ))}

@@ -214,7 +214,15 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
           </button>
 
           <Slider ref={sliderRef} {...settings}>
-            {donationOptions.map((option, index) => (
+            {donationOptions.map((option, index) => {
+              const imageSrc = option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg';
+              console.log(`[ImpactSlider] Rendering option ${index}:`, {
+                title: option.title,
+                optionImage: option.image,
+                defaultImage: defaultDonationImages[option.title],
+                finalSrc: imageSrc
+              });
+              return (
               <div key={index} className="px-3">
                 <div
                   className="relative h-[400px] md:h-[450px] rounded-2xl overflow-hidden cursor-pointer group shadow-2xl"
@@ -222,7 +230,7 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                 >
                   {/* Background Image */}
                   <OptimizedImage
-                    src={option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg'}
+                    src={imageSrc}
                     alt={option.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     fallbackSrc="/images/hero/main-slider-1.jpg"
@@ -257,7 +265,8 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </Slider>
 
           {/* Slide Indicators */}
@@ -314,9 +323,16 @@ export default function WaysToDonate() {
     const fetchContent = async () => {
       try {
         const page = await cmsApi.getPageBySlug('ways-to-donate');
+        console.log('[WaysToDonate] Fetched page:', page);
         const section = page.sections?.find(s => s.section_type === 'page_content');
+        console.log('[WaysToDonate] Found section:', section);
         if (section?.content) {
-          setContent(section.content as WaysToDonateContent);
+          const typedContent = section.content as WaysToDonateContent;
+          console.log('[WaysToDonate] Donation options:', typedContent.donationOptions);
+          typedContent.donationOptions?.forEach((opt, i) => {
+            console.log(`[WaysToDonate] Option ${i} image:`, opt.image);
+          });
+          setContent(typedContent);
         }
       } catch (error) {
         console.error('Failed to load page content:', error);
@@ -354,26 +370,38 @@ export default function WaysToDonate() {
 
       {/* Payment Success Banner */}
       {showPaymentSuccess && (
-        <div className="bg-green-50 border-b border-green-200">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-200">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-green-800">Thank you for your donation!</h3>
-                  <p className="text-sm text-green-700">
-                    Your payment has been processed successfully.
+                  <h3 className="text-xl font-bold text-green-800 mb-1">Thank you for your generous donation!</h3>
+                  <p className="text-green-700 mb-3">
+                    Your payment has been processed successfully. Your contribution will help transform education in Ghana.
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-sm">
                     {paymentReference && (
-                      <span className="ml-1">Reference: <span className="font-mono">{paymentReference}</span></span>
+                      <div className="bg-white/70 px-3 py-1.5 rounded-lg">
+                        <span className="text-gray-600">Reference:</span>{' '}
+                        <span className="font-mono font-semibold text-green-800">{paymentReference}</span>
+                      </div>
                     )}
+                    <div className="bg-white/70 px-3 py-1.5 rounded-lg">
+                      <span className="text-gray-600">Status:</span>{' '}
+                      <span className="font-semibold text-green-800">Completed</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-green-600 mt-3">
+                    A confirmation email will be sent to your email address shortly.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowPaymentSuccess(false)}
-                className="p-2 hover:bg-green-100 rounded-full transition-colors"
+                className="p-2 hover:bg-green-100 rounded-full transition-colors flex-shrink-0"
                 aria-label="Dismiss"
               >
                 <X className="w-5 h-5 text-green-600" />

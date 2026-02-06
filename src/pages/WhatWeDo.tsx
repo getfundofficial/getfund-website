@@ -71,11 +71,9 @@ export default function WhatWeDo() {
               {pageContent?.servicesTitle || 'What We Do'}
             </h1>
             <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
-            {pageContent?.servicesSubtitle && (
-              <p className="text-gray-600 mt-4 max-w-3xl">
-                {pageContent.servicesSubtitle}
-              </p>
-            )}
+            <p className="text-gray-600 mt-4 max-w-3xl">
+              {pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments in infrastructure, scholarships, and capacity building programs that benefit students at all levels.'}
+            </p>
           </div>
         </section>
 
