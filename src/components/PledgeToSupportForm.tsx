@@ -124,17 +124,23 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
   if (success) {
     return (
-      <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
-        {/* Header */}
-        <div className="px-4 py-3" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
-          <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
-            <HeartHandshake className="w-4 h-4" />
-            Pledge Your Support
-          </h3>
-          <p className="text-xs mt-0.5 text-gray-600">Promise to give, we'll follow up</p>
+      <div className={`bg-white rounded-2xl shadow-2xl overflow-hidden ${className}`}>
+        {/* Header with gradient */}
+        <div
+          className="px-5 py-4 relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #2a3f75 0%, #1e3a5f 100%)' }}
+        >
+          <div className="relative z-10">
+            <h3 className="text-xl font-bold text-white">
+              Pledge Your Support
+            </h3>
+            <p className="text-white/70 text-sm mt-1">Promise to give, we'll follow up</p>
+          </div>
+          <div className="absolute -right-4 -top-4 w-24 h-24 rounded-full bg-white/5" />
+          <div className="absolute -right-8 top-8 w-16 h-16 rounded-full bg-white/5" />
         </div>
 
-        <div className="p-4">
+        <div className="p-5">
           <div className="text-center py-6">
             <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
               <svg className="w-8 h-8" style={{ color: '#2a3f75' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -142,22 +148,20 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               </svg>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Thank You!</h3>
-            <p className="text-gray-600 mb-4 max-w-sm mx-auto text-sm">
-              Your pledge to support has been submitted successfully. Our team will contact you soon.
+            <p className="text-gray-600 mb-4 text-sm">
+              Your pledge has been submitted. We'll contact you soon.
             </p>
             <button
               onClick={() => setSuccess(false)}
-              className="px-6 py-2 text-white rounded-lg font-semibold transition-all duration-200 shadow-lg text-sm"
-              style={{ backgroundColor: '#1e3a5f', boxShadow: '0 10px 15px -3px rgba(30, 58, 95, 0.3)' }}
+              className="px-6 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:scale-105"
+              style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
             >
-              Submit Another Pledge
+              Submit Another
             </button>
           </div>
-
-          {/* Trust Badge */}
-          <div className="flex items-center justify-center gap-2 pt-3 border-t border-gray-100 mt-3">
-            <Shield className="w-4 h-4 text-gray-400" />
-            <span className="text-xs text-gray-500">Secure & Encrypted</span>
+          <div className="flex items-center justify-center gap-2 pt-3">
+            <Shield className="w-4 h-4 text-green-600" />
+            <span className="text-xs text-gray-500">SSL Encrypted • Secure</span>
           </div>
         </div>
       </div>
@@ -165,200 +169,182 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
   }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${className}`}>
-      {/* Header */}
-      <div className="px-4 py-3" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
-        <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
-          <HeartHandshake className="w-4 h-4" />
-          Pledge Your Support
-        </h3>
-        <p className="text-xs mt-0.5 text-gray-600">Promise to give, we'll follow up</p>
+    <div className={`bg-white rounded-2xl shadow-2xl overflow-hidden ${className}`}>
+      {/* Header with gradient */}
+      <div
+        className="px-5 py-4 relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #2a3f75 0%, #1e3a5f 100%)' }}
+      >
+        <div className="relative z-10">
+          <h3 className="text-xl font-bold text-white">
+            Pledge Your Support
+          </h3>
+          <p className="text-white/70 text-sm mt-1">Promise to give, we'll follow up</p>
+        </div>
+        {/* Decorative circles */}
+        <div className="absolute -right-4 -top-4 w-24 h-24 rounded-full bg-white/5" />
+        <div className="absolute -right-8 top-8 w-16 h-16 rounded-full bg-white/5" />
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 space-y-3">
+      <form onSubmit={handleSubmit} className="p-5">
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
-            <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-lg text-sm mb-4">
             {error}
           </div>
         )}
 
-        {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Vertical Layout */}
+        <div className="space-y-4">
+          {/* Name Fields Row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="first_name" className="block text-sm font-semibold text-gray-800 mb-2">
+                First Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="first_name"
+                value={formData.first_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                placeholder="John"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-semibold text-gray-800 mb-2">
+                Last Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="last_name"
+                value={formData.last_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                placeholder="Doe"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Email */}
           <div>
-            <label htmlFor="first_name" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-              <User className="w-3 h-3 text-gray-400" />
-              First Name <span className="text-red-500">*</span>
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2">
+              Email Address <span className="text-red-500">*</span>
             </label>
             <input
-              type="text"
-              id="first_name"
-              value={formData.first_name}
-              onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
-              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-              placeholder="John"
+              type="email"
+              id="email"
+              value={formData.email}
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+              placeholder="john.doe@example.com"
               required
             />
           </div>
+
+          {/* Country & Phone Row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="country" className="block text-sm font-semibold text-gray-800 mb-2">
+                Country <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="country"
+                value={formData.country}
+                onChange={(e) => handleCountryChange(e.target.value)}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 bg-white font-medium text-gray-700 text-sm"
+                required
+              >
+                {COUNTRY_DATA.map(country => (
+                  <option key={country.flag} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-semibold text-gray-800 mb-2">
+                Phone <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-2">
+                <select
+                  value={formData.phone_country_code}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone_country_code: e.target.value }))}
+                  className="w-20 px-2 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 bg-white text-sm font-medium text-gray-700"
+                >
+                  {COUNTRY_DATA.map(country => (
+                    <option key={`${country.flag}-code`} value={country.code}>
+                      {country.code}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={formData.phone_number}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setFormData(prev => ({ ...prev, phone_number: value }));
+                  }}
+                  className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                  placeholder="XX XXX XXXX"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* How to Help */}
           <div>
-            <label htmlFor="last_name" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-              <User className="w-3 h-3 text-gray-400" />
-              Last Name <span className="text-red-500">*</span>
+            <label htmlFor="donation_description" className="block text-sm font-semibold text-gray-800 mb-2">
+              How would you like to help? <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              id="last_name"
-              value={formData.last_name}
-              onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
-              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
-              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-              placeholder="Doe"
+            <textarea
+              id="donation_description"
+              value={formData.donation_description}
+              onChange={(e) => setFormData(prev => ({ ...prev, donation_description: e.target.value }))}
+              rows={3}
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm resize-none"
+              placeholder="Describe how you would like to support GETFund..."
               required
             />
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.donation_description.length}/10 min chars
+            </p>
           </div>
         </div>
 
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-            <Mail className="w-3 h-3 text-gray-400" />
-            Email <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={formData.email}
-            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
-            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-            placeholder="john.doe@example.com"
-            required
-          />
-        </div>
-
-        {/* Country */}
-        <div>
-          <label htmlFor="country" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-            <Globe className="w-3 h-3 text-gray-400" />
-            Country <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="country"
-            value={formData.country}
-            onChange={(e) => handleCountryChange(e.target.value)}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white transition-all cursor-pointer font-medium text-sm"
-            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-            required
-          >
-            {COUNTRY_DATA.map(country => (
-              <option key={country.flag} value={country.name}>
-                {country.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Phone with Country Code */}
-        <div>
-          <label htmlFor="phone" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-            <Phone className="w-3 h-3 text-gray-400" />
-            Phone Number <span className="text-red-500">*</span>
-          </label>
-          <div className="flex gap-2">
-            <select
-              value={formData.phone_country_code}
-              onChange={(e) => setFormData(prev => ({ ...prev, phone_country_code: e.target.value }))}
-              className="w-20 px-2 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 bg-white text-xs font-medium"
-              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-            >
-              {COUNTRY_DATA.map(country => (
-                <option key={`${country.flag}-code`} value={country.code}>
-                  {country.code}
-                </option>
-              ))}
-            </select>
-            <input
-              type="tel"
-              id="phone"
-              value={formData.phone_number}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '');
-                setFormData(prev => ({ ...prev, phone_number: value }));
-              }}
-              className="flex-1 px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
-              style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-              placeholder="XX XXX XXXX"
-              required
-            />
-          </div>
-        </div>
-
-        {/* Address */}
-        <div>
-          <label htmlFor="address" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-            <MapPin className="w-3 h-3 text-gray-400" />
-            Address <span className="text-gray-400 font-normal">(optional)</span>
-          </label>
-          <input
-            type="text"
-            id="address"
-            value={formData.address}
-            onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium text-sm"
-            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-            placeholder="Your address"
-          />
-        </div>
-
-        {/* Donation Description */}
-        <div>
-          <label htmlFor="donation_description" className="block text-xs font-semibold text-gray-800 mb-1 flex items-center gap-1">
-            <FileText className="w-3 h-3 text-gray-400" />
-            How would you like to help? <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="donation_description"
-            value={formData.donation_description}
-            onChange={(e) => setFormData(prev => ({ ...prev, donation_description: e.target.value }))}
-            rows={2}
-            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all font-medium resize-none text-sm"
-            style={{ '--tw-ring-color': '#2a3f75' } as React.CSSProperties}
-            placeholder="Describe how you would like to support GETFund..."
-            required
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            {formData.donation_description.length}/10 minimum characters
+        {/* Submit */}
+        <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between gap-4">
+          <p className="text-xs text-gray-500 flex-1">
+            We'll follow up to discuss your support options.
           </p>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-8 py-3 rounded-xl font-bold text-base transition-all shadow-md hover:shadow-lg hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+            style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+          >
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>...</span>
+              </>
+            ) : (
+              'Submit'
+            )}
+          </button>
         </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-3 rounded-lg font-bold text-base transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center bg-amber-500/60 hover:bg-amber-500/80"
-          style={{ color: '#1e3a5f' }}
-        >
-          {isSubmitting ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Submitting...
-            </>
-          ) : (
-            'Submit Pledge'
-          )}
-        </button>
 
         {/* Trust Badge */}
-        <div className="flex items-center justify-center gap-2 pt-3 border-t border-gray-100 mt-2">
-          <Shield className="w-4 h-4 text-gray-400" />
-          <span className="text-xs text-gray-500">Secure & Encrypted</span>
+        <div className="flex items-center justify-center gap-2 pt-3">
+          <Shield className="w-4 h-4 text-green-600" />
+          <span className="text-xs text-gray-500">SSL Encrypted • Secure</span>
         </div>
       </form>
     </div>

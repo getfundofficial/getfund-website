@@ -471,9 +471,9 @@ export default function WaysToDonate() {
           />
         )}
 
-        {/* Main Donation Section - Donation Interface + Pledge Side by Side */}
+        {/* Main Donation Section - Donation Interface + Pledge Stacked */}
         <section className="py-10" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
-          <div className="container mx-auto px-4 max-w-5xl">
+          <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-8">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
                 Make a Direct Donation
@@ -482,12 +482,12 @@ export default function WaysToDonate() {
                 Give a one-time or recurring donation to support GETFund's mission.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-6 items-stretch max-w-4xl mx-auto">
-              {/* Left: Donation Interface */}
-              <DonationInterface />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+              {/* Donation Interface */}
+              <DonationInterface className="max-w-none" />
 
-              {/* Right: Pledge to Support Form */}
-              <PledgeToSupportForm />
+              {/* Pledge to Support Form */}
+              <PledgeToSupportForm className="max-w-none" />
             </div>
 
             {/* Other Ways to Donate - Text below both cards */}

@@ -123,7 +123,7 @@ export default function Lottery() {
     };
 
     Promise.all([
-      fetch(`${apiUrl}/lottery/config`, fetchOptions)
+      fetch(`${apiUrl}/lottery/config?_t=${Date.now()}`, fetchOptions)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
@@ -244,6 +244,7 @@ export default function Lottery() {
                     steps={lotteryConfig.how_it_works_steps}
                     nextDrawDate={lotteryConfig.next_draw_date}
                     currentEntries={lotteryConfig.current_entries_count}
+                    isActive={lotteryConfig.is_active}
                   />
                 </div>
 
@@ -362,7 +363,8 @@ const LotteryHowItWorks: React.FC<{
   steps: LotteryConfig['how_it_works_steps'];
   nextDrawDate: string;
   currentEntries: number;
-}> = ({ steps, nextDrawDate, currentEntries }) => {
+  isActive: boolean;
+}> = ({ steps, nextDrawDate, currentEntries, isActive }) => {
   const StepFront: React.FC<{ step: LotteryStep }> = ({ step }) => (
     <div className="flex items-start">
       <div className="text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0 mr-4 font-bold text-lg shadow-lg" style={{ backgroundColor: '#2a3f75' }}>
@@ -433,13 +435,36 @@ const LotteryHowItWorks: React.FC<{
         </div>
       </div>
 
-      <button
-        onClick={() => window.location.href = '/fundraising/ways-to-donate'}
-        className="w-full text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:opacity-90"
-        style={{ backgroundColor: '#1e3a5f' }}
-      >
-        Participate Now - Donate & Enter
-      </button>
+      {isActive ? (
+        <button
+          onClick={() => window.location.href = '/fundraising/ways-to-donate'}
+          className="w-full text-white py-4 rounded-lg font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:opacity-90"
+          style={{ backgroundColor: '#1e3a5f' }}
+        >
+          Participate Now - Donate & Enter
+        </button>
+      ) : (
+        <div className="text-center">
+          <div className="bg-gray-100 rounded-lg p-4 mb-3">
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-semibold">Lottery Closed</span>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">
+              This lottery draw has ended. Stay tuned for the next one!
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.href = '/fundraising/ways-to-donate'}
+            className="w-full text-white py-3 rounded-lg font-medium text-sm transition-all duration-300 opacity-80 hover:opacity-100"
+            style={{ backgroundColor: '#6b7280' }}
+          >
+            Support Education (No Lottery Entry)
+          </button>
+        </div>
+      )}
     </div>
   );
 };

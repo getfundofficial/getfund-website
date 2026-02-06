@@ -26,6 +26,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
   const [showHonorField, setShowHonorField] = useState(false);
   const [note, setNote] = useState('');
   const [honorName, setHonorName] = useState('');
+  const [donorName, setDonorName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('mobile-money');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -64,15 +65,13 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
       return;
     }
 
-    if (!customerEmail) {
-      setError('Please enter your email address');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-      setError('Please enter a valid email address');
-      return;
+    // Email is optional - only validate if provided
+    if (customerEmail) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customerEmail)) {
+        setError('Please enter a valid email address');
+        return;
+      }
     }
 
     const validation = paymentService.validateAmount(finalAmount, 'GHS');
@@ -88,10 +87,10 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
         amount: finalAmount,
         currency: 'GHS',
         paymentMethod,
-        customerEmail,
+        customerEmail: customerEmail || 'anonymous@donor.com',
         customerPhone: '',
         campaignTitle: title,
-        donorName: honorName || undefined,
+        donorName: donorName || honorName || 'Anonymous Donor',
         campaignId: campaignId || undefined,
         campaignSlug: campaignSlug || undefined,
         donationType,
@@ -187,12 +186,27 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
             )}
           </div>
 
+          {/* Name Input */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your Name <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={donorName}
+              onChange={(e) => setDonorName(e.target.value)}
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
+              disabled={isProcessing}
+            />
+          </div>
+
           {/* Email and Payment Method Grid */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             {/* Email Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address <span className="text-red-500">*</span>
+                Email Address <span className="text-gray-400 font-normal">(optional)</span>
               </label>
               <input
                 type="email"
@@ -204,7 +218,6 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
                 }}
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-green-500"
                 disabled={isProcessing}
-                required
               />
             </div>
 
@@ -289,7 +302,7 @@ export default function DonationModal({ isOpen, onClose, title, amount, descript
           {/* Continue Button */}
           <button
             onClick={handleDonate}
-            disabled={isProcessing || !customerEmail}
+            disabled={isProcessing}
             className="w-full bg-orange-400 hover:bg-orange-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {isProcessing ? (

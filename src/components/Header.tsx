@@ -23,9 +23,10 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
       { id: '4-1', slug: 'why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising', parentId: '4' },
       { id: '4-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '4' },
       { id: '4-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '4' },
-      { id: '4-4', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '4' },
-      { id: '4-5', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '4' },
-      { id: '4-6', slug: 'events', title: 'Events', label: 'Events', parentId: '4' }
+      { id: '4-4', slug: 'lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '4' },
+      { id: '4-5', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '4' },
+      { id: '4-6', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '4' },
+      { id: '4-7', slug: 'events', title: 'Events', label: 'Events', parentId: '4' }
     ]
   }
 ];
@@ -76,6 +77,30 @@ export default function Header() {
 
   const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
+  // Ensure lottery is always in the Fundraising menu
+  const ensureLotteryInMenu = (items: MenuItem[]): MenuItem[] => {
+    return items.map(item => {
+      if (item.slug === 'fundraising' && item.children) {
+        const hasLottery = item.children.some(child => child.slug === 'lottery');
+        if (!hasLottery) {
+          // Add lottery after fundraising-campaigns
+          const campaignsIndex = item.children.findIndex(child => child.slug === 'fundraising-campaigns');
+          const lotteryItem: MenuItem = {
+            id: '4-lottery',
+            slug: 'lottery',
+            title: 'Scholarship Lottery',
+            label: 'Scholarship Lottery',
+            parentId: item.id
+          };
+          const newChildren = [...item.children];
+          newChildren.splice(campaignsIndex + 1, 0, lotteryItem);
+          return { ...item, children: newChildren };
+        }
+      }
+      return item;
+    });
+  };
+
   useEffect(() => {
     let isMounted = true;
 
@@ -86,13 +111,17 @@ export default function Header() {
 
         // Update menu if CMS has valid items
         if (menuConfig.menuItems.length > 0) {
-          setMenuItems(menuConfig.menuItems);
-          cacheMenu(menuConfig.menuItems);
+          const menuWithLottery = ensureLotteryInMenu(menuConfig.menuItems);
+          setMenuItems(menuWithLottery);
+          cacheMenu(menuWithLottery);
         }
       } catch {
         // Keep using cached or default menu items
       }
     };
+
+    // Also ensure lottery in initial/cached menu
+    setMenuItems(prev => ensureLotteryInMenu(prev));
 
     fetchMenu();
 
