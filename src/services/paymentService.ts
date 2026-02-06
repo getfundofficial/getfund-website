@@ -8,10 +8,13 @@ export interface InitiatePaymentRequest {
   customerPhone?: string;
   campaignTitle: string;
   donorName?: string;
+  donorCategory?: 'Individual' | 'Corporate' | 'GETFund Beneficiary';
   campaignId?: string;
   campaignSlug?: string;
   donationType?: 'impact' | 'campaign' | 'general';
   donationDescription?: string;
+  donationFrequency?: 'one-time' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+  donationReason?: string;
 }
 
 export interface PaymentResponse {
@@ -70,10 +73,13 @@ class PaymentService {
         metadata: {
           campaignTitle: paymentData.campaignTitle,
           donorName: paymentData.donorName,
+          donorCategory: paymentData.donorCategory || 'Individual',
           campaignId: paymentData.campaignId,
           campaignSlug: paymentData.campaignSlug,
           donationType: paymentData.donationType || 'general',
           donationDescription: paymentData.donationDescription,
+          donationFrequency: paymentData.donationFrequency || 'one-time',
+          donationReason: paymentData.donationReason,
         },
       };
 

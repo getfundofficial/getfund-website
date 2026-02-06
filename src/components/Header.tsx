@@ -15,20 +15,19 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
   { id: '3', slug: 'impact', title: 'Our Work & Impact', label: 'Our Work & Impact' },
   { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
-  { id: '5', slug: 'resources', title: 'Resources', label: 'Resources' },
   {
-    id: '6',
+    id: '5',
     slug: 'fundraising',
     title: 'Fundraising',
     label: 'Fundraising',
     children: [
-      { id: '6-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '6' },
-      { id: '6-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '6' },
-      { id: '6-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '6' },
-      { id: '6-4', slug: 'fundraising/lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '6' },
-      { id: '6-5', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '6' },
-      { id: '6-6', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '6' },
-      { id: '6-7', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '6' }
+      { id: '5-1', slug: 'fundraising/why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising?', parentId: '5' },
+      { id: '5-2', slug: 'fundraising/ways-to-donate', title: 'Ways to donate', label: 'Ways to donate', parentId: '5' },
+      { id: '5-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '5' },
+      { id: '5-4', slug: 'fundraising/lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '5' },
+      { id: '5-5', slug: 'fundraising/partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '5' },
+      { id: '5-6', slug: 'fundraising/beneficiaries-give-back', title: 'Beneficiaries Give back', label: 'Beneficiaries Give back', parentId: '5' },
+      { id: '5-7', slug: 'fundraising/events', title: 'Events', label: 'Events', parentId: '5' }
     ]
   }
 ];
@@ -94,7 +93,7 @@ export default function Header() {
         </button>
 
         {/* Desktop Navigation */}
-        <ul className="hidden lg:flex items-center gap-2 lg:gap-3 xl:gap-4 2xl:gap-6 3xl:gap-8">
+        <ul className="hidden lg:flex items-center gap-4 lg:gap-5 xl:gap-6 2xl:gap-8 3xl:gap-10">
           {menuItems.map((item) => (
             item.children && item.children.length > 0 ? (
               <DropdownMenu key={item.id} item={item} />

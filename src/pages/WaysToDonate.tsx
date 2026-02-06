@@ -214,7 +214,15 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
           </button>
 
           <Slider ref={sliderRef} {...settings}>
-            {donationOptions.map((option, index) => (
+            {donationOptions.map((option, index) => {
+              const imageSrc = option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg';
+              console.log(`[ImpactSlider] Rendering option ${index}:`, {
+                title: option.title,
+                optionImage: option.image,
+                defaultImage: defaultDonationImages[option.title],
+                finalSrc: imageSrc
+              });
+              return (
               <div key={index} className="px-3">
                 <div
                   className="relative h-[400px] md:h-[450px] rounded-2xl overflow-hidden cursor-pointer group shadow-2xl"
@@ -222,7 +230,7 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                 >
                   {/* Background Image */}
                   <OptimizedImage
-                    src={option.image || defaultDonationImages[option.title] || '/images/hero/main-slider-1.jpg'}
+                    src={imageSrc}
                     alt={option.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     fallbackSrc="/images/hero/main-slider-1.jpg"
@@ -257,7 +265,8 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </Slider>
 
           {/* Slide Indicators */}
@@ -314,9 +323,16 @@ export default function WaysToDonate() {
     const fetchContent = async () => {
       try {
         const page = await cmsApi.getPageBySlug('ways-to-donate');
+        console.log('[WaysToDonate] Fetched page:', page);
         const section = page.sections?.find(s => s.section_type === 'page_content');
+        console.log('[WaysToDonate] Found section:', section);
         if (section?.content) {
-          setContent(section.content as WaysToDonateContent);
+          const typedContent = section.content as WaysToDonateContent;
+          console.log('[WaysToDonate] Donation options:', typedContent.donationOptions);
+          typedContent.donationOptions?.forEach((opt, i) => {
+            console.log(`[WaysToDonate] Option ${i} image:`, opt.image);
+          });
+          setContent(typedContent);
         }
       } catch (error) {
         console.error('Failed to load page content:', error);
