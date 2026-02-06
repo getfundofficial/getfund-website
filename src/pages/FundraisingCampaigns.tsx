@@ -43,55 +43,6 @@ interface Campaign {
   is_featured?: boolean;
 }
 
-// Default campaigns data
-const defaultCampaigns: Campaign[] = [
-  {
-    id: '1',
-    title: 'Education Infrastructure Development',
-    slug: 'education-infrastructure',
-    description: 'Building modern classrooms and laboratories for rural schools across Ghana',
-    image_url: null,
-    goal_amount: 500000,
-    raised_amount: 0,
-    currency: 'GHS',
-    status: 'active',
-    button_text: 'Donate Now',
-    percentage_funded: 0,
-    days_left: 36,
-    donation_count: 0
-  },
-  {
-    id: '2',
-    title: 'Digital Learning Initiative',
-    slug: 'digital-learning',
-    description: 'Providing tablets and internet connectivity to underserved communities',
-    image_url: null,
-    goal_amount: 250000,
-    raised_amount: 0,
-    currency: 'GHS',
-    status: 'active',
-    button_text: 'Donate Now',
-    percentage_funded: 0,
-    days_left: 0,
-    donation_count: 0
-  },
-  {
-    id: '3',
-    title: 'Teacher Training Program',
-    slug: 'teacher-training',
-    description: 'Professional development and certification for educators in remote areas',
-    image_url: null,
-    goal_amount: 150000,
-    raised_amount: 0,
-    currency: 'GHS',
-    status: 'active',
-    button_text: 'Donate Now',
-    percentage_funded: 0,
-    days_left: 0,
-    donation_count: 0
-  }
-];
-
 // Default page content
 const defaultPageContent: PageContent = {
   heroTitle: 'Fundraising Campaigns',
@@ -101,7 +52,7 @@ const defaultPageContent: PageContent = {
 };
 
 export default function FundraisingCampaigns() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>(defaultCampaigns);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [pageContent, setPageContent] = useState<PageContent>(defaultPageContent);
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -137,16 +88,12 @@ export default function FundraisingCampaigns() {
         })
     ])
       .then(([campaignsData, pageData]) => {
-        if (campaignsData.campaigns && campaignsData.campaigns.length > 0) {
-          // Filter for active campaigns and sort by display_order
-          const activeCampaigns = campaignsData.campaigns
-            .filter((c: Campaign) => c.status === 'active')
-            .sort((a: Campaign, b: Campaign) => (a.display_order || 0) - (b.display_order || 0));
+        // Always set campaigns from API (empty array if none exist)
+        const activeCampaigns = (campaignsData.campaigns || [])
+          .filter((c: Campaign) => c.status === 'active')
+          .sort((a: Campaign, b: Campaign) => (a.display_order || 0) - (b.display_order || 0));
 
-          if (activeCampaigns.length > 0) {
-            setCampaigns(activeCampaigns);
-          }
-        }
+        setCampaigns(activeCampaigns);
 
         // Process page content from CMS
         if (pageData && pageData.sections) {
@@ -229,7 +176,7 @@ export default function FundraisingCampaigns() {
             {campaigns.length === 0 ? (
               <div className="text-center py-12">
                 <Gift className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600 text-lg">No active campaigns at the moment. Check back soon!</p>
+                <p className="text-gray-600 text-lg">No active campaigns currently</p>
               </div>
             ) : (
               <div className={`grid gap-6 sm:gap-8 ${
