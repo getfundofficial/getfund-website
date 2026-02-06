@@ -102,70 +102,92 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
 
       {/* Key Initiatives */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 max-w-8xl">
-        <div className="bg-white p-6 sm:p-8 md:p-10 lg:p-12 rounded-xl shadow-lg">
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 md:mb-10 text-center">Key Initiatives (detailed)</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
-          <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 sm:p-8 md:p-10 rounded-xl border-l-4 border-getfund-primary">
+        <div className="text-center mb-10 sm:mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
+            Key Initiatives
+          </span>
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+            Our Strategic Programs
+          </h3>
+          <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+            Transforming education through targeted initiatives and sustainable development programs
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Free SHS Policy - Featured Card */}
+          <div className="group relative bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            {/* Accent line at top */}
+            <div className="absolute top-0 left-6 right-6 h-1 rounded-b-full transition-all duration-300 group-hover:left-4 group-hover:right-4" style={{ backgroundColor: '#2a3f75' }} />
             <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-              <div className="bg-getfund-primary w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" aria-hidden="true" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: '#2a3f75' }} aria-hidden="true" />
               </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Free SHS Policy</h3>
             </div>
-            <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
               Introduced in September 2017, this transformative policy removes cost barriers and expands access to secondary education for all Ghanaian students.
             </p>
             <ul className="space-y-2 sm:space-y-3">
               <li className="flex items-start gap-2 sm:gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#f59e0b' }}></div>
                 <span className="text-sm sm:text-base text-gray-700">Remove financial barriers to education</span>
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#f59e0b' }}></div>
                 <span className="text-sm sm:text-base text-gray-700">Expand and improve infrastructure</span>
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#f59e0b' }}></div>
                 <span className="text-sm sm:text-base text-gray-700">Enhance quality and equity in education</span>
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-getfund-primary mt-2 flex-shrink-0"></div>
+                <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#f59e0b' }}></div>
                 <span className="text-sm sm:text-base text-gray-700">Develop employable skills for the future</span>
               </li>
             </ul>
           </div>
 
+          {/* Right Column - Smaller Cards */}
           <div className="space-y-4 sm:space-y-6">
-            <div className="bg-getfund-secondary/5 p-4 sm:p-6 md:p-8 rounded-xl border-l-4 border-getfund-secondary">
+            <div className="group relative bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#f59e0b' }} />
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-getfund-secondary" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}>
+                  <Users className="w-5 h-5" style={{ color: '#f59e0b' }} aria-hidden="true" />
+                </div>
                 <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Community Day School Projects</h4>
               </div>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                 Establishing accessible secondary schools within communities to reduce the distance students must travel for education.
               </p>
             </div>
 
-            <div className="bg-getfund-accent/10 p-4 sm:p-6 md:p-8 rounded-xl border-l-4 border-getfund-accent">
+            <div className="group relative bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#2a3f75' }} />
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-getfund-accent" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                  <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} aria-hidden="true" />
+                </div>
                 <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Model School Projects</h4>
               </div>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                 Creating state-of-the-art educational facilities that serve as benchmarks for excellence in teaching and learning.
               </p>
             </div>
 
-            <div className="bg-green-50 p-4 sm:p-6 md:p-8 rounded-xl border-l-4 border-green-600">
+            <div className="group relative bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#1e3a5f' }} />
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" aria-hidden="true" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
+                  <BookOpen className="w-5 h-5" style={{ color: '#1e3a5f' }} aria-hidden="true" />
+                </div>
                 <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Basic Education Improvement</h4>
               </div>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                 Strengthening foundational education through infrastructure development and resource provision at the basic education level.
               </p>
             </div>
-          </div>
           </div>
         </div>
       </div>
