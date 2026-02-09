@@ -77,7 +77,7 @@ export default function WhatWeDo() {
           </div>
         </section>
 
-        {/* Programs Section */}
+        {/* Programs Section with Key Initiatives */}
         <Programs showTitle={false} focusAreaImages={pageContent?.focusAreaImages} />
       </main>
       <Footer />
