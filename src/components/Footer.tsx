@@ -55,7 +55,6 @@ export default function Footer() {
   const defaultQuickLinks = [
     { name: 'About', href: '/about' },
     { name: 'What We Do', href: '/what-we-do' },
-    { name: 'Impact', href: '/impact' },
     { name: 'News & Updates', href: '/news' },
     { name: 'Resources', href: '/resources' },
     { name: 'Support Us', href: '/support-us' },
@@ -81,16 +80,17 @@ export default function Footer() {
     footerConfig.social_links.whatsapp ? { icon: WhatsappIcon, href: footerConfig.social_links.whatsapp, label: 'WhatsApp Channel' } : null,
   ].filter(Boolean) : defaultSocialLinks;
 
-  const quickLinks = footerConfig?.quick_links && footerConfig.quick_links.length > 0
+  const quickLinks = (footerConfig?.quick_links && footerConfig.quick_links.length > 0
     ? footerConfig.quick_links.map(link => ({
         ...link,
         name: link.name === 'Who We Are' ? 'About' : link.name,
         href: link.href === '/who-we-are' ? '/about' : link.href
       }))
-    : defaultQuickLinks;
+    : defaultQuickLinks
+  ).filter(link => link.href !== '/impact' && link.name !== 'Impact');
 
   return (
-    <footer id="contact" className="text-white glass-footer" style={{ backgroundColor }}>
+    <footer id="contact" className="text-white glass-footer full-bleed" style={{ backgroundColor }}>
       <div className="container mx-auto px-3 xs:px-4 sm:px-6 3xl:px-8 4xl:px-12 max-w-9xl py-12 sm:py-16 3xl:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 3xl:gap-16 mb-8 sm:mb-12">
           <div>
