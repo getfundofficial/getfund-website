@@ -122,7 +122,7 @@ export default function AchievementsSection({
           ))}
         </div>
 
-        {/* Category Cards Grid - Square Images */}
+        {/* Category Cards Grid - Square Images with no hover cursor */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10">
           {displayCategories.map((category, index) => (
             <div

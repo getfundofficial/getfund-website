@@ -100,7 +100,7 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
         </div>
       </div>
 
-      {/* View Impact Button */}
+      {/* View Impact Button - disabled until page ready */}
       <div className="container mx-auto px-4 text-center mb-12 sm:mb-16">
         <button
           disabled
