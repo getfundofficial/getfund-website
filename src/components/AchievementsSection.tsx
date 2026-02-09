@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 
 interface CircleItem {
   title: string;
@@ -112,7 +111,7 @@ export default function AchievementsSection({
             >
               {/* Green Circle with text inside - using aspect-square to ensure perfect circle */}
               <div
-                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full bg-green-600 hover:bg-green-700 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl p-4"
+                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full bg-green-600 flex items-center justify-center shadow-lg transition-all duration-300 p-4"
                 style={{ borderRadius: '50%' }}
               >
                 <span className="text-white text-[11px] md:text-xs lg:text-sm xl:text-base font-bold text-center leading-tight">
@@ -126,17 +125,16 @@ export default function AchievementsSection({
         {/* Category Cards Grid - Square Images */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10">
           {displayCategories.map((category, index) => (
-            <Link
+            <div
               key={index}
-              to={category.link || '#'}
-              className="group flex flex-col items-center"
+              className="flex flex-col items-center cursor-default"
             >
               {/* Square Image - larger size */}
               <div className="w-36 md:w-44 lg:w-52 aspect-square mb-4 overflow-hidden rounded-lg shadow-md">
                 <img
                   src={category.image}
                   alt={category.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     // Use a valid fallback image that exists
@@ -146,7 +144,7 @@ export default function AchievementsSection({
               </div>
 
               {/* Title and Description Under Image */}
-              <h3 className="text-xs md:text-sm font-bold text-gray-900 text-center group-hover:text-green-600 transition-colors leading-tight">
+              <h3 className="text-xs md:text-sm font-bold text-gray-900 text-center leading-tight">
                 {category.title}
               </h3>
               {category.description && (
@@ -154,7 +152,7 @@ export default function AchievementsSection({
                   {category.description}
                 </p>
               )}
-            </Link>
+            </div>
           ))}
         </div>
       </div>

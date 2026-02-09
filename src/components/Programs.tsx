@@ -56,7 +56,7 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             >
               {/* Circle with text inside - using aspect-square to ensure perfect circle */}
               <div
-                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl p-4"
+                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 p-4"
                 style={{ borderRadius: '50%', backgroundColor: '#2a3f75' }}
               >
                 <span className="text-white text-[11px] md:text-xs lg:text-sm xl:text-base font-bold text-center leading-tight">
@@ -74,7 +74,7 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
           {images.map((item, index) => (
             <div
               key={index}
-              className="relative aspect-square overflow-hidden group"
+              className="relative aspect-square overflow-hidden group cursor-default"
             >
               <OptimizedImage
                 src={item.image}
@@ -98,6 +98,20 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             </div>
           ))}
         </div>
+      </div>
+
+      {/* View Impact Button */}
+      <div className="container mx-auto px-4 text-center mb-12 sm:mb-16">
+        <button
+          disabled
+          className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white rounded-lg shadow-lg cursor-not-allowed opacity-80"
+          style={{ backgroundColor: '#2a3f75' }}
+        >
+          View Our Impact
+          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </button>
       </div>
 
       {/* Key Initiatives */}

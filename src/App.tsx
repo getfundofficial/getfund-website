@@ -30,7 +30,9 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-white">
+        {/* Centered content wrapper with max-width and shadow */}
+        <div className="max-w-[1500px] mx-auto bg-white shadow-xl min-h-screen">
         <Routes>
           {/* Homepage */}
           <Route path="/" element={<Home />} />
@@ -85,6 +87,7 @@ function App() {
           {/* Catch-all CMS route (must be last) */}
           <Route path="/:slug" element={<CMSPage />} />
         </Routes>
+        </div>
       </div>
     </Router>
   );
