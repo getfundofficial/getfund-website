@@ -39,20 +39,20 @@ const regionIdToName: Record<string, string> = {
 
 // Get color based on project count (matching the legend)
 function getColorByProjectCount(count: number | undefined): string {
-  if (count === undefined || count === 0) return '#D1D5DB'; // No data - gray
-  if (count >= 500) return '#065F46'; // 500+ - very dark green
-  if (count >= 200) return '#047857'; // 200-499 - dark green
-  if (count >= 100) return '#10B981'; // 100-199 - medium green
-  if (count >= 50) return '#34D399';  // 50-99 - light green
-  return '#6EE7B7';                    // 1-49 - very light green
+  if (count === undefined || count === 0) return '#D1D5DB';
+  if (count >= 500) return '#065F46';
+  if (count >= 200) return '#047857';
+  if (count >= 100) return '#10B981';
+  if (count >= 50) return '#34D399';
+  return '#6EE7B7';
 }
 
 // Get color based on completion score
 function getColorByCompletionScore(score: number | undefined): string {
-  if (score === undefined) return '#D1D5DB'; // No data - gray
-  if (score < 40) return '#dc2626';  // Low - red
-  if (score < 60) return '#f59e0b';  // Medium - gold
-  return '#10b981';                   // High - green
+  if (score === undefined) return '#D1D5DB';
+  if (score < 40) return '#dc2626';
+  if (score < 60) return '#f59e0b';
+  return '#10b981';
 }
 
 export default function RegionalMapSVG({
@@ -65,7 +65,12 @@ export default function RegionalMapSVG({
 }: RegionalMapSVGProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgContent, setSvgContent] = useState<string>('');
-  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // Use refs for callbacks to avoid stale closures and unnecessary effect re-runs
+  const onRegionClickRef = useRef(onRegionClick);
+  const onRegionHoverRef = useRef(onRegionHover);
+  onRegionClickRef.current = onRegionClick;
+  onRegionHoverRef.current = onRegionHover;
 
   // Find region data by name
   const findRegionData = useCallback((regionName: string): Region | undefined => {
@@ -124,7 +129,7 @@ export default function RegionalMapSVG({
       .catch(err => console.error('Failed to load SVG:', err));
   }, []);
 
-  // Add event listeners to SVG paths
+  // Set up event delegation on SVG - runs once when SVG loads
   useEffect(() => {
     if (!containerRef.current || !svgContent) return;
 
@@ -137,82 +142,93 @@ export default function RegionalMapSVG({
     svg.style.width = '100%';
     svg.style.height = 'auto';
 
-    const paths = svg.querySelectorAll('path[id^="GH"]');
+    // Disable pointer events on label_points circles so they don't block path clicks
+    const labelPoints = svg.querySelector('#label_points');
+    if (labelPoints) {
+      (labelPoints as SVGElement).style.pointerEvents = 'none';
+    }
 
+    // Set initial styles on all paths
+    const paths = svg.querySelectorAll('path[id^="GH"]');
     paths.forEach((path) => {
       const pathElement = path as SVGPathElement;
-      const regionId = pathElement.id;
-      const regionName = regionIdToName[regionId];
-      const baseColor = getRegionBaseColor(regionName);
-
-      // Set base styles with color based on view mode
       pathElement.style.cursor = 'pointer';
       pathElement.style.transition = 'all 0.3s ease';
       pathElement.style.transformOrigin = 'center';
       pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
-      pathElement.style.fill = baseColor;
-
-      // Mouse enter - pop out effect
-      pathElement.addEventListener('mouseenter', () => {
-        setHoveredRegion(regionId);
-        if (regionName) {
-          onRegionHover(regionName);
-        }
-
-        // Apply hover styles - darken the color slightly
-        pathElement.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(0.9)';
-        pathElement.style.transform = 'scale(1.02)';
-
-        // Bring to front by appending to parent
-        const parent = pathElement.parentNode;
-        if (parent) {
-          parent.appendChild(pathElement);
-        }
-      });
-
-      // Mouse leave - reset
-      pathElement.addEventListener('mouseleave', () => {
-        setHoveredRegion(null);
-        onRegionHover(null);
-
-        // Reset styles unless selected
-        if (selectedRegion !== regionName) {
-          pathElement.style.fill = baseColor;
-          pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
-          pathElement.style.transform = 'scale(1)';
-        }
-      });
-
-      // Click handler
-      pathElement.addEventListener('click', () => {
-        if (regionName) {
-          onRegionClick(regionName);
-        }
-      });
-
-      // Apply selected state styling with pulsate animation
-      if (selectedRegion === regionName) {
-        pathElement.classList.add('region-selected');
-        // Bring selected region to front
-        const parent = pathElement.parentNode;
-        if (parent) {
-          parent.appendChild(pathElement);
-        }
-      } else {
-        pathElement.classList.remove('region-selected');
-      }
     });
 
-    // Cleanup event listeners
-    return () => {
-      paths.forEach((path) => {
-        const pathElement = path as SVGPathElement;
-        pathElement.replaceWith(pathElement.cloneNode(true));
-      });
+    // Helper to find nearest GH path from event target
+    const findRegionPath = (target: EventTarget | null): SVGPathElement | null => {
+      if (!target || !(target instanceof Element)) return null;
+      const path = target.closest('path[id^="GH"]');
+      return path as SVGPathElement | null;
     };
-  }, [svgContent, selectedRegion, onRegionHover, onRegionClick, getRegionBaseColor]);
 
-  // Update region colors when data or view mode changes
+    // Event delegation: click handler on SVG
+    const handleClick = (e: MouseEvent) => {
+      const pathElement = findRegionPath(e.target);
+      if (!pathElement) return;
+      const regionId = pathElement.id;
+      const regionName = regionIdToName[regionId];
+      if (regionName) {
+        onRegionClickRef.current(regionName);
+      }
+    };
+
+    // Event delegation: mouseover handler on SVG
+    const handleMouseOver = (e: MouseEvent) => {
+      const pathElement = findRegionPath(e.target);
+      if (!pathElement) return;
+
+      const regionId = pathElement.id;
+      const regionName = regionIdToName[regionId];
+      if (regionName) {
+        onRegionHoverRef.current(regionName);
+      }
+
+      // Apply hover styles
+      pathElement.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(0.9)';
+      pathElement.style.transform = 'scale(1.02)';
+
+      // Bring to front
+      const parent = pathElement.parentNode;
+      if (parent) {
+        parent.appendChild(pathElement);
+      }
+    };
+
+    // Event delegation: mouseout handler on SVG
+    const handleMouseOut = (e: MouseEvent) => {
+      const pathElement = findRegionPath(e.target);
+      if (!pathElement) return;
+
+      onRegionHoverRef.current(null);
+
+      // Reset styles (selected state styling is handled by the separate effect below)
+      const regionId = pathElement.id;
+      const regionName = regionIdToName[regionId];
+      pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+      pathElement.style.transform = 'scale(1)';
+      // Color will be re-applied by the styling effect
+      if (regionName) {
+        pathElement.style.fill = getRegionBaseColor(regionName);
+      }
+    };
+
+    svg.addEventListener('click', handleClick);
+    svg.addEventListener('mouseover', handleMouseOver);
+    svg.addEventListener('mouseout', handleMouseOut);
+
+    return () => {
+      svg.removeEventListener('click', handleClick);
+      svg.removeEventListener('mouseover', handleMouseOver);
+      svg.removeEventListener('mouseout', handleMouseOut);
+    };
+  // Only re-run when SVG content loads or color calculation changes
+  }, [svgContent, getRegionBaseColor]);
+
+  // Update region colors and selected state styling
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -237,14 +253,12 @@ export default function RegionalMapSVG({
         }
       } else {
         pathElement.classList.remove('region-selected');
-        if (hoveredRegion !== regionId) {
-          pathElement.style.fill = baseColor;
-          pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
-          pathElement.style.transform = 'scale(1)';
-        }
+        pathElement.style.fill = baseColor;
+        pathElement.style.filter = 'drop-shadow(0 0 0 transparent)';
+        pathElement.style.transform = 'scale(1)';
       }
     });
-  }, [selectedRegion, hoveredRegion, getRegionBaseColor, viewMode]);
+  }, [selectedRegion, getRegionBaseColor, viewMode]);
 
   return (
     <div className="flex justify-center items-center w-full">
