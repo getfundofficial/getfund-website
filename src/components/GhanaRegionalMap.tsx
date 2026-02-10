@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import RegionalMapSVG from './RegionalMapSVG';
 import { REGIONAL_COMPLETION_DATA, RegionalCompletionData, REGIONAL_TOTALS } from '../data/regionalCompletion';
 import { COMPLETION_COLORS } from '../data/completionData';
@@ -60,9 +60,9 @@ export default function GhanaRegionalMap({
     return REGIONAL_COMPLETION_DATA.find(r => normalize(r.name) === normalize(regionName));
   };
 
-  const handleRegionClick = useCallback((regionName: string) => {
+  const handleRegionClick = (regionName: string) => {
     setSelectedRegion(regionName);
-  }, []);
+  };
 
   const selectedData = selectedRegion ? findRegionData(selectedRegion) : null;
   const selectedCompletionData = selectedRegion ? findCompletionData(selectedRegion) : null;
