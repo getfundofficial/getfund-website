@@ -137,6 +137,12 @@ export default function RegionalMapSVG({
     svg.style.width = '100%';
     svg.style.height = 'auto';
 
+    // Disable pointer events on overlay groups that sit on top of region paths
+    const labelPoints = svg.querySelector('#label_points');
+    if (labelPoints) (labelPoints as SVGElement).style.pointerEvents = 'none';
+    const points = svg.querySelector('#points');
+    if (points) (points as SVGElement).style.pointerEvents = 'none';
+
     const paths = svg.querySelectorAll('path[id^="GH"]');
 
     paths.forEach((path) => {
