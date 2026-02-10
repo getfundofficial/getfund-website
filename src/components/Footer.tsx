@@ -82,7 +82,7 @@ export default function Footer() {
 
   const quickLinks = (footerConfig?.quick_links && footerConfig.quick_links.length > 0
     ? footerConfig.quick_links
-        .filter(link => link.visible !== false) // Only show visible links
+        .filter(link => link.visible !== false) // Filter hidden links (CMS controlled)
         .map(link => ({
           ...link,
           name: link.name === 'Who We Are' ? 'About' : link.name,

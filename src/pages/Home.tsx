@@ -65,12 +65,12 @@ interface PageContent {
   achievementsSubtitle?: string;
   achievementCircles?: AchievementCircle[];
   achievementCategories?: AchievementCategory[];
-  // Stats Section (Empowering Ghana)
+  // Stats Section (Empowering Ghana) - CMS editable from Home page editor
   statsTitle?: string;
   statsDescription?: string;
   statsBackgroundImage?: string;
   impactStats?: ImpactStat[];
-  // Testimonials Section
+  // Testimonials Section - CMS editable from Home page editor
   testimonialsTitle?: string;
   testimonialsSubtitle?: string;
   testimonials?: Testimonial[];
