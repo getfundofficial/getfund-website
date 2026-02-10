@@ -151,7 +151,22 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
               <article>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4">
                   <OptimizedImage
-                    src={article.image || '/images/news/news-placeholder.svg'}
+                    src={(() => {
+                      const img = article.image;
+                      const lowerImg = img?.toLowerCase() || '';
+                      const isValidImage = img &&
+                        !lowerImg.includes('logo-light') &&
+                        !lowerImg.includes('logo-dark') &&
+                        !lowerImg.includes('site-icon') &&
+                        !lowerImg.includes('getfund-site-icon') &&
+                        !lowerImg.includes('getfund-cropped') &&
+                        !lowerImg.includes('cropped-getfund') &&
+                        !lowerImg.includes('placeholder') &&
+                        !lowerImg.includes('favicon') &&
+                        !lowerImg.endsWith('icon.png') &&
+                        !lowerImg.endsWith('logo.png');
+                      return isValidImage ? img : '/images/news/news-placeholder.svg';
+                    })()}
                     alt={article.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     fallbackSrc="/images/news/news-placeholder.svg"
