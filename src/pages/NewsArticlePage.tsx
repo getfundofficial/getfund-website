@@ -48,6 +48,7 @@ interface NewsArticle {
   excerpt: string;
   content: string;
   image: string | null;
+  images?: string[];
   author: string;
   date: string;
   tags: string[];
@@ -123,21 +124,27 @@ export default function NewsArticlePage() {
     fetchArticle();
   }, [slug]);
 
-  // Extract images from content and combine with featured image
+  // Get images from API meta_data (preferred) or extract from content as fallback
   // Must be called before any conditional returns to follow Rules of Hooks
   const { allImages, contentWithoutImages } = useMemo(() => {
     if (!article) {
       return { allImages: [], contentWithoutImages: '' };
     }
 
-    const { images: contentImages, contentWithoutImages } = extractImagesFromHtml(article.content || '');
+    // Remove any images from content for cleaner display
+    const { contentWithoutImages } = extractImagesFromHtml(article.content || '');
 
-    // Combine featured image with content images (featured image first if it exists)
+    // Use images array from API if available (from meta_data)
+    // This contains all scraped images from the source article
+    if (article.images && article.images.length > 0) {
+      return { allImages: article.images, contentWithoutImages };
+    }
+
+    // Fallback: use featured image only
     const allImages: string[] = [];
     if (article.image) {
       allImages.push(article.image);
     }
-    allImages.push(...contentImages);
 
     return { allImages, contentWithoutImages };
   }, [article]);

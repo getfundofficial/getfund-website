@@ -81,13 +81,15 @@ export default function Footer() {
   ].filter(Boolean) : defaultSocialLinks;
 
   const quickLinks = (footerConfig?.quick_links && footerConfig.quick_links.length > 0
-    ? footerConfig.quick_links.map(link => ({
-        ...link,
-        name: link.name === 'Who We Are' ? 'About' : link.name,
-        href: link.href === '/who-we-are' ? '/about' : link.href
-      }))
+    ? footerConfig.quick_links
+        .filter(link => link.visible !== false) // Only show visible links
+        .map(link => ({
+          ...link,
+          name: link.name === 'Who We Are' ? 'About' : link.name,
+          href: link.href === '/who-we-are' ? '/about' : link.href
+        }))
     : defaultQuickLinks
-  ).filter(link => link.href !== '/impact' && link.name !== 'Impact');
+  );
 
   return (
     <footer id="contact" className="text-white glass-footer full-bleed" style={{ backgroundColor }}>

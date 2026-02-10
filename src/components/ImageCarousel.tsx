@@ -47,14 +47,16 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
   if (images.length === 1) {
     return (
       <div className="mb-6">
-        <img
-          src={images[0]}
-          alt={title || 'Article image'}
-          className="w-full h-auto object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
-          }}
-        />
+        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+          <img
+            src={images[0]}
+            alt={title || 'Article image'}
+            className="absolute inset-0 w-full h-full object-contain bg-gray-100"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+            }}
+          />
+        </div>
       </div>
     );
   }
@@ -106,14 +108,16 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
       <Slider {...settings}>
         {images.map((image, index) => (
           <div key={index}>
-            <img
-              src={image}
-              alt={`${title || 'Article'} - Image ${index + 1}`}
-              className="w-full h-auto object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
-              }}
-            />
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <img
+                src={image}
+                alt={`${title || 'Article'} - Image ${index + 1}`}
+                className="absolute inset-0 w-full h-full object-contain bg-gray-100"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+                }}
+              />
+            </div>
           </div>
         ))}
       </Slider>

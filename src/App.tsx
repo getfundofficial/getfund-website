@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WhatWeDo from './pages/WhatWeDo';
 import WhoWeAre from './pages/WhoWeAre';
+import AboutEdit from './pages/AboutEdit';
 import Impact from './pages/Impact';
 import Resources from './pages/Resources';
 import NewsPage from './pages/NewsPage';
@@ -42,7 +43,8 @@ function App() {
           
           {/* About - Dedicated CMS-powered page */}
           <Route path="/about" element={<WhoWeAre />} />
-          
+          <Route path="/about/edit" element={<AboutEdit />} />
+
           {/* Impact - Dedicated CMS-powered page */}
           <Route path="/impact" element={<Impact />} />
           

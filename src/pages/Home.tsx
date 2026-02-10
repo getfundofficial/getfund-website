@@ -30,6 +30,21 @@ interface AchievementCategory {
   link?: string;
 }
 
+interface ImpactStat {
+  number: number;
+  suffix?: string;
+  label: string;
+  description?: string;
+}
+
+interface Testimonial {
+  quote: string;
+  authorName: string;
+  authorRole: string;
+  location?: string;
+  authorImage?: string;
+}
+
 interface PageContent {
   newsTitle?: string;
   newsSubtitle?: string;
@@ -50,6 +65,15 @@ interface PageContent {
   achievementsSubtitle?: string;
   achievementCircles?: AchievementCircle[];
   achievementCategories?: AchievementCategory[];
+  // Stats Section (Empowering Ghana)
+  statsTitle?: string;
+  statsDescription?: string;
+  statsBackgroundImage?: string;
+  impactStats?: ImpactStat[];
+  // Testimonials Section
+  testimonialsTitle?: string;
+  testimonialsSubtitle?: string;
+  testimonials?: Testimonial[];
 }
 
 // Default content when CMS is not available
@@ -128,6 +152,29 @@ export default function Home() {
               if (section.content.achievementCategories) {
                 content.achievementCategories = section.content.achievementCategories;
               }
+              // Stats section
+              if (section.content.statsTitle) {
+                content.statsTitle = section.content.statsTitle;
+              }
+              if (section.content.statsDescription) {
+                content.statsDescription = section.content.statsDescription;
+              }
+              if (section.content.statsBackgroundImage) {
+                content.statsBackgroundImage = section.content.statsBackgroundImage;
+              }
+              if (section.content.impactStats) {
+                content.impactStats = section.content.impactStats;
+              }
+              // Testimonials section
+              if (section.content.testimonialsTitle) {
+                content.testimonialsTitle = section.content.testimonialsTitle;
+              }
+              if (section.content.testimonialsSubtitle) {
+                content.testimonialsSubtitle = section.content.testimonialsSubtitle;
+              }
+              if (section.content.testimonials) {
+                content.testimonials = section.content.testimonials;
+              }
             }
             // Handle separate hero_slides section (legacy format)
             else if (section.section_key === 'hero_slides' && section.content) {
@@ -156,7 +203,7 @@ export default function Home() {
   }
 
   // Default testimonials data
-  const testimonials = [
+  const defaultTestimonials = [
     {
       quote: "GETFund scholarship changed my life. I was able to complete my medical degree and now I'm serving my community as a doctor.",
       authorName: "Dr. Ama Mensah",
@@ -180,6 +227,23 @@ export default function Home() {
     }
   ];
 
+  // Use CMS testimonials if available, otherwise use defaults
+  const testimonials = pageContent?.testimonials && pageContent.testimonials.length > 0
+    ? pageContent.testimonials
+    : defaultTestimonials;
+
+  // Default impact stats
+  const defaultImpactStats: ImpactStat[] = [
+    { number: 5000, suffix: '+', label: 'Scholarships Awarded', description: 'Supporting talented students' },
+    { number: 2000, suffix: '+', label: 'Schools Built', description: 'Across all regions' },
+    { number: 1000, suffix: '+', label: 'Infrastructure Projects', description: 'Completed nationwide' }
+  ];
+
+  // Use CMS impact stats if available, otherwise use defaults
+  const impactStats = pageContent?.impactStats && pageContent.impactStats.length > 0
+    ? pageContent.impactStats
+    : defaultImpactStats;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -199,7 +263,7 @@ export default function Home() {
           {/* Parallax Background - bg-fixed for desktop, bg-scroll for mobile (iOS doesn't support fixed) */}
           <div
             className="absolute inset-0 bg-scroll md:bg-fixed bg-center bg-cover"
-            style={{ backgroundImage: "url('/images/hero/main-slider-1.jpg')" }}
+            style={{ backgroundImage: `url('${pageContent?.statsBackgroundImage || '/images/hero/main-slider-1.jpg'}')` }}
           />
           <div className="absolute inset-0 bg-black/60" />
 
@@ -207,44 +271,32 @@ export default function Home() {
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Empowering Ghana Through Education
+                {pageContent?.statsTitle || 'Empowering Ghana Through Education'}
               </h2>
               <p className="text-lg text-white/80">
-                The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.
+                {pageContent?.statsDescription || 'The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.'}
               </p>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
-                  <AnimatedCounter end={5000} suffix="+" duration={2500} />
+            <div className={`grid grid-cols-1 ${impactStats.length === 4 ? 'md:grid-cols-4' : impactStats.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-8 max-w-4xl mx-auto mb-16`}>
+              {impactStats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
+                    <AnimatedCounter end={stat.number} suffix={stat.suffix || ''} duration={2000 + index * 200} />
+                  </div>
+                  <p className="font-semibold text-white">{stat.label}</p>
+                  {stat.description && <p className="text-sm text-white/70">{stat.description}</p>}
                 </div>
-                <p className="font-semibold text-white">Scholarships Awarded</p>
-                <p className="text-sm text-white/70">Supporting talented students</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
-                  <AnimatedCounter end={200} suffix="+" duration={2000} />
-                </div>
-                <p className="font-semibold text-white">Schools Built</p>
-                <p className="text-sm text-white/70">Across all regions</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
-                  <AnimatedCounter end={1000} suffix="+" duration={2200} />
-                </div>
-                <p className="font-semibold text-white">Infrastructure Projects</p>
-                <p className="text-sm text-white/70">Completed nationwide</p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Testimonials Section */}
         <TestimonialsSection
-          title="What Our Beneficiaries Say"
-          subtitle="Hear from students and communities whose lives have been transformed through GETFund support"
+          title={pageContent?.testimonialsTitle || "What Our Beneficiaries Say"}
+          subtitle={pageContent?.testimonialsSubtitle || "Hear from students and communities whose lives have been transformed through GETFund support"}
           testimonials={testimonials}
           variant="grid"
         />

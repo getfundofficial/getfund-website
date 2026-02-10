@@ -73,6 +73,7 @@ export interface NewsArticle {
   excerpt: string;
   content: string;
   image: string | null;
+  images?: string[];
   author: string;
   date: string;
   tags: string[];
@@ -120,6 +121,7 @@ export interface FooterConfig {
   quick_links: Array<{
     name: string;
     href: string;
+    visible?: boolean;
   }>;
   is_active: boolean;
   updated_at: string;
@@ -275,6 +277,9 @@ class CMSApiClient {
         return null;
       }
 
+      // Get images from meta_data if available
+      const metaImages = (article.meta_data?.images as string[]) || [];
+
       return {
         id: article.id,
         slug: article.slug,
@@ -282,6 +287,7 @@ class CMSApiClient {
         excerpt: article.excerpt,
         content: article.body || '',
         image: article.featured_image_url,
+        images: metaImages.length > 0 ? metaImages : (article.featured_image_url ? [article.featured_image_url] : []),
         author: article.author || 'GETFund',
         date: article.published_at || new Date().toISOString(),
         tags: article.category ? [article.category] : ['News'],

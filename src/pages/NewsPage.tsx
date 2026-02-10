@@ -267,16 +267,52 @@ export default function NewsPage() {
                     <Link to={`/news/${article.slug}`} className="block">
                       <div className="relative h-48">
                         <OptimizedImage
-                          src={article.image && article.image !== '/images/news/news-placeholder.svg' ? article.image : '/images/news/news-placeholder.svg'}
+                          src={(() => {
+                            // Check if image is valid (not null, not placeholder, not just the logo)
+                            const img = article.image;
+                            const lowerImg = img?.toLowerCase() || '';
+                            const isValidImage = img &&
+                              img !== '/images/news/news-placeholder.svg' &&
+                              !lowerImg.includes('logo-light') &&
+                              !lowerImg.includes('logo-dark') &&
+                              !lowerImg.includes('site-icon') &&
+                              !lowerImg.includes('getfund-site-icon') &&
+                              !lowerImg.includes('getfund-cropped') &&
+                              !lowerImg.includes('cropped-getfund') &&
+                              !lowerImg.includes('placeholder') &&
+                              !lowerImg.includes('favicon') &&
+                              !lowerImg.endsWith('icon.png') &&
+                              !lowerImg.endsWith('logo.png');
+                            return isValidImage ? img : '/images/news/news-placeholder.svg';
+                          })()}
                           alt={article.title}
                           className="h-48 w-full object-cover"
                           fallbackSrc="/images/news/news-placeholder.svg"
                         />
-                        <div className="absolute top-4 left-4 z-10">
-                          <span className="text-white px-3 py-1 text-xs font-semibold rounded" style={{ backgroundColor: '#2a3f75' }}>
-                            {article.category?.replace('_', ' ') || article.tags[0] || 'News'}
-                          </span>
-                        </div>
+                        {/* Only show approved category labels: News, Announcements, Press Releases, Events, Updates */}
+                        {(() => {
+                          const categoryLabels: Record<string, string> = {
+                            'NEWS': 'News',
+                            'ANNOUNCEMENT': 'Announcement',
+                            'ANNOUNCEMENTS': 'Announcement',
+                            'PRESS_RELEASE': 'Press Release',
+                            'PRESS RELEASE': 'Press Release',
+                            'EVENT': 'Event',
+                            'EVENTS': 'Event',
+                            'UPDATE': 'Update',
+                            'UPDATES': 'Update',
+                            'EVENTS AND UPDATES': 'Update'
+                          };
+                          const cat = article.category?.toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ').trim();
+                          const label = cat ? categoryLabels[cat] || categoryLabels[cat?.replace(/\s+/g, '_')] : null;
+                          return label ? (
+                            <div className="absolute top-4 left-4 z-10">
+                              <span className="text-white px-3 py-1 text-xs font-semibold rounded" style={{ backgroundColor: '#2a3f75' }}>
+                                {label}
+                              </span>
+                            </div>
+                          ) : null;
+                        })()}
                       </div>
                       <div className="p-5">
                         <div className="flex items-center gap-1 text-gray-500 text-sm mb-2">
