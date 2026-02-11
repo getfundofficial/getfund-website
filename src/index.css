@@ -236,6 +236,14 @@
   p {
     @apply text-base leading-relaxed;
     color: #4b5563;
+    text-align: justify;
+  }
+
+  /* Justify body text elements (not headings) */
+  li,
+  article,
+  .prose {
+    text-align: justify;
   }
 }
 

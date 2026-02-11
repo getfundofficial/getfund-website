@@ -1,14 +1,5 @@
 import { Phone, Mail, MapPin, Facebook, Linkedin, Instagram, Youtube } from 'lucide-react';
 
-// Custom WhatsApp icon with white outline (matching other social icons)
-function WhatsappIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0" {...props} xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.297-.767.967-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.007-.372-.009-.571-.009-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.099 3.205 5.077 4.366.71.306 1.263.489 1.695.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.007-1.413.248-.694.248-1.288.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2a.5.5 0 0 0 .64.64l3.032-.892A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" />
-    </svg>
-  );
-}
-
 // Custom X (Twitter) icon
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -49,7 +40,6 @@ export default function Footer() {
     { icon: Linkedin, href: 'https://www.linkedin.com/company/getfundofficial/', label: 'LinkedIn' },
     { icon: Instagram, href: 'https://www.instagram.com/getfundofficial/', label: 'Instagram' },
     { icon: Youtube, href: 'https://www.youtube.com/@GETFundOfficial', label: 'YouTube' },
-    { icon: WhatsappIcon, href: 'https://whatsapp.com/channel/0029VaF1QwFJvQ1Q2Q1Q2Q', label: 'WhatsApp Channel' },
   ];
 
   const defaultQuickLinks = [
@@ -77,7 +67,6 @@ export default function Footer() {
     footerConfig.social_links.linkedin ? { icon: Linkedin, href: footerConfig.social_links.linkedin, label: 'LinkedIn' } : null,
     footerConfig.social_links.instagram ? { icon: Instagram, href: footerConfig.social_links.instagram, label: 'Instagram' } : null,
     footerConfig.social_links.youtube ? { icon: Youtube, href: footerConfig.social_links.youtube, label: 'YouTube' } : null,
-    footerConfig.social_links.whatsapp ? { icon: WhatsappIcon, href: footerConfig.social_links.whatsapp, label: 'WhatsApp Channel' } : null,
   ].filter(Boolean) : defaultSocialLinks;
 
   const quickLinks = (footerConfig?.quick_links && footerConfig.quick_links.length > 0
