@@ -183,13 +183,6 @@ export default function RegionalMapSVG({
         }
       });
 
-      // Click handler
-      pathElement.addEventListener('click', () => {
-        if (regionName) {
-          onRegionClick(regionName);
-        }
-      });
-
       // Apply selected state styling with pulsate animation
       if (selectedRegion === regionName) {
         pathElement.classList.add('region-selected');
@@ -210,7 +203,7 @@ export default function RegionalMapSVG({
         pathElement.replaceWith(pathElement.cloneNode(true));
       });
     };
-  }, [svgContent, selectedRegion, onRegionHover, onRegionClick, getRegionBaseColor]);
+  }, [svgContent, selectedRegion, onRegionHover, getRegionBaseColor]);
 
   // Update region colors when data or view mode changes
   useEffect(() => {
@@ -252,6 +245,15 @@ export default function RegionalMapSVG({
         ref={containerRef}
         className="relative w-full"
         dangerouslySetInnerHTML={{ __html: svgContent }}
+        onClick={(e) => {
+          const target = e.target as Element;
+          console.log('[MAP CLICK] tagName:', target.tagName, 'id:', target.id);
+          if (target.id?.startsWith('GH')) {
+            const name = regionIdToName[target.id];
+            console.log('[MAP CLICK] Resolved region:', name);
+            if (name) onRegionClick(name);
+          }
+        }}
       />
     </div>
   );

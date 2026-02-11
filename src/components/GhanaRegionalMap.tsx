@@ -61,6 +61,7 @@ export default function GhanaRegionalMap({
   };
 
   const handleRegionClick = (regionName: string) => {
+    console.log('[PARENT] handleRegionClick called with:', regionName);
     setSelectedRegion(regionName);
   };
 
