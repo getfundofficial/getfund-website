@@ -239,6 +239,14 @@
     text-align: justify;
   }
 
+  /* Override justify for centered containers */
+  .text-center p,
+  .text-center li,
+  .text-right p,
+  .text-left p {
+    text-align: inherit;
+  }
+
   /* Justify body text elements (not headings) */
   li,
   article,

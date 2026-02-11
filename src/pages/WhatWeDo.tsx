@@ -45,6 +45,7 @@ export default function WhatWeDo() {
             setPageContent(contentSection.content);
           }
         }
+        
       } catch (error) {
         console.error('Failed to fetch what-we-do content from CMS:', error);
       } finally {
