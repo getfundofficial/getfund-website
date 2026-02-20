@@ -518,7 +518,14 @@ export default function Scholarships() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-16 md:py-24">
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0">
+            <img
+              src={content.hero.heroImage || '/images/scholarship/scholarship-programme-hero.jpg'}
+              alt=""
+              className="w-full h-full object-cover opacity-20"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2a3f75]/80 to-[#1a2a55]/90" />
           <div className="relative container mx-auto px-4 max-w-6xl">
             <div className="flex items-center gap-3 mb-4">
               <GraduationCap className="w-10 h-10 text-getfund-gold" />
@@ -593,14 +600,27 @@ export default function Scholarships() {
                       ))}
                     </div>
                   </div>
-                  <div>
-                    {content.hero.heroImage && (
-                      <img
-                        src={content.hero.heroImage}
-                        alt="GETFund Scholarship Programme"
-                        className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
-                      />
-                    )}
+                  <div className="grid grid-cols-2 gap-3">
+                    <img
+                      src="/images/scholarship/service-details-01.jpg"
+                      alt="GETFund Scholarship students"
+                      className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md"
+                    />
+                    <img
+                      src="/images/scholarship/service-details-02.jpg"
+                      alt="GETFund education support"
+                      className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md"
+                    />
+                    <img
+                      src="/images/scholarship/service-details-03.jpg"
+                      alt="GETFund scholars programme"
+                      className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md"
+                    />
+                    <img
+                      src="/images/scholarship/service-details-04.jpg"
+                      alt="GETFund academic facilities"
+                      className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md"
+                    />
                   </div>
                 </div>
               </div>
