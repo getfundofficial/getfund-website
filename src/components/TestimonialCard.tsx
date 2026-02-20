@@ -84,30 +84,30 @@ export default function TestimonialCard({
 
   // Default card variant
   return (
-    <div className={`bg-white rounded-xl shadow-lg p-6 sm:p-8 hover:shadow-xl transition-shadow duration-300 ${className}`}>
-      <Quote className="w-8 h-8 text-getfund-gold mb-4 opacity-80" />
-      <blockquote className="text-gray-700 italic mb-6 leading-relaxed line-clamp-4">
+    <div className={`bg-white rounded-xl shadow-lg p-3 sm:p-6 md:p-8 hover:shadow-xl transition-shadow duration-300 ${className}`}>
+      <Quote className="w-5 h-5 sm:w-8 sm:h-8 text-getfund-gold mb-2 sm:mb-4 opacity-80" />
+      <blockquote className="text-[10px] sm:text-base text-gray-700 italic mb-3 sm:mb-6 leading-relaxed line-clamp-3 sm:line-clamp-4">
         "{quote}"
       </blockquote>
-      <div className="flex items-center gap-4 border-t pt-4">
+      <div className="flex items-center gap-2 sm:gap-4 border-t pt-2 sm:pt-4">
         {authorImage ? (
           <img
             src={authorImage}
             alt={authorName}
-            className="w-14 h-14 rounded-full object-cover border-2 border-gray-100"
+            className="w-8 h-8 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-gray-100 flex-shrink-0"
           />
         ) : (
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-getfund-primary to-getfund-secondary flex items-center justify-center text-white font-bold text-xl">
+          <div className="w-8 h-8 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-getfund-primary to-getfund-secondary flex items-center justify-center text-white font-bold text-xs sm:text-xl flex-shrink-0">
             {authorName.charAt(0)}
           </div>
         )}
-        <div>
-          <p className="font-semibold text-gray-900">{authorName}</p>
+        <div className="min-w-0">
+          <p className="font-semibold text-[10px] sm:text-base text-gray-900 truncate">{authorName}</p>
           {authorRole && (
-            <p className="text-sm text-gray-500">{authorRole}</p>
+            <p className="text-[9px] sm:text-sm text-gray-500 truncate">{authorRole}</p>
           )}
           {location && (
-            <p className="text-xs text-gray-400">{location}</p>
+            <p className="text-[8px] sm:text-xs text-gray-400 truncate hidden sm:block">{location}</p>
           )}
         </div>
       </div>
@@ -132,15 +132,15 @@ export function TestimonialsSection({
   className = '',
 }: TestimonialsSectionProps) {
   return (
-    <section className={`py-16 sm:py-20 bg-gray-50 ${className}`}>
+    <section className={`py-10 sm:py-20 bg-gray-50 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6 sm:mb-12">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-xs sm:text-lg max-w-2xl mx-auto line-clamp-2 sm:line-clamp-none">
               {subtitle}
             </p>
           )}
@@ -151,7 +151,7 @@ export function TestimonialsSection({
             <TestimonialCard {...testimonials[0]} variant="featured" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-3 gap-3 sm:gap-8">
             {testimonials.map((testimonial, index) => (
               <TestimonialCard key={index} {...testimonial} variant="card" />
             ))}

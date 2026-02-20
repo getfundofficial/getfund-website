@@ -115,14 +115,14 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
   }
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
+    <section className="py-10 sm:py-16 md:py-20 lg:py-24 bg-white">
       {/* Scroll anchor with offset for fixed header */}
       <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with title and View All link */}
-        <div className="flex items-start justify-between mb-8 sm:mb-12">
+        <div className="flex items-start justify-between mb-6 sm:mb-12">
           <div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{title || 'Latest News & Updates'}</h2>
+            <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{title || 'Latest News & Updates'}</h2>
             <div className="w-16 h-1 bg-getfund-primary"></div>
           </div>
           <Link
@@ -134,7 +134,7 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
         </div>
 
         {/* News Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-3 gap-3 sm:gap-8">
           {[...articles]
             .sort((a, b) => {
               const dateA = new Date(a.publishedAt || a.date || 0).getTime();
@@ -149,7 +149,7 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
               className="group block"
             >
               <article>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-2 sm:mb-4">
                   <OptimizedImage
                     src={(() => {
                       const img = article.image;
@@ -172,12 +172,12 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
                     fallbackSrc="/images/news/news-placeholder.svg"
                   />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 group-hover:text-getfund-primary transition-colors line-clamp-2">
+                <h3 className="text-[11px] sm:text-xl font-semibold text-gray-900 mb-1 sm:mb-2 group-hover:text-getfund-primary transition-colors line-clamp-2">
                   {article.title}
                 </h3>
                 <time
                   dateTime={article.publishedAt || article.date || ''}
-                  className="text-sm text-gray-500"
+                  className="text-[9px] sm:text-sm text-gray-500"
                 >
                   {(article.publishedAt || article.date)
                     ? new Date((article.publishedAt || article.date) as string).toLocaleDateString('en-GB', {
@@ -193,10 +193,10 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
         </div>
 
         {/* Mobile View All link */}
-        <div className="text-center mt-8 sm:hidden">
+        <div className="text-center mt-6 sm:hidden">
           <Link
             to="/news"
-            className="inline-flex items-center gap-2 text-getfund-primary font-medium"
+            className="inline-flex items-center gap-2 text-getfund-primary font-medium text-sm"
           >
             View All <ArrowRight className="w-4 h-4" />
           </Link>
