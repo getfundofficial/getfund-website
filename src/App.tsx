@@ -8,9 +8,8 @@ import NewsPage from './pages/NewsPage';
 import NewsArticlePage from './pages/NewsArticlePage';
 import FAQ from './pages/FAQ';
 import ScholarshipApply from './pages/ScholarshipApply';
-import ScholarshipApply2 from './pages/ScholarshipApply2';
+import Scholarships from './pages/Scholarships';
 import InfrastructureProjects from './pages/InfrastructureProjects';
-import ScholarshipProgramme from './pages/ScholarshipProgramme';
 import EducationSectorSupport from './pages/EducationSectorSupport';
 import CommunitySHSProgramme from './pages/CommunitySHSProgramme';
 import SecondaryEducationImprovementProgramme from './pages/SecondaryEducationImprovementProgramme';
@@ -78,10 +77,10 @@ function App() {
 
           {/* Other Pages */}
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/scholarships" element={<Scholarships />} />
           <Route path="/scholarship-apply" element={<ScholarshipApply />} />
-          <Route path="/scholarship-apply-2" element={<ScholarshipApply2 />} />
           <Route path="/service/infrastructure-projects" element={<InfrastructureProjects />} />
-          <Route path="/service/scholarship-programme" element={<ScholarshipProgramme />} />
+          <Route path="/service/scholarship-programme" element={<Scholarships />} />
           <Route path="/service/education-sector-support" element={<EducationSectorSupport />} />
           <Route path="/portfolio/community-shs-programme" element={<CommunitySHSProgramme />} />
           <Route path="/portfolio/secondary-education-improvement-programme" element={<SecondaryEducationImprovementProgramme />} />

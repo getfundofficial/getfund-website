@@ -259,7 +259,7 @@ export default function Home() {
         />
 
         {/* Empowering Ghana Section with Parallax Background */}
-        <section className="relative py-16 md:py-20 overflow-hidden">
+        <section className="relative py-10 md:py-20 overflow-hidden">
           {/* Parallax Background - bg-fixed for desktop, bg-scroll for mobile (iOS doesn't support fixed) */}
           <div
             className="absolute inset-0 bg-scroll md:bg-fixed bg-center bg-cover"
@@ -269,24 +269,24 @@ export default function Home() {
 
           {/* Content */}
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
+              <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-2 md:mb-4">
                 {pageContent?.statsTitle || 'Empowering Ghana Through Education'}
               </h2>
-              <p className="text-lg text-white/80">
+              <p className="text-sm sm:text-lg text-white/80 line-clamp-3 sm:line-clamp-none">
                 {pageContent?.statsDescription || 'The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.'}
               </p>
             </div>
 
             {/* Stats */}
-            <div className={`grid grid-cols-1 ${impactStats.length === 4 ? 'md:grid-cols-4' : impactStats.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-8 max-w-4xl mx-auto mb-16`}>
+            <div className={`grid ${impactStats.length === 4 ? 'grid-cols-4' : impactStats.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} gap-4 md:gap-8 max-w-4xl mx-auto mb-8 md:mb-16`}>
               {impactStats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-400 mb-2">
+                  <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-green-400 mb-1 md:mb-2">
                     <AnimatedCounter end={stat.number} suffix={stat.suffix || ''} duration={2000 + index * 200} />
                   </div>
-                  <p className="font-semibold text-white">{stat.label}</p>
-                  {stat.description && <p className="text-sm text-white/70">{stat.description}</p>}
+                  <p className="text-xs sm:text-base font-semibold text-white">{stat.label}</p>
+                  {stat.description && <p className="text-[10px] sm:text-sm text-white/70 hidden sm:block">{stat.description}</p>}
                 </div>
               ))}
             </div>

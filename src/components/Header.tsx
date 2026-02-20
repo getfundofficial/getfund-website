@@ -13,20 +13,21 @@ import SearchModal from './SearchModal';
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { id: '1', slug: 'about', title: 'About', label: 'About' },
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
-  { id: '3', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
+  { id: '3', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
+  { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
   {
-    id: '4',
+    id: '5',
     slug: 'fundraising',
     title: 'Fundraising',
     label: 'Fundraising',
     children: [
-      { id: '4-1', slug: 'why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising', parentId: '4' },
-      { id: '4-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '4' },
-      { id: '4-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '4' },
-      { id: '4-4', slug: 'lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '4' },
-      { id: '4-5', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '4' },
-      { id: '4-6', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '4' },
-      { id: '4-7', slug: 'events', title: 'Events', label: 'Events', parentId: '4' }
+      { id: '5-1', slug: 'why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising', parentId: '5' },
+      { id: '5-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '5' },
+      { id: '5-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '5' },
+      { id: '5-4', slug: 'lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '5' },
+      { id: '5-5', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '5' },
+      { id: '5-6', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '5' },
+      { id: '5-7', slug: 'events', title: 'Events', label: 'Events', parentId: '5' }
     ]
   }
 ];
@@ -86,7 +87,7 @@ export default function Header() {
           // Add lottery after fundraising-campaigns
           const campaignsIndex = item.children.findIndex(child => child.slug === 'fundraising-campaigns');
           const lotteryItem: MenuItem = {
-            id: '4-lottery',
+            id: '5-lottery',
             slug: 'lottery',
             title: 'Scholarship Lottery',
             label: 'Scholarship Lottery',

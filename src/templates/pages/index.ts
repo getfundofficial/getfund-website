@@ -11,6 +11,7 @@ import { AboutPage as WhoWeArePage } from './WhoWeArePage';
 import { ContactPage } from './ContactPage';
 import { WhatWeDoPage } from './WhatWeDoPage';
 import { ScholarshipProgrammePage } from './ScholarshipProgrammePage';
+import { ScholarshipsPage } from './ScholarshipsPage';
 import { InfrastructureProjectsPage } from './InfrastructureProjectsPage';
 import { ImpactPage } from './ImpactPage';
 import { FAQPage } from './FAQPage';
@@ -32,6 +33,7 @@ export const pageTemplateRegistry: Record<string, React.ComponentType<any>> = {
   'who-we-are': WhoWeArePage,
   'what-we-do': WhatWeDoPage,
   'scholarship-programme': ScholarshipProgrammePage,
+  'scholarships': ScholarshipsPage,
   'infrastructure-projects': InfrastructureProjectsPage,
   'impact': ImpactPage,
   'faq': FAQPage,
@@ -128,6 +130,12 @@ export const pageTemplateMetadata: Record<string, PageTemplateMetadata> = {
     name: 'scholarship-programme',
     displayName: 'Scholarship Programme',
     description: 'Template for scholarship programs with eligibility, process, and success stories',
+    contentSchema: { type: 'object', properties: {} },
+  },
+  'scholarships': {
+    name: 'scholarships',
+    displayName: 'Scholarships',
+    description: 'Comprehensive scholarships page with programme overview, application info, FAQs, and scholars database',
     contentSchema: { type: 'object', properties: {} },
   },
   'infrastructure-projects': {

@@ -13,7 +13,7 @@ function NextArrow(props: ArrowProps) {
   return (
     <button
       type="button"
-      className="hero-nav-arrow absolute top-1/2 right-4 sm:right-6 md:right-8 -translate-y-1/2 z-20 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
+      className="hero-nav-arrow absolute top-1/2 right-2 sm:right-6 md:right-8 -translate-y-1/2 z-20 w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
       onClick={onClick}
       aria-label="Next slide"
     >
@@ -27,7 +27,7 @@ function PrevArrow(props: ArrowProps) {
   return (
     <button
       type="button"
-      className="hero-nav-arrow absolute top-1/2 left-4 sm:left-6 md:left-8 -translate-y-1/2 z-20 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
+      className="hero-nav-arrow absolute top-1/2 left-2 sm:left-6 md:left-8 -translate-y-1/2 z-20 w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white/80 hover:text-white shadow-lg transition-all duration-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation flex items-center justify-center opacity-0 group-hover:opacity-100"
       onClick={onClick}
       aria-label="Previous slide"
     >
@@ -645,7 +645,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
       setCurrentSlide(current);
     },
     appendDots: (dots: React.ReactNode) => (
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-20">
         <ul className="flex gap-2 justify-center items-center">{dots}</ul>
       </div>
     ),
@@ -674,13 +674,28 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
           return (
             <div key={idx}>
               <div
-                className="relative h-[calc(100vh-80px)] w-full flex items-center justify-center"
+                className="relative w-full h-[70vh] sm:h-[calc(100vh-80px)] flex items-center justify-center"
               >
+                {/* Frosted glass background — blurred image fill visible on mobile only */}
+                {!isVideo && (
+                  <div className="absolute inset-0 overflow-hidden sm:hidden" aria-hidden="true">
+                    <img
+                      src={slide.src}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl"
+                    />
+                    <div className="absolute inset-0 bg-gray-500/40 backdrop-blur-sm" />
+                  </div>
+                )}
+                {isVideo && (
+                  <div className="absolute inset-0 overflow-hidden sm:hidden bg-gray-400/30 backdrop-blur-sm" aria-hidden="true" />
+                )}
+
                 {/* Video or Image Background */}
                 {isVideo && videoSource ? (
                   videoSource.type === 'youtube' || videoSource.type === 'vimeo' ? (
                     // YouTube/Vimeo - use wrapper div for full-screen cover effect
-                    <div className="absolute inset-0 overflow-hidden bg-black">
+                    <div className="absolute inset-0 overflow-hidden">
                       <iframe
                         ref={(el) => { iframeRefs.current[idx] = el; }}
                         src={videoSource.src}
@@ -699,14 +714,14 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                       />
                     </div>
                   ) : (
-                    // Direct video file - full screen cover
-                    <div className="absolute inset-0 overflow-hidden bg-black">
+                    // Direct video file
+                    <div className="absolute inset-0 overflow-hidden">
                       <video
                         ref={(el) => { videoRefs.current[idx] = el; }}
                         autoPlay
                         muted
                         playsInline
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-contain sm:object-cover"
                         onEnded={handleVideoEnded}
                         onLoadedMetadata={(e) => handleVideoLoadedMetadata(idx, e.currentTarget)}
                       >
@@ -716,12 +731,12 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     </div>
                   )
                 ) : (
-                  // Image - full screen cover
+                  // Image — contain on mobile (full image visible), cover on desktop
                   <div className="absolute inset-0 overflow-hidden">
                     <OptimizedImage
                       src={slide.src}
                       alt={slide.alt}
-                      className="absolute inset-0 w-full h-full object-cover object-center"
+                      className="absolute inset-0 w-full h-full object-contain sm:object-cover object-center"
                       width={1920}
                       height={1080}
                       priority={idx === 0}
@@ -737,28 +752,28 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
 
                 {/* Blue Content Box - Bottom Left - Fixed size */}
                 <div
-                  className="absolute inset-0 z-20 flex items-end justify-start px-4 sm:px-8 md:px-12 pb-12 sm:pb-16 md:pb-20 transition-opacity duration-1000"
+                  className="absolute inset-0 z-20 flex items-end justify-start px-3 sm:px-8 md:px-12 pb-14 sm:pb-16 md:pb-20 transition-opacity duration-1000"
                   style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1 }}
                 >
                   <div
-                    className="slide-content pointer-events-auto p-6 sm:p-8 md:p-10 max-w-xl"
+                    className="slide-content pointer-events-auto p-4 sm:p-8 md:p-10 max-w-[calc(100%-0.5rem)] sm:max-w-xl"
                     style={getBlueBoxStyle(slide.blueBox)}
                   >
                     {(slide.blueBox?.text || slide.blueBoxText) && (
-                      <span className="inline-block text-sm text-blue-200 mb-2 uppercase tracking-wider font-medium">
+                      <span className="inline-block text-xs sm:text-sm text-blue-200 mb-1 sm:mb-2 uppercase tracking-wider font-medium">
                         {slide.blueBox?.text || slide.blueBoxText}
                       </span>
                     )}
-                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-4 leading-tight text-white`}>
+                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-2 sm:mb-4 leading-tight text-white`}>
                       {slide.headline}
                     </h1>
-                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-5 text-gray-200 leading-relaxed`}>
+                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-3 sm:mb-5 text-gray-200 leading-relaxed line-clamp-3 sm:line-clamp-none`}>
                       {slide.description}
                     </p>
                     {slide.cta && (
                       <Link
                         to={slide.ctaLink || "/scholarship-apply"}
-                        className="inline-flex items-center gap-2 text-white text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        className="inline-flex items-center gap-2 text-white text-sm sm:text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
                         aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                       >
                         {slide.ctaText || "Apply Now"}
