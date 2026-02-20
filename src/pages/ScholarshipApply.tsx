@@ -15,6 +15,7 @@ interface ScholarshipApplyContent {
   hero?: {
     title: string;
     subtitle?: string;
+    heroImage?: string;
   };
   requiredDocuments?: {
     heading: string;
@@ -105,18 +106,26 @@ export default function ScholarshipApply() {
       <Header />
       <Breadcrumb />
 
-      {/* Page Title Section - Clean, minimal */}
-      <section className="bg-white pt-8 pb-6">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex items-center gap-3 mb-2">
-            <GraduationCap className="w-8 h-8" style={{ color: '#2a3f75' }} />
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-              {content.hero?.title || 'Apply for GETFund Scholarship'}
-            </h1>
+      {/* Hero Banner with Cover Image */}
+      <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-12 md:py-16">
+        <div className="absolute inset-0">
+          <img
+            src={content.hero?.heroImage || '/images/scholarship/scholarship-cover.jpg'}
+            alt=""
+            className="w-full h-full object-cover opacity-20"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2a3f75]/80 to-[#1a2a55]/90" />
+        <div className="relative container mx-auto px-4 max-w-6xl">
+          <div className="flex items-center gap-3 mb-3">
+            <GraduationCap className="w-10 h-10 text-getfund-gold" />
+            <span className="text-getfund-gold font-semibold tracking-wide uppercase text-sm">Scholarship Application</span>
           </div>
-          <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          <h1 className="text-3xl md:text-4xl font-bold mb-3">
+            {content.hero?.title || 'Apply for GETFund Scholarship'}
+          </h1>
           {content.hero?.subtitle && (
-            <p className="text-gray-600 mt-4 max-w-3xl">
+            <p className="text-lg text-white/80 max-w-3xl">
               {content.hero.subtitle}
             </p>
           )}
