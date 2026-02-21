@@ -9,6 +9,10 @@ import NewsArticlePage from './pages/NewsArticlePage';
 import FAQ from './pages/FAQ';
 import ScholarshipApply from './pages/ScholarshipApply';
 import Scholarships from './pages/Scholarships';
+import ScholarshipOverview from './pages/ScholarshipOverview';
+import PartnerUniversities from './pages/PartnerUniversities';
+import ScholarshipHowToApply from './pages/ScholarshipHowToApply';
+import GetfundScholars from './pages/GetfundScholars';
 import InfrastructureProjects from './pages/InfrastructureProjects';
 import EducationSectorSupport from './pages/EducationSectorSupport';
 import CommunitySHSProgramme from './pages/CommunitySHSProgramme';
@@ -75,12 +79,18 @@ function App() {
           <Route path="/payment/success" element={<PaymentCallback />} />
           <Route path="/payment/test-success" element={<TestSuccess />} />
 
+          {/* Scholarships Pages */}
+          <Route path="/scholarships" element={<Scholarships />} />
+          <Route path="/scholarships/overview" element={<ScholarshipOverview />} />
+          <Route path="/scholarships/partner-universities" element={<PartnerUniversities />} />
+          <Route path="/scholarships/how-to-apply" element={<ScholarshipHowToApply />} />
+          <Route path="/scholarships/getfund-scholars" element={<GetfundScholars />} />
+          <Route path="/scholarship-apply" element={<ScholarshipApply />} />
+
           {/* Other Pages */}
           <Route path="/faq" element={<FAQ />} />
-          <Route path="/scholarships" element={<Scholarships />} />
-          <Route path="/scholarship-apply" element={<ScholarshipApply />} />
           <Route path="/service/infrastructure-projects" element={<InfrastructureProjects />} />
-          <Route path="/service/scholarship-programme" element={<Scholarships />} />
+          <Route path="/service/scholarship-programme" element={<ScholarshipOverview />} />
           <Route path="/service/education-sector-support" element={<EducationSectorSupport />} />
           <Route path="/portfolio/community-shs-programme" element={<CommunitySHSProgramme />} />
           <Route path="/portfolio/secondary-education-improvement-programme" element={<SecondaryEducationImprovementProgramme />} />

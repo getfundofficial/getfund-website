@@ -452,11 +452,12 @@ class CMSApiClient {
   }
 
   /**
-   * Fetch active partners
+   * Fetch active partners, optionally filtered by category
    */
-  async getPartners(): Promise<Partner[]> {
+  async getPartners(category?: string): Promise<Partner[]> {
     try {
-      const url = `${this.baseUrl}/partners`;
+      const params = category ? `?category=${encodeURIComponent(category)}` : '';
+      const url = `${this.baseUrl}/partners${params}`;
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -522,6 +523,7 @@ export interface Partner {
   logo_url: string;
   website_url?: string;
   description?: string;
+  category?: string;
   display_order: number;
   is_active: boolean;
 }

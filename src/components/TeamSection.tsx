@@ -211,7 +211,13 @@ export default function TeamSection({
             </p>
 
             {/* Action Buttons */}
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
+              <button
+                onClick={handleChairmanClick}
+                className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
+              >
+                Board Chair
+              </button>
               <button
                 onClick={handleBoardOfDirectorsClick}
                 className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
@@ -227,48 +233,9 @@ export default function TeamSection({
             </div>
           </div>
 
-          {/* Leadership Cards: Chairman, Administrator, Deputy Admin, Financial Controller */}
+          {/* Leadership Cards: Administrator, Deputy Admin, Financial Controller */}
           <div className="mb-12">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Board Chairman Card */}
-              {chairman ? (
-                <div
-                  className="group cursor-pointer"
-                  onClick={handleChairmanClick}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleChairmanClick();
-                    }
-                  }}
-                  aria-label={`View ${chairman.name} profile`}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <img
-                      src={chairman.image}
-                      alt={chairman.name}
-                      className="w-full h-full object-cover object-top transition-all duration-300 scale-110 group-hover:scale-[1.15]"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/images/board/s8507362-member1.jpg';
-                      }}
-                    />
-                  </div>
-                  <div className="pt-4">
-                    <p className="text-xs font-semibold text-getfund-primary uppercase tracking-wider mb-1">Board Chairman</p>
-                    <h3 className="text-lg font-bold text-gray-900">{chairman.name}</h3>
-                    <p className="text-sm text-gray-600">{chairman.title}</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
-                  <p className="text-gray-400 text-center text-sm">
-                    Board Chairman<br />coming soon
-                  </p>
-                </div>
-              )}
-
+            <div className="grid md:grid-cols-3 gap-6">
               {/* Current Administrator Card */}
               {currentAdministrator ? (
                 <div

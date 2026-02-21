@@ -13,7 +13,18 @@ import SearchModal from './SearchModal';
 const DEFAULT_MENU_ITEMS: MenuItem[] = [
   { id: '1', slug: 'about', title: 'About', label: 'About' },
   { id: '2', slug: 'what-we-do', title: 'What We Do', label: 'What We Do' },
-  { id: '3', slug: 'scholarships', title: 'Scholarships', label: 'Scholarships' },
+  {
+    id: '3',
+    slug: 'scholarships',
+    title: 'Scholarships',
+    label: 'Scholarships',
+    children: [
+      { id: '3-1', slug: 'overview', title: 'Programme Overview', label: 'Programme Overview', parentId: '3' },
+      { id: '3-2', slug: 'partner-universities', title: 'Partner Universities', label: 'Partner Universities', parentId: '3' },
+      { id: '3-3', slug: 'how-to-apply', title: 'How to Apply', label: 'How to Apply', parentId: '3' },
+      { id: '3-4', slug: 'getfund-scholars', title: 'GETFund Scholars', label: 'GETFund Scholars', parentId: '3' },
+    ]
+  },
   { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
   {
     id: '5',
