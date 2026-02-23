@@ -1,34 +1,40 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import WhatWeDo from './pages/WhatWeDo';
-import WhoWeAre from './pages/WhoWeAre';
-import AboutEdit from './pages/AboutEdit';
-import Impact from './pages/Impact';
-import Resources from './pages/Resources';
-import NewsPage from './pages/NewsPage';
-import NewsArticlePage from './pages/NewsArticlePage';
-import FAQ from './pages/FAQ';
-import ScholarshipApply from './pages/ScholarshipApply';
-import Scholarships from './pages/Scholarships';
-import ScholarshipOverview from './pages/ScholarshipOverview';
-import PartnerUniversities from './pages/PartnerUniversities';
-import ScholarshipHowToApply from './pages/ScholarshipHowToApply';
-import GetfundScholars from './pages/GetfundScholars';
-import InfrastructureProjects from './pages/InfrastructureProjects';
-import EducationSectorSupport from './pages/EducationSectorSupport';
-import CommunitySHSProgramme from './pages/CommunitySHSProgramme';
-import SecondaryEducationImprovementProgramme from './pages/SecondaryEducationImprovementProgramme';
-import CMSPage from './pages/CMSPage';
-import Home from './pages/Home';
-import WhyFundraising from './pages/WhyFundraising';
-import WaysToDonate from './pages/WaysToDonate';
-import Partnerships from './pages/Partnerships';
-import BeneficiariesGiveBack from './pages/BeneficiariesGiveBack';
-import Events from './pages/Events';
-import PaymentCallback from './pages/PaymentCallback';
-import TestSuccess from './pages/payment/TestSuccess';
 import ScrollToTop from './components/ScrollToTop';
-import FundraisingCampaigns from './pages/FundraisingCampaigns';
-import Lottery from './pages/Lottery';
+import LoadingScreen from './components/LoadingScreen';
+
+// Eagerly load the homepage (most common entry point)
+import Home from './pages/Home';
+
+// Lazy load all other pages for faster initial load
+const WhatWeDo = lazy(() => import('./pages/WhatWeDo'));
+const WhoWeAre = lazy(() => import('./pages/WhoWeAre'));
+const AboutEdit = lazy(() => import('./pages/AboutEdit'));
+const Impact = lazy(() => import('./pages/Impact'));
+const Resources = lazy(() => import('./pages/Resources'));
+const NewsPage = lazy(() => import('./pages/NewsPage'));
+const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const ScholarshipApply = lazy(() => import('./pages/ScholarshipApply'));
+const Scholarships = lazy(() => import('./pages/Scholarships'));
+const ScholarshipOverview = lazy(() => import('./pages/ScholarshipOverview'));
+const PartnerUniversities = lazy(() => import('./pages/PartnerUniversities'));
+const ScholarshipHowToApply = lazy(() => import('./pages/ScholarshipHowToApply'));
+const GetfundScholars = lazy(() => import('./pages/GetfundScholars'));
+const InfrastructureProjects = lazy(() => import('./pages/InfrastructureProjects'));
+const EducationSectorSupport = lazy(() => import('./pages/EducationSectorSupport'));
+const CommunitySHSProgramme = lazy(() => import('./pages/CommunitySHSProgramme'));
+const SecondaryEducationImprovementProgramme = lazy(() => import('./pages/SecondaryEducationImprovementProgramme'));
+const CMSPage = lazy(() => import('./pages/CMSPage'));
+const WhyFundraising = lazy(() => import('./pages/WhyFundraising'));
+const WaysToDonate = lazy(() => import('./pages/WaysToDonate'));
+const Partnerships = lazy(() => import('./pages/Partnerships'));
+const BeneficiariesGiveBack = lazy(() => import('./pages/BeneficiariesGiveBack'));
+const Events = lazy(() => import('./pages/Events'));
+const PaymentCallback = lazy(() => import('./pages/PaymentCallback'));
+const TestSuccess = lazy(() => import('./pages/payment/TestSuccess'));
+const FundraisingCampaigns = lazy(() => import('./pages/FundraisingCampaigns'));
+const Lottery = lazy(() => import('./pages/Lottery'));
 
 function App() {
   return (
@@ -37,6 +43,7 @@ function App() {
       <div className="min-h-screen bg-white">
         {/* Centered content wrapper with max-width and shadow for refined layout */}
         <div className="max-w-[1500px] mx-auto bg-white shadow-xl min-h-screen">
+        <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Homepage */}
           <Route path="/" element={<Home />} />
@@ -98,6 +105,7 @@ function App() {
           {/* Catch-all CMS route (must be last) */}
           <Route path="/:slug" element={<CMSPage />} />
         </Routes>
+        </Suspense>
         </div>
       </div>
     </Router>

@@ -156,12 +156,12 @@ export default function GetfundScholars() {
     fetchContent();
   }, []);
 
-  // Load scholars data
+  // Load scholars data from public/ (not bundled)
   useEffect(() => {
     if (!scholarsLoaded) {
-      import('../data/scholars.json')
-        .then((module) => {
-          const data = module.default as ScholarRecord[];
+      fetch('/data/scholars.json')
+        .then((res) => res.json())
+        .then((data: ScholarRecord[]) => {
           setAllScholars(data);
           setScholarsLoaded(true);
         })

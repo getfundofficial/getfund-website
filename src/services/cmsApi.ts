@@ -5,6 +5,23 @@
 
 const CMS_API_URL = import.meta.env.VITE_CMS_API_URL || '/api';
 
+// Simple in-memory cache with TTL
+const apiCache = new Map<string, { data: unknown; expiry: number }>();
+const CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+
+function getCached<T>(key: string): T | null {
+  const entry = apiCache.get(key);
+  if (entry && Date.now() < entry.expiry) {
+    return entry.data as T;
+  }
+  if (entry) apiCache.delete(key);
+  return null;
+}
+
+function setCache(key: string, data: unknown, ttl: number = CACHE_TTL): void {
+  apiCache.set(key, { data, expiry: Date.now() + ttl });
+}
+
 export interface CMSContent {
   id: string;
   type: 'news' | 'hero_slide';
@@ -171,13 +188,6 @@ class CMSApiClient {
       const response = await fetch(url, {
         ...options,
         signal: controller.signal,
-        cache: 'no-store', // Disable caching to always get fresh data
-        headers: {
-          ...options.headers,
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-        },
       });
       clearTimeout(timeoutId);
       return response;
@@ -194,6 +204,10 @@ class CMSApiClient {
    * Fetch all published hero slides
    */
   async getHeroSlides(): Promise<HeroSlide[]> {
+    const cacheKey = 'hero-slides';
+    const cached = getCached<HeroSlide[]>(cacheKey);
+    if (cached) return cached;
+
     try {
       const response = await this.fetchWithTimeout(`${this.baseUrl}/hero-slides`);
 
@@ -204,7 +218,7 @@ class CMSApiClient {
       const data: HeroSlideResponse[] = await response.json();
 
       // Transform database format to website format
-      return data.map((slide) => ({
+      const result = data.map((slide) => ({
         id: slide.id.toString(),
         title: slide.title,
         subtitle: slide.subtitle || '',
@@ -220,6 +234,8 @@ class CMSApiClient {
           opacity: slide.blue_box_opacity ?? 100,
         },
       }));
+      setCache(cacheKey, result);
+      return result;
     } catch {
       return [];
     }
@@ -229,6 +245,10 @@ class CMSApiClient {
    * Fetch all published news articles
    */
   async getNewsArticles(limit?: number): Promise<NewsArticle[]> {
+    const cacheKey = `news-${limit || 'all'}`;
+    const cached = getCached<NewsArticle[]>(cacheKey);
+    if (cached) return cached;
+
     try {
       const response = await this.fetchWithTimeout(`${this.baseUrl}/news`);
 
@@ -239,7 +259,7 @@ class CMSApiClient {
       const data: NewsArticleResponse[] = await response.json();
 
       // Transform database format to website format
-      return data.map((article) => ({
+      const result = data.map((article) => ({
         id: article.id.toString(),
         slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
         title: article.title,
@@ -251,6 +271,8 @@ class CMSApiClient {
         tags: article.category ? [article.category] : ['News'],
         category: article.category || 'NEWS',
       })).slice(0, limit);
+      setCache(cacheKey, result);
+      return result;
     } catch {
       return [];
     }
@@ -309,10 +331,12 @@ class CMSApiClient {
    * Fetch a single published page by slug with all its sections
    */
   async getPageBySlug(slug: string): Promise<CMSPage | null> {
+    const cacheKey = `page-${slug}`;
+    const cached = getCached<CMSPage | null>(cacheKey);
+    if (cached !== null) return cached;
+
     try {
-      // Add timestamp to prevent any caching
-      const timestamp = Date.now();
-      const url = `${this.baseUrl}/pages/${slug}?_t=${timestamp}`;
+      const url = `${this.baseUrl}/pages/${slug}`;
       const response = await this.fetchWithTimeout(url);
 
       if (!response.ok) {
@@ -330,6 +354,7 @@ class CMSApiClient {
         return null;
       }
 
+      setCache(cacheKey, page);
       return page;
     } catch {
       return null;
@@ -340,6 +365,10 @@ class CMSApiClient {
    * Fetch menu configuration
    */
   async getMenuConfig(): Promise<{ menuItems: MenuItem[]; ctaButton: MenuItem | null }> {
+    const cacheKey = 'menu-config';
+    const cached = getCached<{ menuItems: MenuItem[]; ctaButton: MenuItem | null }>(cacheKey);
+    if (cached) return cached;
+
     try {
       const url = `${this.baseUrl}/menu`;
       const response = await this.fetchWithTimeout(url);
@@ -348,7 +377,9 @@ class CMSApiClient {
         throw new Error(`Failed to fetch menu: ${response.statusText}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      setCache(cacheKey, result, 5 * 60 * 1000); // 5 min for menu
+      return result;
     } catch {
       return { menuItems: [], ctaButton: null };
     }
@@ -358,6 +389,10 @@ class CMSApiClient {
    * Fetch all team members (chairman, management, historical admins)
    */
   async getTeamMembers(): Promise<TeamMembersResponse> {
+    const cacheKey = 'team-members';
+    const cached = getCached<TeamMembersResponse>(cacheKey);
+    if (cached) return cached;
+
     try {
       const url = `${this.baseUrl}/team-members`;
       const response = await this.fetchWithTimeout(url);
@@ -367,6 +402,7 @@ class CMSApiClient {
       }
 
       const result = await response.json();
+      setCache(cacheKey, result.data, 5 * 60 * 1000); // 5 min
       return result.data;
     } catch {
       return { chairman: null, management: [], historical_admins: [], deputy_administrator: null, financial_controller: null };
@@ -377,6 +413,10 @@ class CMSApiClient {
    * Fetch footer configuration
    */
   async getFooterConfig(): Promise<FooterConfig | null> {
+    const cacheKey = 'footer-config';
+    const cached = getCached<FooterConfig | null>(cacheKey);
+    if (cached !== null) return cached;
+
     try {
       const url = `${this.baseUrl}/footer-config`;
       const response = await this.fetchWithTimeout(url);
@@ -385,7 +425,9 @@ class CMSApiClient {
         throw new Error(`Failed to fetch footer config: ${response.statusText}`);
       }
 
-      return await response.json();
+      const result = await response.json();
+      setCache(cacheKey, result, 5 * 60 * 1000); // 5 min for footer
+      return result;
     } catch {
       return null;
     }
@@ -395,6 +437,10 @@ class CMSApiClient {
    * Fetch all campaigns (optionally featured only)
    */
   async getCampaigns(featured: boolean = false): Promise<Campaign[]> {
+    const cacheKey = `campaigns-${featured}`;
+    const cached = getCached<Campaign[]>(cacheKey);
+    if (cached) return cached;
+
     try {
       const url = `${this.baseUrl}/campaigns${featured ? '?featured=true' : ''}`;
       const response = await this.fetchWithTimeout(url);
@@ -404,7 +450,9 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      return data.campaigns || [];
+      const result = data.campaigns || [];
+      setCache(cacheKey, result);
+      return result;
     } catch {
       return [];
     }
@@ -436,6 +484,10 @@ class CMSApiClient {
    * Fetch lottery configuration
    */
   async getLotteryConfig(): Promise<LotteryConfig | null> {
+    const cacheKey = 'lottery-config';
+    const cached = getCached<LotteryConfig | null>(cacheKey);
+    if (cached !== null) return cached;
+
     try {
       const url = `${this.baseUrl}/lottery/config`;
       const response = await this.fetchWithTimeout(url);
@@ -445,7 +497,9 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      return data.config || null;
+      const result = data.config || null;
+      if (result) setCache(cacheKey, result);
+      return result;
     } catch {
       return null;
     }
@@ -455,6 +509,10 @@ class CMSApiClient {
    * Fetch active partners, optionally filtered by category
    */
   async getPartners(category?: string): Promise<Partner[]> {
+    const cacheKey = `partners-${category || 'all'}`;
+    const cached = getCached<Partner[]>(cacheKey);
+    if (cached) return cached;
+
     try {
       const params = category ? `?category=${encodeURIComponent(category)}` : '';
       const url = `${this.baseUrl}/partners${params}`;
@@ -465,7 +523,9 @@ class CMSApiClient {
       }
 
       const data = await response.json();
-      return data.data || [];
+      const result = data.data || [];
+      setCache(cacheKey, result);
+      return result;
     } catch {
       return [];
     }

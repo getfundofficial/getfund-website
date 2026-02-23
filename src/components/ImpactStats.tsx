@@ -29,16 +29,9 @@ export default function ImpactStats({ className = '', page = 'all', variant = 'd
 
     const fetchStats = async () => {
       try {
-        const url = `${API_BASE_URL}/impact-stats?page=${page}&t=${Date.now()}`;
+        const url = `${API_BASE_URL}/impact-stats?page=${page}`;
 
-        const response = await fetch(url, {
-          method: 'GET',
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-          },
-        });
+        const response = await fetch(url);
 
         if (!response.ok) {
           throw new Error('Failed to fetch');

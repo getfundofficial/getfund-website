@@ -62,16 +62,8 @@ export default function FundraisingCampaigns() {
     // Use relative URL in development (via Vite proxy) or absolute URL in production
     const apiUrl = import.meta.env.VITE_CMS_API_URL || '/api';
 
-    const fetchOptions = {
-      cache: 'no-store' as RequestCache,
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-    };
-
     Promise.all([
-      fetch(`${apiUrl}/campaigns`, fetchOptions)
+      fetch(`${apiUrl}/campaigns`)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();
