@@ -90,7 +90,7 @@ export default function AboutEdit() {
         throw new Error(error.error || 'Failed to save');
       }
 
-      setMessage({ type: 'success', text: 'Board of Directors content saved successfully!' });
+      setMessage({ type: 'success', text: 'Board of Trustees content saved successfully!' });
 
       // Update local state
       setPageContent(updatedContent);
@@ -132,7 +132,7 @@ export default function AboutEdit() {
               Back to About Page
             </button>
             <h1 className="text-3xl font-bold text-gray-900">Edit About Page</h1>
-            <p className="text-gray-600 mt-2">Update the Board of Directors content</p>
+            <p className="text-gray-600 mt-2">Update the Board of Trustees content</p>
           </div>
 
           {/* Status Message */}
@@ -151,14 +151,14 @@ export default function AboutEdit() {
             </div>
           )}
 
-          {/* Board of Directors Editor */}
+          {/* Board of Trustees Editor */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-4 bg-[#2a3f75] text-white">
               <div className="flex items-center gap-3">
                 <FileText className="w-6 h-6" />
                 <div>
-                  <h2 className="text-lg font-semibold">Board of Directors</h2>
-                  <p className="text-white/80 text-sm">Edit the image and description shown in the Board of Directors modal</p>
+                  <h2 className="text-lg font-semibold">Board of Trustees</h2>
+                  <p className="text-white/80 text-sm">Edit the image and description shown in the Board of Trustees modal</p>
                 </div>
               </div>
             </div>

@@ -36,7 +36,7 @@ interface AboutPageProps {
     leadershipGovernanceTitle?: string;
     leadershipGovernanceSubtitle?: string;
     
-    // Board of Directors
+    // Board of Trustees
     boardImage?: string;
     boardImageAlt?: string;
     boardTitle?: string;
@@ -199,7 +199,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
         </section>
       )}
 
-      {/* Board of Directors Section */}
+      {/* Board of Trustees Section */}
       {content.boardTitle && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -207,7 +207,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
               <div>
                 <img 
                   src={content.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-                  alt={content.boardImageAlt || 'Board of Directors'}
+                  alt={content.boardImageAlt || 'Board of Trustees'}
                   className="rounded-xl shadow-lg w-full h-64 md:h-80 object-cover"
                 />
               </div>

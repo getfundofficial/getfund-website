@@ -39,7 +39,7 @@ interface PageContent {
   leadershipTitle?: string;
   leadershipSubtitle?: string;
 
-  // Board of Directors
+  // Board of Trustees
   boardImage?: string;
   boardTitle?: string;
   boardDescription?: string;

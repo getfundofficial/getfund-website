@@ -61,7 +61,7 @@ export default function TeamSection({
   const handleBoardOfDirectorsClick = () => {
     // Use CMS content if provided, otherwise use default
     const defaultContent = `
-      <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
+      <p class="text-lg mb-4">The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.</p>
 
       <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
       <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
@@ -90,7 +90,7 @@ export default function TeamSection({
     `;
 
     setModalContent({
-      title: 'Board of Directors',
+      title: 'Board of Trustees',
       content: boardDescription || defaultContent,
       image: boardGroupImage,
       type: 'group'
@@ -222,7 +222,7 @@ export default function TeamSection({
                 onClick={handleBoardOfDirectorsClick}
                 className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
               >
-                Board of Directors
+                Board of Trustees
               </button>
               <button
                 onClick={handlePastAdministratorsClick}
