@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle, ArrowRight, GraduationCap, FileText, Award, AlertTriangle, HelpCircle, ChevronDown, ChevronUp, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -367,12 +366,6 @@ export default function ScholarshipHowToApply() {
                 {content.cta.buttonText}
                 <ArrowRight className="w-5 h-5" />
               </a>
-              <Link
-                to="/resources"
-                className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
-              >
-                View Resources
-              </Link>
             </div>
           </div>
         </section>

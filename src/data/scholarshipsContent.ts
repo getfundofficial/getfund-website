@@ -104,6 +104,7 @@ export interface ScholarshipsContent {
     description: string;
     buttonText: string;
     buttonUrl: string;
+    showViewResourcesButton?: boolean;
   };
 }
 
@@ -285,5 +286,6 @@ export const defaultContent: ScholarshipsContent = {
     description: 'Ghana Education Trust Fund (GETFund) - Supporting the delivery of quality education in Ghana. By working in partnership, we create lasting change.',
     buttonText: 'Start Application',
     buttonUrl: 'https://scholarships.getfund.gov.gh/',
+    showViewResourcesButton: true,
   },
 };

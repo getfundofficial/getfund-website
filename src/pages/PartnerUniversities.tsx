@@ -64,7 +64,7 @@ export default function PartnerUniversities() {
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">
               Partner Universities
             </h1>
-            <p className="text-xl text-white max-w-3xl">
+            <p className="text-xl text-white max-w-3xl text-left">
               GETFund has established partnerships with internationally recognized universities to provide world-class education for Ghanaian scholars.
             </p>
           </div>
