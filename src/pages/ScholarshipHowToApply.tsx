@@ -322,30 +322,6 @@ export default function ScholarshipHowToApply() {
           </div>
         </section>
 
-        {/* Contact Info */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Address</p>
-                <p className="text-gray-900 font-medium">{content.contactInfo.address}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Phone</p>
-                <p className="text-gray-900 font-medium">{content.contactInfo.phone}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Email</p>
-                <p className="text-gray-900 font-medium">{content.contactInfo.email}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Website</p>
-                <p className="text-gray-900 font-medium">{content.contactInfo.website}</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* CTA Section */}
         <section className="py-16 bg-[#2a3f75]">
