@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Save, ArrowLeft, Loader2, Check, AlertCircle, Image, FileText } from 'lucide-react';
+import { Save, ArrowLeft, Loader2, Check, AlertCircle, Image, FileText, Plus, Trash2, GripVertical } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_CMS_API_URL || 'https://getfund-cms-backend.vercel.app/api';
 
@@ -24,7 +24,7 @@ export default function AboutEdit() {
 
   // Form fields
   const [boardImage, setBoardImage] = useState('');
-  const [boardDescription, setBoardDescription] = useState('');
+  const [boardMembers, setBoardMembers] = useState<Array<{ name: string; organization: string }>>([]);
 
   useEffect(() => {
     fetchPageContent();
@@ -47,7 +47,7 @@ export default function AboutEdit() {
           setPageContent(pageContentSection.content);
           setSectionKey(pageContentSection.section_key);
           setBoardImage(pageContentSection.content?.boardImage || '');
-          setBoardDescription(pageContentSection.content?.boardDescription || '');
+          setBoardMembers(pageContentSection.content?.boardMembers || []);
         }
       }
     } catch (error) {
@@ -71,7 +71,8 @@ export default function AboutEdit() {
       const updatedContent = {
         ...pageContent,
         boardImage,
-        boardDescription
+        boardMembers,
+        boardDescription: '' // clear legacy HTML field
       };
 
       const response = await fetch(
@@ -200,34 +201,57 @@ export default function AboutEdit() {
                 )}
               </div>
 
-              {/* Board Description */}
+              {/* Board Members */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
                   <FileText className="w-4 h-4" />
-                  Board Description (HTML supported)
+                  Board Members
                 </label>
-                <textarea
-                  value={boardDescription}
-                  onChange={(e) => setBoardDescription(e.target.value)}
-                  rows={15}
-                  placeholder="Enter the board description content. HTML tags are supported..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75] font-mono text-sm transition-colors"
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  You can use HTML tags like &lt;p&gt;, &lt;h3&gt;, &lt;ul&gt;, &lt;li&gt; for formatting
-                </p>
-              </div>
-
-              {/* HTML Preview */}
-              {boardDescription && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Content Preview:</p>
-                  <div
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: boardDescription }}
-                  />
+                <div className="space-y-3">
+                  {boardMembers.map((member, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                      <GripVertical className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <span className="text-sm font-bold text-gray-400 w-6 flex-shrink-0">{index + 1}.</span>
+                      <input
+                        type="text"
+                        value={member.name}
+                        onChange={(e) => {
+                          const updated = [...boardMembers];
+                          updated[index] = { ...updated[index], name: e.target.value };
+                          setBoardMembers(updated);
+                        }}
+                        placeholder="Full Name"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                      />
+                      <input
+                        type="text"
+                        value={member.organization}
+                        onChange={(e) => {
+                          const updated = [...boardMembers];
+                          updated[index] = { ...updated[index], organization: e.target.value };
+                          setBoardMembers(updated);
+                        }}
+                        placeholder="Organization / Role"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                      />
+                      <button
+                        onClick={() => setBoardMembers(boardMembers.filter((_, i) => i !== index))}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                        title="Remove member"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              )}
+                <button
+                  onClick={() => setBoardMembers([...boardMembers, { name: '', organization: '' }])}
+                  className="mt-3 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2a3f75] border border-dashed border-[#2a3f75] rounded-lg hover:bg-[#2a3f75]/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Member
+                </button>
+              </div>
 
               {/* Save Button */}
               <div className="flex justify-end pt-4 border-t border-gray-200">
@@ -257,7 +281,7 @@ export default function AboutEdit() {
             <h3 className="font-semibold text-blue-900 mb-2">Tips for Editing</h3>
             <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
               <li>Use image paths like <code className="bg-blue-100 px-1 rounded">/images/about/filename.jpg</code></li>
-              <li>For HTML formatting, use tags like <code className="bg-blue-100 px-1 rounded">&lt;p&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;h3&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;ul&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;li&gt;</code></li>
+              <li>Add board members using the <strong>Add Member</strong> button</li>
               <li>Changes will be visible on the website immediately after saving</li>
             </ul>
           </div>

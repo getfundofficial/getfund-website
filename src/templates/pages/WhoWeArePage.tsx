@@ -40,7 +40,7 @@ interface AboutPageProps {
     boardImage?: string;
     boardImageAlt?: string;
     boardTitle?: string;
-    boardDescription?: string;
+    boardMembers?: Array<{ name: string; organization: string }>;
     boardCommitments?: Array<{
       title: string;
       description: string;
@@ -215,11 +215,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                   {content.boardTitle}
                 </h2>
-                {content.boardDescription && (
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    {content.boardDescription}
-                  </p>
-                )}
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.
+                </p>
               </div>
             </div>
 

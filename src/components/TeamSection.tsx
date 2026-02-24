@@ -26,11 +26,16 @@ interface CurrentAdmin {
   bio?: string;
 }
 
+interface BoardMember {
+  name: string;
+  organization: string;
+}
+
 interface TeamSectionProps {
   sectionTitle?: string;
   sectionSubtitle?: string;
   boardGroupImage?: string;
-  boardDescription?: string;
+  boardMembers?: BoardMember[];
   chairman?: TeamMember;
   currentAdministrator?: CurrentAdmin;
   deputyAdministrator?: CurrentAdmin;
@@ -38,11 +43,31 @@ interface TeamSectionProps {
   pastAdministrators?: Administrator[];
 }
 
+const DEFAULT_BOARD_MEMBERS: BoardMember[] = [
+  { name: 'Emmanuel Kwasi Bedzrah', organization: 'Chairman' },
+  { name: 'Masawudu Mahama', organization: 'Ministry of Finance' },
+  { name: 'Rev. Dr. Cyril Geshon Kwao Fayose', organization: 'Christian Council' },
+  { name: 'Anthony Kwasi Sarpong', organization: 'Revenue Agency Governing Board' },
+  { name: 'Paul Adjei', organization: 'GETFund Administrator' },
+  { name: 'Mamle D. Andrews', organization: 'Ministry of Education' },
+  { name: 'Prof. Ahmed Abdulai Jinapor', organization: 'Ghana Tertiary Education Commission (GTEC)' },
+  { name: 'Rev. Prof. John Frank Eshun', organization: 'Technical Universities' },
+  { name: 'Philippa Larson', organization: 'National Association of Teachers (NAT)' },
+  { name: 'Daniel Nii Korley Botchway', organization: 'Ghana National Union of Polytechnic Students' },
+  { name: 'Grace Amey-Obeng', organization: 'Association of Ghana Industries' },
+  { name: 'Francisca Atuluk', organization: 'National Council on Women and Development' },
+  { name: 'Alexander Frimpong', organization: "Ghana Employers' Association" },
+  { name: 'Prof. Ernest Kofi Davis', organization: 'Ghana Education Service' },
+  { name: 'John Awuah', organization: 'Ghana Bankers Association' },
+  { name: 'Seth Kobla Aklasi', organization: 'Ghana Insurers Association' },
+  { name: 'Patience Ablah Ganyo', organization: 'National Pension Regulatory Authority' },
+];
+
 export default function TeamSection({
   sectionTitle = 'Leadership & Governance',
   sectionSubtitle = 'Strong leadership and transparent governance for educational transformation',
   boardGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
-  boardDescription,
+  boardMembers,
   chairman,
   currentAdministrator,
   deputyAdministrator,
@@ -59,29 +84,19 @@ export default function TeamSection({
   }>({ title: '', content: '', type: 'group' });
 
   const handleBoardOfDirectorsClick = () => {
-    // Use CMS content if provided, otherwise use default
-    const defaultContent = `
+    // Use CMS board members if available, otherwise use defaults
+    const members = (boardMembers && boardMembers.length > 0) ? boardMembers : DEFAULT_BOARD_MEMBERS;
+
+    const membersHtml = members.map((m, i) =>
+      `<li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">${i + 1}.</span><span><strong>${m.name}</strong> — ${m.organization}</span></li>`
+    ).join('\n          ');
+
+    const content = `
       <p class="text-lg mb-4">The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.</p>
 
       <div class="mt-6 mb-6">
         <ol class="space-y-2 text-sm">
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">1.</span><span><strong>Emmanuel Kwasi Bedzrah</strong> — Chairman</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">2.</span><span><strong>Masawudu Mahama</strong> — Ministry of Finance</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">3.</span><span><strong>Rev. Dr. Cyril Geshon Kwao Fayose</strong> — Christian Council</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">4.</span><span><strong>Anthony Kwasi Sarpong</strong> — Revenue Agency Governing Board</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">5.</span><span><strong>Paul Adjei</strong> — GETFund Administrator</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">6.</span><span><strong>Mamle D. Andrews</strong> — Ministry of Education</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">7.</span><span><strong>Prof. Ahmed Abdulai Jinapor</strong> — Ghana Tertiary Education Commission (GTEC)</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">8.</span><span><strong>Rev. Prof. John Frank Eshun</strong> — Technical Universities</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">9.</span><span><strong>Philippa Larson</strong> — National Association of Teachers (NAT)</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">10.</span><span><strong>Daniel Nii Korley Botchway</strong> — Ghana National Union of Polytechnic Students</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">11.</span><span><strong>Grace Amey-Obeng</strong> — Association of Ghana Industries</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">12.</span><span><strong>Francisca Atuluk</strong> — National Council on Women and Development</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">13.</span><span><strong>Alexander Frimpong</strong> — Ghana Employers' Association</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">14.</span><span><strong>Prof. Ernest Kofi Davis</strong> — Ghana Education Service</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">15.</span><span><strong>John Awuah</strong> — Ghana Bankers Association</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">16.</span><span><strong>Seth Kobla Aklasi</strong> — Ghana Insurers Association</span></li>
-          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">17.</span><span><strong>Patience Ablah Ganyo</strong> — National Pension Regulatory Authority</span></li>
+          ${membersHtml}
         </ol>
       </div>
 
@@ -111,7 +126,7 @@ export default function TeamSection({
 
     setModalContent({
       title: 'Board of Trustees',
-      content: boardDescription || defaultContent,
+      content,
       image: boardGroupImage,
       type: 'group'
     });

@@ -42,7 +42,7 @@ interface PageContent {
   // Board of Trustees
   boardImage?: string;
   boardTitle?: string;
-  boardDescription?: string;
+  boardMembers?: Array<{ name: string; organization: string }>;
   boardCommitments?: Array<{
     title: string;
     description: string;
@@ -210,7 +210,7 @@ export default function WhoWeAre() {
                 content.leadershipTitle = section.content.heading;
                 content.leadershipSubtitle = section.content.subtitle;
                 content.boardTitle = section.content.boardTitle;
-                content.boardDescription = section.content.boardDescription;
+                content.boardMembers = section.content.boardMembers;
                 content.boardImage = section.content.boardImage;
                 content.boardCommitments = section.content.commitments?.map((c: any, i: number) => ({
                   title: c.title,
@@ -396,7 +396,7 @@ export default function WhoWeAre() {
           sectionTitle={pageContent?.leadershipTitle || 'Leadership & Governance'}
           sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-          boardDescription={pageContent?.boardDescription}
+          boardMembers={pageContent?.boardMembers}
           chairman={teamData.chairman ? {
             name: teamData.chairman.name,
             title: teamData.chairman.title,
