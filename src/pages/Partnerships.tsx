@@ -78,7 +78,7 @@ export default function Partnerships() {
           setContent(section.content as PartnershipsContent);
         }
 
-        setPartners(partnersData);
+        setPartners(partnersData.filter(p => !p.category || p.category === ''));
       } catch (error) {
         console.error('Failed to load page content:', error);
       } finally {
