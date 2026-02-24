@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import LoadingScreen from '../components/LoadingScreen';
+import AnnouncementBanner from '../components/AnnouncementBanner';
 import { cmsApi } from '../services/cmsApi';
 import { ScholarshipsContent, ScholarRecord, defaultContent } from '../data/scholarshipsContent';
 
@@ -189,6 +190,11 @@ export default function GetfundScholars() {
       <Breadcrumb />
 
       <main className="flex-1">
+        <AnnouncementBanner
+          message="All 2024/2025 GETFund local scholarship beneficiaries who have still not accepted their scholarship awards, are requested to accept their offers by Friday, 27th February, 2026. Failure to do so by the stated deadline, will result in a revocation and forfeiture of the award."
+          storageKey="scholarship-acceptance-deadline-2026"
+        />
+
         {/* Hero Section */}
         <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-16 md:py-20">
           <div className="absolute inset-0">

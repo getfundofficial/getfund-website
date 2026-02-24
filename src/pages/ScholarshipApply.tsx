@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import LoadingScreen from '../components/LoadingScreen';
+import AnnouncementBanner from '../components/AnnouncementBanner';
 import { cmsApi } from '../services/cmsApi';
 
 interface ScholarshipApplyContent {
@@ -133,6 +134,11 @@ export default function ScholarshipApply() {
       </section>
 
       <main className="flex-1">
+        <AnnouncementBanner
+          message="All 2024/2025 GETFund local scholarship beneficiaries who have still not accepted their scholarship awards, are requested to accept their offers by Friday, 27th February, 2026. Failure to do so by the stated deadline, will result in a revocation and forfeiture of the award."
+          storageKey="scholarship-acceptance-deadline-2026"
+        />
+
         <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             {/* Required Documents */}
