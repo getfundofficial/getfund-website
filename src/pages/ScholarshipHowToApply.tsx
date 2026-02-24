@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle, ArrowRight, GraduationCap, FileText, Award, AlertTriangle, HelpCircle, ChevronDown, ChevronUp, Star } from 'lucide-react';
+import { CheckCircle, ArrowRight, FileText, Award, AlertTriangle, HelpCircle, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
@@ -15,21 +15,21 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
   return (
     <div className="space-y-3">
       {items.map((item, idx) => (
-        <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden">
+        <div key={idx} className="border border-gray-200 overflow-hidden">
           <button
             onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
             className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-gray-50 transition-colors"
           >
             <span className="font-medium text-gray-900 pr-4">{item.question}</span>
             {openIndex === idx ? (
-              <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
+              <ChevronUp className="w-5 h-5 flex-shrink-0" style={{ color: '#2a3f75' }} />
             ) : (
               <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />
             )}
           </button>
           {openIndex === idx && (
-            <div className="px-5 pb-4 bg-gray-50">
-              <p className="text-gray-700 leading-relaxed">{item.answer}</p>
+            <div className="px-5 pb-4 bg-gray-50 border-t border-gray-100">
+              <p className="text-gray-700 leading-relaxed pt-3">{item.answer}</p>
             </div>
           )}
         </div>
@@ -81,63 +81,41 @@ export default function ScholarshipHowToApply() {
           storageKey="scholarship-acceptance-deadline-2026"
         />
 
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-16 md:py-20">
-          <div className="absolute inset-0">
-            <img
-              src={content.hero.heroImage || '/images/scholarship/scholarship-programme-hero.jpg'}
-              alt=""
-              className="w-full h-full object-cover opacity-20"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2a3f75]/80 to-[#1a2a55]/90" />
-          <div className="relative container mx-auto px-4 max-w-6xl">
-            <div className="flex items-center gap-3 mb-4">
-              <GraduationCap className="w-10 h-10 text-getfund-gold" />
-              <span className="text-getfund-gold font-semibold tracking-wide uppercase text-sm">Scholarship Programme</span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">
+        {/* Page Title Section */}
+        <section className="pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               How to Apply
             </h1>
-            <p className="text-xl text-white max-w-3xl">
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <p className="text-gray-600 mt-4 max-w-3xl">
               Everything you need to know about applying for a GETFund scholarship.
             </p>
-            <div className="mt-8">
-              <a
-                href={content.cta.buttonUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                {content.cta.buttonText}
-                <ArrowRight className="w-5 h-5" />
-              </a>
-            </div>
           </div>
         </section>
 
-        {/* Call for Application Banner */}
-        <section className="py-12 bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-200">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex items-start gap-4">
-              <Award className="w-10 h-10 text-amber-600 flex-shrink-0 mt-1" />
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+        {/* Call for Application */}
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid md:grid-cols-3 gap-10">
+              <div className="md:col-span-2">
+                <Award className="w-8 h-8 text-white/80 mb-4" />
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
                   {content.callForApplication.heading}
                 </h2>
-                <p className="text-lg text-amber-800 font-medium mb-3">
+                <p className="text-white/90 leading-relaxed text-lg mb-2">
                   {content.callForApplication.subheading}
                 </p>
-                <p className="text-gray-700 mb-4">{content.callForApplication.description}</p>
-                <div className="flex flex-wrap gap-6">
-                  <div className="bg-white rounded-lg px-5 py-3 border border-amber-200">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">Opening Date</p>
-                    <p className="font-semibold text-gray-900">{content.callForApplication.openingDate}</p>
-                  </div>
-                  <div className="bg-white rounded-lg px-5 py-3 border border-amber-200">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">Closing Date</p>
-                    <p className="font-semibold text-red-600">{content.callForApplication.closingDate}</p>
-                  </div>
+                <p className="text-white/80 leading-relaxed">{content.callForApplication.description}</p>
+              </div>
+              <div className="flex flex-col gap-4 justify-center">
+                <div className="bg-white/10 backdrop-blur-sm px-5 py-4">
+                  <p className="text-xs text-white/60 uppercase tracking-wide">Opening Date</p>
+                  <p className="font-semibold text-white text-lg">{content.callForApplication.openingDate}</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm px-5 py-4">
+                  <p className="text-xs text-white/60 uppercase tracking-wide">Closing Date</p>
+                  <p className="font-semibold text-white text-lg">{content.callForApplication.closingDate}</p>
                 </div>
               </div>
             </div>
@@ -145,60 +123,65 @@ export default function ScholarshipHowToApply() {
         </section>
 
         {/* Application Procedure */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <section className="py-16 md:py-24 bg-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="container mx-auto px-4 max-w-7xl relative">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.applicationProcedure.heading}
             </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="grid md:grid-cols-3 gap-8">
               {content.applicationProcedure.steps.map((step, idx) => (
-                <div key={idx} className="relative bg-gray-50 rounded-lg p-6 border border-gray-200">
-                  <div className="w-10 h-10 rounded-full bg-[#2a3f75] text-white flex items-center justify-center text-lg font-bold mb-4">
-                    {idx + 1}
+                <div key={idx} className="relative group">
+                  <div className="absolute -inset-2 opacity-0 blur-lg transition-all duration-500 group-hover:opacity-10" style={{ backgroundColor: '#2a3f75' }} />
+                  <div className="relative bg-gray-50 p-6 border border-gray-200 transition-shadow duration-300 group-hover:shadow-lg">
+                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mb-4" style={{ backgroundColor: '#2a3f75' }}>
+                      {idx + 1}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{step.description}</p>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                  <p className="text-gray-600">{step.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Eligibility & Academic Requirements Side by Side */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Eligibility */}
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        {/* Eligibility & Academic Requirements - Split Layout */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="relative grid lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
+              {/* Eligibility - Left */}
+              <div className="pr-0 lg:pr-12 pb-10 lg:pb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
                   {content.eligibilityRequirements.heading}
                 </h2>
-                <div className="w-12 h-1 bg-[#2a3f75] mb-6" />
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {content.eligibilityRequirements.items.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
-                      <div className="w-6 h-6 rounded-full bg-[#2a3f75] text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
                         {idx + 1}
                       </div>
-                      <p className="text-gray-700">{item}</p>
+                      <p className="text-gray-700 leading-relaxed">{item}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Academic Requirements */}
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {/* Vertical Divider */}
+              <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200" />
+
+              {/* Academic Requirements - Right */}
+              <div className="pl-0 lg:pl-12 pt-10 lg:pt-0 border-t lg:border-t-0 border-gray-200">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
                   {content.academicRequirements.heading}
                 </h2>
-                <div className="w-12 h-1 bg-[#2a3f75] mb-6" />
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {content.academicRequirements.items.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
-                      <FileText className="w-5 h-5 text-[#2a3f75] flex-shrink-0 mt-0.5" />
-                      <p className="text-gray-700">{item}</p>
-                    </div>
+                    <li key={idx} className="flex items-start gap-3 list-none">
+                      <FileText className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <p className="text-gray-700 leading-relaxed">{item}</p>
+                    </li>
                   ))}
                 </div>
               </div>
@@ -206,44 +189,42 @@ export default function ScholarshipHowToApply() {
           </div>
         </section>
 
-        {/* Supporting Documents */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              {content.supportingDocuments.heading}
-            </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
-            <div className="grid md:grid-cols-2 gap-4">
-              {content.supportingDocuments.items.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 bg-gray-50 p-4 rounded-lg">
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <p className="text-gray-700">{item}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Special Dispensation */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <div className="flex items-start gap-4 mb-6">
-                <Award className="w-8 h-8 text-[#2a3f75] flex-shrink-0" />
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                    {content.specialDispensation.heading}
-                  </h2>
-                  <p className="text-gray-600">{content.specialDispensation.description}</p>
-                </div>
+        {/* Supporting Documents & Special Dispensation - Split Layout */}
+        <section className="py-20 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="relative grid lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
+              {/* Supporting Documents - Left */}
+              <div className="pr-0 lg:pr-12 pb-10 lg:pb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+                  {content.supportingDocuments.heading}
+                </h2>
+                <ul className="space-y-3">
+                  {content.supportingDocuments.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="grid md:grid-cols-2 gap-3">
-                {content.specialDispensation.items.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 bg-blue-50 p-3 rounded-lg">
-                    <Star className="w-5 h-5 text-amber-500 flex-shrink-0" />
-                    <p className="text-gray-700 text-sm">{item}</p>
-                  </div>
-                ))}
+
+              {/* Vertical Divider */}
+              <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200" />
+
+              {/* Special Dispensation - Right */}
+              <div className="pl-0 lg:pl-12 pt-10 lg:pt-0 border-t lg:border-t-0 border-gray-200">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                  {content.specialDispensation.heading}
+                </h2>
+                <p className="text-gray-600 mb-6 leading-relaxed">{content.specialDispensation.description}</p>
+                <ul className="space-y-3">
+                  {content.specialDispensation.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <Star className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <span className="text-gray-700 text-sm">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
@@ -251,16 +232,16 @@ export default function ScholarshipHowToApply() {
 
         {/* Application Steps */}
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.applicationSteps.heading}
             </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
             <div className="flex flex-col md:flex-row gap-4">
               {content.applicationSteps.steps.map((step, idx) => (
                 <div key={idx} className="flex-1 relative">
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 text-center h-full">
-                    <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center text-lg font-bold mx-auto mb-3">
+                  <div className="bg-gray-50 border border-gray-200 p-5 text-center h-full">
+                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mx-auto mb-3" style={{ backgroundColor: '#2a3f75' }}>
                       {idx + 1}
                     </div>
                     <p className="text-gray-700 font-medium text-sm">{step}</p>
@@ -276,38 +257,36 @@ export default function ScholarshipHowToApply() {
 
         {/* Disqualifying Factors */}
         <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-8">
-              <div className="flex items-start gap-3 mb-6">
-                <AlertTriangle className="w-7 h-7 text-red-500 flex-shrink-0" />
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {content.disqualifyingFactors.heading}
-                </h2>
-              </div>
-              <div className="space-y-3">
-                {content.disqualifyingFactors.items.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-red-400 mt-2 flex-shrink-0" />
-                    <p className="text-gray-700">{item}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex items-start gap-3 mb-6">
+              <AlertTriangle className="w-7 h-7 text-red-500 flex-shrink-0" />
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                {content.disqualifyingFactors.heading}
+              </h2>
             </div>
+            <ul className="space-y-3">
+              {content.disqualifyingFactors.items.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-red-400 mt-2 flex-shrink-0" />
+                  <p className="text-gray-700">{item}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
         {/* Funding & Duration */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <section className="py-20">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.fundingAndDuration.heading}
             </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
-            <div className="space-y-4">
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="space-y-6">
               {content.fundingAndDuration.items.map((item, idx) => (
-                <div key={idx} className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                  <p className="font-semibold text-gray-900 mb-1">{item.question}</p>
-                  <p className="text-gray-600">{item.answer}</p>
+                <div key={idx}>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#2a3f75' }}>{item.question}</h3>
+                  <p className="text-gray-700 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -316,34 +295,34 @@ export default function ScholarshipHowToApply() {
 
         {/* FAQs */}
         <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex items-center gap-3 mb-2">
-              <HelpCircle className="w-7 h-7 text-[#2a3f75]" />
+              <HelpCircle className="w-7 h-7" style={{ color: '#2a3f75' }} />
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {content.faqs.heading}
               </h2>
             </div>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
+            <div className="w-16 h-1 mb-8" style={{ backgroundColor: '#2a3f75' }} />
             <FAQAccordion items={content.faqs.items} />
           </div>
         </section>
 
-
-        {/* CTA Section */}
-        <section className="py-16 bg-[#2a3f75]">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              {content.cta.heading}
-            </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-              {content.cta.description}
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
+        {/* Footer CTA */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="bg-getfund-primary text-white rounded-2xl p-16 text-center relative">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+                {content.cta.heading}
+              </h2>
+              <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                {content.cta.description}
+              </p>
               <a
                 href={content.cta.buttonUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
+                className="inline-flex items-center gap-2 bg-white px-8 py-3 font-semibold hover:bg-gray-100 transition-all duration-300"
+                style={{ color: '#2a3f75' }}
               >
                 {content.cta.buttonText}
                 <ArrowRight className="w-5 h-5" />

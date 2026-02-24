@@ -450,7 +450,7 @@ export default function WhoWeAre() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="bg-getfund-primary text-white rounded-2xl p-16 text-center relative">
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <h2 className="text-4xl md:text-5xl font-bold text-white">
                 {pageContent?.footerMessage || 'Supporting the delivery of quality education.'}
               </h2>
               <p className="absolute bottom-4 right-6 text-sm text-white/70">Since 2001</p>

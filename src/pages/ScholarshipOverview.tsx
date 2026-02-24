@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle, ArrowRight, GraduationCap, BookOpen, Users, Building, Star } from 'lucide-react';
+import { ArrowRight, GraduationCap, Users, Building, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -53,181 +53,200 @@ export default function ScholarshipOverview() {
           storageKey="scholarship-acceptance-deadline-2026"
         />
 
-        {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-16 md:py-24">
-          <div className="absolute inset-0">
-            <img
-              src={content.hero.heroImage || '/images/scholarship/scholarship-programme-hero.jpg'}
-              alt=""
-              className="w-full h-full object-cover opacity-20"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2a3f75]/80 to-[#1a2a55]/90" />
-          <div className="relative container mx-auto px-4 max-w-6xl">
-            <div className="flex items-center gap-3 mb-4">
-              <GraduationCap className="w-10 h-10 text-getfund-gold" />
-              <span className="text-getfund-gold font-semibold tracking-wide uppercase text-sm">Scholarship Programme</span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-white">
+        {/* Page Title Section */}
+        <section className="pt-8 pb-6">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero.title}
             </h1>
-            <p className="text-xl md:text-2xl text-white max-w-3xl">
-              {content.hero.subtitle}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href={content.cta.buttonUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                {content.cta.buttonText}
-                <ArrowRight className="w-5 h-5" />
-              </a>
-              <Link
-                to="/scholarships/getfund-scholars"
-                className="inline-flex items-center gap-2 border-2 border-white/60 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
-              >
-                View Our Scholars
-              </Link>
+            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          </div>
+        </section>
+
+        {/* Programme Overview - Two Column with Image */}
+        <section className="py-16 md:py-24 bg-white relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="container mx-auto px-4 max-w-7xl relative">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+              {/* Image with enhanced styling */}
+              <div className="relative group">
+                <div className="absolute -inset-4 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="relative overflow-hidden shadow-2xl">
+                  <img
+                    src={content.hero.heroImage || '/images/scholarship/scholarship-programme-hero.jpg'}
+                    alt="GETFund Scholarship Programme"
+                    className="w-full h-[400px] md:h-[520px] object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
+              </div>
+
+              {/* Text content with accent styling */}
+              <div className="relative">
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="lg:pl-8">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    {content.programmeOverview.heading}
+                  </h2>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2a3f75' }} />
+                    <span className="text-sm md:text-base font-semibold" style={{ color: '#2a3f75' }}>
+                      {content.hero.subtitle}
+                    </span>
+                  </div>
+                  <div className="space-y-6 text-gray-600 leading-relaxed text-base md:text-lg">
+                    {content.programmeOverview.paragraphs.map((p, idx) => (
+                      <p key={idx}>{p}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Programme Overview */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                  {content.programmeOverview.heading}
+        {/* Core Belief - Blue Overlay Section */}
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid md:grid-cols-2 gap-10">
+              <div className="text-center md:text-left">
+                <Star className="w-8 h-8 text-white/80 mb-4 mx-auto md:mx-0" />
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5">Our Core Belief</h3>
+                <p className="text-white/90 leading-relaxed text-lg italic">
+                  "{content.coreBelief}"
+                </p>
+              </div>
+              <div className="text-center md:text-left">
+                <GraduationCap className="w-8 h-8 text-white/80 mb-4 mx-auto md:mx-0" />
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-5">
+                  {content.supportProvided.heading}
+                </h3>
+                <p className="text-white/90 leading-relaxed text-lg">
+                  {content.supportProvided.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Priority Areas & Scope - Split Layout */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="relative grid lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
+              {/* Priority Areas - Left */}
+              <div className="pr-0 lg:pr-12 pb-10 lg:pb-0">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+                  {content.priorityAreas.heading}
                 </h2>
-                <div className="w-12 h-1 bg-[#2a3f75] mb-6" />
-                <div className="space-y-4">
-                  {content.programmeOverview.paragraphs.map((p, idx) => (
-                    <p key={idx} className="text-gray-700 leading-relaxed">{p}</p>
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  The Fund sets out other areas of priority aligned with the nation's development agenda.
+                </p>
+                <div className="space-y-6">
+                  {content.priorityAreas.items.map((area, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                        {idx === 0 ? <Building className="w-6 h-6 text-white" /> : <Users className="w-6 h-6 text-white" />}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold mb-2" style={{ color: '#2a3f75' }}>{area.title}</h3>
+                        <p className="text-gray-700 leading-relaxed">{area.description}</p>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <img src="/images/scholarship/service-details-01.jpg" alt="GETFund Scholarship students" className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md" />
-                <img src="/images/scholarship/service-details-02.jpg" alt="GETFund education support" className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md" />
-                <img src="/images/scholarship/service-details-03.jpg" alt="GETFund scholars programme" className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md" />
-                <img src="/images/scholarship/service-details-04.jpg" alt="GETFund academic facilities" className="w-full h-36 md:h-44 object-cover rounded-lg shadow-md" />
+
+              {/* Vertical Divider */}
+              <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200" />
+
+              {/* Scope of Scholarship - Right */}
+              <div className="pl-0 lg:pl-12 pt-10 lg:pt-0 border-t lg:border-t-0 border-gray-200">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+                  {content.scopeOfScholarship.heading}
+                </h2>
+                <p className="text-gray-700 mb-6 leading-relaxed">{content.scopeOfScholarship.description}</p>
+                <ul className="space-y-3">
+                  {content.scopeOfScholarship.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }} />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Core Belief + Support Provided */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="bg-[#2a3f75] text-white rounded-xl p-8 md:p-12 mb-12 text-center">
-              <Star className="w-8 h-8 text-getfund-gold mx-auto mb-4" />
-              <blockquote className="text-xl md:text-2xl font-medium italic">
-                "{content.coreBelief}"
-              </blockquote>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-                {content.supportProvided.heading}
-              </h2>
-              <div className="w-12 h-1 bg-[#2a3f75] mb-6" />
-              <p className="text-lg text-gray-700 leading-relaxed">
-                {content.supportProvided.description}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Priority Areas */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              {content.priorityAreas.heading}
-            </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-8" />
-            <p className="text-gray-600 mb-8">The Fund sets out other areas of priority aligned with the nation's development agenda.</p>
-            <div className="grid md:grid-cols-2 gap-6">
-              {content.priorityAreas.items.map((area, idx) => (
-                <div key={idx} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-[#2a3f75] rounded-lg flex items-center justify-center flex-shrink-0">
-                      {idx === 0 ? <Building className="w-6 h-6 text-white" /> : <Users className="w-6 h-6 text-white" />}
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{area.title}</h3>
-                      <p className="text-gray-600">{area.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Programme Statistics */}
-        <section className="py-16 bg-[#2a3f75] text-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center text-white">
+        {/* Programme Statistics - Blue Overlay */}
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center text-white">
               {content.programmeStats.heading}
             </h2>
-            <div className="w-12 h-1 bg-getfund-gold mx-auto mb-10" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
               {content.programmeStats.stats.map((stat, idx) => (
-                <div key={idx} className="text-center bg-white/10 rounded-lg p-6 backdrop-blur-sm">
-                  <p className="text-3xl md:text-4xl font-bold text-getfund-gold mb-2">{stat.value}</p>
-                  <p className="text-sm text-white/80">{stat.label}</p>
+                <div key={idx} className="text-center">
+                  <p className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</p>
+                  <p className="text-white/80">{stat.label}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Scope of Scholarship */}
+        {/* Image Grid */}
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              {content.scopeOfScholarship.heading}
-            </h2>
-            <div className="w-12 h-1 bg-[#2a3f75] mb-6" />
-            <p className="text-gray-700 mb-8">{content.scopeOfScholarship.description}</p>
-            <div className="space-y-4">
-              {content.scopeOfScholarship.items.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-700">{item}</p>
-                </div>
-              ))}
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="relative group overflow-hidden shadow-lg">
+                <img src="/images/scholarship/service-details-01.jpg" alt="GETFund Scholarship students" className="w-full h-48 md:h-56 object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+              <div className="relative group overflow-hidden shadow-lg">
+                <img src="/images/scholarship/service-details-02.jpg" alt="GETFund education support" className="w-full h-48 md:h-56 object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+              <div className="relative group overflow-hidden shadow-lg">
+                <img src="/images/scholarship/service-details-03.jpg" alt="GETFund scholars programme" className="w-full h-48 md:h-56 object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+              <div className="relative group overflow-hidden shadow-lg">
+                <img src="/images/scholarship/service-details-04.jpg" alt="GETFund academic facilities" className="w-full h-48 md:h-56 object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-[#2a3f75]">
-          <div className="container mx-auto px-4 max-w-4xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              {content.cta.heading}
-            </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-              {content.cta.description}
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={content.cta.buttonUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-getfund-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                {content.cta.buttonText}
-                <ArrowRight className="w-5 h-5" />
-              </a>
-              <Link
-                to="/scholarships/how-to-apply"
-                className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
-              >
-                How to Apply
-              </Link>
+        {/* Footer CTA */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="bg-getfund-primary text-white rounded-2xl p-16 text-center relative">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+                {content.cta.heading}
+              </h2>
+              <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                {content.cta.description}
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href={content.cta.buttonUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white px-8 py-3 font-semibold transition-all duration-300 hover:bg-gray-100"
+                  style={{ color: '#2a3f75' }}
+                >
+                  {content.cta.buttonText}
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+                <Link
+                  to="/scholarships/how-to-apply"
+                  className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 font-semibold hover:bg-white/10 transition-all duration-300"
+                >
+                  How to Apply
+                </Link>
+              </div>
             </div>
           </div>
         </section>
