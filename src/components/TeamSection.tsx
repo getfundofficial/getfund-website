@@ -107,8 +107,6 @@ export default function TeamSection({
           <span>Monitoring performance and educational outcomes</span>
         </li>
       </ul>
-
-      <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
     `;
 
     setModalContent({
