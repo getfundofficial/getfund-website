@@ -42,6 +42,11 @@ interface PageContent {
   // Board of Trustees
   boardImage?: string;
   boardTitle?: string;
+  boardIntro?: string;
+  boardOrgStructureHeading?: string;
+  boardOrgStructureText?: string;
+  boardResponsibilitiesHeading?: string;
+  boardResponsibilities?: string[];
   boardMembers?: Array<{ name: string; organization: string }>;
   boardCommitments?: Array<{
     title: string;
@@ -397,6 +402,11 @@ export default function WhoWeAre() {
           sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
           boardMembers={pageContent?.boardMembers}
+          boardIntro={pageContent?.boardIntro}
+          boardOrgStructureHeading={pageContent?.boardOrgStructureHeading}
+          boardOrgStructureText={pageContent?.boardOrgStructureText}
+          boardResponsibilitiesHeading={pageContent?.boardResponsibilitiesHeading}
+          boardResponsibilities={pageContent?.boardResponsibilities}
           chairman={teamData.chairman ? {
             name: teamData.chairman.name,
             title: teamData.chairman.title,

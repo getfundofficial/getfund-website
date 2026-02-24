@@ -36,6 +36,11 @@ interface TeamSectionProps {
   sectionSubtitle?: string;
   boardGroupImage?: string;
   boardMembers?: BoardMember[];
+  boardIntro?: string;
+  boardOrgStructureHeading?: string;
+  boardOrgStructureText?: string;
+  boardResponsibilitiesHeading?: string;
+  boardResponsibilities?: string[];
   chairman?: TeamMember;
   currentAdministrator?: CurrentAdmin;
   deputyAdministrator?: CurrentAdmin;
@@ -68,6 +73,11 @@ export default function TeamSection({
   sectionSubtitle = 'Strong leadership and transparent governance for educational transformation',
   boardGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
   boardMembers,
+  boardIntro,
+  boardOrgStructureHeading,
+  boardOrgStructureText,
+  boardResponsibilitiesHeading,
+  boardResponsibilities,
   chairman,
   currentAdministrator,
   deputyAdministrator,
@@ -91,8 +101,26 @@ export default function TeamSection({
       `<li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">${i + 1}.</span><span><strong>${m.name}</strong> — ${m.organization}</span></li>`
     ).join('\n          ');
 
+    const introText = boardIntro || 'The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.';
+    const orgHeading = boardOrgStructureHeading || 'Organizational Structure';
+    const orgText = boardOrgStructureText || 'The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund\'s mission of transforming Ghana\'s educational landscape.';
+    const respHeading = boardResponsibilitiesHeading || 'Key Responsibilities';
+    const respItems = (boardResponsibilities && boardResponsibilities.length > 0) ? boardResponsibilities : [
+      'Setting strategic priorities aligned with national education goals',
+      'Ensuring efficient resource utilization and project delivery',
+      'Building partnerships across all education sectors',
+      'Monitoring performance and educational outcomes'
+    ];
+
+    const responsibilitiesHtml = respItems.map(item =>
+      `<li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>${item}</span>
+        </li>`
+    ).join('\n        ');
+
     const content = `
-      <p class="text-lg mb-4">The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.</p>
+      <p class="text-lg mb-4">${introText}</p>
 
       <div class="mt-6 mb-6">
         <ol class="space-y-2 text-sm">
@@ -100,27 +128,12 @@ export default function TeamSection({
         </ol>
       </div>
 
-      <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
-      <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
+      <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">${orgHeading}</h3>
+      <p class="mb-4">${orgText}</p>
 
-      <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Key Responsibilities</h3>
+      <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">${respHeading}</h3>
       <ul class="space-y-3 mb-4">
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Setting strategic priorities aligned with national education goals</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Ensuring efficient resource utilization and project delivery</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Building partnerships across all education sectors</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Monitoring performance and educational outcomes</span>
-        </li>
+        ${responsibilitiesHtml}
       </ul>
     `;
 
