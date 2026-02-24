@@ -63,6 +63,28 @@ export default function TeamSection({
     const defaultContent = `
       <p class="text-lg mb-4">The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.</p>
 
+      <div class="mt-6 mb-6">
+        <ol class="space-y-2 text-sm">
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">1.</span><span><strong>Emmanuel Kwasi Bedzrah</strong> — Chairman</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">2.</span><span><strong>Masawudu Mahama</strong> — Ministry of Finance</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">3.</span><span><strong>Rev. Dr. Cyril Geshon Kwao Fayose</strong> — Christian Council</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">4.</span><span><strong>Anthony Kwasi Sarpong</strong> — Revenue Agency Governing Board</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">5.</span><span><strong>Paul Adjei</strong> — GETFund Administrator</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">6.</span><span><strong>Mamle D. Andrews</strong> — Ministry of Education</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">7.</span><span><strong>Prof. Ahmed Abdulai Jinapor</strong> — Ghana Tertiary Education Commission (GTEC)</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">8.</span><span><strong>Rev. Prof. John Frank Eshun</strong> — Technical Universities</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">9.</span><span><strong>Philippa Larson</strong> — National Association of Teachers (NAT)</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">10.</span><span><strong>Daniel Nii Korley Botchway</strong> — Ghana National Union of Polytechnic Students</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">11.</span><span><strong>Grace Amey-Obeng</strong> — Association of Ghana Industries</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">12.</span><span><strong>Francisca Atuluk</strong> — National Council on Women and Development</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">13.</span><span><strong>Alexander Frimpong</strong> — Ghana Employers' Association</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">14.</span><span><strong>Prof. Ernest Kofi Davis</strong> — Ghana Education Service</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">15.</span><span><strong>John Awuah</strong> — Ghana Bankers Association</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">16.</span><span><strong>Seth Kobla Aklasi</strong> — Ghana Insurers Association</span></li>
+          <li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">17.</span><span><strong>Patience Ablah Ganyo</strong> — National Pension Regulatory Authority</span></li>
+        </ol>
+      </div>
+
       <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
       <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
 
