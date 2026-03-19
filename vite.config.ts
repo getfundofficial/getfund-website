@@ -19,7 +19,7 @@ export default defineConfig({
     },
     minify: true,
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 500,
   },
   server: {
     sourcemapIgnoreList: () => true,
