@@ -4,11 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        // GETFund Brand Colors - Ghana Flag Inspired
+        // GETFund Brand Colors - Dark Green Theme
         'getfund': {
-          'primary': '#059669',     // Forest green (main)
-          'secondary': '#191825',   // Dark navy for text
-          'accent': '#10b981',      // Emerald accent
+          'primary': '#047857',     // Deep emerald (main)
+          'secondary': '#052e16',   // Very dark green (text/dark surfaces)
+          'accent': '#059669',      // Emerald accent (mid)
+          'dark': '#064e3b',        // Dark green for overlays/footer
           'light': '#f0fdf4',       // Light green background
           'gray': '#6c757d',        // Text gray
           'red': '#dc2626',         // Ghana flag red
@@ -16,11 +17,12 @@ export default {
           'black': '#1f2937',       // Ghana flag black
         },
         // Override default colors with GETFund theme
-        'primary': '#059669',
-        'secondary': '#191825',
+        'primary': '#047857',
+        'secondary': '#052e16',
       },
       fontFamily: {
         'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        'display': ['Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       screens: {
         'xs': '475px',      // Extra small devices (large phones)
@@ -46,17 +48,32 @@ export default {
         '8xl': '88rem',
         '9xl': '96rem',
       },
-      // Remove all rounded corners from the entire website
+      // Subtle rounded corners for a softer, more modern feel
       borderRadius: {
         'none': '0',
-        'sm': '0',
-        'DEFAULT': '0',
-        'md': '0',
-        'lg': '0',
-        'xl': '0',
-        '2xl': '0',
-        '3xl': '0',
-        'full': '0',
+        'sm': '2px',
+        'DEFAULT': '4px',
+        'md': '6px',
+        'lg': '8px',
+        'xl': '12px',
+        '2xl': '16px',
+        '3xl': '24px',
+        'full': '9999px',
+      },
+      boxShadow: {
+        // Flatter, more refined shadow system
+        'xs': '0 1px 2px rgba(17, 24, 39, 0.04)',
+        'sm': '0 1px 2px rgba(17, 24, 39, 0.05), 0 1px 3px rgba(17, 24, 39, 0.06)',
+        'DEFAULT': '0 1px 3px rgba(17, 24, 39, 0.06), 0 1px 2px rgba(17, 24, 39, 0.04)',
+        'md': '0 4px 6px -1px rgba(17, 24, 39, 0.06), 0 2px 4px -1px rgba(17, 24, 39, 0.04)',
+        'lg': '0 10px 15px -3px rgba(17, 24, 39, 0.06), 0 4px 6px -2px rgba(17, 24, 39, 0.04)',
+        'xl': '0 20px 25px -5px rgba(17, 24, 39, 0.08), 0 10px 10px -5px rgba(17, 24, 39, 0.03)',
+        '2xl': '0 25px 50px -12px rgba(17, 24, 39, 0.15)',
+        'soft': '0 2px 8px rgba(17, 24, 39, 0.04)',
+      },
+      letterSpacing: {
+        'tighter': '-0.04em',
+        'tight': '-0.02em',
       },
     },
   },

@@ -52,7 +52,7 @@ export const REGIONAL_COMPLETION_DATA: RegionalCompletionData[] = [
 // Category/Sector completion data (ongoing projects by education level)
 export const CATEGORY_COMPLETION_DATA: CategoryCompletionData[] = [
   { id: 1, sector: 'Basic', belowThreshold: 807, progress30to69: 636, progress70to99: 443, total: 1886, color: '#059669' },
-  { id: 2, sector: 'E-Block', belowThreshold: 31, progress30to69: 22, progress70to99: 11, total: 64, color: '#1e3a5f' },
+  { id: 2, sector: 'E-Block', belowThreshold: 31, progress30to69: 22, progress70to99: 11, total: 64, color: '#052e16' },
   { id: 3, sector: 'Model SHS', belowThreshold: 0, progress30to69: 2, progress70to99: 5, total: 7, color: '#7c3aed' },
   { id: 4, sector: 'Secondary', belowThreshold: 278, progress30to69: 533, progress70to99: 494, total: 1305, color: '#10b981' },
   { id: 5, sector: 'Tertiary', belowThreshold: 98, progress30to69: 111, progress70to99: 94, total: 303, color: '#0891b2' },

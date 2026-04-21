@@ -120,7 +120,7 @@ export default function ScholarshipApply() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Apply for GETFund Scholarship'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             {content.hero?.subtitle && (
               <p className="text-gray-600 mt-4 max-w-3xl">
                 {content.hero.subtitle}
@@ -131,7 +131,7 @@ export default function ScholarshipApply() {
 
         {/* Required Documents & How to Apply - Split Layout */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#064e3b 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
           <div className="container mx-auto px-4 relative">
             <div className="relative grid lg:grid-cols-2 gap-0 max-w-7xl mx-auto">
               {/* Required Documents - Left */}
@@ -142,7 +142,7 @@ export default function ScholarshipApply() {
                 <ul className="space-y-4">
                   {(content.requiredDocuments?.items || defaultContent.requiredDocuments?.items || []).map((item, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#064e3b' }} />
                       <span className="text-gray-700 leading-relaxed">{item}</span>
                     </li>
                   ))}
@@ -160,7 +160,7 @@ export default function ScholarshipApply() {
                 <div className="space-y-6">
                   {(content.howToApply?.steps || defaultContent.howToApply?.steps || []).map((step, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                      <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#064e3b' }}>
                         {index + 1}
                       </div>
                       <p className="text-gray-700 leading-relaxed">{step}</p>
@@ -188,7 +188,7 @@ export default function ScholarshipApply() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white px-10 py-4 font-semibold text-lg transition-all duration-300 hover:bg-gray-100 shadow-lg"
-                  style={{ color: '#2a3f75' }}
+                  style={{ color: '#064e3b' }}
                 >
                   {content.applyButton?.text || 'Start Application'}
                   <ExternalLink className="w-5 h-5" />

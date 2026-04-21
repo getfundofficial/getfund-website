@@ -80,7 +80,7 @@ export default function PortfolioTimeline({
           )}
         </div>
         <div className="text-right">
-          <div className="text-3xl md:text-4xl font-bold" style={{ color: '#2a3f75' }}>
+          <div className="text-3xl md:text-4xl font-bold" style={{ color: '#064e3b' }}>
             {isVisible ? (
               <AnimatedCounter end={TOTAL_PORTFOLIO_PROJECTS} duration={1500} />
             ) : (

@@ -230,7 +230,7 @@ class CMSApiClient {
         blueBoxText: slide.blue_box_text || '',
         blueBox: {
           text: slide.blue_box_text || '',
-          color: slide.blue_box_color || '#2a3f75',
+          color: slide.blue_box_color || '#064e3b',
           opacity: slide.blue_box_opacity ?? 100,
         },
       }));

@@ -99,7 +99,7 @@ const defaultOverlay: SlideOverlay = {
 
 // Default blue box settings
 const defaultBlueBox: BlueBoxSettings = {
-  color: '#2a3f75',
+  color: '#064e3b',
   opacity: 100,
 };
 
@@ -109,7 +109,7 @@ function getBlueBoxStyle(blueBox?: BlueBoxSettings): React.CSSProperties {
   const opacity = (settings.opacity ?? 100) / 100;
 
   return {
-    backgroundColor: settings.color || '#2a3f75',
+    backgroundColor: settings.color || '#064e3b',
     opacity: opacity,
   };
 }
@@ -743,19 +743,19 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                 {/* Mobile: gradient overlay at bottom with text (no box) */}
                 <div
                   className="sm:hidden absolute inset-x-0 bottom-0 z-20 transition-opacity duration-1000"
-                  style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}
+                  style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1, background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}
                 >
-                  <div className="px-4 pb-10 pt-16">
-                    <h1 className="text-lg font-bold mb-1 leading-tight text-white line-clamp-2 drop-shadow-lg">
+                  <div className="px-5 pb-10 pt-20">
+                    <h1 className="font-display text-2xl font-semibold mb-2 text-white line-clamp-2" style={{ letterSpacing: '-0.03em', lineHeight: '1.1' }}>
                       {slide.headline}
                     </h1>
-                    <p className="text-xs text-gray-200 mb-2 line-clamp-1 drop-shadow">
+                    <p className="text-sm text-white/80 mb-4 line-clamp-2">
                       {slide.description}
                     </p>
                     {slide.cta && (
                       <Link
                         to={slide.ctaLink || "/scholarship-apply"}
-                        className="inline-flex items-center gap-1.5 text-white text-xs uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        className="inline-flex items-center gap-1.5 bg-getfund-gold text-getfund-secondary text-xs font-semibold px-4 py-2 rounded-full group"
                         aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                       >
                         {slide.ctaText || "Apply Now"}
@@ -772,35 +772,37 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                   </div>
                 </div>
 
-                {/* Desktop: Blue Content Box - Bottom Left */}
+                {/* Desktop: modern editorial text overlay */}
                 <div
-                  className="hidden sm:flex absolute inset-0 z-20 items-end justify-start px-8 md:px-12 pb-16 md:pb-20 transition-opacity duration-1000"
+                  className="hidden sm:flex absolute inset-0 z-20 items-end justify-start pb-20 md:pb-28 transition-opacity duration-1000"
                   style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1 }}
                 >
-                  <div
-                    className="slide-content pointer-events-auto p-8 md:p-10 max-w-xl"
-                    style={getBlueBoxStyle(slide.blueBox)}
-                  >
+                  {/* Gradient fade from left for readability, no solid box */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent pointer-events-none" />
+                  <div className="slide-content pointer-events-auto relative px-8 md:px-16 lg:px-20 max-w-4xl">
                     {(slide.blueBox?.text || slide.blueBoxText) && (
-                      <span className="inline-block text-sm text-blue-200 mb-2 uppercase tracking-wider font-medium">
+                      <span className="inline-block text-xs md:text-sm text-getfund-gold mb-5 uppercase font-semibold" style={{ letterSpacing: '0.2em' }}>
                         {slide.blueBox?.text || slide.blueBoxText}
                       </span>
                     )}
-                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-4 leading-tight text-white`}>
+                    <h1
+                      className={`font-display ${getHeadlineSizeClasses(slide.titleFontSize)} font-semibold mb-5 text-white`}
+                      style={{ letterSpacing: '-0.035em', lineHeight: '1.05' }}
+                    >
                       {slide.headline}
                     </h1>
-                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-5 text-gray-200 leading-relaxed`}>
+                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-8 text-white/85 leading-relaxed max-w-2xl`}>
                       {slide.description}
                     </p>
                     {slide.cta && (
                       <Link
                         to={slide.ctaLink || "/scholarship-apply"}
-                        className="inline-flex items-center gap-2 text-white text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        className="inline-flex items-center gap-2 bg-getfund-gold hover:bg-getfund-gold/90 text-getfund-secondary text-sm md:text-base font-semibold px-6 py-3 rounded-full transition-all duration-200 group shadow-md"
                         aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                       >
                         {slide.ctaText || "Apply Now"}
                         <svg
-                          className="w-5 h-5 md:w-6 md:h-6 transform group-hover:translate-x-1 transition-transform"
+                          className="w-4 h-4 md:w-5 md:h-5 transform group-hover:translate-x-1 transition-transform"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"

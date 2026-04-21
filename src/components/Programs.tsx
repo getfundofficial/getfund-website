@@ -10,10 +10,11 @@ interface FocusAreaImage {
 interface ProgramsProps {
   title?: string;
   showTitle?: boolean;
+  hideFocusCircles?: boolean;
   focusAreaImages?: FocusAreaImage[];
 }
 
-export default function Programs({ title, showTitle = true, focusAreaImages }: ProgramsProps = {}) {
+export default function Programs({ title, showTitle = true, hideFocusCircles = false, focusAreaImages }: ProgramsProps = {}) {
   const defaultImages: FocusAreaImage[] = [
     { image: '/images/hero/main-slider-1.jpg', title: 'Educational Infrastructure', description: 'Building schools across Ghana' },
     { image: '/images/hero/main-slider-2.jpg', title: 'Scholarship Programs', description: 'Supporting students nationwide' },
@@ -25,71 +26,82 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
 
   const images = focusAreaImages || defaultImages;
 
+  const focusCircles = [
+    'Educational Infrastructure Support',
+    'Ministry of Education & Agencies Financial Support',
+    'Government Policy & Programme Support',
+    'Scholar & capacity Building Programmes',
+    'Others'
+  ];
+
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-24 3xl:py-28 bg-gray-50">
+    <section className="pt-6 md:pt-10 pb-20 md:pb-32 bg-white">
       {/* Scroll anchor with offset for fixed header */}
       <div id="what-we-do" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 max-w-8xl">
-        {showTitle && (
-          <div className="text-center mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 3xl:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 3xl:mb-8">{title || 'What We Do'}</h2>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl 3xl:text-3xl text-gray-600 max-w-4xl 3xl:max-w-5xl mx-auto leading-relaxed">
-              GETFund is committed to transforming education in Ghana through strategic investments and key initiatives.
-            </p>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {showTitle ? (
+          /* Asymmetric Section Header with title + circles */
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mb-14 md:mb-20 max-w-6xl">
+            <div className="md:col-span-5">
+              <span className="text-eyebrow">Since 2000</span>
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-getfund-secondary mt-4 leading-[1.05]" style={{ letterSpacing: '-0.03em' }}>
+                {title || 'Transforming education across Ghana.'}
+              </h2>
+            </div>
+            <div className="md:col-span-7 md:col-start-6 flex items-center">
+              <div className="flex flex-nowrap justify-start md:justify-end gap-2 sm:gap-3 md:gap-4 w-full">
+                {focusCircles.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex-1 min-w-0 aspect-square max-w-[120px] md:max-w-[140px] bg-green-500 flex items-center justify-center shadow-md p-2 sm:p-3"
+                    style={{ borderRadius: '50%' }}
+                  >
+                    <span className="text-white text-[7px] sm:text-[10px] md:text-xs font-semibold text-center leading-tight">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Focus Areas - Navy Blue Circles (full width) */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 md:mb-20 3xl:mb-24">
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10 xl:gap-12">
-          {[
-            'Educational Infrastructure Support',
-            'Ministry of Education & Agencies Financial Support',
-            'Government Policy & Programme Support',
-            'Scholar & capacity Building Programmes',
-            'Others'
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="group flex flex-col items-center"
-            >
-              {/* Circle with text inside - using aspect-square to ensure perfect circle */}
+        ) : !hideFocusCircles ? (
+          /* Original-style focus circles — larger, full labels, wrap when needed */
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10 xl:gap-12 mb-12 sm:mb-16">
+            {focusCircles.map((item, index) => (
               <div
-                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full flex items-center justify-center shadow-lg transition-all duration-300 p-4"
-                style={{ borderRadius: '50%', backgroundColor: '#2a3f75' }}
+                key={index}
+                className="w-32 md:w-36 lg:w-40 xl:w-44 aspect-square bg-green-500 flex items-center justify-center shadow-lg p-4"
+                style={{ borderRadius: '50%' }}
               >
                 <span className="text-white text-[11px] md:text-xs lg:text-sm xl:text-base font-bold text-center leading-tight">
                   {item}
                 </span>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        ) : null}
 
-      {/* Full Screen Image Grid - 6 Edge-to-Edge Boxes */}
-      <div className="w-full bg-white my-12 sm:my-16 md:my-20">
-        <div className="grid grid-cols-2 md:grid-cols-3">
+        {/* Category Grid — 4 per row on desktop, tight clean lines */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
           {images.map((item, index) => (
             <div
               key={index}
-              className="relative aspect-square overflow-hidden group cursor-default"
+              className="group block"
             >
-              <OptimizedImage
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                fallbackSrc="/images/hero/main-slider-1.jpg"
-              />
-              {/* Overlay with title on hover */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
-                <div className="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4">
-                  <h3 className="text-white text-lg md:text-xl lg:text-2xl font-bold mb-1">
+              <div className="relative overflow-hidden bg-gray-100 aspect-[4/3]">
+                <OptimizedImage
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fallbackSrc="/images/hero/main-slider-1.jpg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
+                  <h3 className="font-display text-sm sm:text-lg md:text-xl font-semibold text-white leading-tight" style={{ letterSpacing: '-0.015em' }}>
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-white/80 text-sm md:text-base">
+                    <p className="text-xs sm:text-sm text-white/80 mt-1 sm:mt-2 line-clamp-2 hidden sm:block leading-relaxed">
                       {item.description}
                     </p>
                   )}
@@ -101,14 +113,13 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
       </div>
 
       {/* View Impact Button - disabled until page ready */}
-      <div className="container mx-auto px-4 text-center mb-12 sm:mb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 md:mt-24 mb-20 md:mb-28">
         <button
           disabled
-          className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white rounded-lg shadow-lg cursor-not-allowed opacity-80"
-          style={{ backgroundColor: '#2a3f75' }}
+          className="inline-flex items-center gap-2 px-7 py-3.5 text-base font-semibold text-white rounded-full shadow-sm cursor-not-allowed opacity-70 bg-getfund-dark hover:bg-getfund-secondary transition-colors"
         >
           View Our Impact
-          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </button>
@@ -117,7 +128,7 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
       {/* Key Initiatives */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 3xl:px-12 max-w-8xl">
         <div className="text-center mb-10 sm:mb-12">
-          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)', color: '#2a3f75' }}>
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)', color: '#064e3b' }}>
             Key Initiatives
           </span>
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
@@ -132,10 +143,10 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
           {/* Free SHS Policy - Featured Card */}
           <div className="group relative bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             {/* Accent line at top */}
-            <div className="absolute top-0 left-6 right-6 h-1 rounded-b-full transition-all duration-300 group-hover:left-4 group-hover:right-4" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="absolute top-0 left-6 right-6 h-1 rounded-b-full transition-all duration-300 group-hover:left-4 group-hover:right-4" style={{ backgroundColor: '#064e3b' }} />
             <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: '#2a3f75' }} aria-hidden="true" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                <GraduationCap className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: '#064e3b' }} aria-hidden="true" />
               </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Free SHS Policy</h3>
             </div>
@@ -178,10 +189,10 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             </div>
 
             <div className="group relative bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#2a3f75' }} />
+              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#064e3b' }} />
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                  <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} aria-hidden="true" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                  <TrendingUp className="w-5 h-5" style={{ color: '#064e3b' }} aria-hidden="true" />
                 </div>
                 <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Model School Projects</h4>
               </div>
@@ -191,10 +202,10 @@ export default function Programs({ title, showTitle = true, focusAreaImages }: P
             </div>
 
             <div className="group relative bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#1e3a5f' }} />
+              <div className="absolute top-0 left-5 right-5 h-1 rounded-b-full transition-all duration-300 group-hover:left-3 group-hover:right-3" style={{ backgroundColor: '#052e16' }} />
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
-                  <BookOpen className="w-5 h-5" style={{ color: '#1e3a5f' }} aria-hidden="true" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                  <BookOpen className="w-5 h-5" style={{ color: '#052e16' }} aria-hidden="true" />
                 </div>
                 <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">Basic Education Improvement</h4>
               </div>

@@ -128,7 +128,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
         {/* Header with gradient */}
         <div
           className="px-5 py-4 relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #2a3f75 0%, #1e3a5f 100%)' }}
+          style={{ background: 'linear-gradient(135deg, #064e3b 0%, #052e16 100%)' }}
         >
           <div className="relative z-10">
             <h3 className="text-xl font-bold text-white">
@@ -142,8 +142,8 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
 
         <div className="p-5">
           <div className="text-center py-6">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-              <svg className="w-8 h-8" style={{ color: '#2a3f75' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+              <svg className="w-8 h-8" style={{ color: '#064e3b' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -154,7 +154,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             <button
               onClick={() => setSuccess(false)}
               className="px-6 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md hover:scale-105"
-              style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+              style={{ backgroundColor: '#f59e0b', color: '#052e16' }}
             >
               Submit Another
             </button>
@@ -173,7 +173,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
       {/* Header with gradient */}
       <div
         className="px-5 py-4 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #2a3f75 0%, #1e3a5f 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #064e3b 0%, #052e16 100%)' }}
       >
         <div className="relative z-10">
           <h3 className="text-xl font-bold text-white">
@@ -207,7 +207,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 id="first_name"
                 value={formData.first_name}
                 onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
                 placeholder="John"
                 required
               />
@@ -221,7 +221,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 id="last_name"
                 value={formData.last_name}
                 onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
                 placeholder="Doe"
                 required
               />
@@ -238,7 +238,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               id="email"
               value={formData.email}
               onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
               placeholder="john.doe@example.com"
               required
             />
@@ -254,7 +254,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 id="country"
                 value={formData.country}
                 onChange={(e) => handleCountryChange(e.target.value)}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 bg-white font-medium text-gray-700 text-sm"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 bg-white font-medium text-gray-700 text-sm"
                 required
               >
                 {COUNTRY_DATA.map(country => (
@@ -272,7 +272,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                 <select
                   value={formData.phone_country_code}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone_country_code: e.target.value }))}
-                  className="w-20 px-2 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 bg-white text-sm font-medium text-gray-700"
+                  className="w-20 px-2 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 bg-white text-sm font-medium text-gray-700"
                 >
                   {COUNTRY_DATA.map(country => (
                     <option key={`${country.flag}-code`} value={country.code}>
@@ -288,7 +288,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
                     const value = e.target.value.replace(/\D/g, '');
                     setFormData(prev => ({ ...prev, phone_number: value }));
                   }}
-                  className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                  className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
                   placeholder="XX XXX XXXX"
                   required
                 />
@@ -306,7 +306,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
               value={formData.donation_description}
               onChange={(e) => setFormData(prev => ({ ...prev, donation_description: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm resize-none"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm resize-none"
               placeholder="Describe how you would like to support GETFund..."
               required
             />
@@ -325,7 +325,7 @@ export default function PledgeToSupportForm({ className = '' }: PledgeToSupportF
             type="submit"
             disabled={isSubmitting}
             className="px-8 py-3 rounded-xl font-bold text-base transition-all shadow-md hover:shadow-lg hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
-            style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+            style={{ backgroundColor: '#f59e0b', color: '#052e16' }}
           >
             {isSubmitting ? (
               <>

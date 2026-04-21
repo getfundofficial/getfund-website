@@ -27,7 +27,7 @@ export interface CompletionTotals {
 
 // Completion status colors - Professional blue palette aligned with GETFund branding
 export const COMPLETION_COLORS = {
-  completed: '#1e3a5f',      // Navy blue (GETFund primary) - 100% complete
+  completed: '#052e16',      // Navy blue (GETFund primary) - 100% complete
   progress70to99: '#3b82f6', // Medium blue - 70-99%
   progress30to69: '#06b6d4', // Cyan/teal - 30-69%
   belowThreshold: '#94a3b8', // Slate gray - <30%
@@ -75,7 +75,7 @@ export const SECTOR_COMPLETION_DATA: SectorCompletion[] = [
     belowThreshold: 27,
     total: 101,
     completionRate: Math.round((36 / 101) * 100),
-    color: '#1e3a5f',
+    color: '#052e16',
     parentId: 'secondary',
     isSubSector: true
   },

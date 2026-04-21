@@ -90,69 +90,64 @@ export default function AchievementsSection({
     : defaultCategories;
 
   return (
-    <section className="py-10 md:py-24 bg-white">
+    <section className="py-20 md:py-32 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Centered */}
-        <div className="text-center max-w-4xl mx-auto mb-6 sm:mb-12">
-          <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 sm:mb-3">
-            {sectionTitle}
-          </h2>
-          <p className="text-sm sm:text-lg md:text-xl text-gray-500 font-medium">
-            {sectionSubtitle}
-          </p>
-        </div>
-
-        {/* Green Circles Row - Category Labels */}
-        <div className="flex flex-nowrap justify-center gap-2 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 mb-8 sm:mb-16">
-          {displayCircles.map((circle, index) => (
-            <div
-              key={index}
-              className="group flex flex-col items-center min-w-0"
-            >
-              {/* Green Circle with text inside - using aspect-square to ensure perfect circle */}
-              <div
-                className="w-[60px] sm:w-32 md:w-36 lg:w-40 xl:w-44 aspect-square rounded-full bg-green-600 flex items-center justify-center shadow-lg transition-all duration-300 p-1.5 sm:p-4"
-                style={{ borderRadius: '50%' }}
-              >
-                <span className="text-white text-[7px] sm:text-[11px] md:text-xs lg:text-sm xl:text-base font-bold text-center leading-tight">
-                  {circle.value || circle.title}
-                </span>
-              </div>
+        {/* Asymmetric Section Header */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 mb-14 md:mb-20 max-w-6xl">
+          <div className="md:col-span-5">
+            <span className="text-eyebrow">{sectionSubtitle}</span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-getfund-secondary mt-4 leading-[1.05]" style={{ letterSpacing: '-0.03em' }}>
+              {sectionTitle}
+            </h2>
+          </div>
+          <div className="md:col-span-7 md:col-start-6 flex items-center">
+            <div className="flex flex-nowrap justify-start md:justify-end gap-2 sm:gap-3 md:gap-4 w-full">
+              {displayCircles.map((circle, index) => (
+                <div
+                  key={index}
+                  className="flex-1 min-w-0 aspect-square max-w-[120px] md:max-w-[140px] bg-getfund-dark flex items-center justify-center shadow-md p-2 sm:p-3"
+                  style={{ borderRadius: '50%' }}
+                >
+                  <span className="text-white text-[7px] sm:text-[10px] md:text-xs font-semibold text-center leading-tight">
+                    {circle.value || circle.title}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Category Cards Grid - Square Images with no hover cursor */}
-        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-8 lg:gap-10">
+        {/* Category Grid — 4 per row on desktop, tight clean lines */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
           {displayCategories.map((category, index) => (
-            <div
+            <a
               key={index}
-              className="flex flex-col items-center cursor-default"
+              href={category.link || '#'}
+              className="group block"
             >
-              {/* Square Image - larger size */}
-              <div className="w-full sm:w-36 md:w-44 lg:w-52 aspect-square mb-2 sm:mb-4 overflow-hidden rounded-lg shadow-md">
+              <div className="relative overflow-hidden bg-gray-100 aspect-[4/3]">
                 <img
                   src={category.image}
                   alt={category.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    // Use a valid fallback image that exists
                     target.src = '/images/hero/main-slider-1.jpg';
                   }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
+                  <h3 className="font-display text-sm sm:text-lg md:text-xl font-semibold text-white leading-tight" style={{ letterSpacing: '-0.015em' }}>
+                    {category.title}
+                  </h3>
+                  {category.description && (
+                    <p className="text-xs sm:text-sm text-white/80 mt-1 sm:mt-2 line-clamp-2 hidden sm:block leading-relaxed">
+                      {category.description}
+                    </p>
+                  )}
+                </div>
               </div>
-
-              {/* Title and Description Under Image */}
-              <h3 className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 text-center leading-tight">
-                {category.title}
-              </h3>
-              {category.description && (
-                <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-500 text-center mt-0.5 sm:mt-1 hidden sm:block">
-                  {category.description}
-                </p>
-              )}
-            </div>
+            </a>
           ))}
         </div>
       </div>

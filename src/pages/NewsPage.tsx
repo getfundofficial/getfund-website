@@ -98,7 +98,8 @@ export default function NewsPage() {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 12;
+  const firstPageSize = 13; // 1 featured + 12 grid
+  const otherPageSize = 12;
 
   // Fetch news articles and page content from CMS on component mount
   useEffect(() => {
@@ -149,11 +150,18 @@ export default function NewsPage() {
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
     });
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
-  const indexOfLastArticle = currentPage * articlesPerPage;
-  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  // Pagination — page 1 has a featured article (13 total), other pages show 12
+  const totalPages = filteredArticles.length <= firstPageSize
+    ? 1
+    : 1 + Math.ceil((filteredArticles.length - firstPageSize) / otherPageSize);
+  const indexOfFirstArticle = currentPage === 1
+    ? 0
+    : firstPageSize + (currentPage - 2) * otherPageSize;
+  const indexOfLastArticle = currentPage === 1
+    ? firstPageSize
+    : indexOfFirstArticle + otherPageSize;
   const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const showFeatured = currentPage === 1 && currentArticles.length > 0;
 
   // Reset to page 1 when search, category, or sort changes
   useEffect(() => {
@@ -236,7 +244,7 @@ export default function NewsPage() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content?.hero?.title || 'News & Events'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
@@ -255,7 +263,7 @@ export default function NewsPage() {
                         ? 'text-white'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
-                    style={selectedCategory === cat.key ? { backgroundColor: '#2a3f75' } : {}}
+                    style={selectedCategory === cat.key ? { backgroundColor: '#064e3b' } : {}}
                   >
                     {cat.label}
                   </button>
@@ -316,57 +324,59 @@ export default function NewsPage() {
               </div>
             ) : (
               <>
-                {/* Featured Article — first article displayed as a hero card */}
-                <article className="bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
-                  <Link to={`/news/${currentArticles[0].slug}`} className="block md:flex">
-                    <div className="relative md:w-3/5 overflow-hidden">
-                      <OptimizedImage
-                        src={getValidImage(currentArticles[0].image)}
-                        alt={currentArticles[0].title}
-                        className="w-full h-64 md:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
-                        fallbackSrc={PLACEHOLDER_IMAGE}
-                        priority
-                      />
-                      {getCategoryLabel(currentArticles[0].category) && (
-                        <div className="absolute top-4 left-4 z-10">
-                          <span
-                            className="text-white px-3 py-1 text-xs font-semibold"
-                            style={{ backgroundColor: '#2a3f75' }}
-                          >
-                            {getCategoryLabel(currentArticles[0].category)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6 md:p-8 lg:p-10 flex flex-col justify-center md:w-2/5">
-                      <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
-                        <Calendar className="w-4 h-4" aria-hidden="true" />
-                        {formatArticleDate(currentArticles[0].date) && (
-                          <time dateTime={currentArticles[0].date}>
-                            {formatArticleDate(currentArticles[0].date)}
-                          </time>
+                {/* Featured Article — only on page 1 */}
+                {showFeatured && (
+                  <article className="bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group mb-8">
+                    <Link to={`/news/${currentArticles[0].slug}`} className="block md:flex">
+                      <div className="relative md:w-3/5 overflow-hidden">
+                        <OptimizedImage
+                          src={getValidImage(currentArticles[0].image)}
+                          alt={currentArticles[0].title}
+                          className="w-full h-64 md:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                          fallbackSrc={PLACEHOLDER_IMAGE}
+                          priority
+                        />
+                        {getCategoryLabel(currentArticles[0].category) && (
+                          <div className="absolute top-4 left-4 z-10">
+                            <span
+                              className="text-white px-3 py-1 text-xs font-semibold"
+                              style={{ backgroundColor: '#064e3b' }}
+                            >
+                              {getCategoryLabel(currentArticles[0].category)}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-3">
-                        {currentArticles[0].title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed mb-6 line-clamp-4">
-                        {currentArticles[0].excerpt}
-                      </p>
-                      <span
-                        className="inline-flex items-center gap-2 font-semibold text-sm group-hover:gap-3 transition-all"
-                        style={{ color: '#2a3f75' }}
-                      >
-                        Read full article <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                      </span>
-                    </div>
-                  </Link>
-                </article>
+                      <div className="p-6 md:p-8 lg:p-10 flex flex-col justify-center md:w-2/5">
+                        <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+                          <Calendar className="w-4 h-4" aria-hidden="true" />
+                          {formatArticleDate(currentArticles[0].date) && (
+                            <time dateTime={currentArticles[0].date}>
+                              {formatArticleDate(currentArticles[0].date)}
+                            </time>
+                          )}
+                        </div>
+                        <h3 className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-getfund-secondary mb-4 group-hover:text-getfund-primary transition-colors line-clamp-3 leading-tight" style={{ letterSpacing: '-0.025em' }}>
+                          {currentArticles[0].title}
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed mb-6 line-clamp-4">
+                          {currentArticles[0].excerpt}
+                        </p>
+                        <span
+                          className="inline-flex items-center gap-2 font-semibold text-sm group-hover:gap-3 transition-all"
+                          style={{ color: '#064e3b' }}
+                        >
+                          Read full article <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                        </span>
+                      </div>
+                    </Link>
+                  </article>
+                )}
 
-                {/* Remaining Articles Grid */}
-                {currentArticles.length > 1 && (
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                    {currentArticles.slice(1).map((article) => (
+                {/* Grid — 12 cards (page 1 skips the featured; other pages show all 12) */}
+                {(showFeatured ? currentArticles.length > 1 : currentArticles.length > 0) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {(showFeatured ? currentArticles.slice(1) : currentArticles).map((article) => (
                       <article
                         key={article.id}
                         className="bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col"
@@ -385,7 +395,7 @@ export default function NewsPage() {
                               <div className="absolute top-4 left-4 z-10">
                                 <span
                                   className="text-white px-3 py-1 text-xs font-semibold"
-                                  style={{ backgroundColor: '#2a3f75' }}
+                                  style={{ backgroundColor: '#064e3b' }}
                                 >
                                   {getCategoryLabel(article.category)}
                                 </span>
@@ -401,7 +411,7 @@ export default function NewsPage() {
                                 </time>
                               )}
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                            <h3 className="font-display text-lg font-semibold text-getfund-secondary mb-2 group-hover:text-getfund-primary transition-colors line-clamp-2 leading-snug" style={{ letterSpacing: '-0.015em' }}>
                               {article.title}
                             </h3>
                             <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
@@ -409,7 +419,7 @@ export default function NewsPage() {
                             </p>
                             <span
                               className="inline-flex items-center gap-2 font-semibold text-sm group-hover:gap-3 transition-all mt-auto"
-                              style={{ color: '#2a3f75' }}
+                              style={{ color: '#064e3b' }}
                             >
                               Read more <ArrowRight className="w-4 h-4" aria-hidden="true" />
                             </span>
@@ -459,7 +469,7 @@ export default function NewsPage() {
                           ? 'text-white'
                           : 'text-gray-600 hover:bg-gray-200'
                       }`}
-                      style={currentPage === pageNumber ? { backgroundColor: '#2a3f75' } : {}}
+                      style={currentPage === pageNumber ? { backgroundColor: '#064e3b' } : {}}
                       aria-label={`Page ${pageNumber}`}
                       aria-current={currentPage === pageNumber ? 'page' : undefined}
                     >

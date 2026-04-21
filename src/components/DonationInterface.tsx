@@ -106,7 +106,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
       {/* Header with gradient */}
       <div
         className="px-5 py-4 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #2a3f75 0%, #1e3a5f 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #064e3b 0%, #052e16 100%)' }}
       >
         <div className="relative z-10">
           <h3 className="text-xl font-bold text-white">
@@ -174,7 +174,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                         ? 'text-white shadow-md'
                         : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                     }`}
-                    style={amount === amt ? { backgroundColor: '#2a3f75' } : {}}
+                    style={amount === amt ? { backgroundColor: '#064e3b' } : {}}
                     aria-pressed={amount === amt}
                   >
                     GH₵{formatNumberWithCommas(amt)}
@@ -188,7 +188,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                       ? 'text-white shadow-md'
                       : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                   }`}
-                  style={amount === 'other' ? { backgroundColor: '#2a3f75' } : {}}
+                  style={amount === 'other' ? { backgroundColor: '#064e3b' } : {}}
                   aria-pressed={amount === 'other'}
                 >
                   Any Amount
@@ -209,7 +209,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                           setCustomAmount(formatted);
                         }
                       }}
-                      className="w-full pl-14 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 text-base font-bold text-gray-800"
+                      className="w-full pl-14 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 text-base font-bold text-gray-800"
                       placeholder="Enter amount"
                       required
                     />
@@ -252,7 +252,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                   id="donorType"
                   value={donorType}
                   onChange={(e) => setDonorType(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 bg-white font-medium text-gray-700 text-sm"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 bg-white font-medium text-gray-700 text-sm"
                 >
                   <option value="Individual">Individual</option>
                   <option value="Corporate">Corporate</option>
@@ -268,7 +268,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                   id="donorName"
                   value={donorType === 'Corporate' ? companyName : donorName}
                   onChange={(e) => donorType === 'Corporate' ? setCompanyName(e.target.value) : setDonorName(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
                   placeholder={donorType === 'Corporate' ? 'Company' : 'Your name'}
                 />
               </div>
@@ -284,7 +284,7 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#2a3f75] focus:ring-0 font-medium text-gray-700 text-sm"
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:border-[#064e3b] focus:ring-0 font-medium text-gray-700 text-sm"
                 placeholder="your@email.com"
               />
             </div>
@@ -294,17 +294,17 @@ export default function DonationInterface({ className = '' }: DonationInterfaceP
         {/* Amount Display & Submit */}
         <div className="mt-5 pt-4 border-t border-gray-100">
           <div className="flex items-center justify-between gap-4">
-            <div className="rounded-xl p-3 flex-1" style={{ backgroundColor: 'rgba(42, 63, 117, 0.05)' }}>
+            <div className="rounded-xl p-3 flex-1" style={{ backgroundColor: 'rgba(6, 78, 59, 0.05)' }}>
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 text-sm">Total</span>
-                <span className="text-xl font-bold" style={{ color: '#2a3f75' }}>{getDisplayAmount()}</span>
+                <span className="text-xl font-bold" style={{ color: '#064e3b' }}>{getDisplayAmount()}</span>
               </div>
             </div>
             <button
               type="submit"
               disabled={isLoading}
               className="px-8 py-3 rounded-xl font-bold text-base transition-all shadow-md hover:shadow-lg hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
-              style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+              style={{ backgroundColor: '#f59e0b', color: '#052e16' }}
             >
               {isLoading ? (
                 <>

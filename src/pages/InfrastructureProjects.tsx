@@ -179,7 +179,7 @@ export default function InfrastructureProjects() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Infrastructure Projects'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
@@ -271,7 +271,7 @@ export default function InfrastructureProjects() {
                         {content.achievements?.heading || 'Key Achievements'}
                       </h2>
                     </div>
-                    <div className="w-12 h-1 mb-6 ml-8" style={{ backgroundColor: '#2a3f75' }} />
+                    <div className="w-12 h-1 mb-6 ml-8" style={{ backgroundColor: '#064e3b' }} />
                     <div className="space-y-4">
                       {content.achievements?.items?.map((item, idx) => (
                         <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">

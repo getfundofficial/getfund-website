@@ -258,35 +258,39 @@ export default function Home() {
           categories={pageContent?.achievementCategories}
         />
 
-        {/* Empowering Ghana Section with Parallax Background */}
-        <section className="relative py-10 md:py-20 overflow-hidden">
-          {/* Parallax Background - bg-fixed for desktop, bg-scroll for mobile (iOS doesn't support fixed) */}
+        {/* Empowering Ghana — parallax impact section */}
+        <section className="relative py-24 md:py-36 overflow-hidden">
+          {/* Parallax background — fixed on desktop, scroll on mobile (iOS doesn't support fixed) */}
           <div
             className="absolute inset-0 bg-scroll md:bg-fixed bg-center bg-cover"
             style={{ backgroundImage: `url('${pageContent?.statsBackgroundImage || '/images/hero/main-slider-1.jpg'}')` }}
           />
-          <div className="absolute inset-0 bg-black/60" />
+          {/* Layered modern overlay — dark base + brand green wash */}
+          <div className="absolute inset-0 bg-getfund-secondary/80" />
+          <div className="absolute inset-0 bg-gradient-to-br from-getfund-primary/30 via-transparent to-transparent" />
 
-          {/* Content */}
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
-              <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-2 md:mb-4">
-                {pageContent?.statsTitle || 'Empowering Ghana Through Education'}
+            <div className="max-w-3xl mb-14 md:mb-20">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-getfund-gold">Our Impact</span>
+              <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white mt-5 mb-6 leading-[1.05]" style={{ letterSpacing: '-0.035em' }}>
+                {pageContent?.statsTitle || 'Empowering Ghana through education.'}
               </h2>
-              <p className="text-sm sm:text-lg text-white/80 line-clamp-3 sm:line-clamp-none">
-                {pageContent?.statsDescription || 'The Ghana Education Trust Fund (GETFund) is a statutory body established to provide financial resources for educational development. Since our inception in 2000, we have remained committed to supplementing government efforts in providing educational infrastructure and facilities at all levels.'}
+              <p className="text-base md:text-lg text-white/80 leading-relaxed max-w-2xl">
+                {pageContent?.statsDescription || 'The Ghana Education Trust Fund is a statutory body established to provide financial resources for educational development. Since 2000, we have supplemented government efforts in providing educational infrastructure and facilities at all levels.'}
               </p>
             </div>
 
-            {/* Stats */}
-            <div className={`grid ${impactStats.length === 4 ? 'grid-cols-4' : impactStats.length === 2 ? 'grid-cols-2' : 'grid-cols-3'} gap-4 md:gap-8 max-w-4xl mx-auto mb-8 md:mb-16`}>
+            {/* Stats — hairline divider grid on glass */}
+            <div className={`grid ${impactStats.length === 4 ? 'grid-cols-2 md:grid-cols-4' : impactStats.length === 2 ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'} divide-y sm:divide-y-0 sm:divide-x divide-white/15 border-y border-white/15`}>
               {impactStats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl sm:text-4xl md:text-5xl font-bold text-green-400 mb-1 md:mb-2">
+                <div key={index} className="py-8 md:py-10 px-2 sm:px-6">
+                  <div className="font-display text-4xl md:text-6xl font-semibold text-getfund-gold mb-3" style={{ letterSpacing: '-0.04em' }}>
                     <AnimatedCounter end={stat.number} suffix={stat.suffix || ''} duration={2000 + index * 200} />
                   </div>
-                  <p className="text-xs sm:text-base font-semibold text-white">{stat.label}</p>
-                  {stat.description && <p className="text-[10px] sm:text-sm text-white/70 hidden sm:block">{stat.description}</p>}
+                  <p className="text-xs md:text-sm font-semibold uppercase text-white" style={{ letterSpacing: '0.12em' }}>{stat.label}</p>
+                  {stat.description && (
+                    <p className="text-sm text-white/60 mt-2 hidden sm:block">{stat.description}</p>
+                  )}
                 </div>
               ))}
             </div>

@@ -115,19 +115,24 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
   }
 
   return (
-    <section className="py-10 sm:py-16 md:py-20 lg:py-24 bg-white">
+    <section className="py-16 sm:py-20 md:py-28 bg-white">
       {/* Scroll anchor with offset for fixed header */}
       <div id="news" className="absolute -mt-24 sm:-mt-28 md:-mt-32 lg:-mt-36"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with title and View All link */}
-        <div className="flex items-start justify-between mb-6 sm:mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-16 max-w-6xl">
           <div>
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{title || 'Latest News & Updates'}</h2>
-            <div className="w-16 h-1 bg-getfund-primary"></div>
+            <span className="text-eyebrow">Newsroom</span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-getfund-secondary mt-3 leading-tight">
+              {title || 'Latest News & Updates'}
+            </h2>
+            {subtitle && (
+              <p className="text-base sm:text-lg text-gray-600 mt-4 leading-relaxed max-w-2xl">{subtitle}</p>
+            )}
           </div>
           <Link
             to="/news"
-            className="hidden sm:inline-flex items-center gap-2 text-getfund-primary font-medium hover:gap-3 transition-all"
+            className="inline-flex items-center gap-2 text-getfund-primary font-semibold text-sm uppercase tracking-wider hover:gap-3 transition-all"
           >
             View All <ArrowRight className="w-4 h-4" />
           </Link>
@@ -172,12 +177,12 @@ export default function News({ articles: propArticles, title, subtitle }: NewsPr
                     fallbackSrc="/images/news/news-placeholder.svg"
                   />
                 </div>
-                <h3 className="text-[11px] sm:text-xl font-semibold text-gray-900 mb-1 sm:mb-2 group-hover:text-getfund-primary transition-colors line-clamp-2">
+                <h3 className="font-display text-base sm:text-xl md:text-2xl font-semibold text-getfund-secondary mb-2 sm:mb-3 group-hover:text-getfund-primary transition-colors line-clamp-2 leading-snug tracking-tight">
                   {article.title}
                 </h3>
                 <time
                   dateTime={article.publishedAt || article.date || ''}
-                  className="text-[9px] sm:text-sm text-gray-500"
+                  className="text-xs sm:text-sm text-gray-500 uppercase tracking-wider"
                 >
                   {(article.publishedAt || article.date)
                     ? new Date((article.publishedAt || article.date) as string).toLocaleDateString('en-GB', {

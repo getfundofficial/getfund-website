@@ -86,7 +86,7 @@ export const PROGRAMMES_DATA: Programme[] = [
     startYear: 2014,
     endYear: null,
     projectCount: 101,
-    color: '#1e3a5f',
+    color: '#052e16',
     description: 'Community day senior high schools'
   },
   {

@@ -22,7 +22,7 @@ function FAQAccordion({ items }: { items: FAQItem[] }) {
           >
             <span className="font-medium text-gray-900 pr-4">{item.question}</span>
             {openIndex === idx ? (
-              <ChevronUp className="w-5 h-5 flex-shrink-0" style={{ color: '#2a3f75' }} />
+              <ChevronUp className="w-5 h-5 flex-shrink-0" style={{ color: '#064e3b' }} />
             ) : (
               <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />
             )}
@@ -87,7 +87,7 @@ export default function ScholarshipHowToApply() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               How to Apply
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             <p className="text-gray-600 mt-4 max-w-3xl">
               Everything you need to know about applying for a GETFund scholarship.
             </p>
@@ -95,7 +95,7 @@ export default function ScholarshipHowToApply() {
         </section>
 
         {/* Call for Application */}
-        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="grid md:grid-cols-3 gap-10">
               <div className="md:col-span-2">
@@ -124,18 +124,18 @@ export default function ScholarshipHowToApply() {
 
         {/* Application Procedure */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#064e3b 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
           <div className="container mx-auto px-4 max-w-7xl relative">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.applicationProcedure.heading}
             </h2>
-            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#064e3b' }} />
             <div className="grid md:grid-cols-3 gap-8">
               {content.applicationProcedure.steps.map((step, idx) => (
                 <div key={idx} className="relative group">
-                  <div className="absolute -inset-2 opacity-0 blur-lg transition-all duration-500 group-hover:opacity-10" style={{ backgroundColor: '#2a3f75' }} />
+                  <div className="absolute -inset-2 opacity-0 blur-lg transition-all duration-500 group-hover:opacity-10" style={{ backgroundColor: '#064e3b' }} />
                   <div className="relative bg-gray-50 p-6 border border-gray-200 transition-shadow duration-300 group-hover:shadow-lg">
-                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mb-4" style={{ backgroundColor: '#2a3f75' }}>
+                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mb-4" style={{ backgroundColor: '#064e3b' }}>
                       {idx + 1}
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
@@ -159,7 +159,7 @@ export default function ScholarshipHowToApply() {
                 <div className="space-y-4">
                   {content.eligibilityRequirements.items.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-3">
-                      <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                      <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#064e3b' }}>
                         {idx + 1}
                       </div>
                       <p className="text-gray-700 leading-relaxed">{item}</p>
@@ -179,7 +179,7 @@ export default function ScholarshipHowToApply() {
                 <div className="space-y-4">
                   {content.academicRequirements.items.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 list-none">
-                      <FileText className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <FileText className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#064e3b' }} />
                       <p className="text-gray-700 leading-relaxed">{item}</p>
                     </li>
                   ))}
@@ -201,7 +201,7 @@ export default function ScholarshipHowToApply() {
                 <ul className="space-y-3">
                   {content.supportingDocuments.items.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#064e3b' }} />
                       <span className="text-gray-700">{item}</span>
                     </li>
                   ))}
@@ -220,7 +220,7 @@ export default function ScholarshipHowToApply() {
                 <ul className="space-y-3">
                   {content.specialDispensation.items.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <Star className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2a3f75' }} />
+                      <Star className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#064e3b' }} />
                       <span className="text-gray-700 text-sm">{item}</span>
                     </li>
                   ))}
@@ -236,12 +236,12 @@ export default function ScholarshipHowToApply() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.applicationSteps.heading}
             </h2>
-            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#064e3b' }} />
             <div className="flex flex-col md:flex-row gap-4">
               {content.applicationSteps.steps.map((step, idx) => (
                 <div key={idx} className="flex-1 relative">
                   <div className="bg-gray-50 border border-gray-200 p-5 text-center h-full">
-                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mx-auto mb-3" style={{ backgroundColor: '#2a3f75' }}>
+                    <div className="w-10 h-10 flex items-center justify-center text-lg font-bold text-white mx-auto mb-3" style={{ backgroundColor: '#064e3b' }}>
                       {idx + 1}
                     </div>
                     <p className="text-gray-700 font-medium text-sm">{step}</p>
@@ -281,11 +281,11 @@ export default function ScholarshipHowToApply() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.fundingAndDuration.heading}
             </h2>
-            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1 mb-10" style={{ backgroundColor: '#064e3b' }} />
             <div className="space-y-6">
               {content.fundingAndDuration.items.map((item, idx) => (
                 <div key={idx}>
-                  <h3 className="text-xl font-bold mb-2" style={{ color: '#2a3f75' }}>{item.question}</h3>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: '#064e3b' }}>{item.question}</h3>
                   <p className="text-gray-700 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
@@ -297,12 +297,12 @@ export default function ScholarshipHowToApply() {
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="flex items-center gap-3 mb-2">
-              <HelpCircle className="w-7 h-7" style={{ color: '#2a3f75' }} />
+              <HelpCircle className="w-7 h-7" style={{ color: '#064e3b' }} />
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {content.faqs.heading}
               </h2>
             </div>
-            <div className="w-16 h-1 mb-8" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1 mb-8" style={{ backgroundColor: '#064e3b' }} />
             <FAQAccordion items={content.faqs.items} />
           </div>
         </section>
@@ -322,7 +322,7 @@ export default function ScholarshipHowToApply() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white px-8 py-3 font-semibold hover:bg-gray-100 transition-all duration-300"
-                style={{ color: '#2a3f75' }}
+                style={{ color: '#064e3b' }}
               >
                 {content.cta.buttonText}
                 <ArrowRight className="w-5 h-5" />

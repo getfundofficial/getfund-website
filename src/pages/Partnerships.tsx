@@ -120,12 +120,12 @@ export default function Partnerships() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Partnerships'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
         {/* Two-column Intro Section */}
-        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-12" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Text Content - Left */}
@@ -156,7 +156,7 @@ export default function Partnerships() {
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {content.ourPartners?.heading || 'Our Partners'}
               </h2>
-              <div className="w-12 h-1" style={{ backgroundColor: '#2a3f75' }} />
+              <div className="w-12 h-1" style={{ backgroundColor: '#064e3b' }} />
             </div>
 
             {partners.length > 0 ? (
@@ -206,7 +206,7 @@ export default function Partnerships() {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                   {content.waysToPartner?.heading || 'Ways to Partner'}
                 </h2>
-                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#064e3b' }} />
                 <div className="grid grid-cols-2 gap-4">
                   {(content.waysToPartner?.ways || ['Infrastructure Funding', 'Scholarship Support', 'Technology Donations', 'Volunteer Programs']).map((way, index) => (
                     <Link
@@ -226,7 +226,7 @@ export default function Partnerships() {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                   {content.whySupport?.heading || 'Benefits of Partnership'}
                 </h2>
-                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="w-12 h-1 mb-6" style={{ backgroundColor: '#064e3b' }} />
                 <div className="space-y-4">
                   {(content.whySupport?.benefits || [
                     { title: 'Tax Benefits', description: 'Enjoy tax deductions for your contributions to education.' },

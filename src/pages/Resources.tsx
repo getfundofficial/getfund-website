@@ -184,7 +184,7 @@ export default function Resources() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {pageContent?.heroTitle || 'Resources & Publications'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             <p className="text-gray-600 mt-3 max-w-3xl">
               {pageContent?.heroSubtitle || "Access our comprehensive collection of reports, policies, research studies, and strategic documents."}
             </p>
@@ -192,23 +192,23 @@ export default function Resources() {
         </section>
 
         {/* Stats Section - Compact */}
-        <section className="py-6" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-6" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.documentsAvailable}+</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>{stats.documentsAvailable}+</div>
                 <div className="text-gray-600 text-sm">Documents</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.policyDocuments}</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>{stats.policyDocuments}</div>
                 <div className="text-gray-600 text-sm">Policies</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.researchStudies}</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>{stats.researchStudies}</div>
                 <div className="text-gray-600 text-sm">Research Studies</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>{stats.annualReports}</div>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>{stats.annualReports}</div>
                 <div className="text-gray-600 text-sm">Annual Reports</div>
               </div>
             </div>
@@ -577,7 +577,7 @@ export default function Resources() {
         </section>
 
         {/* Newsletter Subscription Section */}
-        <section className="py-10" style={{ backgroundColor: '#1e3a5f' }}>
+        <section className="py-10" style={{ backgroundColor: '#052e16' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="text-center text-white">
               <h2 className="text-2xl md:text-3xl font-bold mb-2">

@@ -86,7 +86,7 @@ export default function Events() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Events'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             {content.hero?.subtitle && (
               <p className="text-gray-600 mt-4 max-w-3xl">
                 {content.hero.subtitle}
@@ -96,13 +96,13 @@ export default function Events() {
         </section>
 
         {/* Upcoming Events */}
-        <section className="py-12" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-12" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {content.upcomingEvents?.heading || 'Upcoming Events'}
               </h2>
-              <div className="w-12 h-1" style={{ backgroundColor: '#2a3f75' }} />
+              <div className="w-12 h-1" style={{ backgroundColor: '#064e3b' }} />
             </div>
 
             {events.length > 0 ? (
@@ -116,13 +116,13 @@ export default function Events() {
                     {event.imageUrl ? (
                       <img src={event.imageUrl} alt={event.title} className="aspect-video w-full object-cover" />
                     ) : (
-                      <div className="aspect-video flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                        <Calendar className="w-12 h-12" style={{ color: '#2a3f75' }} />
+                      <div className="aspect-video flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                        <Calendar className="w-12 h-12" style={{ color: '#064e3b' }} />
                       </div>
                     )}
 
                     <div className="p-5">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#2a3f75] transition-colors">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#064e3b] transition-colors">
                         {event.title}
                       </h3>
                       <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
@@ -136,8 +136,8 @@ export default function Events() {
               </div>
             ) : (
               <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                  <Calendar className="w-8 h-8" style={{ color: '#2a3f75' }} />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                  <Calendar className="w-8 h-8" style={{ color: '#064e3b' }} />
                 </div>
                 <p className="text-gray-700 text-lg font-medium">{content.upcomingEvents?.emptyStateTitle || 'No upcoming events'}</p>
                 <p className="text-gray-500 mt-2 text-sm">{content.upcomingEvents?.emptyStateSubtitle || 'Check back soon for new events!'}</p>

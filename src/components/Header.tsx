@@ -148,7 +148,7 @@ export default function Header() {
       <header className={`fixed top-0 left-0 right-0 glass-header z-50 transition-transform duration-300 ease-in-out ${
         shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
       }`}>
-      <nav className="container mx-auto px-3 xs:px-4 sm:px-6 py-2 sm:py-3 3xl:px-8 4xl:px-12 max-w-9xl flex items-center justify-between">
+      <nav className="font-display container mx-auto px-3 xs:px-4 sm:px-6 py-2 sm:py-3 3xl:px-8 4xl:px-12 max-w-9xl flex items-center justify-between">
         <Link to="/" className="flex items-center flex-shrink-0">
           <img
             src="/images/logos/GETFund logo_200cm Wide -  Black.png"

@@ -83,7 +83,7 @@ export default function BeneficiariesGiveBack() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'GETFund Beneficiaries'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
@@ -108,7 +108,7 @@ export default function BeneficiariesGiveBack() {
         )}
 
         {/* Main Content */}
-        <section className="py-20" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-20" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
               {content.mainContent?.heading}
@@ -124,7 +124,7 @@ export default function BeneficiariesGiveBack() {
               <Link
                 to="/fundraising/ways-to-donate"
                 className="inline-block px-12 py-4 rounded-md font-semibold transition-colors text-lg shadow-lg hover:shadow-xl"
-                style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+                style={{ backgroundColor: '#f59e0b', color: '#052e16' }}
               >
                 {content.mainContent?.ctaButtonText || 'Make a Donation'}
               </Link>

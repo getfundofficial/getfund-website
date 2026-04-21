@@ -58,7 +58,7 @@ export default function Footer() {
   const address = footerConfig?.address || 'No. 42, 4th Close, Airport Residential Area, Accra';
   const officeHoursWeekday = footerConfig?.office_hours_weekday || 'Monday - Friday: 8:00 AM - 5:00 PM';
   const officeHoursWeekend = footerConfig?.office_hours_weekend || 'Saturday - Sunday: Closed';
-  const backgroundColor = footerConfig?.background_color || '#1e3a5f';
+  const backgroundColor = footerConfig?.background_color || '#052e16';
 
   // Build social links from CMS data
   const socialLinks = footerConfig?.social_links ? [
@@ -82,8 +82,8 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="text-white glass-footer full-bleed" style={{ backgroundColor }}>
-      <div className="container mx-auto px-3 xs:px-4 sm:px-6 3xl:px-8 4xl:px-12 max-w-9xl py-12 sm:py-16 3xl:py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 3xl:gap-16 mb-8 sm:mb-12">
+      <div className="container mx-auto px-3 xs:px-4 sm:px-6 3xl:px-8 4xl:px-12 max-w-9xl py-16 sm:py-20 3xl:py-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 lg:gap-16 mb-12 sm:mb-16">
           <div>
             <div className="flex items-center gap-2 mb-4 sm:mb-6">
               <img
@@ -92,7 +92,7 @@ export default function Footer() {
                 className="h-12 sm:h-14 3xl:h-16 4xl:h-20 w-auto object-contain"
               />
             </div>
-            <p className="text-sm sm:text-base 3xl:text-lg text-gray-400 leading-relaxed mb-4 sm:mb-6">
+            <p className="text-sm sm:text-base 3xl:text-lg text-white/60 leading-relaxed mb-6 sm:mb-7 max-w-sm">
               {aboutText}
             </p>
             <div className="flex gap-3 sm:gap-4 flex-wrap">
@@ -102,10 +102,10 @@ export default function Footer() {
                   <a
                     key={social.label}
                     href={social.href}
-                    className="glass-icon w-10 h-10 3xl:w-12 3xl:h-12 4xl:w-14 4xl:h-14 rounded-lg flex items-center justify-center touch-manipulation"
+                    className="w-10 h-10 3xl:w-11 3xl:h-11 rounded-full border border-white/15 hover:border-white/50 hover:bg-white/5 flex items-center justify-center transition-colors touch-manipulation"
                     aria-label={social.label}
                   >
-                    <Icon className="w-5 h-5 3xl:w-6 3xl:h-6 4xl:w-7 4xl:h-7" aria-hidden="true" />
+                    <Icon className="w-4 h-4 3xl:w-5 3xl:h-5" aria-hidden="true" />
                   </a>
                 );
               })}
@@ -113,7 +113,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Quick Links</h3>
+            <h3 className="font-sans font-semibold text-xs sm:text-sm uppercase tracking-widest text-white mb-5 sm:mb-6">Quick Links</h3>
             <ul className="space-y-2 sm:space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -121,14 +121,14 @@ export default function Footer() {
                     <a
                       href={link.href}
                       onClick={(e) => handleAnchorClick(link.href, e)}
-                      className="text-gray-400 hover:text-white transition-colors"
+                      className="text-white/60 hover:text-white transition-colors"
                     >
                       {link.name}
                     </a>
                   ) : (
                     <Link
                       to={link.href}
-                      className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors"
+                      className="text-sm sm:text-base 3xl:text-lg text-white/60 hover:text-white transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -139,17 +139,17 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Contact Info</h3>
+            <h3 className="font-sans font-semibold text-xs sm:text-sm uppercase tracking-widest text-white mb-5 sm:mb-6">Contact Info</h3>
             <ul className="space-y-3 sm:space-y-4">
               <li className="flex items-start gap-2 sm:gap-3">
                 <Phone className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-6 3xl:h-6 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors">
+                <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="text-sm sm:text-base 3xl:text-lg text-white/60 hover:text-white transition-colors">
                   {phone}
                 </a>
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 3xl:w-6 3xl:h-6 text-getfund-gold flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <a href={`mailto:${email}`} className="text-sm sm:text-base 3xl:text-lg text-gray-400 hover:text-white transition-colors">
+                <a href={`mailto:${email}`} className="text-sm sm:text-base 3xl:text-lg text-white/60 hover:text-white transition-colors">
                   {email}
                 </a>
               </li>
@@ -163,7 +163,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-bold text-base sm:text-lg 3xl:text-xl mb-4 sm:mb-6">Office Hours</h3>
+            <h3 className="font-sans font-semibold text-xs sm:text-sm uppercase tracking-widest text-white mb-5 sm:mb-6">Office Hours</h3>
             <div className="space-y-2 text-sm sm:text-base 3xl:text-lg text-gray-400">
               <p className="font-semibold text-white">{officeHoursWeekday}</p>
               <p className="font-semibold text-white mt-4">{officeHoursWeekend}</p>
@@ -171,8 +171,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-6 sm:pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-gray-400 text-xs sm:text-sm 3xl:text-base">
+        <div className="border-t border-white/10 pt-8 sm:pt-10">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-white/50 text-xs sm:text-sm 3xl:text-base">
             <p>&copy; {currentYear} Ghana Education Trust Fund. All rights reserved.</p>
             <div className="flex gap-4 sm:gap-6">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

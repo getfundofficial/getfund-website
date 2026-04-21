@@ -139,22 +139,22 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
         {impactVisualized && (
           <div className="flex flex-wrap gap-6 mb-8">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                <TrendingUp className="w-5 h-5" style={{ color: '#2a3f75' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.15)' }}>
+                <TrendingUp className="w-5 h-5" style={{ color: '#064e3b' }} />
               </div>
               <div>
-                <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                <span className="text-2xl font-bold" style={{ color: '#064e3b' }}>
                   {impactVisualized.totalRaised}
                 </span>
                 <span className="text-gray-500 text-xs ml-2">Total Raised</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.15)' }}>
-                <Users className="w-5 h-5" style={{ color: '#2a3f75' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.15)' }}>
+                <Users className="w-5 h-5" style={{ color: '#064e3b' }} />
               </div>
               <div>
-                <span className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                <span className="text-2xl font-bold" style={{ color: '#064e3b' }}>
                   {impactVisualized.totalDonations}
                 </span>
                 <span className="text-gray-500 text-xs ml-2">Donations</span>
@@ -204,14 +204,14 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
             className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-xl flex items-center justify-center hover:bg-white transition-all duration-300"
             style={{ boxShadow: '0 8px 25px rgba(0,0,0,0.2)' }}
           >
-            <ChevronLeft className="w-6 h-6" style={{ color: '#2a3f75' }} />
+            <ChevronLeft className="w-6 h-6" style={{ color: '#064e3b' }} />
           </button>
           <button
             onClick={() => sliderRef.current?.slickNext()}
             className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/90 shadow-xl flex items-center justify-center hover:bg-white transition-all duration-300"
             style={{ boxShadow: '0 8px 25px rgba(0,0,0,0.2)' }}
           >
-            <ChevronRight className="w-6 h-6" style={{ color: '#2a3f75' }} />
+            <ChevronRight className="w-6 h-6" style={{ color: '#064e3b' }} />
           </button>
 
           <Slider ref={sliderRef} {...settings}>
@@ -256,9 +256,9 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                     <button
                       className="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 hover:scale-105"
                       style={{
-                        backgroundColor: '#2a3f75',
+                        backgroundColor: '#064e3b',
                         color: 'white',
-                        boxShadow: '0 10px 30px rgba(42, 63, 117, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3)',
+                        boxShadow: '0 10px 30px rgba(6, 78, 59, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3)',
                       }}
                     >
                       {option.buttonText || 'Donate Now'}
@@ -278,7 +278,7 @@ function ImpactSlider({ donationOptions, impactVisualized, onSelectDonation }: I
                 onClick={() => sliderRef.current?.slickGoTo(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   activeSlide === index
-                    ? 'w-8 bg-[#2a3f75]'
+                    ? 'w-8 bg-[#064e3b]'
                     : 'bg-gray-300 hover:bg-gray-400'
                 }`}
               />
@@ -429,7 +429,7 @@ export default function WaysToDonate() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Ways to Donate'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             {content.hero?.subtitle && (
               <p className="text-gray-600 mt-4 max-w-3xl">
                 {content.hero.subtitle}
@@ -472,7 +472,7 @@ export default function WaysToDonate() {
         )}
 
         {/* Main Donation Section - Donation Interface + Pledge Stacked */}
-        <section className="py-10" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-10" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-8">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
@@ -513,8 +513,8 @@ export default function WaysToDonate() {
         <section className="py-12" style={{ backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                <Shield className="w-6 h-6" style={{ color: '#2a3f75' }} />
+              <div className="w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                <Shield className="w-6 h-6" style={{ color: '#064e3b' }} />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -529,7 +529,7 @@ export default function WaysToDonate() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16" style={{ backgroundColor: '#1e3a5f' }}>
+        <section className="py-16" style={{ backgroundColor: '#052e16' }}>
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
               Ready to Make a Difference?
@@ -541,7 +541,7 @@ export default function WaysToDonate() {
               <Link
                 to="/fundraising-campaigns"
                 className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300"
-                style={{ color: '#1e3a5f' }}
+                style={{ color: '#052e16' }}
               >
                 View Campaigns
                 <ArrowRight className="w-5 h-5" />
