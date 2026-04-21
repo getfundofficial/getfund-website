@@ -6,6 +6,6 @@
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
 
-  # Otherwise, redirect all requests to index.html for client-side routing
+  # Otherwise, redirect all requests to index.html (SPA fallback)
   RewriteRule ^ index.html [QSA,L]
 </IfModule>

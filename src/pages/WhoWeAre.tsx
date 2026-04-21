@@ -39,10 +39,15 @@ interface PageContent {
   leadershipTitle?: string;
   leadershipSubtitle?: string;
 
-  // Board of Directors
+  // Board of Trustees
   boardImage?: string;
   boardTitle?: string;
-  boardDescription?: string;
+  boardIntro?: string;
+  boardOrgStructureHeading?: string;
+  boardOrgStructureText?: string;
+  boardResponsibilitiesHeading?: string;
+  boardResponsibilities?: string[];
+  boardMembers?: Array<{ name: string; organization: string }>;
   boardCommitments?: Array<{
     title: string;
     description: string;
@@ -210,7 +215,7 @@ export default function WhoWeAre() {
                 content.leadershipTitle = section.content.heading;
                 content.leadershipSubtitle = section.content.subtitle;
                 content.boardTitle = section.content.boardTitle;
-                content.boardDescription = section.content.boardDescription;
+                content.boardMembers = section.content.boardMembers;
                 content.boardImage = section.content.boardImage;
                 content.boardCommitments = section.content.commitments?.map((c: any, i: number) => ({
                   title: c.title,
@@ -396,7 +401,12 @@ export default function WhoWeAre() {
           sectionTitle={pageContent?.leadershipTitle || 'Leadership & Governance'}
           sectionSubtitle={pageContent?.leadershipSubtitle || 'Strong leadership and transparent governance for educational transformation'}
           boardGroupImage={pageContent?.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-          boardDescription={pageContent?.boardDescription}
+          boardMembers={pageContent?.boardMembers}
+          boardIntro={pageContent?.boardIntro}
+          boardOrgStructureHeading={pageContent?.boardOrgStructureHeading}
+          boardOrgStructureText={pageContent?.boardOrgStructureText}
+          boardResponsibilitiesHeading={pageContent?.boardResponsibilitiesHeading}
+          boardResponsibilities={pageContent?.boardResponsibilities}
           chairman={teamData.chairman ? {
             name: teamData.chairman.name,
             title: teamData.chairman.title,
@@ -440,7 +450,7 @@ export default function WhoWeAre() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="bg-getfund-primary text-white rounded-2xl p-16 text-center relative">
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <h2 className="text-4xl md:text-5xl font-bold text-white">
                 {pageContent?.footerMessage || 'Supporting the delivery of quality education.'}
               </h2>
               <p className="absolute bottom-4 right-6 text-sm text-white/70">Since 2001</p>

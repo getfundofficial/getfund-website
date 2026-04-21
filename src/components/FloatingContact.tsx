@@ -22,13 +22,7 @@ export default function FloatingContact() {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/fundraising-contact`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-          },
-        });
+        const response = await fetch(`${API_BASE_URL}/fundraising-contact`);
         if (response.ok) {
           const data = await response.json();
           if (data.phone || data.email || data.address || data.button_text) {

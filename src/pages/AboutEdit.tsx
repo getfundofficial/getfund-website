@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Save, ArrowLeft, Loader2, Check, AlertCircle, Image, FileText } from 'lucide-react';
+import { Save, ArrowLeft, Loader2, Check, AlertCircle, Image, FileText, Plus, Trash2, GripVertical } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_CMS_API_URL || 'https://getfund-cms-backend.vercel.app/api';
 
@@ -21,10 +21,12 @@ export default function AboutEdit() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [pageContent, setPageContent] = useState<any>(null);
   const [sectionKey, setSectionKey] = useState<string>('');
+  const [leadershipContent, setLeadershipContent] = useState<any>(null);
+  const [leadershipSectionKey, setLeadershipSectionKey] = useState<string>('');
 
   // Form fields
   const [boardImage, setBoardImage] = useState('');
-  const [boardDescription, setBoardDescription] = useState('');
+  const [boardMembers, setBoardMembers] = useState<Array<{ name: string; organization: string }>>([]);
 
   useEffect(() => {
     fetchPageContent();
@@ -39,15 +41,28 @@ export default function AboutEdit() {
       const data = await response.json();
 
       if (data && data.sections) {
+        // page_content section (for board image)
         const pageContentSection = data.sections.find(
           (s: PageSection) => s.section_type === 'page_content'
         );
-
         if (pageContentSection) {
           setPageContent(pageContentSection.content);
           setSectionKey(pageContentSection.section_key);
           setBoardImage(pageContentSection.content?.boardImage || '');
-          setBoardDescription(pageContentSection.content?.boardDescription || '');
+        }
+
+        // leadership_governance section (where WhoWeAre reads board members from)
+        const leadershipSection = data.sections.find(
+          (s: PageSection) => s.section_key === 'leadership_governance'
+        );
+        if (leadershipSection) {
+          setLeadershipContent(leadershipSection.content);
+          setLeadershipSectionKey(leadershipSection.section_key);
+          setBoardMembers(leadershipSection.content?.boardMembers || []);
+          // Also load board image from leadership section if not in page_content
+          if (!pageContentSection?.content?.boardImage && leadershipSection.content?.boardImage) {
+            setBoardImage(leadershipSection.content.boardImage);
+          }
         }
       }
     } catch (error) {
@@ -68,32 +83,52 @@ export default function AboutEdit() {
       setSaving(true);
       setMessage(null);
 
-      const updatedContent = {
-        ...pageContent,
-        boardImage,
-        boardDescription
-      };
+      const savePromises: Promise<Response>[] = [];
 
-      const response = await fetch(
-        `${API_BASE}/pages/about/sections/${sectionKey}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ content: updatedContent })
-        }
-      );
+      // Save to page_content section (board image + clear legacy HTML)
+      if (sectionKey) {
+        const updatedPageContent = {
+          ...pageContent,
+          boardImage,
+          boardMembers,
+          boardDescription: '' // clear legacy HTML field
+        };
+        savePromises.push(
+          fetch(`${API_BASE}/pages/about/sections/${sectionKey}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: updatedPageContent })
+          })
+        );
+        setPageContent(updatedPageContent);
+      }
 
-      if (!response.ok) {
-        const error = await response.json();
+      // Save to leadership_governance section (where WhoWeAre reads from)
+      if (leadershipSectionKey) {
+        const updatedLeadershipContent = {
+          ...leadershipContent,
+          boardImage,
+          boardMembers,
+          boardDescription: '' // clear legacy HTML field
+        };
+        savePromises.push(
+          fetch(`${API_BASE}/pages/about/sections/${leadershipSectionKey}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: updatedLeadershipContent })
+          })
+        );
+        setLeadershipContent(updatedLeadershipContent);
+      }
+
+      const responses = await Promise.all(savePromises);
+      const failed = responses.find(r => !r.ok);
+      if (failed) {
+        const error = await failed.json();
         throw new Error(error.error || 'Failed to save');
       }
 
-      setMessage({ type: 'success', text: 'Board of Directors content saved successfully!' });
-
-      // Update local state
-      setPageContent(updatedContent);
+      setMessage({ type: 'success', text: 'Board of Trustees content saved successfully!' });
     } catch (error: any) {
       console.error('Error saving:', error);
       setMessage({ type: 'error', text: error.message || 'Failed to save changes' });
@@ -132,7 +167,7 @@ export default function AboutEdit() {
               Back to About Page
             </button>
             <h1 className="text-3xl font-bold text-gray-900">Edit About Page</h1>
-            <p className="text-gray-600 mt-2">Update the Board of Directors content</p>
+            <p className="text-gray-600 mt-2">Update the Board of Trustees content</p>
           </div>
 
           {/* Status Message */}
@@ -151,14 +186,14 @@ export default function AboutEdit() {
             </div>
           )}
 
-          {/* Board of Directors Editor */}
+          {/* Board of Trustees Editor */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="p-4 bg-[#2a3f75] text-white">
               <div className="flex items-center gap-3">
                 <FileText className="w-6 h-6" />
                 <div>
-                  <h2 className="text-lg font-semibold">Board of Directors</h2>
-                  <p className="text-white/80 text-sm">Edit the image and description shown in the Board of Directors modal</p>
+                  <h2 className="text-lg font-semibold">Board of Trustees</h2>
+                  <p className="text-white/80 text-sm">Edit the image and description shown in the Board of Trustees modal</p>
                 </div>
               </div>
             </div>
@@ -200,34 +235,57 @@ export default function AboutEdit() {
                 )}
               </div>
 
-              {/* Board Description */}
+              {/* Board Members */}
               <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
                   <FileText className="w-4 h-4" />
-                  Board Description (HTML supported)
+                  Board Members
                 </label>
-                <textarea
-                  value={boardDescription}
-                  onChange={(e) => setBoardDescription(e.target.value)}
-                  rows={15}
-                  placeholder="Enter the board description content. HTML tags are supported..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75] font-mono text-sm transition-colors"
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  You can use HTML tags like &lt;p&gt;, &lt;h3&gt;, &lt;ul&gt;, &lt;li&gt; for formatting
-                </p>
-              </div>
-
-              {/* HTML Preview */}
-              {boardDescription && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Content Preview:</p>
-                  <div
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: boardDescription }}
-                  />
+                <div className="space-y-3">
+                  {boardMembers.map((member, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                      <GripVertical className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      <span className="text-sm font-bold text-gray-400 w-6 flex-shrink-0">{index + 1}.</span>
+                      <input
+                        type="text"
+                        value={member.name}
+                        onChange={(e) => {
+                          const updated = [...boardMembers];
+                          updated[index] = { ...updated[index], name: e.target.value };
+                          setBoardMembers(updated);
+                        }}
+                        placeholder="Full Name"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                      />
+                      <input
+                        type="text"
+                        value={member.organization}
+                        onChange={(e) => {
+                          const updated = [...boardMembers];
+                          updated[index] = { ...updated[index], organization: e.target.value };
+                          setBoardMembers(updated);
+                        }}
+                        placeholder="Organization / Role"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                      />
+                      <button
+                        onClick={() => setBoardMembers(boardMembers.filter((_, i) => i !== index))}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                        title="Remove member"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              )}
+                <button
+                  onClick={() => setBoardMembers([...boardMembers, { name: '', organization: '' }])}
+                  className="mt-3 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2a3f75] border border-dashed border-[#2a3f75] rounded-lg hover:bg-[#2a3f75]/5 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Member
+                </button>
+              </div>
 
               {/* Save Button */}
               <div className="flex justify-end pt-4 border-t border-gray-200">
@@ -257,7 +315,7 @@ export default function AboutEdit() {
             <h3 className="font-semibold text-blue-900 mb-2">Tips for Editing</h3>
             <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
               <li>Use image paths like <code className="bg-blue-100 px-1 rounded">/images/about/filename.jpg</code></li>
-              <li>For HTML formatting, use tags like <code className="bg-blue-100 px-1 rounded">&lt;p&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;h3&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;ul&gt;</code>, <code className="bg-blue-100 px-1 rounded">&lt;li&gt;</code></li>
+              <li>Add board members using the <strong>Add Member</strong> button</li>
               <li>Changes will be visible on the website immediately after saving</li>
             </ul>
           </div>

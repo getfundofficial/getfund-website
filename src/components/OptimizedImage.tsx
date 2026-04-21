@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -19,24 +19,31 @@ export default function OptimizedImage({
   fallbackSrc,
   priority = false
 }: OptimizedImageProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(src);
+  const effectiveSrc = src?.trim() || fallbackSrc || '';
+  const [isLoading, setIsLoading] = useState(!!effectiveSrc);
+  const [hasError, setHasError] = useState(!effectiveSrc);
+  const [currentSrc, setCurrentSrc] = useState(effectiveSrc);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   // Update currentSrc when src prop changes
   useEffect(() => {
-    setCurrentSrc(src);
+    const newSrc = src?.trim() || fallbackSrc || '';
+    if (!newSrc) {
+      setHasError(true);
+      setIsLoading(false);
+      return;
+    }
+    setCurrentSrc(newSrc);
     setIsLoading(true);
     setHasError(false);
-  }, [src]);
+  }, [src, fallbackSrc]);
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setIsLoading(false);
-  };
+  }, []);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     setIsLoading(false);
-    // If a fallback image is provided and isn't already being tried, swap to it
     if (fallbackSrc && currentSrc !== fallbackSrc) {
       setCurrentSrc(fallbackSrc);
       setIsLoading(true);
@@ -44,7 +51,55 @@ export default function OptimizedImage({
       return;
     }
     setHasError(true);
-  };
+  }, [fallbackSrc, currentSrc]);
+
+  // Check if image is already loaded (from browser cache).
+  // onLoad may not re-fire for cached images, so we check img.complete.
+  // Use requestAnimationFrame retry to handle race conditions on refresh.
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkComplete = () => {
+      if (cancelled) return;
+      const img = imgRef.current;
+      if (img && img.complete) {
+        if (img.naturalWidth > 0) {
+          setIsLoading(false);
+        } else if (currentSrc) {
+          handleError();
+        }
+      }
+    };
+
+    // Check immediately, then retry after paint for reliability
+    checkComplete();
+    requestAnimationFrame(checkComplete);
+
+    // Safety timeout: if still loading after 5s, force reveal the image
+    const timeout = setTimeout(() => {
+      if (!cancelled) setIsLoading(false);
+    }, 5000);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+  }, [currentSrc, handleError]);
+
+  // Handle bfcache restoration — re-evaluate image state when page is restored
+  useEffect(() => {
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        const img = imgRef.current;
+        if (img && img.complete && img.naturalWidth > 0) {
+          setIsLoading(false);
+          setHasError(false);
+        }
+      }
+    };
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, []);
 
   if (hasError) {
     return (
@@ -57,16 +112,13 @@ export default function OptimizedImage({
     );
   }
 
-  // Wrapper stays plain (no external classes) to avoid creating stacking contexts
-  // that can interfere with overlayed content. The passed className is applied
-  // to the <img> (and to the error/fallback) so sizing and visual styles are
-  // preserved without affecting stacking.
   return (
     <div className="relative h-full">
       {isLoading && (
         <div className="absolute inset-0 bg-gray-200 animate-pulse" />
       )}
       <img
+        ref={imgRef}
         src={currentSrc}
         alt={alt}
         width={width}

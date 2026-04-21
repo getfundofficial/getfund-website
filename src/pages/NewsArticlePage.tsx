@@ -306,14 +306,20 @@ export default function NewsArticlePage() {
                               src={related.image}
                               alt={related.title}
                               className="w-full h-full object-cover"
+                              loading="lazy"
+                              decoding="async"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                              <span className="text-gray-400">No image</span>
-                            </div>
+                            <img
+                              src="/images/news/news-placeholder.svg"
+                              alt={related.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                              decoding="async"
+                            />
                           )}
                         </div>
                         <div className="p-4">
@@ -376,18 +382,16 @@ export default function NewsArticlePage() {
                       className="flex gap-3 group"
                     >
                       <div className="flex-shrink-0 w-20 h-20">
-                        {news.image ? (
-                          <img
-                            src={news.image}
-                            alt={news.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gray-200"></div>
-                        )}
+                        <img
+                          src={news.image || '/images/news/news-placeholder.svg'}
+                          alt={news.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
+                          }}
+                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-sm text-gray-900 group-hover:text-getfund-primary transition-colors line-clamp-2 mb-1">

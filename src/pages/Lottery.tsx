@@ -114,16 +114,8 @@ export default function Lottery() {
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_CMS_API_URL || '/api';
 
-    const fetchOptions = {
-      cache: 'no-store' as RequestCache,
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-      },
-    };
-
     Promise.all([
-      fetch(`${apiUrl}/lottery/config?_t=${Date.now()}`, fetchOptions)
+      fetch(`${apiUrl}/lottery/config`)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
           return r.json();

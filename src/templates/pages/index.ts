@@ -85,10 +85,10 @@ export const pageTemplateMetadata: Record<string, PageTemplateMetadata> = {
         },
         leadershipGovernanceTitle: { type: 'string', description: 'Leadership & Governance title' },
         leadershipGovernanceSubtitle: { type: 'string', description: 'Leadership & Governance subtitle' },
-        boardImage: { type: 'string', format: 'url', description: 'Board of Directors image URL' },
+        boardImage: { type: 'string', format: 'url', description: 'Board of Trustees image URL' },
         boardImageAlt: { type: 'string', description: 'Board image alt text' },
-        boardTitle: { type: 'string', description: 'Board of Directors title' },
-        boardDescription: { type: 'string', description: 'Board description' },
+        boardTitle: { type: 'string', description: 'Board of Trustees title' },
+        boardMembers: { type: 'array', description: 'Board members list', items: { type: 'object', properties: { name: { type: 'string' }, organization: { type: 'string' } } } },
         boardCommitments: {
           type: 'array',
           description: 'Board commitment items',

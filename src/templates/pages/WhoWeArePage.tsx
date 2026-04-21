@@ -36,11 +36,11 @@ interface AboutPageProps {
     leadershipGovernanceTitle?: string;
     leadershipGovernanceSubtitle?: string;
     
-    // Board of Directors
+    // Board of Trustees
     boardImage?: string;
     boardImageAlt?: string;
     boardTitle?: string;
-    boardDescription?: string;
+    boardMembers?: Array<{ name: string; organization: string }>;
     boardCommitments?: Array<{
       title: string;
       description: string;
@@ -199,7 +199,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
         </section>
       )}
 
-      {/* Board of Directors Section */}
+      {/* Board of Trustees Section */}
       {content.boardTitle && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -207,7 +207,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
               <div>
                 <img 
                   src={content.boardImage || '/images/about/getfund-7th-board-inauguration.jpg'}
-                  alt={content.boardImageAlt || 'Board of Directors'}
+                  alt={content.boardImageAlt || 'Board of Trustees'}
                   className="rounded-xl shadow-lg w-full h-64 md:h-80 object-cover"
                 />
               </div>
@@ -215,11 +215,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ pageData, content }) => {
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                   {content.boardTitle}
                 </h2>
-                {content.boardDescription && (
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    {content.boardDescription}
-                  </p>
-                )}
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.
+                </p>
               </div>
             </div>
 

@@ -26,11 +26,21 @@ interface CurrentAdmin {
   bio?: string;
 }
 
+interface BoardMember {
+  name: string;
+  organization: string;
+}
+
 interface TeamSectionProps {
   sectionTitle?: string;
   sectionSubtitle?: string;
   boardGroupImage?: string;
-  boardDescription?: string;
+  boardMembers?: BoardMember[];
+  boardIntro?: string;
+  boardOrgStructureHeading?: string;
+  boardOrgStructureText?: string;
+  boardResponsibilitiesHeading?: string;
+  boardResponsibilities?: string[];
   chairman?: TeamMember;
   currentAdministrator?: CurrentAdmin;
   deputyAdministrator?: CurrentAdmin;
@@ -38,11 +48,36 @@ interface TeamSectionProps {
   pastAdministrators?: Administrator[];
 }
 
+const DEFAULT_BOARD_MEMBERS: BoardMember[] = [
+  { name: 'Emmanuel Kwasi Bedzrah', organization: 'Chairman' },
+  { name: 'Masawudu Mahama', organization: 'Ministry of Finance' },
+  { name: 'Rev. Dr. Cyril Geshon Kwao Fayose', organization: 'Christian Council' },
+  { name: 'Anthony Kwasi Sarpong', organization: 'Revenue Agency Governing Board' },
+  { name: 'Paul Adjei', organization: 'GETFund Administrator' },
+  { name: 'Mamle D. Andrews', organization: 'Ministry of Education' },
+  { name: 'Prof. Ahmed Abdulai Jinapor', organization: 'Ghana Tertiary Education Commission (GTEC)' },
+  { name: 'Rev. Prof. John Frank Eshun', organization: 'Technical Universities' },
+  { name: 'Philippa Larson', organization: 'National Association of Teachers (NAT)' },
+  { name: 'Daniel Nii Korley Botchway', organization: 'Ghana National Union of Polytechnic Students' },
+  { name: 'Grace Amey-Obeng', organization: 'Association of Ghana Industries' },
+  { name: 'Francisca Atuluk', organization: 'National Council on Women and Development' },
+  { name: 'Alexander Frimpong', organization: "Ghana Employers' Association" },
+  { name: 'Prof. Ernest Kofi Davis', organization: 'Ghana Education Service' },
+  { name: 'John Awuah', organization: 'Ghana Bankers Association' },
+  { name: 'Seth Kobla Aklasi', organization: 'Ghana Insurers Association' },
+  { name: 'Patience Ablah Ganyo', organization: 'National Pension Regulatory Authority' },
+];
+
 export default function TeamSection({
   sectionTitle = 'Leadership & Governance',
   sectionSubtitle = 'Strong leadership and transparent governance for educational transformation',
   boardGroupImage = '/images/about/getfund-7th-board-inauguration.jpg',
-  boardDescription,
+  boardMembers,
+  boardIntro,
+  boardOrgStructureHeading,
+  boardOrgStructureText,
+  boardResponsibilitiesHeading,
+  boardResponsibilities,
   chairman,
   currentAdministrator,
   deputyAdministrator,
@@ -59,39 +94,52 @@ export default function TeamSection({
   }>({ title: '', content: '', type: 'group' });
 
   const handleBoardOfDirectorsClick = () => {
-    // Use CMS content if provided, otherwise use default
-    const defaultContent = `
-      <p class="text-lg mb-4">The GETFund Board of Directors comprises distinguished individuals with expertise in education, finance, and public administration.</p>
+    // Use CMS board members if available, otherwise use defaults
+    const members = (boardMembers && boardMembers.length > 0) ? boardMembers : DEFAULT_BOARD_MEMBERS;
 
-      <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">Organizational Structure</h3>
-      <p class="mb-4">The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund's mission of transforming Ghana's educational landscape.</p>
+    const membersHtml = members.map((m, i) =>
+      `<li class="flex gap-2"><span class="font-bold text-gray-500 min-w-[24px]">${i + 1}.</span><span><strong>${m.name}</strong> — ${m.organization}</span></li>`
+    ).join('\n          ');
 
-      <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">Key Responsibilities</h3>
+    const introText = boardIntro || 'The GETFund Board of Trustees comprises distinguished individuals with expertise in education, finance, and public administration.';
+    const orgHeading = boardOrgStructureHeading || 'Organizational Structure';
+    const orgText = boardOrgStructureText || 'The Board provides strategic oversight and ensures accountability in all GETFund initiatives. Members bring decades of combined experience to guide the fund\'s mission of transforming Ghana\'s educational landscape.';
+    const respHeading = boardResponsibilitiesHeading || 'Key Responsibilities';
+    const respItems = (boardResponsibilities && boardResponsibilities.length > 0) ? boardResponsibilities : [
+      'Setting strategic priorities aligned with national education goals',
+      'Ensuring efficient resource utilization and project delivery',
+      'Building partnerships across all education sectors',
+      'Monitoring performance and educational outcomes'
+    ];
+
+    const responsibilitiesHtml = respItems.map(item =>
+      `<li class="flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
+          <span>${item}</span>
+        </li>`
+    ).join('\n        ');
+
+    const content = `
+      <p class="text-lg mb-4">${introText}</p>
+
+      <div class="mt-6 mb-6">
+        <ol class="space-y-2 text-sm">
+          ${membersHtml}
+        </ol>
+      </div>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-3 mt-6">${orgHeading}</h3>
+      <p class="mb-4">${orgText}</p>
+
+      <h3 class="text-xl font-bold text-gray-900 mb-4 mt-8">${respHeading}</h3>
       <ul class="space-y-3 mb-4">
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Setting strategic priorities aligned with national education goals</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Ensuring efficient resource utilization and project delivery</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Building partnerships across all education sectors</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-[#8B2332] mt-2 flex-shrink-0"></span>
-          <span>Monitoring performance and educational outcomes</span>
-        </li>
+        ${responsibilitiesHtml}
       </ul>
-
-      <p class="text-sm text-gray-600 italic mt-6">Individual board member profiles coming soon.</p>
     `;
 
     setModalContent({
-      title: 'Board of Directors',
-      content: boardDescription || defaultContent,
+      title: 'Board of Trustees',
+      content,
       image: boardGroupImage,
       type: 'group'
     });
@@ -211,12 +259,18 @@ export default function TeamSection({
             </p>
 
             {/* Action Buttons */}
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
+              <button
+                onClick={handleChairmanClick}
+                className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
+              >
+                Board Chair
+              </button>
               <button
                 onClick={handleBoardOfDirectorsClick}
                 className="px-6 py-3 glass-card rounded-lg text-gray-700 font-medium transition-all"
               >
-                Board of Directors
+                Board of Trustees
               </button>
               <button
                 onClick={handlePastAdministratorsClick}
@@ -227,48 +281,9 @@ export default function TeamSection({
             </div>
           </div>
 
-          {/* Leadership Cards: Chairman, Administrator, Deputy Admin, Financial Controller */}
+          {/* Leadership Cards: Administrator, Deputy Admin, Financial Controller */}
           <div className="mb-12">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Board Chairman Card */}
-              {chairman ? (
-                <div
-                  className="group cursor-pointer"
-                  onClick={handleChairmanClick}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleChairmanClick();
-                    }
-                  }}
-                  aria-label={`View ${chairman.name} profile`}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <img
-                      src={chairman.image}
-                      alt={chairman.name}
-                      className="w-full h-full object-cover object-top transition-all duration-300 scale-110 group-hover:scale-[1.15]"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/images/board/s8507362-member1.jpg';
-                      }}
-                    />
-                  </div>
-                  <div className="pt-4">
-                    <p className="text-xs font-semibold text-getfund-primary uppercase tracking-wider mb-1">Board Chairman</p>
-                    <h3 className="text-lg font-bold text-gray-900">{chairman.name}</h3>
-                    <p className="text-sm text-gray-600">{chairman.title}</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="border border-dashed border-gray-300 p-8 flex items-center justify-center aspect-[3/4]">
-                  <p className="text-gray-400 text-center text-sm">
-                    Board Chairman<br />coming soon
-                  </p>
-                </div>
-              )}
-
+            <div className="grid md:grid-cols-3 gap-6">
               {/* Current Administrator Card */}
               {currentAdministrator ? (
                 <div

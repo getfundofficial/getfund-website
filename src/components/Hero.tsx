@@ -674,19 +674,9 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
           return (
             <div key={idx}>
               <div
-                className="relative w-full h-[70vh] sm:h-[calc(100vh-80px)] flex items-center justify-center"
+                className="relative w-full h-[50vh] sm:h-[calc(100vh-80px)] flex items-center justify-center"
               >
-                {/* Frosted glass background — blurred image fill visible on mobile only */}
-                {!isVideo && (
-                  <div className="absolute inset-0 overflow-hidden sm:hidden" aria-hidden="true">
-                    <img
-                      src={slide.src}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl"
-                    />
-                    <div className="absolute inset-0 bg-gray-500/40 backdrop-blur-sm" />
-                  </div>
-                )}
+                {/* Frosted glass background — only for video on mobile */}
                 {isVideo && (
                   <div className="absolute inset-0 overflow-hidden sm:hidden bg-gray-400/30 backdrop-blur-sm" aria-hidden="true" />
                 )}
@@ -721,7 +711,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                         autoPlay
                         muted
                         playsInline
-                        className="absolute inset-0 w-full h-full object-contain sm:object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
                         onEnded={handleVideoEnded}
                         onLoadedMetadata={(e) => handleVideoLoadedMetadata(idx, e.currentTarget)}
                       >
@@ -736,7 +726,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     <OptimizedImage
                       src={slide.src}
                       alt={slide.alt}
-                      className="absolute inset-0 w-full h-full object-contain sm:object-cover object-center"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
                       width={1920}
                       height={1080}
                       priority={idx === 0}
@@ -750,35 +740,67 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                 />
 
 
-                {/* Blue Content Box - Bottom Left - Fixed size */}
+                {/* Mobile: gradient overlay at bottom with text (no box) */}
                 <div
-                  className="absolute inset-0 z-20 flex items-end justify-start px-3 sm:px-8 md:px-12 pb-14 sm:pb-16 md:pb-20 transition-opacity duration-1000"
-                  style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1 }}
+                  className="sm:hidden absolute inset-x-0 bottom-0 z-20 transition-opacity duration-1000"
+                  style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}
                 >
-                  <div
-                    className="slide-content pointer-events-auto p-4 sm:p-8 md:p-10 max-w-[calc(100%-0.5rem)] sm:max-w-xl"
-                    style={getBlueBoxStyle(slide.blueBox)}
-                  >
-                    {(slide.blueBox?.text || slide.blueBoxText) && (
-                      <span className="inline-block text-xs sm:text-sm text-blue-200 mb-1 sm:mb-2 uppercase tracking-wider font-medium">
-                        {slide.blueBox?.text || slide.blueBoxText}
-                      </span>
-                    )}
-                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-2 sm:mb-4 leading-tight text-white`}>
+                  <div className="px-4 pb-10 pt-16">
+                    <h1 className="text-lg font-bold mb-1 leading-tight text-white line-clamp-2 drop-shadow-lg">
                       {slide.headline}
                     </h1>
-                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-3 sm:mb-5 text-gray-200 leading-relaxed line-clamp-3 sm:line-clamp-none`}>
+                    <p className="text-xs text-gray-200 mb-2 line-clamp-1 drop-shadow">
                       {slide.description}
                     </p>
                     {slide.cta && (
                       <Link
                         to={slide.ctaLink || "/scholarship-apply"}
-                        className="inline-flex items-center gap-2 text-white text-sm sm:text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        className="inline-flex items-center gap-1.5 text-white text-xs uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
                         aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
                       >
                         {slide.ctaText || "Apply Now"}
                         <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:translate-x-1 transition-transform"
+                          className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                {/* Desktop: Blue Content Box - Bottom Left */}
+                <div
+                  className="hidden sm:flex absolute inset-0 z-20 items-end justify-start px-8 md:px-12 pb-16 md:pb-20 transition-opacity duration-1000"
+                  style={{ opacity: hideTextBoxForSlide === idx ? 0 : 1 }}
+                >
+                  <div
+                    className="slide-content pointer-events-auto p-8 md:p-10 max-w-xl"
+                    style={getBlueBoxStyle(slide.blueBox)}
+                  >
+                    {(slide.blueBox?.text || slide.blueBoxText) && (
+                      <span className="inline-block text-sm text-blue-200 mb-2 uppercase tracking-wider font-medium">
+                        {slide.blueBox?.text || slide.blueBoxText}
+                      </span>
+                    )}
+                    <h1 className={`${getHeadlineSizeClasses(slide.titleFontSize)} font-bold mb-4 leading-tight text-white`}>
+                      {slide.headline}
+                    </h1>
+                    <p className={`${getDescriptionSizeClasses(slide.subtitleFontSize)} mb-5 text-gray-200 leading-relaxed`}>
+                      {slide.description}
+                    </p>
+                    {slide.cta && (
+                      <Link
+                        to={slide.ctaLink || "/scholarship-apply"}
+                        className="inline-flex items-center gap-2 text-white text-base uppercase tracking-wider font-semibold hover:text-blue-200 transition-colors group"
+                        aria-label={slide.ctaText || "Apply for GETFund scholarship program"}
+                      >
+                        {slide.ctaText || "Apply Now"}
+                        <svg
+                          className="w-5 h-5 md:w-6 md:h-6 transform group-hover:translate-x-1 transition-transform"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"

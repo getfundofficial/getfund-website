@@ -99,7 +99,7 @@ export default function TeamMemberModal({ isOpen, onClose, title, content, image
           </div>
         )}
 
-        {/* Group Layout (Board of Directors) */}
+        {/* Group Layout (Board of Trustees) */}
         {type === 'group' && (
           <div className="overflow-y-auto max-h-[85vh]">
             {/* Header with Image */}

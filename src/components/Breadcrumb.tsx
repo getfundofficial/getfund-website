@@ -36,6 +36,11 @@ const routeLabels: Record<string, string> = {
   '/fundraising/beneficiaries-give-back': 'Beneficiaries Give Back',
   '/fundraising/events': 'Events',
   '/fundraising-campaigns': 'Fundraising Campaigns',
+  '/scholarships': 'Scholarships',
+  '/scholarships/overview': 'Programme Overview',
+  '/scholarships/partner-universities': 'Partner Universities',
+  '/scholarships/how-to-apply': 'How to Apply',
+  '/scholarships/getfund-scholars': 'GETFund Scholars',
 };
 
 const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
@@ -82,6 +87,23 @@ const Breadcrumb = ({ items, className = '' }: BreadcrumbProps) => {
       breadcrumbs.push({
         label: 'Fundraising',
         href: '/fundraising',
+        isActive: false
+      });
+
+      breadcrumbs.push({
+        label: label,
+        href: fullPath,
+        isActive: true
+      });
+    }
+    // Special handling for scholarships routes - show intermediate Scholarships breadcrumb
+    else if (pathnames[0] === 'scholarships' && pathnames.length > 1) {
+      const fullPath = location.pathname;
+      const label = routeLabels[fullPath] || pathnames[pathnames.length - 1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+      breadcrumbs.push({
+        label: 'Scholarships',
+        href: '/scholarships/overview',
         isActive: false
       });
 

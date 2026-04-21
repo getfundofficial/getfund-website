@@ -36,8 +36,11 @@ function NextArrow({ onClick }: ArrowProps) {
   );
 }
 
+const MAX_DOTS = 7;
+
 export default function ImageCarousel({ images, title }: ImageCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const showDots = images.length <= MAX_DOTS;
 
   if (images.length === 0) {
     return null;
@@ -52,6 +55,8 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
             src={images[0]}
             alt={title || 'Article image'}
             className="absolute inset-0 w-full h-full object-contain bg-gray-100"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
             }}
@@ -61,9 +66,10 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
     );
   }
 
-  // Multiple images - use carousel
+  const progressPercent = ((currentSlide + 1) / images.length) * 100;
+
   const settings = {
-    dots: true,
+    dots: showDots,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -71,40 +77,46 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     beforeChange: (_: number, next: number) => setCurrentSlide(next),
-    customPaging: (i: number) => (
-      <button
-        className={`w-3 h-3 rounded-full transition-colors ${
-          i === currentSlide ? 'bg-getfund-primary' : 'bg-gray-300'
-        }`}
-        aria-label={`Go to slide ${i + 1}`}
-      />
-    ),
-    dotsClass: 'slick-dots custom-dots',
+    ...(showDots && {
+      customPaging: (i: number) => (
+        <button
+          className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
+            i === currentSlide
+              ? 'bg-getfund-primary scale-110'
+              : 'bg-gray-300 hover:bg-gray-400'
+          }`}
+          aria-label={`Go to slide ${i + 1}`}
+        />
+      ),
+      dotsClass: 'slick-dots custom-dots',
+    }),
   };
 
   return (
     <div className="mb-6 relative">
-      <style>{`
-        .custom-dots {
-          position: relative;
-          bottom: 0;
-          display: flex !important;
-          justify-content: center;
-          gap: 8px;
-          padding: 12px 0 0 0;
-          margin: 0;
-          list-style: none;
-        }
-        .custom-dots li {
-          margin: 0;
-          padding: 0;
-          width: auto;
-          height: auto;
-        }
-        .custom-dots li button {
-          padding: 0;
-        }
-      `}</style>
+      {showDots && (
+        <style>{`
+          .custom-dots {
+            position: relative;
+            bottom: 0;
+            display: flex !important;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 0 0 0;
+            margin: 0;
+            list-style: none;
+          }
+          .custom-dots li {
+            margin: 0;
+            padding: 0;
+            width: auto;
+            height: auto;
+          }
+          .custom-dots li button {
+            padding: 0;
+          }
+        `}</style>
+      )}
       <Slider {...settings}>
         {images.map((image, index) => (
           <div key={index}>
@@ -113,6 +125,8 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
                 src={image}
                 alt={`${title || 'Article'} - Image ${index + 1}`}
                 className="absolute inset-0 w-full h-full object-contain bg-gray-100"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/images/news/news-placeholder.svg';
                 }}
@@ -121,7 +135,20 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
           </div>
         ))}
       </Slider>
-      <div className="text-center text-sm text-gray-500 mt-2">
+
+      {/* Progress bar + counter for large image sets */}
+      {!showDots && (
+        <div className="mt-3 px-2">
+          <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-getfund-primary rounded-full transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="text-center text-sm text-gray-500 mt-2 tabular-nums">
         {currentSlide + 1} / {images.length}
       </div>
     </div>

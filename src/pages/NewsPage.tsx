@@ -43,6 +43,53 @@ interface NewsUpdatesContent {
   };
 }
 
+const PLACEHOLDER_IMAGE = '/images/news/news-placeholder.svg';
+
+const CATEGORY_LABELS: Record<string, string> = {
+  NEWS: 'News',
+  ANNOUNCEMENT: 'Announcement',
+  ANNOUNCEMENTS: 'Announcement',
+  PRESS_RELEASE: 'Press Release',
+  'PRESS RELEASE': 'Press Release',
+  EVENT: 'Event',
+  EVENTS: 'Event',
+  UPDATE: 'Update',
+  UPDATES: 'Update',
+  'EVENTS AND UPDATES': 'Update',
+};
+
+function getValidImage(image: string | null): string {
+  const lowerImg = image?.toLowerCase() || '';
+  const isValid = image &&
+    image !== PLACEHOLDER_IMAGE &&
+    !lowerImg.includes('logo-light') &&
+    !lowerImg.includes('logo-dark') &&
+    !lowerImg.includes('site-icon') &&
+    !lowerImg.includes('getfund-site-icon') &&
+    !lowerImg.includes('getfund-cropped') &&
+    !lowerImg.includes('cropped-getfund') &&
+    !lowerImg.includes('placeholder') &&
+    !lowerImg.includes('favicon') &&
+    !lowerImg.endsWith('icon.png') &&
+    !lowerImg.endsWith('logo.png');
+  return isValid ? image : PLACEHOLDER_IMAGE;
+}
+
+function getCategoryLabel(category?: string): string | null {
+  const cat = category?.toUpperCase().replace(/[-_]/g, ' ').trim();
+  if (!cat) return null;
+  return CATEGORY_LABELS[cat] || CATEGORY_LABELS[cat.replace(/\s+/g, '_')] || null;
+}
+
+function formatArticleDate(date: string): string | null {
+  if (!date || isNaN(Date.parse(date))) return null;
+  return new Date(date).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 export default function NewsPage() {
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [content, setContent] = useState<NewsUpdatesContent | null>(null);
@@ -250,95 +297,129 @@ export default function NewsPage() {
         <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4 max-w-6xl">
 
+            {/* Results count */}
+            {filteredArticles.length > 0 && (
+              <div className="flex items-center justify-between mb-8">
+                <p className="text-sm text-gray-500">
+                  Showing {indexOfFirstArticle + 1}&ndash;{Math.min(indexOfLastArticle, filteredArticles.length)} of{' '}
+                  {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+            )}
+
             {/* News Grid */}
             {filteredArticles.length === 0 ? (
-              <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+              <div className="bg-white shadow-sm p-12 text-center">
                 <p className="text-gray-600 text-lg">
                   {content?.emptyState?.noArticlesMessage || 'No articles found matching your criteria.'}
                 </p>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentArticles.map((article) => (
-                  <article
-                    key={article.id}
-                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
-                  >
-                    <Link to={`/news/${article.slug}`} className="block">
-                      <div className="relative h-48">
-                        <OptimizedImage
-                          src={(() => {
-                            // Check if image is valid (not null, not placeholder, not just the logo)
-                            const img = article.image;
-                            const lowerImg = img?.toLowerCase() || '';
-                            const isValidImage = img &&
-                              img !== '/images/news/news-placeholder.svg' &&
-                              !lowerImg.includes('logo-light') &&
-                              !lowerImg.includes('logo-dark') &&
-                              !lowerImg.includes('site-icon') &&
-                              !lowerImg.includes('getfund-site-icon') &&
-                              !lowerImg.includes('getfund-cropped') &&
-                              !lowerImg.includes('cropped-getfund') &&
-                              !lowerImg.includes('placeholder') &&
-                              !lowerImg.includes('favicon') &&
-                              !lowerImg.endsWith('icon.png') &&
-                              !lowerImg.endsWith('logo.png');
-                            return isValidImage ? img : '/images/news/news-placeholder.svg';
-                          })()}
-                          alt={article.title}
-                          className="h-48 w-full object-cover"
-                          fallbackSrc="/images/news/news-placeholder.svg"
-                        />
-                        {/* Only show approved category labels: News, Announcements, Press Releases, Events, Updates */}
-                        {(() => {
-                          const categoryLabels: Record<string, string> = {
-                            'NEWS': 'News',
-                            'ANNOUNCEMENT': 'Announcement',
-                            'ANNOUNCEMENTS': 'Announcement',
-                            'PRESS_RELEASE': 'Press Release',
-                            'PRESS RELEASE': 'Press Release',
-                            'EVENT': 'Event',
-                            'EVENTS': 'Event',
-                            'UPDATE': 'Update',
-                            'UPDATES': 'Update',
-                            'EVENTS AND UPDATES': 'Update'
-                          };
-                          const cat = article.category?.toUpperCase().replace(/-/g, ' ').replace(/_/g, ' ').trim();
-                          const label = cat ? categoryLabels[cat] || categoryLabels[cat?.replace(/\s+/g, '_')] : null;
-                          return label ? (
-                            <div className="absolute top-4 left-4 z-10">
-                              <span className="text-white px-3 py-1 text-xs font-semibold rounded" style={{ backgroundColor: '#2a3f75' }}>
-                                {label}
-                              </span>
-                            </div>
-                          ) : null;
-                        })()}
-                      </div>
-                      <div className="p-5">
-                        <div className="flex items-center gap-1 text-gray-500 text-sm mb-2">
-                          <Calendar className="w-4 h-4" aria-hidden="true" />
-                          {article.date && !isNaN(Date.parse(article.date)) ? (
-                            <time dateTime={article.date}>
-                              {new Date(article.date).toLocaleDateString('en-US', {
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric',
-                              })}
-                            </time>
-                          ) : null}
+              <>
+                {/* Featured Article — first article displayed as a hero card */}
+                <article className="bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                  <Link to={`/news/${currentArticles[0].slug}`} className="block md:flex">
+                    <div className="relative md:w-3/5 overflow-hidden">
+                      <OptimizedImage
+                        src={getValidImage(currentArticles[0].image)}
+                        alt={currentArticles[0].title}
+                        className="w-full h-64 md:h-80 lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                        fallbackSrc={PLACEHOLDER_IMAGE}
+                        priority
+                      />
+                      {getCategoryLabel(currentArticles[0].category) && (
+                        <div className="absolute top-4 left-4 z-10">
+                          <span
+                            className="text-white px-3 py-1 text-xs font-semibold"
+                            style={{ backgroundColor: '#2a3f75' }}
+                          >
+                            {getCategoryLabel(currentArticles[0].category)}
+                          </span>
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                          {article.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">{article.excerpt}</p>
-                        <span className="inline-flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all">
-                          Read more <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                        </span>
+                      )}
+                    </div>
+                    <div className="p-6 md:p-8 lg:p-10 flex flex-col justify-center md:w-2/5">
+                      <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+                        <Calendar className="w-4 h-4" aria-hidden="true" />
+                        {formatArticleDate(currentArticles[0].date) && (
+                          <time dateTime={currentArticles[0].date}>
+                            {formatArticleDate(currentArticles[0].date)}
+                          </time>
+                        )}
                       </div>
-                    </Link>
-                  </article>
-                ))}
-              </div>
+                      <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-3">
+                        {currentArticles[0].title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed mb-6 line-clamp-4">
+                        {currentArticles[0].excerpt}
+                      </p>
+                      <span
+                        className="inline-flex items-center gap-2 font-semibold text-sm group-hover:gap-3 transition-all"
+                        style={{ color: '#2a3f75' }}
+                      >
+                        Read full article <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </Link>
+                </article>
+
+                {/* Remaining Articles Grid */}
+                {currentArticles.length > 1 && (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                    {currentArticles.slice(1).map((article) => (
+                      <article
+                        key={article.id}
+                        className="bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col"
+                      >
+                        <Link to={`/news/${article.slug}`} className="flex flex-col h-full">
+                          <div className="relative overflow-hidden">
+                            <div className="aspect-[16/10]">
+                              <OptimizedImage
+                                src={getValidImage(article.image)}
+                                alt={article.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                fallbackSrc={PLACEHOLDER_IMAGE}
+                              />
+                            </div>
+                            {getCategoryLabel(article.category) && (
+                              <div className="absolute top-4 left-4 z-10">
+                                <span
+                                  className="text-white px-3 py-1 text-xs font-semibold"
+                                  style={{ backgroundColor: '#2a3f75' }}
+                                >
+                                  {getCategoryLabel(article.category)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-5 flex flex-col flex-1">
+                            <div className="flex items-center gap-2 text-gray-500 text-sm mb-3">
+                              <Calendar className="w-4 h-4" aria-hidden="true" />
+                              {formatArticleDate(article.date) && (
+                                <time dateTime={article.date}>
+                                  {formatArticleDate(article.date)}
+                                </time>
+                              )}
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                              {article.title}
+                            </h3>
+                            <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
+                              {article.excerpt}
+                            </p>
+                            <span
+                              className="inline-flex items-center gap-2 font-semibold text-sm group-hover:gap-3 transition-all mt-auto"
+                              style={{ color: '#2a3f75' }}
+                            >
+                              Read more <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                            </span>
+                          </div>
+                        </Link>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
 
             {/* Pagination */}
