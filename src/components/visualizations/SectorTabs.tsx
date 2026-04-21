@@ -113,7 +113,7 @@ export default function SectorTabs({
                   }
                   ${index !== 0 ? 'border-l border-gray-200' : ''}
                 `}
-                style={activeTab === tab.id ? { backgroundColor: '#2a3f75' } : {}}
+                style={activeTab === tab.id ? { backgroundColor: '#064e3b' } : {}}
               >
                 {tab.icon}
                 <span className="hidden sm:inline">{tab.label}</span>
@@ -171,7 +171,7 @@ export default function SectorTabs({
               {/* Total Scholars and Growth */}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-blue-50 rounded-lg p-4 text-center">
-                  <div className="text-3xl md:text-4xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                  <div className="text-3xl md:text-4xl font-bold mb-1" style={{ color: '#064e3b' }}>
                     {totalScholars || '16,000+'}
                   </div>
                   <h4 className="text-lg font-semibold text-gray-900">Total Scholars Supported</h4>
@@ -187,16 +187,16 @@ export default function SectorTabs({
                       </div>
                       <div className="text-xs text-gray-500">{scholarshipGrowth?.from.year || '2019/20'}</div>
                     </div>
-                    <div className="text-2xl" style={{ color: '#2a3f75' }}>→</div>
+                    <div className="text-2xl" style={{ color: '#064e3b' }}>→</div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold" style={{ color: '#2a3f75' }}>
+                      <div className="text-2xl font-bold" style={{ color: '#064e3b' }}>
                         {scholarshipGrowth?.to.count.toLocaleString() || '5,026'}
                       </div>
                       <div className="text-xs text-gray-500">{scholarshipGrowth?.to.year || '2023/24'}</div>
                     </div>
                   </div>
                   <div className="mt-3 text-center">
-                    <span className="inline-block text-white text-xs px-3 py-1 rounded-full font-semibold" style={{ backgroundColor: '#2a3f75' }}>
+                    <span className="inline-block text-white text-xs px-3 py-1 rounded-full font-semibold" style={{ backgroundColor: '#064e3b' }}>
                       199% Growth
                     </span>
                   </div>
@@ -208,7 +208,7 @@ export default function SectorTabs({
                 <h4 className="text-lg font-bold text-gray-900 mb-3">Scholarship Categories</h4>
                 <div className="grid md:grid-cols-2 gap-3">
                   {(scholarshipCategories || defaultScholarshipCategories).map((category, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 border-l-3" style={{ borderLeftWidth: '3px', borderLeftColor: '#2a3f75' }}>
+                    <div key={index} className="bg-gray-50 rounded-lg p-3 border-l-3" style={{ borderLeftWidth: '3px', borderLeftColor: '#064e3b' }}>
                       <h5 className="text-sm font-semibold text-gray-900">{category.title}</h5>
                       <p className="text-gray-500 text-xs">{category.description}</p>
                     </div>
@@ -222,7 +222,7 @@ export default function SectorTabs({
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {(reforms || defaultReforms).map((reform, index) => (
                     <div key={index} className="flex items-center gap-2 text-sm">
-                      <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
+                      <div className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#064e3b' }}>
                         <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>

@@ -139,18 +139,18 @@ export default function ScholarshipProgramme() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'GETFund Scholarship Programme'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
         {/* Two-column Intro with Image */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#064e3b 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
           <div className="container mx-auto px-4 max-w-7xl relative">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Image */}
               <div className="relative group">
-                <div className="absolute -inset-4 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute -inset-4 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#064e3b' }} />
                 <div className="relative overflow-hidden shadow-2xl">
                   <img
                     src={content.hero?.heroImage || '/images/scholarship/GETFund-Scholarship-Programme.jpg'}
@@ -163,14 +163,14 @@ export default function ScholarshipProgramme() {
 
               {/* Text content */}
               <div className="relative">
-                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#064e3b' }} />
                 <div className="lg:pl-8">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                     {content.overview?.heading || 'Programme Overview'}
                   </h2>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2a3f75' }} />
-                    <span className="text-sm md:text-base font-semibold" style={{ color: '#2a3f75' }}>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#064e3b' }} />
+                    <span className="text-sm md:text-base font-semibold" style={{ color: '#064e3b' }}>
                       {content.hero?.subtitle || 'Empowering Ghanaian students'}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function ScholarshipProgramme() {
 
         {/* Key Objectives - Blue Overlay Section */}
         {content.objectives?.items?.length > 0 && (
-          <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+          <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             <div className="container mx-auto px-4 max-w-7xl">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-10 text-center">
                 {content.objectives?.heading || 'Key Objectives'}
@@ -220,7 +220,7 @@ export default function ScholarshipProgramme() {
                   <div className="space-y-4">
                     {content.eligibility?.items?.map((item, idx) => (
                       <div key={idx} className="flex items-start gap-3">
-                        <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                        <div className="w-7 h-7 flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: '#064e3b' }}>
                           {idx + 1}
                         </div>
                         <p className="text-gray-700 leading-relaxed">{item}</p>
@@ -242,7 +242,7 @@ export default function ScholarshipProgramme() {
                   <ul className="space-y-4">
                     {content.applicationProcess?.steps?.map((step, idx) => (
                       <li key={idx} className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }} />
+                        <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#064e3b' }} />
                         <span className="text-gray-700 leading-relaxed">{step}</span>
                       </li>
                     ))}
@@ -263,7 +263,7 @@ export default function ScholarshipProgramme() {
               <ul className="space-y-3">
                 {content.importantNotes?.items?.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }} />
+                    <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#064e3b' }} />
                     <p className="text-gray-700">{item}</p>
                   </li>
                 ))}
@@ -286,7 +286,7 @@ export default function ScholarshipProgramme() {
                 <Link
                   to="/scholarship-apply"
                   className="inline-flex items-center gap-2 bg-white px-8 py-3 font-semibold hover:bg-gray-100 transition-all duration-300"
-                  style={{ color: '#2a3f75' }}
+                  style={{ color: '#064e3b' }}
                 >
                   Apply Now
                   <ArrowRight className="w-5 h-5" />

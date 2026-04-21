@@ -116,7 +116,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div
                   className="slide-content pointer-events-auto p-6 sm:p-8 md:p-10 lg:p-12 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl"
                   style={{
-                    backgroundColor: slide.blueBoxColor || '#2a3f75',
+                    backgroundColor: slide.blueBoxColor || '#064e3b',
                     opacity: (slide.blueBoxOpacity ?? 100) / 100,
                   }}
                 >

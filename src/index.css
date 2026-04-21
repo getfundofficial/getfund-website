@@ -3,105 +3,89 @@
 @tailwind utilities;
 
 /* ========================================
-   GLASSMORPHISM THEME
-   To revert: Remove this entire section
+   SURFACE SYSTEM
+   Flattened from glassmorphism for a professional, editorial feel.
+   Class names kept for backwards compatibility across components.
    ======================================== */
 @layer components {
-  /* Glass effect - light variant (for dark backgrounds) */
+  /* Light surface on dark backgrounds */
   .glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+    color: #1f2937;
   }
 
-  /* Glass effect - solid variant (for light backgrounds) */
+  /* Solid white surface on light backgrounds */
   .glass-solid {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    box-shadow: 0 1px 3px rgba(17, 24, 39, 0.06);
   }
 
-  /* Glass effect - dark variant */
+  /* Dark surface */
   .glass-dark {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: #052e16;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   }
 
-  /* Glass card */
+  /* Card */
   .glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    background: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   }
 
   .glass-card:hover {
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    border-color: rgba(5, 150, 105, 0.3);
+    box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
+    transform: translateY(-1px);
   }
 
-  /* Glass header */
+  /* Header */
   .glass-header {
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03);
   }
 
-  /* Glass footer */
+  /* Footer */
   .glass-footer {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Glass modal */
+  /* Modal */
   .glass-modal {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(17, 24, 39, 0.18);
   }
 
-  /* Glass button */
+  /* Button on image/dark backgrounds */
   .glass-btn {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: background 0.2s ease, border-color 0.2s ease;
   }
 
   .glass-btn:hover {
-    background: rgba(255, 255, 255, 0.35);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 
-  /* Glass input */
+  /* Input */
   .glass-input {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.3s ease;
+    background: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.12);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .glass-input:focus {
-    background: rgba(255, 255, 255, 0.8);
+    background: #ffffff;
     border-color: rgba(5, 150, 105, 0.5);
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
   }
 
   /* Full-width breakout - makes element span full viewport width */
@@ -114,60 +98,52 @@
     margin-right: -50vw;
   }
 
-  /* Glass section background */
+  /* Subtle section background */
   .glass-section {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: #fafafa;
   }
 
-  /* Glass dropdown menu */
+  /* Dropdown menu */
   .glass-dropdown {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
   }
 
-  /* Glass mobile menu */
+  /* Mobile menu */
   .glass-mobile-menu {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border-top: 1px solid rgba(17, 24, 39, 0.08);
+    box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
   }
 
-  /* Glass social icons */
+  /* Social icons on dark backgrounds */
   .glass-icon {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
   .glass-icon:hover {
-    background: rgba(5, 150, 105, 0.8);
-    border-color: rgba(5, 150, 105, 0.5);
-    transform: translateY(-2px);
+    background: #059669;
+    border-color: #059669;
+    transform: translateY(-1px);
   }
 
-  /* Gradient backgrounds for glassmorphism */
+  /* Brand gradients (kept for sections that use them) */
   .bg-gradient-glass {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
   }
 
   .bg-gradient-glass-green {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
   }
 
   .bg-gradient-glass-blue {
-    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #052e16 0%, #1f2937 100%);
   }
 }
-/* END GLASSMORPHISM THEME */
+/* END SURFACE SYSTEM */
 
 @layer base {
   html {
@@ -186,7 +162,7 @@
     flex-direction: column;
     font-size: 1rem;
     line-height: 1.625;
-    color: #191825;
+    color: #052e16;
   }
 
   #root {
@@ -197,85 +173,91 @@
   }
 
   /* ========================================
-     TYPOGRAPHY SYSTEM - GETFund Standard
-     Consistent across all GETFund projects
+     TYPOGRAPHY SYSTEM - GETFund Refresh
+     Geist display sans for headings, Inter for body.
      ======================================== */
 
-  /* Headings */
+  /* Headings — Geist, tight modern tracking */
+  h1, h2, h3, h4, h5 {
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #052e16;
+    text-align: left;
+  }
+
   h1 {
-    @apply text-4xl md:text-5xl font-bold tracking-tight;
-    color: #191825;
+    @apply text-4xl md:text-5xl font-semibold;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight;
-    color: #191825;
+    @apply text-3xl md:text-4xl font-semibold;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
   }
 
   h3 {
     @apply text-2xl md:text-3xl font-semibold;
-    color: #191825;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
   }
 
   h4 {
     @apply text-xl md:text-2xl font-semibold;
-    color: #191825;
+    letter-spacing: -0.015em;
   }
 
   h5 {
-    @apply text-lg md:text-xl font-medium;
-    color: #191825;
+    @apply text-lg md:text-xl font-semibold;
+    letter-spacing: -0.01em;
   }
 
   h6 {
-    @apply text-base md:text-lg font-medium;
-    color: #191825;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #052e16;
+    @apply text-xs font-semibold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
   }
 
-  /* Paragraphs */
+  /* Paragraphs — readable, left-aligned (no more justify) */
   p {
     @apply text-base leading-relaxed;
     color: #4b5563;
-    text-align: justify;
-  }
-
-  /* Override justify for centered containers */
-  .text-center p,
-  .text-center li,
-  .text-right p,
-  .text-left p {
-    text-align: inherit;
-  }
-
-  /* Justify body text elements (not headings) */
-  li,
-  article,
-  .prose {
-    text-align: justify;
-  }
-
-  /* Headings should never be justified */
-  h1, h2, h3, h4, h5, h6 {
-    text-align: left;
   }
 }
 
 @layer components {
   /* Typography utility classes */
   .text-display {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight;
+    @apply font-display text-5xl md:text-6xl lg:text-7xl font-semibold;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
   }
 
   .text-hero {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-semibold;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
   .text-title {
-    @apply text-3xl md:text-4xl font-bold;
+    @apply font-display text-3xl md:text-4xl font-semibold;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
   }
 
   .text-subtitle {
-    @apply text-2xl md:text-3xl font-semibold;
+    @apply font-display text-2xl md:text-3xl font-semibold;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  /* Small uppercase eyebrow label for section intros */
+  .text-eyebrow {
+    @apply text-xs font-semibold uppercase text-getfund-primary;
+    letter-spacing: 0.15em;
   }
 
   .text-heading {

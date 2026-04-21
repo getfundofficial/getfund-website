@@ -65,21 +65,46 @@ export default function WhatWeDo() {
       <Header />
       <Breadcrumb />
       <main className="flex-1">
-        {/* Page Title Section */}
-        <section className="bg-white pt-8 pb-6">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              {pageContent?.servicesTitle || 'What We Do'}
-            </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
-            <p className="text-gray-600 mt-4 max-w-3xl">
-              {pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments in infrastructure, scholarships, and capacity building programs that benefit students at all levels.'}
-            </p>
+        {/* Page Title Section — asymmetric with focus circles */}
+        <section className="bg-white pt-16 md:pt-24 pb-12 md:pb-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+              <div className="md:col-span-5">
+                <span className="text-eyebrow">What We Do</span>
+                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-getfund-secondary mt-4 leading-[1.05]" style={{ letterSpacing: '-0.035em' }}>
+                  {pageContent?.servicesTitle || 'What We Do'}
+                </h1>
+                <p className="text-base md:text-lg text-gray-600 mt-6 leading-relaxed max-w-xl">
+                  {pageContent?.servicesSubtitle || 'GETFund is committed to transforming education in Ghana through strategic investments in infrastructure, scholarships, and capacity building programs that benefit students at all levels.'}
+                </p>
+              </div>
+              <div className="md:col-span-7 md:col-start-6">
+                <div className="flex flex-wrap justify-start md:justify-end gap-4 md:gap-5 lg:gap-6">
+                  {[
+                    'Educational Infrastructure Support',
+                    'Ministry of Education & Agencies Financial Support',
+                    'Government Policy & Programme Support',
+                    'Scholar & capacity Building Programmes',
+                    'Others'
+                  ].map((item, index) => (
+                    <div
+                      key={index}
+                      className="w-24 sm:w-28 md:w-28 lg:w-32 xl:w-36 aspect-square bg-getfund-dark flex items-center justify-center shadow-lg p-3"
+                      style={{ borderRadius: '50%' }}
+                    >
+                      <span className="text-white text-[10px] sm:text-[11px] md:text-xs lg:text-sm font-bold text-center leading-tight">
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Programs Section with Key Initiatives */}
-        <Programs showTitle={false} focusAreaImages={pageContent?.focusAreaImages} />
+        <Programs showTitle={false} hideFocusCircles focusAreaImages={pageContent?.focusAreaImages} />
       </main>
       <Footer />
     </div>

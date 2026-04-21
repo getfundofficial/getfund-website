@@ -143,7 +143,7 @@ export default function AboutEdit() {
         <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="w-10 h-10 animate-spin text-[#2a3f75] mx-auto mb-4" />
+            <Loader2 className="w-10 h-10 animate-spin text-[#064e3b] mx-auto mb-4" />
             <p className="text-gray-600">Loading page content...</p>
           </div>
         </main>
@@ -161,7 +161,7 @@ export default function AboutEdit() {
           <div className="mb-8">
             <button
               onClick={() => navigate('/about')}
-              className="flex items-center gap-2 text-gray-600 hover:text-[#2a3f75] mb-4 transition-colors"
+              className="flex items-center gap-2 text-gray-600 hover:text-[#064e3b] mb-4 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to About Page
@@ -188,7 +188,7 @@ export default function AboutEdit() {
 
           {/* Board of Trustees Editor */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-4 bg-[#2a3f75] text-white">
+            <div className="p-4 bg-[#064e3b] text-white">
               <div className="flex items-center gap-3">
                 <FileText className="w-6 h-6" />
                 <div>
@@ -210,7 +210,7 @@ export default function AboutEdit() {
                   value={boardImage}
                   onChange={(e) => setBoardImage(e.target.value)}
                   placeholder="/images/about/getfund-7th-board-inauguration.jpg"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75] transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#064e3b] focus:border-[#064e3b] transition-colors"
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Enter the path to the board group photo (e.g., /images/about/board-photo.jpg)
@@ -255,7 +255,7 @@ export default function AboutEdit() {
                           setBoardMembers(updated);
                         }}
                         placeholder="Full Name"
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#064e3b] focus:border-[#064e3b]"
                       />
                       <input
                         type="text"
@@ -266,7 +266,7 @@ export default function AboutEdit() {
                           setBoardMembers(updated);
                         }}
                         placeholder="Organization / Role"
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#2a3f75] focus:border-[#2a3f75]"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[#064e3b] focus:border-[#064e3b]"
                       />
                       <button
                         onClick={() => setBoardMembers(boardMembers.filter((_, i) => i !== index))}
@@ -280,7 +280,7 @@ export default function AboutEdit() {
                 </div>
                 <button
                   onClick={() => setBoardMembers([...boardMembers, { name: '', organization: '' }])}
-                  className="mt-3 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2a3f75] border border-dashed border-[#2a3f75] rounded-lg hover:bg-[#2a3f75]/5 transition-colors"
+                  className="mt-3 flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#064e3b] border border-dashed border-[#064e3b] rounded-lg hover:bg-[#064e3b]/5 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Add Member
@@ -292,7 +292,7 @@ export default function AboutEdit() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex items-center gap-2 px-6 py-3 bg-[#2a3f75] text-white rounded-lg hover:bg-[#1e2d54] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#064e3b] text-white rounded-lg hover:bg-[#1e2d54] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
                   {saving ? (
                     <>

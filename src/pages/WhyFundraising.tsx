@@ -55,7 +55,7 @@ const impactPoints = [
     icon: GraduationCap,
     title: 'Scholarships',
     description: 'Fund scholarships for talented students who lack financial resources',
-    color: '#2a3f75'
+    color: '#064e3b'
   },
   {
     icon: Building2,
@@ -67,7 +67,7 @@ const impactPoints = [
     icon: Users,
     title: 'Teacher Training',
     description: 'Support professional development programs for educators',
-    color: '#1e3a5f'
+    color: '#052e16'
   },
   {
     icon: TrendingUp,
@@ -156,16 +156,16 @@ export default function WhyFundraising() {
           />
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#2a3f75]/5" />
+            <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#064e3b]/5" />
             <div className="absolute top-1/2 -left-32 w-64 h-64 rounded-full bg-amber-500/10" />
-            <div className="absolute bottom-0 right-1/4 w-48 h-48 rounded-full bg-[#2a3f75]/5" />
+            <div className="absolute bottom-0 right-1/4 w-48 h-48 rounded-full bg-[#064e3b]/5" />
           </div>
 
           <div className="container mx-auto px-4 max-w-6xl relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Left - Text Content */}
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2a3f75]/10 text-[#2a3f75] text-sm mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#064e3b]/10 text-[#064e3b] text-sm mb-6">
                   <Heart className="w-4 h-4" />
                   Support Education in Ghana
                 </div>
@@ -179,14 +179,14 @@ export default function WhyFundraising() {
                   <Link
                     to="/fundraising/ways-to-donate"
                     className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                    style={{ backgroundColor: '#f59e0b', color: '#1e3a5f', boxShadow: '0 10px 30px rgba(245, 158, 11, 0.4)' }}
+                    style={{ backgroundColor: '#f59e0b', color: '#052e16', boxShadow: '0 10px 30px rgba(245, 158, 11, 0.4)' }}
                   >
                     <Heart className="w-5 h-5" />
                     Donate Now
                   </Link>
                   <Link
                     to="/fundraising-campaigns"
-                    className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-[#2a3f75] text-[#2a3f75] transition-all duration-300 hover:bg-[#2a3f75] hover:text-white hover:border-[#2a3f75]"
+                    className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-[#064e3b] text-[#064e3b] transition-all duration-300 hover:bg-[#064e3b] hover:text-white hover:border-[#064e3b]"
                   >
                     View Campaigns
                     <ArrowRight className="w-5 h-5" />
@@ -215,35 +215,29 @@ export default function WhyFundraising() {
           </div>
         </section>
 
-        {/* Where Your Donations Go Section */}
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="mb-10">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                Where Your Donations Go
+        {/* Where Your Donations Go — editorial */}
+        <section className="py-20 md:py-28 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mb-14 md:mb-20">
+              <span className="text-eyebrow">Allocation</span>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-getfund-secondary mt-4 leading-[1.05]" style={{ letterSpacing: '-0.03em' }}>
+                Where your donations go.
               </h2>
-              <p className="text-gray-600 mt-2 max-w-2xl">
-                Your contributions directly support these critical areas of educational development
+              <p className="text-base md:text-lg text-gray-600 mt-5 leading-relaxed">
+                Your contributions directly support these critical areas of educational development.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 sm:divide-x divide-y sm:divide-y-0 lg:divide-y-0 divide-gray-200 border-y border-gray-200">
               {impactPoints.map((point, index) => (
-                <div
-                  key={index}
-                  className="group relative bg-gray-50 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-100 hover:border-gray-200"
-                >
-                  {/* Accent line at top */}
-                  <div
-                    className="absolute top-0 left-6 right-6 h-1 rounded-b-full transition-all duration-300 group-hover:left-4 group-hover:right-4"
-                    style={{ backgroundColor: point.color }}
-                  />
-                  <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${point.color}15` }}
-                  >
-                    <point.icon className="w-7 h-7" style={{ color: point.color }} />
+                <div key={index} className="py-8 sm:py-10 px-4 sm:px-6 lg:px-8 first:pl-0 last:pr-0">
+                  <div className="font-display text-sm font-semibold text-getfund-primary mb-6" style={{ letterSpacing: '0.15em' }}>
+                    {String(index + 1).padStart(2, '0')}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{point.title}</h3>
+                  <point.icon className="w-6 h-6 text-getfund-dark mb-4" strokeWidth={1.75} />
+                  <h3 className="font-display text-xl font-semibold text-getfund-secondary mb-3 leading-tight" style={{ letterSpacing: '-0.015em' }}>
+                    {point.title}
+                  </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">{point.description}</p>
                 </div>
               ))}
@@ -269,7 +263,7 @@ export default function WhyFundraising() {
                     className="text-center group"
                   >
                     {/* Number */}
-                    <div className="text-4xl md:text-5xl font-bold tracking-tight transition-transform duration-300 group-hover:scale-110 text-[#2a3f75]">
+                    <div className="text-4xl md:text-5xl font-bold tracking-tight transition-transform duration-300 group-hover:scale-110 text-[#064e3b]">
                       {stat.value}
                     </div>
                     {/* Label with underline */}
@@ -277,7 +271,7 @@ export default function WhyFundraising() {
                       <span className="text-gray-600 text-xs md:text-sm font-medium uppercase tracking-wider">
                         {stat.title}
                       </span>
-                      <div className="absolute -bottom-1 left-0 w-full h-0.5 rounded-full bg-[#2a3f75] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                      <div className="absolute -bottom-1 left-0 w-full h-0.5 rounded-full bg-[#064e3b] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                     </div>
                   </div>
                 ))}
@@ -298,7 +292,7 @@ export default function WhyFundraising() {
                 <div className="space-y-6">
                   {content.whyDonate?.paragraph1 && (
                     <div className="flex gap-4">
-                      <div className="w-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#2a3f75' }} />
+                      <div className="w-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#064e3b' }} />
                       <p className="text-gray-700 leading-relaxed">{content.whyDonate.paragraph1}</p>
                     </div>
                   )}
@@ -310,7 +304,7 @@ export default function WhyFundraising() {
                   )}
                   {content.whyDonate?.paragraph3 && (
                     <div className="flex gap-4">
-                      <div className="w-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#1e3a5f' }} />
+                      <div className="w-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#052e16' }} />
                       <p className="text-gray-700 leading-relaxed">{content.whyDonate.paragraph3}</p>
                     </div>
                   )}
@@ -342,9 +336,9 @@ export default function WhyFundraising() {
           />
           {/* Decorative Elements */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full bg-[#2a3f75]/5" />
+            <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full bg-[#064e3b]/5" />
             <div className="absolute top-1/2 -right-24 w-48 h-48 rounded-full bg-amber-500/10" />
-            <div className="absolute -bottom-12 left-1/3 w-40 h-40 rounded-full bg-[#2a3f75]/5" />
+            <div className="absolute -bottom-12 left-1/3 w-40 h-40 rounded-full bg-[#064e3b]/5" />
           </div>
 
           <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
@@ -358,14 +352,14 @@ export default function WhyFundraising() {
               <Link
                 to="/fundraising/ways-to-donate"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                style={{ backgroundColor: '#2a3f75', color: 'white' }}
+                style={{ backgroundColor: '#064e3b', color: 'white' }}
               >
                 <Heart className="w-5 h-5" />
                 Start Donating
               </Link>
               <Link
                 to="/fundraising/partnerships"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-[#2a3f75] text-[#2a3f75] transition-all duration-300 hover:bg-[#2a3f75] hover:text-white"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-[#064e3b] text-[#064e3b] transition-all duration-300 hover:bg-[#064e3b] hover:text-white"
               >
                 Become a Partner
               </Link>

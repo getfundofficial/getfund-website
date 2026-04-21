@@ -255,20 +255,20 @@ export default function WhoWeAre() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {pageContent?.heroTitle || 'About Us'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
         {/* Main Content - Ghana Education Trust Fund */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
           {/* Subtle background pattern */}
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#064e3b 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
 
           <div className="container mx-auto px-4 max-w-7xl relative">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
               {/* Image with enhanced styling */}
               <div className="relative group">
-                <div className="absolute -inset-4 rounded-2xl opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute -inset-4 rounded-2xl opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#064e3b' }} />
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                   <img
                     src={pageContent?.mainImage || '/images/about/getfund-7th-board-inauguration.jpg'}
@@ -282,14 +282,14 @@ export default function WhoWeAre() {
 
               {/* Text content with accent styling */}
               <div className="relative">
-                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#064e3b' }} />
                 <div className="lg:pl-8">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                     {pageContent?.mainHeading || 'Ghana Education Trust Fund'}
                   </h2>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2a3f75' }} />
-                    <span className="text-sm md:text-base font-semibold" style={{ color: '#2a3f75' }}>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#064e3b' }} />
+                    <span className="text-sm md:text-base font-semibold" style={{ color: '#064e3b' }}>
                       {pageContent?.redHeading || 'Since its establishment in 2000'}
                     </span>
                   </div>
@@ -309,7 +309,7 @@ export default function WhoWeAre() {
         </section>
 
         {/* Vision, Mission, Values */}
-        <section className="py-12 md:py-16 -mt-56 md:-mt-72 pt-60 md:pt-80" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+        <section className="py-12 md:py-16 -mt-56 md:-mt-72 pt-60 md:pt-80" style={{ backgroundColor: 'rgba(5, 46, 22, 0.92)' }}>
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="grid md:grid-cols-3 gap-10">
               <div className="text-center">
@@ -351,13 +351,13 @@ export default function WhoWeAre() {
                 </h2>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-bold mb-3" style={{ color: '#2a3f75' }}>The Cost-Sharing Policy</h3>
+                    <h3 className="text-xl font-bold mb-3" style={{ color: '#064e3b' }}>The Cost-Sharing Policy</h3>
                     <p className="text-gray-700 leading-relaxed">
                       {pageContent?.costSharingPolicy || 'In Ghana, due to the government\'s limited capacity to fully fund tertiary education, a cost-sharing policy has been introduced. This approach requires students and families to contribute towards the cost of higher education, supplementing government funding.'}
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-3" style={{ color: '#2a3f75' }}>Public Responsibility</h3>
+                    <h3 className="text-xl font-bold mb-3" style={{ color: '#064e3b' }}>Public Responsibility</h3>
                     <p className="text-gray-700 leading-relaxed">
                       {pageContent?.publicResponsibility || 'While various cost-sharing options exist, the policy recognizes that education remains a public responsibility. The government continues to play a central role in ensuring that higher education funding is adequately supported and equitably distributed.'}
                     </p>
@@ -385,7 +385,7 @@ export default function WhoWeAre() {
                     'Equitable allocation of funds to districts at the pre-tertiary level of education'
                   ]).map((factor, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}></div>
+                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#064e3b' }}></div>
                       <span className="text-gray-700">{factor}</span>
                     </li>
                   ))}

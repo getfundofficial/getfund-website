@@ -133,7 +133,7 @@ export default function FundraisingCampaigns() {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             {pageContent.heroTitle || 'Fundraising Campaigns'}
           </h1>
-          <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+          <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           <p className="text-gray-600 mt-4 max-w-3xl">
             {pageContent.campaignsSectionSubtitle || 'Join thousands of Ghanaians making a difference through our targeted fundraising campaigns. Every contribution counts towards building a better educational future.'}
           </p>
@@ -162,7 +162,7 @@ export default function FundraisingCampaigns() {
 
       <main className="flex-1">
         {/* Campaigns Section */}
-        <section className="py-12 sm:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.03)' }}>
+        <section className="py-12 sm:py-16" style={{ backgroundColor: 'rgba(6, 78, 59, 0.03)' }}>
           <div className="container mx-auto px-4 sm:px-6">
 
             {campaigns.length === 0 ? (
@@ -188,7 +188,7 @@ export default function FundraisingCampaigns() {
               <a
                 href="/fundraising/all-campaigns"
                 className="inline-block font-semibold py-3 px-8 rounded-lg transition-colors shadow-lg hover:opacity-90"
-                style={{ backgroundColor: '#f59e0b', color: '#1e3a5f' }}
+                style={{ backgroundColor: '#f59e0b', color: '#052e16' }}
               >
                 {pageContent.viewAllButtonText || 'View All Campaigns'}
               </a>
@@ -238,7 +238,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           />
         </div>
       ) : (
-        <div className="relative h-48 flex items-center justify-center" style={{ backgroundColor: '#2a3f75' }}>
+        <div className="relative h-48 flex items-center justify-center" style={{ backgroundColor: '#064e3b' }}>
           <Gift className="w-16 h-16 text-white/50" />
         </div>
       )}
@@ -275,7 +275,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
           <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
             <div
               className="h-2.5 rounded-full transition-all duration-500 ease-out"
-              style={{ backgroundColor: '#2a3f75', width: `${Math.max(percentageFunded, 2)}%` }}
+              style={{ backgroundColor: '#064e3b', width: `${Math.max(percentageFunded, 2)}%` }}
             />
           </div>
           <div className="text-xs text-gray-500 mt-1">
@@ -289,7 +289,7 @@ const CampaignCard: React.FC<{ campaign: Campaign }> = ({ campaign }) => {
             setModalOpen(true);
           }}
           className="w-full text-white py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:opacity-90 flex items-center justify-center"
-          style={{ backgroundColor: '#1e3a5f' }}
+          style={{ backgroundColor: '#052e16' }}
         >
           {campaign.button_text || 'Donate Now'}
         </button>

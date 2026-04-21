@@ -53,7 +53,7 @@ export default function PartnerUniversities() {
         />
 
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-[#2a3f75] to-[#1a2a55] text-white py-16 md:py-20">
+        <section className="relative bg-getfund-dark text-white py-16 md:py-20">
           <div className="absolute inset-0">
             <img
               src="/images/scholarship/GETFund-Scholarship-Programme.jpg"
@@ -61,7 +61,7 @@ export default function PartnerUniversities() {
               className="w-full h-full object-cover opacity-20"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#2a3f75]/80 to-[#1a2a55]/90" />
+          <div className="absolute inset-0 bg-getfund-dark/85" />
           <div className="relative container mx-auto px-4 max-w-6xl">
             <div className="flex items-center gap-3 mb-4">
               <GraduationCap className="w-10 h-10 text-getfund-gold" />
@@ -80,7 +80,7 @@ export default function PartnerUniversities() {
           <section className="py-16 bg-gray-50">
             <div className="container mx-auto px-4 max-w-6xl">
               <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 bg-[#2a3f75]/10 text-[#2a3f75] px-4 py-1.5 text-sm font-medium mb-4">
+                <div className="inline-flex items-center gap-2 bg-[#064e3b]/10 text-[#064e3b] px-4 py-1.5 text-sm font-medium mb-4">
                   <Globe className="w-4 h-4" />
                   International Partnerships
                 </div>
@@ -92,13 +92,13 @@ export default function PartnerUniversities() {
               {/* Summary Stats */}
               <div className="flex flex-wrap justify-center gap-6 mb-10">
                 <div className="flex items-center gap-2 bg-white px-5 py-3 border border-gray-200">
-                  <Building className="w-5 h-5 text-[#2a3f75]" />
-                  <span className="text-2xl font-bold text-[#2a3f75]">{universityPartners.length}</span>
+                  <Building className="w-5 h-5 text-[#064e3b]" />
+                  <span className="text-2xl font-bold text-[#064e3b]">{universityPartners.length}</span>
                   <span className="text-gray-600 text-sm">Partner Universities</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white px-5 py-3 border border-gray-200">
                   <Globe className="w-5 h-5 text-getfund-gold" />
-                  <span className="text-2xl font-bold text-[#2a3f75]">{sortedCountries.length}</span>
+                  <span className="text-2xl font-bold text-[#064e3b]">{sortedCountries.length}</span>
                   <span className="text-gray-600 text-sm">Countries</span>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export default function PartnerUniversities() {
                         <CardWrapper
                           key={uni.id}
                           {...linkProps}
-                          className={`group flex flex-col items-center gap-3 bg-white p-4 border border-gray-200 hover:border-[#2a3f75]/30 hover:shadow-md transition-all ${uni.website_url ? 'cursor-pointer' : ''}`}
+                          className={`group flex flex-col items-center gap-3 bg-white p-4 border border-gray-200 hover:border-[#064e3b]/30 hover:shadow-md transition-all ${uni.website_url ? 'cursor-pointer' : ''}`}
                         >
                           <div className="w-full h-12 flex items-center justify-center">
                             <img
@@ -140,11 +140,11 @@ export default function PartnerUniversities() {
                               className="max-h-12 max-w-full object-contain"
                             />
                           </div>
-                          <span className="text-xs font-medium text-gray-700 text-center leading-tight group-hover:text-[#2a3f75] transition-colors">
+                          <span className="text-xs font-medium text-gray-700 text-center leading-tight group-hover:text-[#064e3b] transition-colors">
                             {uni.name}
                           </span>
                           {uni.website_url && (
-                            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-[#2a3f75] transition-colors" />
+                            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-[#064e3b] transition-colors" />
                           )}
                         </CardWrapper>
                       );

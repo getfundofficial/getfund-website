@@ -59,18 +59,18 @@ export default function ScholarshipOverview() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero.title}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
           </div>
         </section>
 
         {/* Programme Overview - Two Column with Image */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#2a3f75 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#064e3b 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
           <div className="container mx-auto px-4 max-w-7xl relative">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Image with enhanced styling */}
               <div className="relative group">
-                <div className="absolute -inset-4 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute -inset-4 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-30" style={{ backgroundColor: '#064e3b' }} />
                 <div className="relative overflow-hidden shadow-2xl">
                   <img
                     src={content.hero.heroImage || '/images/scholarship/scholarship-programme-hero.jpg'}
@@ -83,14 +83,14 @@ export default function ScholarshipOverview() {
 
               {/* Text content with accent styling */}
               <div className="relative">
-                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#2a3f75' }} />
+                <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full hidden lg:block" style={{ backgroundColor: '#064e3b' }} />
                 <div className="lg:pl-8">
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                     {content.programmeOverview.heading}
                   </h2>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(42, 63, 117, 0.1)' }}>
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2a3f75' }} />
-                    <span className="text-sm md:text-base font-semibold" style={{ color: '#2a3f75' }}>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#064e3b' }} />
+                    <span className="text-sm md:text-base font-semibold" style={{ color: '#064e3b' }}>
                       {content.hero.subtitle}
                     </span>
                   </div>
@@ -106,7 +106,7 @@ export default function ScholarshipOverview() {
         </section>
 
         {/* Core Belief - Blue Overlay Section */}
-        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="grid md:grid-cols-2 gap-10">
               <div className="text-center md:text-left">
@@ -144,11 +144,11 @@ export default function ScholarshipOverview() {
                 <div className="space-y-6">
                   {content.priorityAreas.items.map((area, idx) => (
                     <div key={idx} className="flex items-start gap-4">
-                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#2a3f75' }}>
+                      <div className="w-12 h-12 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#064e3b' }}>
                         {idx === 0 ? <Building className="w-6 h-6 text-white" /> : <Users className="w-6 h-6 text-white" />}
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold mb-2" style={{ color: '#2a3f75' }}>{area.title}</h3>
+                        <h3 className="text-xl font-bold mb-2" style={{ color: '#064e3b' }}>{area.title}</h3>
                         <p className="text-gray-700 leading-relaxed">{area.description}</p>
                       </div>
                     </div>
@@ -168,7 +168,7 @@ export default function ScholarshipOverview() {
                 <ul className="space-y-3">
                   {content.scopeOfScholarship.items.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#2a3f75' }} />
+                      <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ backgroundColor: '#064e3b' }} />
                       <span className="text-gray-700">{item}</span>
                     </li>
                   ))}
@@ -179,7 +179,7 @@ export default function ScholarshipOverview() {
         </section>
 
         {/* Programme Statistics - Blue Overlay */}
-        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(42, 63, 117, 0.85)' }}>
+        <section className="py-12 md:py-16" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
           <div className="container mx-auto px-4 max-w-7xl">
             <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center text-white">
               {content.programmeStats.heading}
@@ -235,7 +235,7 @@ export default function ScholarshipOverview() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white px-8 py-3 font-semibold transition-all duration-300 hover:bg-gray-100"
-                  style={{ color: '#2a3f75' }}
+                  style={{ color: '#064e3b' }}
                 >
                   {content.cta.buttonText}
                   <ArrowRight className="w-5 h-5" />

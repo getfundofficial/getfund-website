@@ -41,8 +41,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <div className="min-h-screen bg-white">
-        {/* Centered content wrapper with max-width and shadow for refined layout */}
-        <div className="max-w-[1500px] mx-auto bg-white shadow-xl min-h-screen">
+        <div className="w-full bg-white min-h-screen">
         <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Homepage */}

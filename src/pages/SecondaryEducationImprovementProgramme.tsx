@@ -194,7 +194,7 @@ export default function SecondaryEducationImprovementProgramme() {
               {content.objectives?.items?.length > 0 && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                    <span className="w-2 h-8 rounded" style={{ backgroundColor: '#2a3f75' }}></span>
+                    <span className="w-2 h-8 rounded" style={{ backgroundColor: '#064e3b' }}></span>
                     {content.objectives?.heading}
                   </h2>
                   <div className="bg-blue-50 p-6 rounded-xl">

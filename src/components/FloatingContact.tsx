@@ -50,7 +50,7 @@ export default function FloatingContact() {
       {/* Expanded Contact Panel */}
       {isOpen && (
         <div className="absolute right-40 top-1/2 -translate-y-1/2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden animate-scale-in">
-          <div className="p-4" style={{ backgroundColor: '#1e3a5f' }}>
+          <div className="p-4" style={{ backgroundColor: '#052e16' }}>
             <h3 className="text-white font-semibold text-lg">Get in Touch</h3>
             <p className="text-blue-200 text-sm">We're here to help</p>
           </div>
@@ -59,8 +59,8 @@ export default function FloatingContact() {
               href={`tel:${phoneLink}`}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
-                <Phone className="w-5 h-5" style={{ color: '#1e3a5f' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                <Phone className="w-5 h-5" style={{ color: '#052e16' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Call Us</p>
@@ -71,8 +71,8 @@ export default function FloatingContact() {
               href={`mailto:${contactInfo.email}`}
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
-                <Mail className="w-5 h-5" style={{ color: '#1e3a5f' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                <Mail className="w-5 h-5" style={{ color: '#052e16' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Email Us</p>
@@ -85,8 +85,8 @@ export default function FloatingContact() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors group"
             >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(30, 58, 95, 0.1)' }}>
-                <MapPin className="w-5 h-5" style={{ color: '#1e3a5f' }} />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center transition-colors" style={{ backgroundColor: 'rgba(6, 78, 59, 0.1)' }}>
+                <MapPin className="w-5 h-5" style={{ color: '#052e16' }} />
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Visit Us</p>
@@ -105,7 +105,7 @@ export default function FloatingContact() {
           width: '120px',
           height: '120px',
           borderRadius: '50%',
-          backgroundColor: '#1e3a5f',
+          backgroundColor: '#052e16',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

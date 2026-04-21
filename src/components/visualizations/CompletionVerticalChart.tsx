@@ -20,7 +20,7 @@ const SECTOR_DESCRIPTIONS: Record<string, string> = {
 // Color palette matching page theme
 const SECTOR_COLORS: Record<string, { complete: string; incomplete: string }> = {
   basic: { complete: '#059669', incomplete: '#e5e7eb' },
-  secondary: { complete: '#2a3f75', incomplete: '#e5e7eb' },
+  secondary: { complete: '#064e3b', incomplete: '#e5e7eb' },
   eblock: { complete: '#7c3aed', incomplete: '#e5e7eb' },
   modelshs: { complete: '#ea580c', incomplete: '#e5e7eb' },
   tertiary: { complete: '#0891b2', incomplete: '#e5e7eb' },

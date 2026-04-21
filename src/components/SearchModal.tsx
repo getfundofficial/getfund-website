@@ -196,12 +196,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 >
                   <div
                     className="p-2 rounded-lg flex-shrink-0"
-                    style={{ backgroundColor: result.type === 'news' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(42, 63, 117, 0.1)' }}
+                    style={{ backgroundColor: result.type === 'news' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(6, 78, 59, 0.1)' }}
                   >
                     {result.type === 'news' ? (
                       <Newspaper className="w-4 h-4" style={{ color: '#f59e0b' }} />
                     ) : (
-                      <FileText className="w-4 h-4" style={{ color: '#2a3f75' }} />
+                      <FileText className="w-4 h-4" style={{ color: '#064e3b' }} />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

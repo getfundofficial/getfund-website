@@ -121,7 +121,7 @@ export default function FAQ() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {content.hero?.title || 'Frequently Asked Questions'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             {content.hero?.subtitle && (
               <p className="text-gray-600 mt-4 max-w-3xl">
                 {content.hero.subtitle}
@@ -171,9 +171,9 @@ export default function FAQ() {
               <a
                 href={content.contactCta?.buttonLink || '/contact'}
                 className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-                style={{ backgroundColor: '#2a3f75' }}
+                style={{ backgroundColor: '#064e3b' }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1e2d54'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a3f75'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#064e3b'}
               >
                 {content.contactCta?.buttonText || 'Contact Us'}
               </a>

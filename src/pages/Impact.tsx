@@ -236,7 +236,7 @@ export default function Impact() {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               {pageContent?.heroTitle || 'Our Work & Impact'}
             </h1>
-            <div className="w-16 h-1" style={{ backgroundColor: '#2a3f75' }} />
+            <div className="w-16 h-1" style={{ backgroundColor: '#064e3b' }} />
             <p className="text-gray-600 mt-3 max-w-3xl">
               {pageContent?.heroSubtitle || 'Transforming lives and communities through quality education across Ghana'}
             </p>
@@ -278,21 +278,21 @@ export default function Impact() {
                 <p className="text-xs text-gray-500 mt-1">In progress</p>
               </div>
               <div className="bg-blue-50 p-5 text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>
                   <AnimatedCounter end={16} duration={1500} />
                 </div>
                 <div className="text-sm font-semibold text-gray-900">Regions</div>
                 <p className="text-xs text-gray-500 mt-1">Nationwide</p>
               </div>
               <div className="bg-blue-50 p-5 text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>
                   <AnimatedCounter end={5} duration={1500} />
                 </div>
                 <div className="text-sm font-semibold text-gray-900">Sectors</div>
                 <p className="text-xs text-gray-500 mt-1">Education levels</p>
               </div>
               <div className="bg-blue-50 p-5 text-center">
-                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#2a3f75' }}>
+                <div className="text-2xl md:text-3xl font-bold mb-1" style={{ color: '#064e3b' }}>
                   <AnimatedCounter end={24} duration={1500} suffix="+" />
                 </div>
                 <div className="text-sm font-semibold text-gray-900">Years</div>
@@ -348,8 +348,8 @@ export default function Impact() {
                 { year: '2020', title: 'Digital Infrastructure', description: 'E-learning support deployed' },
                 { year: '2024', title: '11,488 Projects', description: 'Across all 16 regions' }
               ]).map((achievement, index) => (
-                <div key={index} className="bg-white rounded-lg p-4 shadow-sm border-t-3" style={{ borderTopWidth: '3px', borderTopColor: '#2a3f75' }}>
-                  <span className="inline-block text-white text-xs font-bold px-2 py-1 rounded mb-2" style={{ backgroundColor: '#2a3f75' }}>
+                <div key={index} className="bg-white rounded-lg p-4 shadow-sm border-t-3" style={{ borderTopWidth: '3px', borderTopColor: '#064e3b' }}>
+                  <span className="inline-block text-white text-xs font-bold px-2 py-1 rounded mb-2" style={{ backgroundColor: '#064e3b' }}>
                     {achievement.year}
                   </span>
                   <h3 className="text-sm font-bold text-gray-900 mb-1">{achievement.title}</h3>
@@ -361,7 +361,7 @@ export default function Impact() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-10 text-white" style={{ backgroundColor: '#1e3a5f' }}>
+        <section className="py-10 text-white" style={{ backgroundColor: '#052e16' }}>
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-2">
@@ -373,7 +373,7 @@ export default function Impact() {
               <a
                 href={pageContent?.ctaButtonLink || '/support-us'}
                 className="inline-block bg-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                style={{ color: '#1e3a5f' }}
+                style={{ color: '#052e16' }}
               >
                 {pageContent?.ctaButtonText || 'Support Our Mission'}
               </a>

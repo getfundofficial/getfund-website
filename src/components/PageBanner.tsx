@@ -77,26 +77,30 @@ export default function PageBanner({
 
   return (
     <section
-      className="relative text-white py-16 overflow-hidden"
+      className="relative text-white py-24 md:py-32 overflow-hidden"
       style={getBackgroundStyle()}
     >
       {/* Tint Overlay - Only show if background image exists */}
       {hasBackgroundImage && (
         <div className="absolute inset-0" style={getTintStyle()} />
       )}
+      {/* Additional subtle depth layer for modern feel */}
+      {hasBackgroundImage && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+      )}
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-4xl">
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg"
-            style={{ color: bannerBackground?.titleColor || '#FFFFFF' }}
+            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold mb-5"
+            style={{ color: bannerBackground?.titleColor || '#FFFFFF', letterSpacing: '-0.035em', lineHeight: '1.05' }}
           >
             {title}
           </h1>
           {subtitle && (
             <p
-              className="text-xl md:text-2xl leading-relaxed drop-shadow-md"
-              style={{ color: bannerBackground?.subtitleColor || '#FCA5A5' }}
+              className="text-lg md:text-xl leading-relaxed max-w-2xl"
+              style={{ color: bannerBackground?.subtitleColor || 'rgba(255,255,255,0.8)' }}
             >
               {subtitle}
             </p>
