@@ -270,7 +270,11 @@ class CMSApiClient {
         date: article.date || article.published_date || '',
         tags: article.category ? [article.category] : ['News'],
         category: article.category || 'NEWS',
-      })).slice(0, limit);
+      }))
+        // Sort by date (newest first) before applying the limit, so a limited
+        // request (e.g. homepage's getRecentNews) returns the actual latest articles
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, limit);
       setCache(cacheKey, result);
       return result;
     } catch {
