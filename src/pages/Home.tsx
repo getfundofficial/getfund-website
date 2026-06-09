@@ -59,6 +59,7 @@ interface PageContent {
     overlay?: SlideOverlay;
     mediaType?: 'image' | 'video';
     videoUrl?: string; // YouTube, Vimeo, or direct video URL
+    loop?: boolean; // Whether the video loops continuously (defaults to true)
   }>;
   // Achievements section
   achievementsTitle?: string;

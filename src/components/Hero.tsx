@@ -71,6 +71,7 @@ interface HeroSlide {
   blueBox?: BlueBoxSettings; // New blue box settings with color/opacity
   mediaType?: 'image' | 'video'; // Type of media
   videoUrl?: string; // Video URL (YouTube, Vimeo, or direct mp4/webm)
+  loop?: boolean; // Whether the video loops continuously (defaults to true)
 }
 
 interface CMSSlide {
@@ -86,6 +87,7 @@ interface CMSSlide {
   blueBox?: BlueBoxSettings;
   mediaType?: 'image' | 'video';
   videoUrl?: string;
+  loop?: boolean;
 }
 
 // Default overlay settings
@@ -233,22 +235,16 @@ interface HeroProps {
   slides?: CMSSlide[];
 }
 
-// Buffer time before video ends to switch slides (in seconds)
-const VIDEO_END_BUFFER = 5;
-// Minimum video duration to apply buffer (in seconds)
-const MIN_VIDEO_DURATION_FOR_BUFFER = 10;
-// Fallback duration if we can't detect video length (in seconds)
-const FALLBACK_VIDEO_DURATION = 30;
+// How long each video slide is shown before the carousel advances (in seconds).
+// The video loops continuously during this window, so it plays multiple times.
+const VIDEO_SLIDE_DISPLAY_DURATION = 18;
 
 export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hideTextBoxForSlide, setHideTextBoxForSlide] = useState<number | null>(null);
-  const [videoDurations, setVideoDurations] = useState<{ [key: number]: number }>({});
   const sliderRef = useRef<Slider>(null);
-  const videoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
-  const iframeRefs = useRef<{ [key: number]: HTMLIFrameElement | null }>({});
   const videoTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Use prop slides or fetch from CMS
@@ -274,6 +270,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
           blueBox: slide.blueBox,
           mediaType: detectedMediaType,
           videoUrl: slide.videoUrl,
+          loop: slide.loop,
         };
       });
       setSlides(transformedSlides);
@@ -323,19 +320,6 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     }
   }, []);
 
-  // Handle video end for direct videos (fallback if timer doesn't trigger)
-  const handleVideoEnded = useCallback(() => {
-    goToNextSlide();
-  }, [goToNextSlide]);
-
-  // Handle direct video metadata loaded - get duration
-  const handleVideoLoadedMetadata = useCallback((idx: number, video: HTMLVideoElement) => {
-    const duration = video.duration;
-    if (duration && !isNaN(duration) && isFinite(duration)) {
-      setVideoDurations(prev => ({ ...prev, [idx]: duration }));
-    }
-  }, []);
-
   // Track if we've already triggered slide change to prevent duplicates
   const hasTriggeredEndRef = useRef<{ [key: number]: boolean }>({});
 
@@ -344,173 +328,10 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     hasTriggeredEndRef.current = {};
   }, [currentSlide]);
 
-  // Handle YouTube/Vimeo iframe messages for video duration and end detection
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // YouTube sends messages when video state changes
-      if (event.origin.includes('youtube')) {
-        try {
-          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-
-          // Capture duration from YouTube info delivery
-          if (data.event === 'infoDelivery' && data.info) {
-            // Duration comes in various formats
-            const duration = data.info.duration || data.info.videoDuration;
-            if (duration && !isNaN(duration) && duration > 0) {
-              setVideoDurations(prev => {
-                if (!prev[currentSlide]) {
-                  return { ...prev, [currentSlide]: duration };
-                }
-                return prev;
-              });
-            }
-          }
-
-          // Prevent duplicate triggers for end detection
-          if (hasTriggeredEndRef.current[currentSlide]) return;
-
-          // Check various YouTube message formats for ended state (playerState: 0)
-          let isEnded = false;
-
-          // Format 1: onStateChange event with info as state value
-          if (data.event === 'onStateChange' && data.info === 0) {
-            isEnded = true;
-          }
-          // Format 2: infoDelivery with nested playerState
-          if (data.event === 'infoDelivery' && data.info && data.info.playerState === 0) {
-            isEnded = true;
-          }
-          // Format 3: Direct playerState in data
-          if (data.playerState === 0) {
-            isEnded = true;
-          }
-          // Format 4: Check for 'ended' in event name
-          if (data.event === 'ended' || data.info === 'ended') {
-            isEnded = true;
-          }
-
-          if (isEnded) {
-            hasTriggeredEndRef.current[currentSlide] = true;
-            goToNextSlide();
-          }
-        } catch {
-          // Ignore parse errors
-        }
-      }
-
-      // Vimeo sends messages when video ends or provides duration
-      if (event.origin.includes('vimeo')) {
-        try {
-          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-
-          // Capture duration from Vimeo
-          if (data.event === 'ready' || data.method === 'getDuration') {
-            const duration = data.value || data.duration;
-            if (duration && !isNaN(duration) && duration > 0) {
-              setVideoDurations(prev => {
-                if (!prev[currentSlide]) {
-                  return { ...prev, [currentSlide]: duration };
-                }
-                return prev;
-              });
-            }
-          }
-
-          // Prevent duplicate triggers
-          if (hasTriggeredEndRef.current[currentSlide]) return;
-
-          if (data.event === 'ended' || data.method === 'ended') {
-            hasTriggeredEndRef.current[currentSlide] = true;
-            goToNextSlide();
-          }
-        } catch {
-          // Ignore parse errors
-        }
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [goToNextSlide, currentSlide]);
-
-  // Initialize YouTube iframe API event listening when iframe loads
-  const handleYouTubeIframeLoad = useCallback((iframe: HTMLIFrameElement) => {
-    if (iframe && iframe.contentWindow) {
-      // Subscribe to YouTube events using multiple methods for compatibility
-
-      // Method 1: Widget API listening command
-      iframe.contentWindow.postMessage(JSON.stringify({
-        event: 'listening',
-        id: 1,
-        channel: 'widget'
-      }), '*');
-
-      // Method 2: addEventListener command
-      iframe.contentWindow.postMessage(JSON.stringify({
-        event: 'command',
-        func: 'addEventListener',
-        args: ['onStateChange']
-      }), '*');
-
-      // Method 3: Older format
-      setTimeout(() => {
-        if (iframe.contentWindow) {
-          iframe.contentWindow.postMessage('{"event":"listening"}', '*');
-          // Also request video info which includes duration
-          iframe.contentWindow.postMessage(JSON.stringify({
-            event: 'command',
-            func: 'getVideoData',
-            args: []
-          }), '*');
-          iframe.contentWindow.postMessage(JSON.stringify({
-            event: 'command',
-            func: 'getDuration',
-            args: []
-          }), '*');
-        }
-      }, 500);
-
-      // Request duration after a delay to ensure video is loaded
-      setTimeout(() => {
-        if (iframe.contentWindow) {
-          iframe.contentWindow.postMessage(JSON.stringify({
-            event: 'command',
-            func: 'getDuration',
-            args: []
-          }), '*');
-        }
-      }, 2000);
-    }
-  }, []);
-
-  // Subscribe to Vimeo events when iframe loads
-  const handleVimeoIframeLoad = useCallback((iframe: HTMLIFrameElement) => {
-    if (iframe && iframe.contentWindow) {
-      // Subscribe to Vimeo events
-      iframe.contentWindow.postMessage(JSON.stringify({
-        method: 'addEventListener',
-        value: 'ended'
-      }), '*');
-
-      // Request duration
-      iframe.contentWindow.postMessage(JSON.stringify({
-        method: 'getDuration'
-      }), '*');
-
-      // Request duration after a delay to ensure video is loaded
-      setTimeout(() => {
-        if (iframe.contentWindow) {
-          iframe.contentWindow.postMessage(JSON.stringify({
-            method: 'getDuration'
-          }), '*');
-        }
-      }, 2000);
-    }
-  }, []);
-
-  // Handle autoplay and video timing
-  // For video slides: pause autoplay and use custom timer based on video duration
-  // For image slides: use normal autoplay
+  // Handle autoplay and video timing.
+  // Video slides loop continuously, so we pause react-slick autoplay and use a
+  // manual timer to advance after VIDEO_SLIDE_DISPLAY_DURATION (the video plays
+  // through several times first). Image slides use normal react-slick autoplay.
   useEffect(() => {
     if (slides.length === 0 || !sliderRef.current) return;
 
@@ -524,34 +345,16 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     }
 
     if (isVideo) {
-      // Pause slider autoplay for video slides - we control timing manually
+      // Pause slider autoplay for video slides - we control timing manually so
+      // the looping video stays on screen for the full display duration.
       sliderRef.current.slickPause();
 
-      // Get the video duration (if we've detected it)
-      const duration = videoDurations[currentSlide];
-
-      // Calculate when to switch (duration - buffer, minimum 5 seconds)
-      let switchDelay: number;
-
-      if (duration && duration > MIN_VIDEO_DURATION_FOR_BUFFER) {
-        // Switch 5 seconds before video ends
-        switchDelay = Math.max((duration - VIDEO_END_BUFFER) * 1000, 5000);
-      } else if (duration) {
-        // Short video - switch at 80% of duration or after 3 seconds minimum
-        switchDelay = Math.max(duration * 0.8 * 1000, 3000);
-      } else {
-        // No duration detected yet - use fallback, but set up a re-check
-        switchDelay = (FALLBACK_VIDEO_DURATION - VIDEO_END_BUFFER) * 1000;
-      }
-
-      // Set timer to advance slide
       videoTimerRef.current = setTimeout(() => {
         if (!hasTriggeredEndRef.current[currentSlide]) {
           hasTriggeredEndRef.current[currentSlide] = true;
           goToNextSlide();
         }
-      }, switchDelay);
-
+      }, VIDEO_SLIDE_DISPLAY_DURATION * 1000);
     } else {
       // Image slide - use normal autoplay
       sliderRef.current.slickPlay();
@@ -564,38 +367,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
         videoTimerRef.current = null;
       }
     };
-  }, [currentSlide, slides, videoDurations, goToNextSlide]);
-
-  // Re-trigger timer when video duration becomes available
-  useEffect(() => {
-    if (slides.length === 0 || !sliderRef.current) return;
-
-    const slide = slides[currentSlide];
-    const isVideo = slide?.mediaType === 'video' && slide?.videoUrl;
-    const duration = videoDurations[currentSlide];
-
-    // If we're on a video slide and just got the duration, update the timer
-    if (isVideo && duration && videoTimerRef.current) {
-      // Clear existing timer
-      clearTimeout(videoTimerRef.current);
-
-      // Calculate new switch delay based on actual duration
-      let switchDelay: number;
-      if (duration > MIN_VIDEO_DURATION_FOR_BUFFER) {
-        switchDelay = Math.max((duration - VIDEO_END_BUFFER) * 1000, 5000);
-      } else {
-        switchDelay = Math.max(duration * 0.8 * 1000, 3000);
-      }
-
-      // Set new timer (accounting for time already elapsed - approximate)
-      videoTimerRef.current = setTimeout(() => {
-        if (!hasTriggeredEndRef.current[currentSlide]) {
-          hasTriggeredEndRef.current[currentSlide] = true;
-          goToNextSlide();
-        }
-      }, switchDelay);
-    }
-  }, [videoDurations, currentSlide, slides, goToNextSlide]);
+  }, [currentSlide, slides, goToNextSlide]);
 
   // Handle text box fade for video slides only
   useEffect(() => {
@@ -669,7 +441,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
       <Slider ref={sliderRef} {...settings} className="w-full">
         {slides.map((slide, idx) => {
           const isVideo = slide.mediaType === 'video' && slide.videoUrl;
-          const videoSource = isVideo ? getVideoSource(slide.videoUrl!, false) : null; // No loop - we control advancement
+          const videoSource = isVideo ? getVideoSource(slide.videoUrl!, slide.loop ?? true) : null; // Loop video unless disabled per-slide in the CMS; carousel advances on a fixed timer
 
           return (
             <div key={idx}>
@@ -687,33 +459,23 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     // YouTube/Vimeo - use wrapper div for full-screen cover effect
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
-                        ref={(el) => { iframeRefs.current[idx] = el; }}
                         src={videoSource.src}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[100%] min-h-[100%] w-[177.78vh] h-[56.25vw]"
                         style={{ border: 'none', pointerEvents: 'none' }}
                         allow="autoplay; fullscreen; picture-in-picture"
                         allowFullScreen
                         title={slide.alt}
-                        onLoad={(e) => {
-                          if (videoSource.type === 'youtube') {
-                            handleYouTubeIframeLoad(e.currentTarget);
-                          } else if (videoSource.type === 'vimeo') {
-                            handleVimeoIframeLoad(e.currentTarget);
-                          }
-                        }}
                       />
                     </div>
                   ) : (
                     // Direct video file
                     <div className="absolute inset-0 overflow-hidden">
                       <video
-                        ref={(el) => { videoRefs.current[idx] = el; }}
                         autoPlay
                         muted
+                        loop
                         playsInline
                         className="absolute inset-0 w-full h-full object-cover"
-                        onEnded={handleVideoEnded}
-                        onLoadedMetadata={(e) => handleVideoLoadedMetadata(idx, e.currentTarget)}
                       >
                         <source src={videoSource.src} type="video/mp4" />
                         Your browser does not support the video tag.
