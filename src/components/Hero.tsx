@@ -230,6 +230,19 @@ function getVideoSource(url: string, loop: boolean = false): { type: 'youtube' |
   return { type: 'direct', src: url };
 }
 
+// Subscribe to a YouTube iframe's player events so it streams back infoDelivery
+// messages (currentTime/duration/playerState) that we use to loop the video.
+function subscribeToYouTube(win: Window | null) {
+  if (!win) return;
+  try { win.postMessage('{"event":"listening"}', '*'); } catch { /* cross-origin: ignore */ }
+}
+
+// Send a command (e.g. seekTo, playVideo) to a YouTube iframe's player.
+function sendYouTubeCommand(win: Window | null, func: string, args: unknown[] = []) {
+  if (!win) return;
+  try { win.postMessage(JSON.stringify({ event: 'command', func, args }), '*'); } catch { /* cross-origin: ignore */ }
+}
+
 
 interface HeroProps {
   slides?: CMSSlide[];
@@ -327,6 +340,53 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   useEffect(() => {
     hasTriggeredEndRef.current = {};
   }, [currentSlide]);
+
+  // Robustly loop YouTube videos. The native loop=1&playlist param has "limited
+  // support" in IFrame embeds and frequently lets the video stop on the replay
+  // end-screen (unrecoverable here because controls are hidden). So we drive the
+  // loop via the IFrame postMessage API: seek back to the start just BEFORE the
+  // video ends (so the end-screen never renders — seamless), with an ended-state
+  // fallback. Each iframe subscribes on load (see the iframe's onLoad below).
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Accept both youtube.com and youtube-nocookie.com origins — a nocookie
+      // embed sends its messages from the nocookie origin.
+      if (!event.origin || !event.origin.includes('youtube')) return;
+
+      let data: { event?: string; info?: number | { currentTime?: number; duration?: number; playerState?: number } };
+      try {
+        data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      } catch {
+        return;
+      }
+      if (!data || typeof data !== 'object') return;
+
+      const src = event.source as Window | null;
+      const info = data.info;
+
+      // Pre-end watchdog: restart just before the true end so the replay/end
+      // screen never appears. infoDelivery streams currentTime/duration.
+      if (
+        info && typeof info === 'object' &&
+        typeof info.currentTime === 'number' && typeof info.duration === 'number' &&
+        info.duration > 0 && info.currentTime >= info.duration - 0.5
+      ) {
+        sendYouTubeCommand(src, 'seekTo', [0, true]);
+      }
+
+      // Fallback: if the video did reach ENDED (playerState 0), force a restart.
+      const state = data.event === 'onStateChange'
+        ? data.info
+        : (info && typeof info === 'object' ? info.playerState : undefined);
+      if (state === 0) {
+        sendYouTubeCommand(src, 'seekTo', [0, true]);
+        sendYouTubeCommand(src, 'playVideo');
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   // Handle autoplay and video timing.
   // Video slides loop continuously, so we pause react-slick autoplay and use a
@@ -465,6 +525,14 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                         allow="autoplay; fullscreen; picture-in-picture"
                         allowFullScreen
                         title={slide.alt}
+                        onLoad={(e) => {
+                          // Subscribe so we receive player state/time messages
+                          // (used to loop the video). Retry to beat the player's
+                          // readiness race. Harmless for non-YouTube embeds.
+                          const win = e.currentTarget.contentWindow;
+                          subscribeToYouTube(win);
+                          [600, 1500, 3000].forEach((delay) => window.setTimeout(() => subscribeToYouTube(win), delay));
+                        }}
                       />
                     </div>
                   ) : (
