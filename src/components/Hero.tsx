@@ -243,6 +243,13 @@ function sendYouTubeCommand(win: Window | null, func: string, args: unknown[] = 
   try { win.postMessage(JSON.stringify({ event: 'command', func, args }), '*'); } catch { /* cross-origin: ignore */ }
 }
 
+// Send a command (e.g. play, setCurrentTime) to a Vimeo iframe's player.
+function sendVimeoCommand(win: Window | null, method: string, value?: number) {
+  if (!win) return;
+  const payload = value === undefined ? { method } : { method, value };
+  try { win.postMessage(JSON.stringify(payload), '*'); } catch { /* cross-origin: ignore */ }
+}
+
 
 interface HeroProps {
   slides?: CMSSlide[];
@@ -252,6 +259,12 @@ interface HeroProps {
 // The video loops continuously during this window, so it plays multiple times.
 const VIDEO_SLIDE_DISPLAY_DURATION = 18;
 
+// Restart a looping YouTube video this many seconds BEFORE it actually ends, so
+// it always replays before YouTube can show its replay/end-screen. Kept generous
+// because YouTube's time updates can arrive ~1s apart; tune lower for a tighter
+// loop if needed.
+const YOUTUBE_LOOP_RESTART_BUFFER = 1.5;
+
 export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -259,6 +272,8 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const [hideTextBoxForSlide, setHideTextBoxForSlide] = useState<number | null>(null);
   const sliderRef = useRef<Slider>(null);
   const videoTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const videoIframeRefs = useRef<{ [key: number]: HTMLIFrameElement | null }>({});
+  const directVideoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
 
   // Use prop slides or fetch from CMS
   useEffect(() => {
@@ -348,6 +363,10 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   // video ends (so the end-screen never renders — seamless), with an ended-state
   // fallback. Each iframe subscribes on load (see the iframe's onLoad below).
   useEffect(() => {
+    // Debounce loop restarts per player so the burst of near-end time updates
+    // only restarts once (otherwise repeated seekTo calls stutter).
+    const lastRestart = new Map<MessageEventSource, number>();
+
     const handleMessage = (event: MessageEvent) => {
       // Accept both youtube.com and youtube-nocookie.com origins — a nocookie
       // embed sends its messages from the nocookie origin.
@@ -365,13 +384,23 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
       const info = data.info;
 
       // Pre-end watchdog: restart just before the true end so the replay/end
-      // screen never appears. infoDelivery streams currentTime/duration.
+      // screen never appears. infoDelivery streams currentTime/duration. Cap the
+      // buffer for short clips so they aren't cut short, and debounce so the
+      // burst of near-end updates only restarts once.
       if (
         info && typeof info === 'object' &&
         typeof info.currentTime === 'number' && typeof info.duration === 'number' &&
-        info.duration > 0 && info.currentTime >= info.duration - 0.5
+        info.duration > 0
       ) {
-        sendYouTubeCommand(src, 'seekTo', [0, true]);
+        const buffer = Math.min(YOUTUBE_LOOP_RESTART_BUFFER, info.duration * 0.2);
+        const now = Date.now();
+        if (
+          info.currentTime >= info.duration - buffer &&
+          event.source && now - (lastRestart.get(event.source) ?? 0) >= 1000
+        ) {
+          lastRestart.set(event.source, now);
+          sendYouTubeCommand(src, 'seekTo', [0, true]);
+        }
       }
 
       // Fallback: if the video did reach ENDED (playerState 0), force a restart.
@@ -387,6 +416,33 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
+
+  // Replay the active slide's video from the start whenever the slide changes.
+  // In fade mode every video iframe is mounted and playing in the background, so
+  // without this a video would resume mid-clip when you navigate to its slide.
+  useEffect(() => {
+    if (slides.length === 0) return;
+    const slide = slides[currentSlide];
+    if (!slide || slide.mediaType !== 'video' || !slide.videoUrl) return;
+
+    const source = getVideoSource(slide.videoUrl);
+    if (source.type === 'youtube') {
+      const win = videoIframeRefs.current[currentSlide]?.contentWindow ?? null;
+      subscribeToYouTube(win); // ensure looping watchdog is active for this player
+      sendYouTubeCommand(win, 'seekTo', [0, true]);
+      sendYouTubeCommand(win, 'playVideo');
+    } else if (source.type === 'vimeo') {
+      const win = videoIframeRefs.current[currentSlide]?.contentWindow ?? null;
+      sendVimeoCommand(win, 'setCurrentTime', 0);
+      sendVimeoCommand(win, 'play');
+    } else {
+      const video = directVideoRefs.current[currentSlide];
+      if (video) {
+        video.currentTime = 0;
+        void video.play().catch(() => { /* autoplay restrictions: ignore */ });
+      }
+    }
+  }, [currentSlide, slides]);
 
   // Handle autoplay and video timing.
   // Video slides loop continuously, so we pause react-slick autoplay and use a
@@ -519,6 +575,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     // YouTube/Vimeo - use wrapper div for full-screen cover effect
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
+                        ref={(el) => { videoIframeRefs.current[idx] = el; }}
                         src={videoSource.src}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[100%] min-h-[100%] w-[177.78vh] h-[56.25vw]"
                         style={{ border: 'none', pointerEvents: 'none' }}
@@ -539,6 +596,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     // Direct video file
                     <div className="absolute inset-0 overflow-hidden">
                       <video
+                        ref={(el) => { directVideoRefs.current[idx] = el; }}
                         autoPlay
                         muted
                         loop
