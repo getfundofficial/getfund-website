@@ -255,15 +255,21 @@ interface HeroProps {
   slides?: CMSSlide[];
 }
 
-// How long each video slide is shown before the carousel advances (in seconds).
-// The video loops continuously during this window, so it plays multiple times.
-const VIDEO_SLIDE_DISPLAY_DURATION = 18;
+// Hard fallback: advance a video slide after this many seconds if the video's
+// end can't be detected via the player API, so a slide never gets stuck. Kept
+// long so it doesn't cut off a legitimately long video; it only fires when the
+// player's progress messages never arrive.
+const VIDEO_SLIDE_FALLBACK_DURATION = 180;
 
-// Restart a looping YouTube video this many seconds BEFORE it actually ends, so
-// it always replays before YouTube can show its replay/end-screen. Kept generous
-// because YouTube's time updates can arrive ~1s apart; tune lower for a tighter
-// loop if needed.
-const YOUTUBE_LOOP_RESTART_BUFFER = 1.5;
+// Advance the carousel this many seconds before the video's true end, so the
+// fade-out covers the final moment and YouTube's replay/end-screen never shows.
+const VIDEO_ADVANCE_BEFORE_END = 1;
+
+// When a slide becomes active we restart its video from 0, but the YouTube seek
+// is async. Block advancing for this long so a stale "near-end" position
+// reported before the seek lands can't immediately skip the slide (covers the
+// seek round-trip plus the 800ms fade).
+const VIDEO_RESTART_ARM_DELAY_MS = 1000;
 
 export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -274,6 +280,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const videoTimerRef = useRef<NodeJS.Timeout | null>(null);
   const videoIframeRefs = useRef<{ [key: number]: HTMLIFrameElement | null }>({});
   const directVideoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
+  const currentSlideRef = useRef(0);
 
   // Use prop slides or fetch from CMS
   useEffect(() => {
@@ -343,33 +350,27 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
 
   // Go to next slide
   const goToNextSlide = useCallback(() => {
+    // A lone slide has nowhere to advance to — let its video just keep looping.
+    if (slides.length <= 1) return;
     if (sliderRef.current) {
       sliderRef.current.slickNext();
     }
-  }, []);
+  }, [slides.length]);
 
-  // Track if we've already triggered slide change to prevent duplicates
+  // Track which slides have already triggered an advance (per slide index, so a
+  // departed-but-still-mounted background video can't advance the carousel
+  // again). Re-armed for the arriving slide synchronously in beforeChange.
   const hasTriggeredEndRef = useRef<{ [key: number]: boolean }>({});
 
-  // Reset the triggered flag when slide changes
+  // Advance the carousel when the ON-SCREEN video finishes playing. YouTube's
+  // controls are hidden, so we watch the player via the IFrame postMessage API
+  // and move to the next slide a hair before the true end — the fade-out covers
+  // the final moment and the replay/end-screen never shows. Only the active
+  // slide's video may advance the carousel (all slides' videos play in the
+  // background in fade mode).
   useEffect(() => {
-    hasTriggeredEndRef.current = {};
-  }, [currentSlide]);
-
-  // Robustly loop YouTube videos. The native loop=1&playlist param has "limited
-  // support" in IFrame embeds and frequently lets the video stop on the replay
-  // end-screen (unrecoverable here because controls are hidden). So we drive the
-  // loop via the IFrame postMessage API: seek back to the start just BEFORE the
-  // video ends (so the end-screen never renders — seamless), with an ended-state
-  // fallback. Each iframe subscribes on load (see the iframe's onLoad below).
-  useEffect(() => {
-    // Debounce loop restarts per player so the burst of near-end time updates
-    // only restarts once (otherwise repeated seekTo calls stutter).
-    const lastRestart = new Map<MessageEventSource, number>();
-
     const handleMessage = (event: MessageEvent) => {
-      // Accept both youtube.com and youtube-nocookie.com origins — a nocookie
-      // embed sends its messages from the nocookie origin.
+      // Accept both youtube.com and youtube-nocookie.com origins.
       if (!event.origin || !event.origin.includes('youtube')) return;
 
       let data: { event?: string; info?: number | { currentTime?: number; duration?: number; playerState?: number } };
@@ -380,74 +381,77 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
       }
       if (!data || typeof data !== 'object') return;
 
-      const src = event.source as Window | null;
+      // Ignore messages from off-screen background videos.
+      const activeWin = videoIframeRefs.current[currentSlideRef.current]?.contentWindow ?? null;
+      if (!activeWin || event.source !== activeWin) return;
+
       const info = data.info;
 
-      // Pre-end watchdog: restart just before the true end so the replay/end
-      // screen never appears. infoDelivery streams currentTime/duration. Cap the
-      // buffer for short clips so they aren't cut short, and debounce so the
-      // burst of near-end updates only restarts once.
+      // Has the on-screen video reached (almost) its end?
+      let finished = false;
       if (
         info && typeof info === 'object' &&
         typeof info.currentTime === 'number' && typeof info.duration === 'number' &&
         info.duration > 0
       ) {
-        const buffer = Math.min(YOUTUBE_LOOP_RESTART_BUFFER, info.duration * 0.2);
-        const now = Date.now();
-        if (
-          info.currentTime >= info.duration - buffer &&
-          event.source && now - (lastRestart.get(event.source) ?? 0) >= 1000
-        ) {
-          lastRestart.set(event.source, now);
-          sendYouTubeCommand(src, 'seekTo', [0, true]);
-        }
+        const buffer = Math.min(VIDEO_ADVANCE_BEFORE_END, info.duration * 0.2);
+        if (info.currentTime >= info.duration - buffer) finished = true;
       }
-
-      // Fallback: if the video did reach ENDED (playerState 0), force a restart.
       const state = data.event === 'onStateChange'
         ? data.info
         : (info && typeof info === 'object' ? info.playerState : undefined);
-      if (state === 0) {
-        sendYouTubeCommand(src, 'seekTo', [0, true]);
-        sendYouTubeCommand(src, 'playVideo');
+      if (state === 0) finished = true; // ENDED — backup in case we missed near-end
+
+      const idx = currentSlideRef.current;
+      if (finished && !hasTriggeredEndRef.current[idx]) {
+        hasTriggeredEndRef.current[idx] = true;
+        goToNextSlide();
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  }, [goToNextSlide]);
 
-  // Replay the active slide's video from the start whenever the slide changes.
-  // In fade mode every video iframe is mounted and playing in the background, so
-  // without this a video would resume mid-clip when you navigate to its slide.
-  useEffect(() => {
-    if (slides.length === 0) return;
-    const slide = slides[currentSlide];
+  // Restart a slide's video from the very start. All videos play in the
+  // background in fade mode, so when a slide becomes active we reset it to 0 —
+  // otherwise it would resume mid-clip (and could even be near its end and
+  // advance the carousel immediately). Called synchronously from beforeChange so
+  // the reset lands before the slide fades into view.
+  const restartSlideVideo = useCallback((idx: number) => {
+    const slide = slides[idx];
     if (!slide || slide.mediaType !== 'video' || !slide.videoUrl) return;
 
     const source = getVideoSource(slide.videoUrl);
-    if (source.type === 'youtube') {
-      const win = videoIframeRefs.current[currentSlide]?.contentWindow ?? null;
-      subscribeToYouTube(win); // ensure looping watchdog is active for this player
-      sendYouTubeCommand(win, 'seekTo', [0, true]);
-      sendYouTubeCommand(win, 'playVideo');
-    } else if (source.type === 'vimeo') {
-      const win = videoIframeRefs.current[currentSlide]?.contentWindow ?? null;
-      sendVimeoCommand(win, 'setCurrentTime', 0);
-      sendVimeoCommand(win, 'play');
+    if (source.type === 'youtube' || source.type === 'vimeo') {
+      const win = videoIframeRefs.current[idx]?.contentWindow ?? null;
+      if (source.type === 'youtube') {
+        subscribeToYouTube(win); // ensure the player streams progress for the finish detector
+        sendYouTubeCommand(win, 'seekTo', [0, true]);
+        sendYouTubeCommand(win, 'playVideo');
+      } else {
+        sendVimeoCommand(win, 'setCurrentTime', 0);
+        sendVimeoCommand(win, 'play');
+      }
     } else {
-      const video = directVideoRefs.current[currentSlide];
+      const video = directVideoRefs.current[idx];
       if (video) {
         video.currentTime = 0;
         void video.play().catch(() => { /* autoplay restrictions: ignore */ });
       }
     }
-  }, [currentSlide, slides]);
+  }, [slides]);
 
-  // Handle autoplay and video timing.
-  // Video slides loop continuously, so we pause react-slick autoplay and use a
-  // manual timer to advance after VIDEO_SLIDE_DISPLAY_DURATION (the video plays
-  // through several times first). Image slides use normal react-slick autoplay.
+  // Restart the initial slide's video once slides load (beforeChange handles
+  // every subsequent slide change).
+  useEffect(() => {
+    restartSlideVideo(currentSlideRef.current);
+  }, [slides, restartSlideVideo]);
+
+  // Handle autoplay and video timing. On a video slide we pause react-slick
+  // autoplay and advance manually when the video finishes (see the message
+  // handler); the timer below is only a hard fallback. Image slides use normal
+  // react-slick autoplay.
   useEffect(() => {
     if (slides.length === 0 || !sliderRef.current) return;
 
@@ -461,16 +465,18 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     }
 
     if (isVideo) {
-      // Pause slider autoplay for video slides - we control timing manually so
-      // the looping video stays on screen for the full display duration.
+      // Pause slider autoplay for video slides — we advance manually when the
+      // video finishes. This timer is only a hard fallback so a slide never
+      // gets stuck if the video's end can't be detected.
       sliderRef.current.slickPause();
 
+      const slideIndex = currentSlide;
       videoTimerRef.current = setTimeout(() => {
-        if (!hasTriggeredEndRef.current[currentSlide]) {
-          hasTriggeredEndRef.current[currentSlide] = true;
+        if (currentSlideRef.current === slideIndex && !hasTriggeredEndRef.current[slideIndex]) {
+          hasTriggeredEndRef.current[slideIndex] = true;
           goToNextSlide();
         }
-      }, VIDEO_SLIDE_DISPLAY_DURATION * 1000);
+      }, VIDEO_SLIDE_FALLBACK_DURATION * 1000);
     } else {
       // Image slide - use normal autoplay
       sliderRef.current.slickPlay();
@@ -526,10 +532,22 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (_current: number, next: number) => {
+      // Update the ref synchronously (a post-commit effect would run too late,
+      // leaving an ~800ms window during the fade where the message handler sees a
+      // stale active slide) and restart the arriving slide's video from the
+      // start. Block advancing until the restart lands — every video plays in the
+      // background, so the arriving one may be sitting near its end, and that
+      // stale position must not skip the slide before the seek to 0 takes effect.
+      currentSlideRef.current = next;
+      hasTriggeredEndRef.current[next] = true;
+      restartSlideVideo(next);
+      window.setTimeout(() => {
+        if (currentSlideRef.current === next) delete hasTriggeredEndRef.current[next];
+      }, VIDEO_RESTART_ARM_DELAY_MS);
       setCurrentSlide(next);
     },
     afterChange: (current: number) => {
-      // Ensure state is synced after change
+      currentSlideRef.current = current;
       setCurrentSlide(current);
     },
     appendDots: (dots: React.ReactNode) => (
@@ -557,7 +575,11 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
       <Slider ref={sliderRef} {...settings} className="w-full">
         {slides.map((slide, idx) => {
           const isVideo = slide.mediaType === 'video' && slide.videoUrl;
-          const videoSource = isVideo ? getVideoSource(slide.videoUrl!, slide.loop ?? true) : null; // Loop video unless disabled per-slide in the CMS; carousel advances on a fixed timer
+          // Keep loop=1 on the embed: it guarantees the player never lands on its
+          // replay/end-screen. On a multi-slide carousel we advance to the next
+          // slide just before the end (see the message handler), so the loop wrap
+          // is never seen; a lone video slide simply keeps looping.
+          const videoSource = isVideo ? getVideoSource(slide.videoUrl!, slide.loop ?? true) : null;
 
           return (
             <div key={idx}>
@@ -599,9 +621,17 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                         ref={(el) => { directVideoRefs.current[idx] = el; }}
                         autoPlay
                         muted
-                        loop
+                        loop={slides.length <= 1}
                         playsInline
                         className="absolute inset-0 w-full h-full object-cover"
+                        onEnded={() => {
+                          // Advance only when the on-screen video finishes (a lone
+                          // slide loops via the loop attribute instead).
+                          if (idx === currentSlideRef.current && !hasTriggeredEndRef.current[idx]) {
+                            hasTriggeredEndRef.current[idx] = true;
+                            goToNextSlide();
+                          }
+                        }}
                       >
                         <source src={videoSource.src} type="video/mp4" />
                         Your browser does not support the video tag.
