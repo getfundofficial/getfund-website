@@ -230,17 +230,71 @@ function getVideoSource(url: string, loop: boolean = false): { type: 'youtube' |
   return { type: 'direct', src: url };
 }
 
-// Subscribe to a YouTube iframe's player events so it streams back infoDelivery
-// messages (currentTime/duration/playerState) that we use to loop the video.
-function subscribeToYouTube(win: Window | null) {
-  if (!win) return;
-  try { win.postMessage('{"event":"listening"}', '*'); } catch { /* cross-origin: ignore */ }
+// --- YouTube IFrame Player API ---
+// We drive YouTube playback through the official API rather than hand-rolled
+// postMessage (which proved unreliable on some hosts): the API establishes the
+// player connection itself, giving dependable getCurrentTime/getDuration.
+interface YTPlayerInstance {
+  seekTo: (seconds: number, allowSeekAhead?: boolean) => void;
+  playVideo: () => void;
+  mute: () => void;
+  getCurrentTime: () => number;
+  getDuration: () => number;
+  destroy: () => void;
+}
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        el: string | HTMLElement,
+        opts: { events?: { onReady?: (e: { target: YTPlayerInstance }) => void } }
+      ) => YTPlayerInstance;
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
 }
 
-// Send a command (e.g. seekTo, playVideo) to a YouTube iframe's player.
-function sendYouTubeCommand(win: Window | null, func: string, args: unknown[] = []) {
-  if (!win) return;
-  try { win.postMessage(JSON.stringify({ event: 'command', func, args }), '*'); } catch { /* cross-origin: ignore */ }
+let ytApiLoading = false;
+const ytReadyCallbacks: Array<() => void> = [];
+function flushYtReadyCallbacks() {
+  if (!window.YT || !window.YT.Player) return;
+  ytReadyCallbacks.splice(0).forEach((fn) => fn());
+}
+// Load the YouTube IFrame Player API once for the whole page, then run cb (or
+// queue it until ready). Robust to another script/loader owning the API tag or
+// the onYouTubeIframeAPIReady global: we chain (not clobber) that global AND
+// poll window.YT as a fallback, so queued callbacks are never orphaned.
+function whenYouTubeApiReady(cb: () => void) {
+  if (window.YT && window.YT.Player) { cb(); return; }
+  ytReadyCallbacks.push(cb);
+  if (ytApiLoading) return;
+  ytApiLoading = true;
+
+  const prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => {
+    if (typeof prev === 'function') prev();
+    flushYtReadyCallbacks();
+  };
+
+  if (!document.getElementById('youtube-iframe-api')) {
+    const tag = document.createElement('script');
+    tag.id = 'youtube-iframe-api';
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+
+  // Belt-and-suspenders: if the script/global is owned elsewhere (so our
+  // onYouTubeIframeAPIReady may never run), poll until the API object appears.
+  let attempts = 0;
+  const poll = window.setInterval(() => {
+    attempts += 1;
+    if (window.YT && window.YT.Player) {
+      window.clearInterval(poll);
+      flushYtReadyCallbacks();
+    } else if (attempts > 75) {
+      window.clearInterval(poll); // ~15s; give up — the fallback timer advances
+    }
+  }, 200);
 }
 
 // Send a command (e.g. play, setCurrentTime) to a Vimeo iframe's player.
@@ -263,7 +317,9 @@ const VIDEO_SLIDE_FALLBACK_DURATION = 180;
 
 // Advance the carousel this many seconds before the video's true end, so the
 // fade-out covers the final moment and YouTube's replay/end-screen never shows.
-const VIDEO_ADVANCE_BEFORE_END = 1;
+// Small (the player API gives reliable timing) so the next slide shows right
+// around when the video finishes.
+const VIDEO_ADVANCE_BEFORE_END = 0.5;
 
 // When a slide becomes active we restart its video from 0, but the YouTube seek
 // is async. Block advancing for this long so a stale "near-end" position
@@ -281,6 +337,7 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   const videoIframeRefs = useRef<{ [key: number]: HTMLIFrameElement | null }>({});
   const directVideoRefs = useRef<{ [key: number]: HTMLVideoElement | null }>({});
   const currentSlideRef = useRef(0);
+  const ytPlayersRef = useRef<{ [key: number]: YTPlayerInstance | null }>({});
 
   // Use prop slides or fetch from CMS
   useEffect(() => {
@@ -362,56 +419,52 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   // again). Re-armed for the arriving slide synchronously in beforeChange.
   const hasTriggeredEndRef = useRef<{ [key: number]: boolean }>({});
 
-  // Advance the carousel when the ON-SCREEN video finishes playing. YouTube's
-  // controls are hidden, so we watch the player via the IFrame postMessage API
-  // and move to the next slide a hair before the true end — the fade-out covers
-  // the final moment and the replay/end-screen never shows. Only the active
-  // slide's video may advance the carousel (all slides' videos play in the
-  // background in fade mode).
+  // Bind the official YouTube player to an already-rendered iframe (its src has
+  // enablejsapi=1 + the exact origin baked in). The API gives us reliable
+  // getCurrentTime/getDuration — raw postMessage was not delivering events on
+  // some hosts, which left the video looping forever and never advancing.
+  const createYouTubePlayer = useCallback((idx: number) => {
+    whenYouTubeApiReady(() => {
+      if (!window.YT || ytPlayersRef.current[idx]) return;
+      if (!document.getElementById(`hero-yt-${idx}`)) return;
+      ytPlayersRef.current[idx] = new window.YT.Player(`hero-yt-${idx}`, {
+        events: {
+          onReady: (e) => { try { e.target.mute(); e.target.playVideo(); } catch { /* ignore */ } },
+        },
+      });
+    });
+  }, []);
+
+  // Advance the carousel when the ON-SCREEN YouTube video finishes. We poll the
+  // player's time via the official API and move on a hair before the true end so
+  // the loop wrap / end-screen is never seen. Only the active slide can advance
+  // (all slides' videos play in the background in fade mode).
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Accept both youtube.com and youtube-nocookie.com origins.
-      if (!event.origin || !event.origin.includes('youtube')) return;
-
-      let data: { event?: string; info?: number | { currentTime?: number; duration?: number; playerState?: number } };
-      try {
-        data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-      } catch {
-        return;
-      }
-      if (!data || typeof data !== 'object') return;
-
-      // Ignore messages from off-screen background videos.
-      const activeWin = videoIframeRefs.current[currentSlideRef.current]?.contentWindow ?? null;
-      if (!activeWin || event.source !== activeWin) return;
-
-      const info = data.info;
-
-      // Has the on-screen video reached (almost) its end?
-      let finished = false;
-      if (
-        info && typeof info === 'object' &&
-        typeof info.currentTime === 'number' && typeof info.duration === 'number' &&
-        info.duration > 0
-      ) {
-        const buffer = Math.min(VIDEO_ADVANCE_BEFORE_END, info.duration * 0.2);
-        if (info.currentTime >= info.duration - buffer) finished = true;
-      }
-      const state = data.event === 'onStateChange'
-        ? data.info
-        : (info && typeof info === 'object' ? info.playerState : undefined);
-      if (state === 0) finished = true; // ENDED — backup in case we missed near-end
-
+    const interval = window.setInterval(() => {
       const idx = currentSlideRef.current;
-      if (finished && !hasTriggeredEndRef.current[idx]) {
+      const player = ytPlayersRef.current[idx];
+      if (!player || typeof player.getDuration !== 'function') return;
+      let dur = 0;
+      let cur = 0;
+      try { dur = player.getDuration(); cur = player.getCurrentTime(); } catch { return; }
+      // getDuration() is 0 until metadata loads — guard so we don't fire at t=0.
+      if (dur <= 0) return;
+      const buffer = Math.min(VIDEO_ADVANCE_BEFORE_END, dur * 0.2);
+      if (cur >= dur - buffer && !hasTriggeredEndRef.current[idx]) {
         hasTriggeredEndRef.current[idx] = true;
         goToNextSlide();
       }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+    }, 250);
+    return () => window.clearInterval(interval);
   }, [goToNextSlide]);
+
+  // Tear down players on unmount.
+  useEffect(() => {
+    const players = ytPlayersRef.current;
+    return () => {
+      Object.values(players).forEach((p) => { try { p?.destroy(); } catch { /* ignore */ } });
+    };
+  }, []);
 
   // Restart a slide's video from the very start. All videos play in the
   // background in fade mode, so when a slide becomes active we reset it to 0 —
@@ -423,16 +476,15 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
     if (!slide || slide.mediaType !== 'video' || !slide.videoUrl) return;
 
     const source = getVideoSource(slide.videoUrl);
-    if (source.type === 'youtube' || source.type === 'vimeo') {
-      const win = videoIframeRefs.current[idx]?.contentWindow ?? null;
-      if (source.type === 'youtube') {
-        subscribeToYouTube(win); // ensure the player streams progress for the finish detector
-        sendYouTubeCommand(win, 'seekTo', [0, true]);
-        sendYouTubeCommand(win, 'playVideo');
-      } else {
-        sendVimeoCommand(win, 'setCurrentTime', 0);
-        sendVimeoCommand(win, 'play');
+    if (source.type === 'youtube') {
+      const player = ytPlayersRef.current[idx];
+      if (player && typeof player.seekTo === 'function') {
+        try { player.seekTo(0, true); player.playVideo(); } catch { /* player not ready yet */ }
       }
+    } else if (source.type === 'vimeo') {
+      const win = videoIframeRefs.current[idx]?.contentWindow ?? null;
+      sendVimeoCommand(win, 'setCurrentTime', 0);
+      sendVimeoCommand(win, 'play');
     } else {
       const video = directVideoRefs.current[idx];
       if (video) {
@@ -449,9 +501,9 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
   }, [slides, restartSlideVideo]);
 
   // Handle autoplay and video timing. On a video slide we pause react-slick
-  // autoplay and advance manually when the video finishes (see the message
-  // handler); the timer below is only a hard fallback. Image slides use normal
-  // react-slick autoplay.
+  // autoplay and advance manually when the video finishes (see the player poll);
+  // the timer below is only a hard fallback. Image slides use normal react-slick
+  // autoplay.
   useEffect(() => {
     if (slides.length === 0 || !sliderRef.current) return;
 
@@ -576,9 +628,9 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
         {slides.map((slide, idx) => {
           const isVideo = slide.mediaType === 'video' && slide.videoUrl;
           // Keep loop=1 on the embed: it guarantees the player never lands on its
-          // replay/end-screen. On a multi-slide carousel we advance to the next
-          // slide just before the end (see the message handler), so the loop wrap
-          // is never seen; a lone video slide simply keeps looping.
+          // replay/end-screen. On a multi-slide carousel the player poll advances
+          // to the next slide just before the end, so the loop wrap is never seen;
+          // a lone video slide simply keeps looping.
           const videoSource = isVideo ? getVideoSource(slide.videoUrl!, slide.loop ?? true) : null;
 
           return (
@@ -598,19 +650,18 @@ export default function Hero({ slides: propSlides }: HeroProps = {}) {
                     <div className="absolute inset-0 overflow-hidden">
                       <iframe
                         ref={(el) => { videoIframeRefs.current[idx] = el; }}
+                        id={videoSource.type === 'youtube' ? `hero-yt-${idx}` : undefined}
                         src={videoSource.src}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[100%] min-h-[100%] w-[177.78vh] h-[56.25vw]"
                         style={{ border: 'none', pointerEvents: 'none' }}
                         allow="autoplay; fullscreen; picture-in-picture"
                         allowFullScreen
                         title={slide.alt}
-                        onLoad={(e) => {
-                          // Subscribe so we receive player state/time messages
-                          // (used to loop the video). Retry to beat the player's
-                          // readiness race. Harmless for non-YouTube embeds.
-                          const win = e.currentTarget.contentWindow;
-                          subscribeToYouTube(win);
-                          [600, 1500, 3000].forEach((delay) => window.setTimeout(() => subscribeToYouTube(win), delay));
+                        onLoad={() => {
+                          // Bind the official YouTube player so we can reliably
+                          // detect when the video finishes (Vimeo keeps its own
+                          // loop params + the fallback timer).
+                          if (videoSource.type === 'youtube') createYouTubePlayer(idx);
                         }}
                       />
                     </div>
