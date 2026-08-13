@@ -26,22 +26,29 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
     ]
   },
   { id: '4', slug: 'news', title: 'News & Updates', label: 'News & Updates' },
-  {
-    id: '5',
-    slug: 'fundraising',
-    title: 'Fundraising',
-    label: 'Fundraising',
-    children: [
-      { id: '5-1', slug: 'why-fundraising', title: 'Why Fundraising?', label: 'Why Fundraising', parentId: '5' },
-      { id: '5-2', slug: 'ways-to-donate', title: 'Ways to Donate', label: 'Ways to Donate', parentId: '5' },
-      { id: '5-3', slug: 'fundraising-campaigns', title: 'Fundraising Campaigns', label: 'Fundraising Campaigns', parentId: '5' },
-      { id: '5-4', slug: 'lottery', title: 'Scholarship Lottery', label: 'Scholarship Lottery', parentId: '5' },
-      { id: '5-5', slug: 'partnerships', title: 'Partnerships', label: 'Partnerships', parentId: '5' },
-      { id: '5-6', slug: 'beneficiaries-give-back', title: 'Beneficiaries Give Back', label: 'Beneficiaries Give Back', parentId: '5' },
-      { id: '5-7', slug: 'events', title: 'Events', label: 'Events', parentId: '5' }
-    ]
-  }
 ];
+
+/**
+ * Giving now happens on EFPI, so Fundraising is no longer a section of this
+ * site's navigation and the header's call to action points there instead.
+ */
+const EFPI_URL = 'https://efpi.getfund.gov.gh';
+
+/**
+ * The menu comes from the CMS, which still publishes the Fundraising pages —
+ * they remain live and linked from within the site, they are simply not in the
+ * nav any more. Dropping the item here rather than only from the defaults above
+ * means that stays true for visitors holding a cached menu, and on any response
+ * the CMS gives back.
+ *
+ * Once those pages are unpublished from the menu in the CMS, this filter is
+ * doing nothing and can go.
+ */
+const HIDDEN_FROM_NAV = new Set(['fundraising']);
+
+function prepareMenu(items: MenuItem[]): MenuItem[] {
+  return items.filter((item) => !HIDDEN_FROM_NAV.has(item.slug));
+}
 
 const MENU_CACHE_KEY = 'getfund_menu_cache';
 
@@ -89,29 +96,6 @@ export default function Header() {
 
   const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
-  // Ensure lottery is always in the Fundraising menu
-  const ensureLotteryInMenu = (items: MenuItem[]): MenuItem[] => {
-    return items.map(item => {
-      if (item.slug === 'fundraising' && item.children) {
-        const hasLottery = item.children.some(child => child.slug === 'lottery');
-        if (!hasLottery) {
-          // Add lottery after fundraising-campaigns
-          const campaignsIndex = item.children.findIndex(child => child.slug === 'fundraising-campaigns');
-          const lotteryItem: MenuItem = {
-            id: '5-lottery',
-            slug: 'lottery',
-            title: 'Scholarship Lottery',
-            label: 'Scholarship Lottery',
-            parentId: item.id
-          };
-          const newChildren = [...item.children];
-          newChildren.splice(campaignsIndex + 1, 0, lotteryItem);
-          return { ...item, children: newChildren };
-        }
-      }
-      return item;
-    });
-  };
 
   useEffect(() => {
     let isMounted = true;
@@ -123,17 +107,18 @@ export default function Header() {
 
         // Update menu if CMS has valid items
         if (menuConfig.menuItems.length > 0) {
-          const menuWithLottery = ensureLotteryInMenu(menuConfig.menuItems);
-          setMenuItems(menuWithLottery);
-          cacheMenu(menuWithLottery);
+          const items = prepareMenu(menuConfig.menuItems);
+          setMenuItems(items);
+          cacheMenu(items);
         }
       } catch {
         // Keep using cached or default menu items
       }
     };
 
-    // Also ensure lottery in initial/cached menu
-    setMenuItems(prev => ensureLotteryInMenu(prev));
+    // The cached menu was written before Fundraising left the nav, so filter
+    // what we started with too rather than waiting for the fetch to land.
+    setMenuItems(prev => prepareMenu(prev));
 
     fetchMenu();
 
@@ -185,6 +170,21 @@ export default function Header() {
             )
           ))}
 
+          {/* EFPI — a separate site, so a plain anchor rather than a router Link */}
+          <li>
+            <a
+              href={EFPI_URL}
+              className="flex items-center rounded transition-transform hover:scale-105"
+              title="EFPI — Education Financing & Partnership Initiative"
+            >
+              <img
+                src="/images/logos/efpi-logo.png"
+                alt="EFPI — Education Financing and Partnership Initiative"
+                className="h-6 xl:h-7 3xl:h-8 w-auto object-contain"
+              />
+            </a>
+          </li>
+
           {/* Search Button */}
           <li>
             <button
@@ -197,16 +197,16 @@ export default function Header() {
             </button>
           </li>
 
-          {/* Donate Button */}
+          {/* Donate Button — now hands off to EFPI, which takes the payment */}
           <li>
-            <Link
-              to="/fundraising/ways-to-donate"
+            <a
+              href={EFPI_URL}
               className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap hover:scale-105"
               style={{ boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2)' }}
               title="Donate"
             >
               Donate
-            </Link>
+            </a>
           </li>
         </ul>
 
@@ -247,13 +247,26 @@ export default function Header() {
                 )
               ))}
               <li>
-                <Link
-                  to="/fundraising/ways-to-donate"
+                <a
+                  href={EFPI_URL}
+                  className="flex items-center gap-3 px-4 py-3 border-t border-gray-100 hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <img
+                    src="/images/logos/efpi-logo.png"
+                    alt="EFPI — Education Financing and Partnership Initiative"
+                    className="h-7 w-auto object-contain"
+                  />
+                </a>
+              </li>
+              <li>
+                <a
+                  href={EFPI_URL}
                   className="block mx-4 mt-2 bg-getfund-gold text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm tracking-wide text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Donate
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
