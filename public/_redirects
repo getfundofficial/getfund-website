@@ -1,0 +1,5 @@
+# Single-page app: every unknown path is served index.html so the router can
+# handle it, instead of Netlify returning its own 404. This is the Netlify
+# equivalent of the .htaccess rule already in this directory for Apache.
+# 200, not 301: the URL the visitor typed must stay in the address bar.
+/*  /index.html  200
