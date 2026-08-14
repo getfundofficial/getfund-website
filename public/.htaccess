@@ -1,11 +1,132 @@
+# Apache config for the built single-page app.
+#
+# Everything is wrapped in <IfModule> so a host missing a module degrades
+# rather than 500s — an .htaccess referencing an absent module takes the whole
+# site down, and that is a bad way to find out.
+
+# Don't list directory contents where there is no index file.
+Options -Indexes
+
+# ---------------------------------------------------------------- routing
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # If the request is for an existing file or directory, serve it directly
+  # Real files and directories are served as they are.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
 
-  # Otherwise, redirect all requests to index.html (SPA fallback)
+  # A request for an asset that does not exist must 404, not fall through to
+  # index.html. Without this the browser asks for a deleted bundle — say
+  # /assets/index-OLD.js after a deploy — and gets HTML back, producing
+  # "Unexpected token '<'" in the console, which says nothing about the real
+  # problem. A plain 404 is honest and debuggable.
+  RewriteCond %{REQUEST_URI} !\.(js|mjs|css|map|json|txt|xml|ico|png|jpe?g|gif|svg|webp|avif|woff2?|ttf|otf|eot|pdf|mp4|webm|zip)$ [NC]
+
+  # Everything else is a client-side route: hand it index.html and let the
+  # router decide. 200, not a redirect — the URL the visitor typed stays put.
   RewriteRule ^ index.html [QSA,L]
 </IfModule>
+
+# ---------------------------------------------------------------- caching
+#
+# The rule that matters: index.html must never be cached, everything under
+# /assets/ can be cached forever.
+#
+# Vite writes a content hash into every filename in /assets/, so those files
+# are immutable — a change produces a new name. index.html is the one file
+# with a stable name, and it is what points at the current hashes. Cache it
+# and a returning visitor keeps loading an old index.html that references
+# bundles which no longer exist: a white screen, or a chunk-load error, that
+# clears only when the cache expires.
+<IfModule mod_rewrite.c>
+  RewriteRule ^assets/ - [E=IMMUTABLE:1]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=31536000, immutable" env=IMMUTABLE
+
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # These carry stable names and are edited in place — the EFPI logo, the
+  # GETFund logo, favicons. A day is long enough to be worth caching and short
+  # enough that replacing one is visible the next day rather than next year.
+  <FilesMatch "\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+
+  # Never cached: they are read to decide what to serve.
+  <FilesMatch "^(\.htaccess|_redirects|robots\.txt|sitemap\.xml)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# The env=IMMUTABLE rule above wins for /assets/; this covers the rest.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/png "access plus 1 day"
+  ExpiresByType image/jpeg "access plus 1 day"
+  ExpiresByType image/svg+xml "access plus 1 day"
+  ExpiresByType image/webp "access plus 1 day"
+  ExpiresByType font/woff2 "access plus 1 week"
+</IfModule>
+
+# ------------------------------------------------------------ compression
+# The JS bundle is ~150KB uncompressed and ~46KB gzipped. Worth having on a
+# connection paying by the megabyte.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml application/rss+xml
+  # Already-compressed formats gain nothing and cost CPU.
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|avif|zip|gz|mp4|woff2?)$ no-gzip dont-vary
+</IfModule>
+
+# ------------------------------------------------------------- mime types
+# Some hosts still serve these as octet-stream, which stops fonts loading and
+# breaks .mjs modules outright.
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# ---------------------------------------------------------------- security
+<IfModule mod_headers.c>
+  # Stop the browser guessing a MIME type it was not given.
+  Header always set X-Content-Type-Options "nosniff"
+  # No framing: this is a government site and a clickjacking target.
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Send the origin to other sites, the full URL to our own.
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Nothing here needs a camera, a microphone or a location.
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # Apache advertises its version by default; there is no reason to.
+  Header unset X-Powered-By
+</IfModule>
+
+# Block access to anything that should never have been uploaded to a web root.
+<FilesMatch "(^\.env|\.env\.|^\.git|\.log$|\.sql$|~$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# --------------------------------------------------------------- HTTPS
+# Deliberately left off. cPanel usually terminates TLS at a proxy, where
+# %{HTTPS} reads "off" even on an https request — a redirect rule here would
+# then loop forever. Force HTTPS in cPanel (Domains -> Force HTTPS Redirect),
+# which knows how its own proxy is configured.
