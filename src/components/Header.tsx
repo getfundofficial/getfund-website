@@ -35,6 +35,17 @@ const DEFAULT_MENU_ITEMS: MenuItem[] = [
 const EFPI_URL = 'https://efpi.getfund.gov.gh';
 
 /**
+ * Donate opens EFPI with its donation form already up, rather than dropping the
+ * visitor on the EFPI homepage to find it themselves. `?donate` is EFPI's own
+ * parameter for this — it opens the form on arrival and strips itself from the
+ * URL, so a refresh or the back button behaves normally.
+ *
+ * The printed QR codes redirect to this same address, so there is one way in
+ * and it only has to be got right once.
+ */
+const EFPI_DONATE_URL = `${EFPI_URL}/?donate=1`;
+
+/**
  * The menu comes from the CMS, which still publishes the Fundraising pages —
  * they remain live and linked from within the site, they are simply not in the
  * nav any more. Dropping the item here rather than only from the defaults above
@@ -200,7 +211,7 @@ export default function Header() {
           {/* Donate Button — now hands off to EFPI, which takes the payment */}
           <li>
             <a
-              href={EFPI_URL}
+              href={EFPI_DONATE_URL}
               className="inline-flex items-center justify-center bg-getfund-gold text-white px-3 lg:px-4 xl:px-6 2xl:px-8 py-2 xl:py-2.5 3xl:py-3 rounded font-semibold hover:bg-yellow-600 transition-all text-xs lg:text-sm xl:text-base 3xl:text-lg tracking-wide whitespace-nowrap hover:scale-105"
               style={{ boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2)' }}
               title="Donate"
@@ -261,7 +272,7 @@ export default function Header() {
               </li>
               <li>
                 <a
-                  href={EFPI_URL}
+                  href={EFPI_DONATE_URL}
                   className="block mx-4 mt-2 bg-getfund-gold text-white px-6 py-3 rounded-sm font-semibold hover:bg-yellow-600 transition-colors text-sm tracking-wide text-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
