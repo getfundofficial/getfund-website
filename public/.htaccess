@@ -12,6 +12,17 @@ Options -Indexes
   RewriteEngine On
   RewriteBase /
 
+  # Fundraising is now EFPI, and a printed QR code still points at the old
+  # "ways to donate" page. That code cannot be recalled or reprinted, so the
+  # URL it carries has to keep working: it lands here and is sent on to the
+  # EFPI site with the donation form already open.
+  #
+  # 301, not 302: the move is permanent and search engines should follow the
+  # rebrand. Worth knowing that browsers cache a 301 hard — anyone who has
+  # followed it will keep being redirected even if this line is removed later,
+  # until their cache expires.
+  RewriteRule ^fundraising/ways-to-donate/?$ https://efpi.getfund.gov.gh/?donate=1 [R=301,L,QSD]
+
   # Real files and directories are served as they are.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
